@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { Leaf, Droplet, Plus, X, ChevronDown, ChevronUp, FlaskConical } from "lucide-react";
+import React, { useState, useMemo, useEffect } from "react";
+import { Leaf, Droplet, Plus, X, ChevronDown, ChevronUp, FlaskConical, Download } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // DADOS DE PRODUTOS — extraídos dos catálogos do projeto (garantias de
@@ -166,15 +166,37 @@ const COMPANIES = [
   },
 ];
 
-let customIdCounter = 1;
+const STORAGE_KEY = "agro-comparador-state-v1";
+
+function loadPersistedState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function genId(prefix) {
+  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+}
 
 export default function AgroComparador() {
   const [openCompany, setOpenCompany] = useState(COMPANIES[0].id);
-  const [selected, setSelected] = useState({}); // productId -> { dose, price }
-  const [agroceteProducts, setAgroceteProducts] = useState([]); // custom entries
-  const [agroSelected, setAgroSelected] = useState({});
+  const [selected, setSelected] = useState(() => loadPersistedState()?.selected ?? {}); // productId -> { dose, price }
+  const [agroceteProducts, setAgroceteProducts] = useState(() => loadPersistedState()?.agroceteProducts ?? []); // custom entries
+  const [agroSelected, setAgroSelected] = useState(() => loadPersistedState()?.agroSelected ?? {});
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProd, setNewProd] = useState({ name: "", unit: "L/ha", dose: 1, price: 0, nutrients: {} });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, agroceteProducts, agroSelected }));
+    } catch {
+      // localStorage indisponível (modo privado, quota excedida etc.) — ignora, estado só não persiste
+    }
+  }, [selected, agroceteProducts, agroSelected]);
 
   const allProducts = useMemo(
     () => COMPANIES.flatMap((c) => c.products.map((p) => ({ ...p, companyId: c.id, companyName: c.name, companyColor: c.color }))),
@@ -220,7 +242,7 @@ export default function AgroComparador() {
       const num = parseFloat(v);
       if (!isNaN(num) && num > 0) cleanNutrients[k] = num;
     });
-    const id = `agro-${customIdCounter++}`;
+    const id = genId("agro");
     setAgroceteProducts((prev) => [
       ...prev,
       { id, name: newProd.name, unit: newProd.unit, dose: parseFloat(newProd.dose) || 0, price: parseFloat(newProd.price) || 0, nutrients: cleanNutrients },
@@ -292,6 +314,113 @@ export default function AgroComparador() {
 
   const selectedCount = Object.keys(selected).length;
   const agroSelectedCount = Object.keys(agroSelected).length;
+
+  async function exportPDF() {
+    const { jsPDF } = await import("jspdf");
+    const doc = new jsPDF();
+    let y = 15;
+
+    doc.setFontSize(16);
+    doc.text("Comparativo de Manejo Foliar", 14, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setTextColor(110);
+    doc.text(`Gerado em ${new Date().toLocaleDateString("pt-BR")}`, 14, y);
+    doc.setTextColor(0);
+    y += 10;
+
+    doc.setFontSize(12);
+    doc.text("Produtos concorrentes selecionados", 14, y);
+    y += 6;
+    doc.setFontSize(9);
+    if (selectedCount === 0) {
+      doc.text("Nenhum produto concorrente selecionado.", 16, y);
+      y += 5;
+    } else {
+      Object.entries(selected).forEach(([id, sel]) => {
+        const product = allProducts.find((p) => p.id === id);
+        if (!product) return;
+        doc.text(
+          `- ${product.companyName} · ${product.name} — dose ${sel.dose} ${product.unit}, preço R$ ${(parseFloat(sel.price) || 0).toFixed(2)}`,
+          16,
+          y
+        );
+        y += 5;
+      });
+    }
+
+    y += 5;
+    doc.setFontSize(12);
+    doc.text("Produtos Agrocete selecionados", 14, y);
+    y += 6;
+    doc.setFontSize(9);
+    if (agroSelectedCount === 0) {
+      doc.text("Nenhum produto Agrocete selecionado.", 16, y);
+      y += 5;
+    } else {
+      Object.entries(agroSelected).forEach(([id, sel]) => {
+        const product = agroceteProducts.find((p) => p.id === id);
+        if (!product) return;
+        doc.text(
+          `- ${product.name} — dose ${sel.dose} ${product.unit}, preço R$ ${(parseFloat(sel.price) || 0).toFixed(2)}`,
+          16,
+          y
+        );
+        y += 5;
+      });
+    }
+
+    y += 6;
+    doc.setFontSize(12);
+    doc.text("Comparativo de nutrientes (g/ha)", 14, y);
+    y += 7;
+    doc.setFontSize(9);
+    doc.setFont(undefined, "bold");
+    doc.text("Nutriente", 14, y);
+    doc.text("Concorrentes", 90, y);
+    doc.text("Agrocete", 140, y);
+    doc.setFont(undefined, "normal");
+    y += 5;
+    allNutrientKeys.forEach((key) => {
+      if (y > 275) {
+        doc.addPage();
+        y = 15;
+      }
+      const compVal = competitorTotals.totals[key] || 0;
+      const agroVal = agroTotals.totals[key] || 0;
+      doc.text(NUTRIENT_META[key]?.label ?? key, 14, y);
+      doc.text(`${compVal.toFixed(1)} g`, 90, y);
+      doc.text(`${agroVal.toFixed(1)} g`, 140, y);
+      y += 5;
+    });
+
+    if (y > 260) {
+      doc.addPage();
+      y = 15;
+    }
+    y += 6;
+    doc.setFontSize(12);
+    doc.setFont(undefined, "bold");
+    doc.text("Custo por hectare", 14, y);
+    doc.setFont(undefined, "normal");
+    y += 7;
+    doc.setFontSize(10);
+    doc.text(`Concorrentes: R$ ${competitorTotals.cost.toFixed(2)}/ha`, 14, y);
+    y += 6;
+    doc.text(`Agrocete: R$ ${agroTotals.cost.toFixed(2)}/ha`, 14, y);
+    y += 8;
+
+    if (competitorTotals.cost > 0 && agroTotals.cost > 0) {
+      const diff = Math.abs(competitorTotals.cost - agroTotals.cost).toFixed(2);
+      const msg =
+        agroTotals.cost <= competitorTotals.cost
+          ? `Manejo Agrocete é R$ ${diff}/ha mais barato que o manejo concorrente selecionado.`
+          : `Manejo Agrocete é R$ ${diff}/ha mais caro que o manejo concorrente selecionado — avalie se a diferença de nutrientes acima justifica o custo.`;
+      doc.text(doc.splitTextToSize(msg, 180), 14, y);
+    }
+
+    doc.save("comparativo-manejo-foliar.pdf");
+  }
 
   return (
     <div style={{ background: "#EDEAE0", minHeight: "100vh", fontFamily: "'Inter', system-ui, sans-serif", color: "#23301F" }}>
@@ -607,6 +736,28 @@ export default function AgroComparador() {
                 )}
               </div>
             )}
+
+            <button
+              onClick={exportPDF}
+              style={{
+                marginTop: 12,
+                width: "100%",
+                padding: "11px",
+                borderRadius: 10,
+                border: "none",
+                background: "#23301F",
+                color: "#EDEAE0",
+                fontWeight: 600,
+                fontSize: 13,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 7,
+              }}
+            >
+              <Download size={15} /> Exportar comparativo em PDF
+            </button>
           </section>
         )}
 

@@ -28,14 +28,40 @@ formulário "Adicionar produto Agrocete" dentro do app, ou edite
 diretamente o array `agroceteProducts` inicial em `AgroComparador.jsx`
 se quiser deixá-los pré-carregados.
 
+## Persistência
+
+O manejo montado (produtos selecionados, doses e preços, tanto dos
+concorrentes quanto os cadastrados na linha Agrocete) é salvo
+automaticamente no `localStorage` do navegador a cada alteração, sob a
+chave `agro-comparador-state-v1`. Ao recarregar a página o estado é
+restaurado. Isso é armazenamento local por navegador/dispositivo — não
+sincroniza entre aparelhos nem sobrevive a "limpar dados do site".
+
+## Exportar em PDF
+
+O botão "Exportar comparativo em PDF", exibido junto ao comparativo de
+nutrientes, gera um PDF com a lista de produtos selecionados (dose e
+preço), a tabela de nutrientes (g/ha) por lado e o resumo de custo por
+hectare. A biblioteca `jspdf` é carregada sob demanda (import dinâmico)
+só quando o botão é clicado, para não pesar o bundle inicial do app.
+
+## Deploy na Vercel
+
+O projeto já inclui um `vercel.json` com o preset do Vite
+(`npm run build`, saída em `dist/`). Para publicar:
+
+```bash
+npm i -g vercel   # se ainda não tiver a CLI
+vercel
+```
+
+Ou importe o repositório diretamente em https://vercel.com/new — a
+Vercel detecta o framework Vite automaticamente.
+
 ## Próximos passos sugeridos (para pedir ao Claude Code)
 
-- Persistir os manejos montados (hoje reseta ao recarregar a página) —
-  pode usar `localStorage` num app fora do Claude.ai, ou um backend
-  simples.
 - Adicionar as demais empresas do portfólio (Brandt, Multifol, Prime,
   Genica, Arggus, Valence, União Agro etc.), extraindo as garantias de
   nutrientes dos PDFs de cada uma.
-- Adicionar exportação do manejo montado em PDF ou planilha.
-- Deploy (Vercel/Netlify) para acesso via link, sem precisar rodar
-  localmente.
+- Permitir exportar/importar o manejo montado como JSON, para
+  compartilhar entre dispositivos sem depender só do `localStorage`.
