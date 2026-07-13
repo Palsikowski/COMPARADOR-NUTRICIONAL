@@ -27,13 +27,16 @@ com garantias de nutrientes reais extraídas dos catálogos.
 A seção "2 · Linha Agrocete" já vem pré-carregada com o catálogo oficial
 da **Linha GRAP** (28 produtos), extraído do Folheto de Garantias Agrocete
 de maio/2023 (`GRAP_CATALOG` em `AgroComparador.jsx`). As garantias do
-folheto são percentuais (%m/m); foram convertidas para g/L usando a
-densidade (`d`) informada de cada produto (`g/L = % × densidade × 10`),
-mesma técnica já usada para os produtos Ballagro. Produtos do folheto sem
-garantia de nutriente (adjuvantes, inoculantes, limpeza de equipamento)
-não entraram no catálogo, pois não há o que comparar no gráfico de
-nutrientes. As doses padrão são um valor genérico de partida — ajuste
-conforme a bula/recomendação técnica de cada produto.
+folheto são percentuais (%m/m); a densidade de cada produto foi usada para
+convertê-las para g/L na hora de montar o catálogo (`g/L = % × densidade
+× 10`), mesma técnica já usada para os produtos Ballagro — o código
+armazena apenas o resultado final em `nutrients`, não a densidade de
+origem, então para auditar um valor é preciso voltar ao folheto (`fonte`
+de cada produto). Produtos do folheto sem garantia de nutriente
+(adjuvantes, inoculantes, limpeza de equipamento) não entraram no
+catálogo, pois não há o que comparar no gráfico de nutrientes. As doses
+padrão são um valor genérico de partida — ajuste conforme a
+bula/recomendação técnica de cada produto.
 
 Produtos que não estejam no catálogo oficial podem ser cadastrados à mão
 pelo formulário "Adicionar produto Agrocete" dentro do app.
