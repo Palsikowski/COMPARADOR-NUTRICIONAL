@@ -166,6 +166,42 @@ const COMPANIES = [
   },
 ];
 
+const GRAP_FONTE = "Folheto de Garantias Agrocete — Linha GRAP, maio/2023 (convertido de %m/m x densidade)";
+
+// Catálogo oficial da Linha GRAP (Agrocete). Produtos sem garantia de
+// nutrientes no folheto (adjuvantes, inoculantes, limpeza) não entram aqui,
+// pois não há o que comparar no gráfico de nutrientes.
+const GRAP_CATALOG = [
+  { id: "grap-102cab", name: "GRAP 102 CAB", unit: "L/ha", defaultDose: 1, nutrients: { Ca: 135.0, S: 27.0 }, fonte: GRAP_FONTE },
+  { id: "grap-104fluid", name: "GRAP 104 FLUID", unit: "L/ha", defaultDose: 1, nutrients: { S: 52.8, Zn: 132.0 }, fonte: GRAP_FONTE },
+  { id: "grap-140fluid", name: "GRAP 140 FLUID", unit: "L/ha", defaultDose: 1, nutrients: { S: 100.1, Mn: 171.6 }, fonte: GRAP_FONTE },
+  { id: "grap-110je", name: "GRAP 110 JE", unit: "L/ha", defaultDose: 1, nutrients: { B: 14.0, Mo: 140.0 }, fonte: GRAP_FONTE },
+  { id: "grap-165je", name: "GRAP 165 JE", unit: "L/ha", defaultDose: 1, nutrients: { B: 24.2, Mo: 241.5 }, fonte: GRAP_FONTE },
+  { id: "grap-15mol", name: "GRAP 15 MOL", unit: "L/ha", defaultDose: 1, nutrients: { Mo: 226.5 }, fonte: GRAP_FONTE },
+  { id: "grap-30k", name: "GRAP 30K", unit: "L/ha", defaultDose: 1, nutrients: { K2O: 435.0 }, fonte: GRAP_FONTE },
+  { id: "grap-boric", name: "GRAP BORIC", unit: "L/ha", defaultDose: 1, nutrients: { B: 130.0 }, fonte: GRAP_FONTE },
+  { id: "grap-cafe", name: "GRAP CAFÉ", unit: "L/ha", defaultDose: 1, nutrients: { N: 130.0, S: 32.5, B: 13.0, Mo: 0.65, Zn: 65.0 }, fonte: GRAP_FONTE },
+  { id: "grap-cobre", name: "GRAP COBRE", unit: "L/ha", defaultDose: 1, nutrients: { S: 38.9, Cu: 76.7 }, fonte: GRAP_FONTE },
+  { id: "grap-evics", name: "GRAP EVIC-S", unit: "L/ha", defaultDose: 1, nutrients: { N: 146.3, S: 332.5 }, fonte: GRAP_FONTE },
+  { id: "grap-ferro", name: "GRAP Ferro", unit: "L/ha", defaultDose: 1, nutrients: { S: 30.0, Fe: 54.0 }, fonte: GRAP_FONTE },
+  { id: "grap-frutas", name: "GRAP FRUTAS", unit: "L/ha", defaultDose: 1, nutrients: { S: 29.3, B: 5.9, Co: 5.9, Cu: 5.9, Mn: 5.9, Mo: 0.2, Zn: 35.1 }, fonte: GRAP_FONTE },
+  { id: "grap-grad", name: "GRAP GRAD", unit: "L/ha", defaultDose: 1, nutrients: { Mg: 89.6 }, fonte: `${GRAP_FONTE} — ácidos carboxílicos` },
+  { id: "grap-magnesio", name: "GRAP Magnésio", unit: "L/ha", defaultDose: 1, nutrients: { Mg: 111.4 }, fonte: GRAP_FONTE },
+  { id: "grap-mnrrplus", name: "GRAP Manganês rr Plus", unit: "L/ha", defaultDose: 1, nutrients: { S: 50.0, Mn: 87.5 }, fonte: GRAP_FONTE },
+  { id: "grap-mont15", name: "GRAP MONT 15", unit: "L/ha", defaultDose: 1, nutrients: { S: 67.5, B: 6.8, Mn: 81.0, Mo: 1.4, Zn: 40.5 }, fonte: GRAP_FONTE },
+  { id: "grap-nitro", name: "GRAP NITRO", unit: "L/ha", defaultDose: 1, nutrients: { N: 384.0 }, fonte: `${GRAP_FONTE} — N nítrico e amoniacal` },
+  { id: "grap-p306", name: "GRAP P-306", unit: "L/ha", defaultDose: 1, nutrients: { N: 76.8, P2O5: 384.0 }, fonte: `${GRAP_FONTE} — 20% do P2O5 proveniente de ácido fosforoso` },
+  { id: "grap-philcobre", name: "GRAP PHIL Cobre", unit: "L/ha", defaultDose: 1, nutrients: { Cu: 38.4 }, fonte: GRAP_FONTE },
+  { id: "grap-philk", name: "GRAP PHIL K", unit: "L/ha", defaultDose: 1, nutrients: { K2O: 280.0 }, fonte: GRAP_FONTE },
+  { id: "grap-philmn", name: "GRAP PHIL Mn", unit: "L/ha", defaultDose: 1, nutrients: { Mn: 85.8 }, fonte: GRAP_FONTE },
+  { id: "grap-topfluidplus", name: "GRAP TOP FLUID Plus", unit: "L/ha", defaultDose: 1, nutrients: { N: 189.0, P2O5: 54.0, K2O: 67.5, Mg: 20.3, B: 1.4, Mn: 20.3, Mo: 0.7, Zn: 27.0 }, fonte: `${GRAP_FONTE} — contém 3% de fosfito` },
+  { id: "grap-amyno15", name: "GRAP amyno 15", unit: "L/ha", defaultDose: 1, nutrients: { S: 67.5, B: 6.8, Cu: 6.8, Mn: 81.0, Mo: 1.4, Zn: 40.5 }, fonte: `${GRAP_FONTE} — base ácido glutâmico` },
+  { id: "grap-organotop", name: "GRAP organo TOP", unit: "L/ha", defaultDose: 1, nutrients: { N: 65.0, P2O5: 52.0, Mg: 2.6, S: 0.3, B: 0.65, Co: 1.3, Cu: 0.65, Mn: 2.6, Zn: 1.3 }, fonte: `${GRAP_FONTE} — matéria orgânica 25%, carbono orgânico 14%` },
+  { id: "grap-stpro", name: "GRAP ST PRO", unit: "L/ha", defaultDose: 1, nutrients: { B: 12.8, Mn: 89.6 }, fonte: `${GRAP_FONTE} — base Ascophyllum nodosum` },
+  { id: "grap-fieldpro", name: "GRAP Field PRO", unit: "L/ha", defaultDose: 1, nutrients: { B: 23.0, Mn: 108.0 }, fonte: `${GRAP_FONTE} — base Ascophyllum nodosum` },
+  { id: "grap-breedpro", name: "GRAP Breed PRO", unit: "L/ha", defaultDose: 1, nutrients: { B: 60.5, Mn: 24.2 }, fonte: `${GRAP_FONTE} — base Ascophyllum nodosum` },
+];
+
 const STORAGE_KEY = "agro-comparador-state-v1";
 
 function loadPersistedState() {
@@ -184,6 +220,7 @@ function genId(prefix) {
 
 export default function AgroComparador() {
   const [openCompany, setOpenCompany] = useState(COMPANIES[0].id);
+  const [openGrap, setOpenGrap] = useState(true);
   const [selected, setSelected] = useState(() => loadPersistedState()?.selected ?? {}); // productId -> { dose, price }
   const [agroceteProducts, setAgroceteProducts] = useState(() => loadPersistedState()?.agroceteProducts ?? []); // custom entries
   const [agroSelected, setAgroSelected] = useState(() => loadPersistedState()?.agroSelected ?? {});
@@ -202,6 +239,8 @@ export default function AgroComparador() {
     () => COMPANIES.flatMap((c) => c.products.map((p) => ({ ...p, companyId: c.id, companyName: c.name, companyColor: c.color }))),
     []
   );
+
+  const allAgroProducts = useMemo(() => [...GRAP_CATALOG, ...agroceteProducts], [agroceteProducts]);
 
   function toggleProduct(product) {
     setSelected((prev) => {
@@ -225,7 +264,7 @@ export default function AgroComparador() {
       if (next[product.id]) {
         delete next[product.id];
       } else {
-        next[product.id] = { dose: product.dose, price: product.price };
+        next[product.id] = { dose: product.defaultDose ?? product.dose ?? 0, price: product.price ?? 0 };
       }
       return next;
     });
@@ -282,7 +321,7 @@ export default function AgroComparador() {
     const totals = {};
     let cost = 0;
     Object.entries(agroSelected).forEach(([id, sel]) => {
-      const product = agroceteProducts.find((p) => p.id === id);
+      const product = allAgroProducts.find((p) => p.id === id);
       if (!product) return;
       const dose = parseFloat(sel.dose) || 0;
       const price = parseFloat(sel.price) || 0;
@@ -292,7 +331,7 @@ export default function AgroComparador() {
       });
     });
     return { totals, cost };
-  }, [agroSelected, agroceteProducts]);
+  }, [agroSelected, allAgroProducts]);
 
   const allNutrientKeys = useMemo(() => {
     const keys = new Set([...Object.keys(competitorTotals.totals), ...Object.keys(agroTotals.totals)]);
@@ -359,7 +398,7 @@ export default function AgroComparador() {
       y += 5;
     } else {
       Object.entries(agroSelected).forEach(([id, sel]) => {
-        const product = agroceteProducts.find((p) => p.id === id);
+        const product = allAgroProducts.find((p) => p.id === id);
         if (!product) return;
         doc.text(
           `- ${product.name} — dose ${sel.dose} ${product.unit}, preço R$ ${(parseFloat(sel.price) || 0).toFixed(2)}`,
@@ -569,9 +608,131 @@ export default function AgroComparador() {
         <section style={{ marginTop: 26 }}>
           <SectionTitle icon={<Droplet size={16} />} title="2 · Linha Agrocete" subtitle={`${agroSelectedCount} selecionado(s)`} />
           <p style={{ fontSize: 12, color: "#6B6A5F", marginTop: -6, marginBottom: 10 }}>
-            Sem portfólio Agrocete nos arquivos do projeto — cadastre aqui os produtos reais para comparar.
+            Catálogo oficial da Linha GRAP (folheto de garantias maio/2023). Doses padrão são um ponto de partida
+            genérico — ajuste conforme a bula/recomendação técnica de cada produto. Cadastre abaixo outros produtos
+            Agrocete que não estejam nessa lista.
           </p>
 
+          <div style={{ background: "#FFFFFF", borderRadius: 12, border: "1px solid #DEDACB", overflow: "hidden", marginBottom: 10 }}>
+            <button
+              onClick={() => setOpenGrap(!openGrap)}
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "13px 14px",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                textAlign: "left",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#2451B0", display: "inline-block" }} />
+                <span style={{ fontWeight: 600, fontSize: 15 }}>Linha GRAP (catálogo oficial)</span>
+                {(() => {
+                  const grapSelectedCount = GRAP_CATALOG.filter((p) => agroSelected[p.id]).length;
+                  return (
+                    grapSelectedCount > 0 && (
+                      <span style={{ fontSize: 11, background: "#EDEAE0", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>
+                        {grapSelectedCount} ativo{grapSelectedCount > 1 ? "s" : ""}
+                      </span>
+                    )
+                  );
+                })()}
+              </div>
+              {openGrap ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            </button>
+
+            {openGrap && (
+              <div style={{ padding: "0 12px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
+                {GRAP_CATALOG.map((product) => {
+                  const isSelected = !!agroSelected[product.id];
+                  return (
+                    <div
+                      key={product.id}
+                      style={{
+                        border: `1.5px solid ${isSelected ? "#2451B0" : "#E4E1D4"}`,
+                        borderRadius: 10,
+                        padding: 10,
+                        background: isSelected ? "#2451B00D" : "#FCFBF7",
+                      }}
+                    >
+                      <button
+                        onClick={() => toggleAgro(product)}
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          background: "transparent",
+                          border: "none",
+                          cursor: "pointer",
+                          padding: 0,
+                          textAlign: "left",
+                        }}
+                      >
+                        <div>
+                          <div style={{ fontWeight: 600, fontSize: 14 }}>{product.name}</div>
+                          <div style={{ fontSize: 12, color: "#6B6A5F", marginTop: 2 }}>
+                            {Object.entries(product.nutrients)
+                              .map(([el, v]) => `${NUTRIENT_META[el]?.label ?? el} ${v}g/L`)
+                              .join(" · ")}
+                          </div>
+                        </div>
+                        <span
+                          style={{
+                            flexShrink: 0,
+                            marginLeft: 10,
+                            width: 26,
+                            height: 26,
+                            borderRadius: 8,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: isSelected ? "#2451B0" : "#EDEAE0",
+                            color: isSelected ? "#fff" : "#8A8776",
+                          }}
+                        >
+                          {isSelected ? <X size={15} /> : <Plus size={15} />}
+                        </span>
+                      </button>
+
+                      {isSelected && (
+                        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                          <label style={{ fontSize: 11, flex: 1 }}>
+                            Dose ({product.unit})
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={agroSelected[product.id].dose}
+                              onChange={(e) => updateAgroSelected(product.id, "dose", e.target.value)}
+                              style={inputStyle}
+                            />
+                          </label>
+                          <label style={{ fontSize: 11, flex: 1 }}>
+                            Preço (R$/{product.unit.split("/")[0]})
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={agroSelected[product.id].price}
+                              onChange={(e) => updateAgroSelected(product.id, "price", e.target.value)}
+                              style={inputStyle}
+                            />
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {agroceteProducts.length > 0 && (
+            <div style={{ fontSize: 11, fontWeight: 600, color: "#6B6A5F", marginBottom: 6 }}>Cadastrados manualmente</div>
+          )}
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {agroceteProducts.map((product) => {
               const isSelected = !!agroSelected[product.id];

@@ -22,11 +22,21 @@ Abre em `http://localhost:5173`.
 ## Dados dos produtos
 
 Os produtos concorrentes (Fortgreen, Stoller, ICL, Ballagro) já vêm
-com garantias de nutrientes reais extraídas dos catálogos. A seção
-Agrocete está vazia por padrão — cadastre os produtos reais pelo
-formulário "Adicionar produto Agrocete" dentro do app, ou edite
-diretamente o array `agroceteProducts` inicial em `AgroComparador.jsx`
-se quiser deixá-los pré-carregados.
+com garantias de nutrientes reais extraídas dos catálogos.
+
+A seção "2 · Linha Agrocete" já vem pré-carregada com o catálogo oficial
+da **Linha GRAP** (28 produtos), extraído do Folheto de Garantias Agrocete
+de maio/2023 (`GRAP_CATALOG` em `AgroComparador.jsx`). As garantias do
+folheto são percentuais (%m/m); foram convertidas para g/L usando a
+densidade (`d`) informada de cada produto (`g/L = % × densidade × 10`),
+mesma técnica já usada para os produtos Ballagro. Produtos do folheto sem
+garantia de nutriente (adjuvantes, inoculantes, limpeza de equipamento)
+não entraram no catálogo, pois não há o que comparar no gráfico de
+nutrientes. As doses padrão são um valor genérico de partida — ajuste
+conforme a bula/recomendação técnica de cada produto.
+
+Produtos que não estejam no catálogo oficial podem ser cadastrados à mão
+pelo formulário "Adicionar produto Agrocete" dentro do app.
 
 ## Persistência
 
