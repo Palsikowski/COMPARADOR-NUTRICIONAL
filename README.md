@@ -71,6 +71,39 @@ vercel
 Ou importe o repositório diretamente em https://vercel.com/new — a
 Vercel detecta o framework Vite automaticamente.
 
+## Deploy como arquivo único (Firebase Hosting e afins)
+
+Para hosts estáticos simples (Firebase Hosting, GitHub Pages, ou
+"arrastar e soltar" um único arquivo), gere uma versão com tudo
+embutido em um único `index.html` (CSS e JS inline, sem arquivos
+externos):
+
+```bash
+npm run build:standalone
+```
+
+Isso cria `dist-standalone/index.html` — um arquivo autocontido de
+~950 KB que funciona sozinho, sem servidor (testado até abrindo
+direto via `file://`). Para publicar no Firebase Hosting:
+
+```bash
+npm i -g firebase-tools   # se ainda não tiver a CLI
+firebase login
+firebase init hosting     # aponte o "public directory" para dist-standalone
+firebase deploy
+```
+
+Ou, se preferir configurar manualmente, edite `firebase.json` para
+apontar `"public": "dist-standalone"`, e rode `firebase deploy`.
+
+Diferença para o build normal (`npm run build`, usado no deploy da
+Vercel): o build normal divide o app em vários arquivos (JS/CSS
+separados, com `jspdf` carregado sob demanda só quando o botão de
+exportar é clicado) — mais eficiente para carregamento inicial. O
+build standalone embute tudo, incluindo o `jspdf`, no próprio
+`index.html`, então o arquivo é maior mas roda em qualquer lugar sem
+depender de múltiplos arquivos.
+
 ## Próximos passos sugeridos (para pedir ao Claude Code)
 
 - Adicionar as demais empresas do portfólio (Brandt, Multifol, Prime,
