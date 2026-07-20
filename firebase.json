@@ -1,0 +1,6 @@
+{
+  "hosting": {
+    "public": "dist-standalone",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}

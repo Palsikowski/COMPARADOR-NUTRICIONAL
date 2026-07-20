@@ -264,7 +264,7 @@ export default function AgroComparador() {
       if (next[product.id]) {
         delete next[product.id];
       } else {
-        next[product.id] = { dose: product.defaultDose ?? product.dose ?? 0, price: product.price ?? 0 };
+        next[product.id] = { dose: product.defaultDose ?? 0, price: product.defaultPrice ?? 0 };
       }
       return next;
     });
@@ -284,7 +284,14 @@ export default function AgroComparador() {
     const id = genId("agro");
     setAgroceteProducts((prev) => [
       ...prev,
-      { id, name: newProd.name, unit: newProd.unit, dose: parseFloat(newProd.dose) || 0, price: parseFloat(newProd.price) || 0, nutrients: cleanNutrients },
+      {
+        id,
+        name: newProd.name,
+        unit: newProd.unit,
+        defaultDose: parseFloat(newProd.dose) || 0,
+        defaultPrice: parseFloat(newProd.price) || 0,
+        nutrients: cleanNutrients,
+      },
     ]);
     setNewProd({ name: "", unit: "L/ha", dose: 1, price: 0, nutrients: {} });
     setShowAddForm(false);
@@ -353,6 +360,7 @@ export default function AgroComparador() {
 
   const selectedCount = Object.keys(selected).length;
   const agroSelectedCount = Object.keys(agroSelected).length;
+  const grapSelectedCount = GRAP_CATALOG.filter((p) => agroSelected[p.id]).length;
 
   async function exportPDF() {
     const { jsPDF } = await import("jspdf");
@@ -488,117 +496,27 @@ export default function AgroComparador() {
               const isOpen = openCompany === company.id;
               const companySelectedCount = company.products.filter((p) => selected[p.id]).length;
               return (
-                <div key={company.id} style={{ background: "#FFFFFF", borderRadius: 12, border: "1px solid #DEDACB", overflow: "hidden" }}>
-                  <button
-                    onClick={() => setOpenCompany(isOpen ? null : company.id)}
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "13px 14px",
-                      background: "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                      textAlign: "left",
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <span style={{ width: 10, height: 10, borderRadius: "50%", background: company.color, display: "inline-block" }} />
-                      <span style={{ fontWeight: 600, fontSize: 15 }}>{company.name}</span>
-                      {companySelectedCount > 0 && (
-                        <span style={{ fontSize: 11, background: "#EDEAE0", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>
-                          {companySelectedCount} ativo{companySelectedCount > 1 ? "s" : ""}
-                        </span>
-                      )}
-                    </div>
-                    {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                  </button>
-
-                  {isOpen && (
-                    <div style={{ padding: "0 12px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
-                      {company.products.map((product) => {
-                        const isSelected = !!selected[product.id];
-                        return (
-                          <div
-                            key={product.id}
-                            style={{
-                              border: `1.5px solid ${isSelected ? company.color : "#E4E1D4"}`,
-                              borderRadius: 10,
-                              padding: 10,
-                              background: isSelected ? `${company.color}0D` : "#FCFBF7",
-                            }}
-                          >
-                            <button
-                              onClick={() => toggleProduct(product)}
-                              style={{
-                                width: "100%",
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                background: "transparent",
-                                border: "none",
-                                cursor: "pointer",
-                                padding: 0,
-                                textAlign: "left",
-                              }}
-                            >
-                              <div>
-                                <div style={{ fontWeight: 600, fontSize: 14 }}>{product.name}</div>
-                                <div style={{ fontSize: 12, color: "#6B6A5F", marginTop: 2 }}>
-                                  {Object.entries(product.nutrients)
-                                    .map(([el, v]) => `${NUTRIENT_META[el]?.label ?? el} ${v}${product.unit.startsWith("kg") ? "g/kg" : "g/L"}`)
-                                    .join(" · ")}
-                                </div>
-                              </div>
-                              <span
-                                style={{
-                                  flexShrink: 0,
-                                  marginLeft: 10,
-                                  width: 26,
-                                  height: 26,
-                                  borderRadius: 8,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  background: isSelected ? company.color : "#EDEAE0",
-                                  color: isSelected ? "#fff" : "#8A8776",
-                                }}
-                              >
-                                {isSelected ? <X size={15} /> : <Plus size={15} />}
-                              </span>
-                            </button>
-
-                            {isSelected && (
-                              <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                                <label style={{ fontSize: 11, flex: 1 }}>
-                                  Dose ({product.unit})
-                                  <input
-                                    type="number"
-                                    step="0.01"
-                                    value={selected[product.id].dose}
-                                    onChange={(e) => updateSelected(product.id, "dose", e.target.value)}
-                                    style={inputStyle}
-                                  />
-                                </label>
-                                <label style={{ fontSize: 11, flex: 1 }}>
-                                  Preço (R$/{product.unit.split("/")[0]})
-                                  <input
-                                    type="number"
-                                    step="0.01"
-                                    value={selected[product.id].price}
-                                    onChange={(e) => updateSelected(product.id, "price", e.target.value)}
-                                    style={inputStyle}
-                                  />
-                                </label>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+                <AccordionSection
+                  key={company.id}
+                  color={company.color}
+                  name={company.name}
+                  count={companySelectedCount}
+                  isOpen={isOpen}
+                  onToggle={() => setOpenCompany(isOpen ? null : company.id)}
+                >
+                  {company.products.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      color={company.color}
+                      isSelected={!!selected[product.id]}
+                      onToggle={() => toggleProduct(product)}
+                      doseValue={selected[product.id]?.dose}
+                      priceValue={selected[product.id]?.price}
+                      onUpdate={(field, value) => updateSelected(product.id, field, value)}
+                    />
+                  ))}
+                </AccordionSection>
               );
             })}
           </div>
@@ -613,178 +531,46 @@ export default function AgroComparador() {
             Agrocete que não estejam nessa lista.
           </p>
 
-          <div style={{ background: "#FFFFFF", borderRadius: 12, border: "1px solid #DEDACB", overflow: "hidden", marginBottom: 10 }}>
-            <button
-              onClick={() => setOpenGrap(!openGrap)}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "13px 14px",
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                textAlign: "left",
-              }}
+          <div style={{ marginBottom: 10 }}>
+            <AccordionSection
+              color="#2451B0"
+              name="Linha GRAP (catálogo oficial)"
+              count={grapSelectedCount}
+              isOpen={openGrap}
+              onToggle={() => setOpenGrap(!openGrap)}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#2451B0", display: "inline-block" }} />
-                <span style={{ fontWeight: 600, fontSize: 15 }}>Linha GRAP (catálogo oficial)</span>
-                {(() => {
-                  const grapSelectedCount = GRAP_CATALOG.filter((p) => agroSelected[p.id]).length;
-                  return (
-                    grapSelectedCount > 0 && (
-                      <span style={{ fontSize: 11, background: "#EDEAE0", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>
-                        {grapSelectedCount} ativo{grapSelectedCount > 1 ? "s" : ""}
-                      </span>
-                    )
-                  );
-                })()}
-              </div>
-              {openGrap ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-            </button>
-
-            {openGrap && (
-              <div style={{ padding: "0 12px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
-                {GRAP_CATALOG.map((product) => {
-                  const isSelected = !!agroSelected[product.id];
-                  return (
-                    <div
-                      key={product.id}
-                      style={{
-                        border: `1.5px solid ${isSelected ? "#2451B0" : "#E4E1D4"}`,
-                        borderRadius: 10,
-                        padding: 10,
-                        background: isSelected ? "#2451B00D" : "#FCFBF7",
-                      }}
-                    >
-                      <button
-                        onClick={() => toggleAgro(product)}
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          background: "transparent",
-                          border: "none",
-                          cursor: "pointer",
-                          padding: 0,
-                          textAlign: "left",
-                        }}
-                      >
-                        <div>
-                          <div style={{ fontWeight: 600, fontSize: 14 }}>{product.name}</div>
-                          <div style={{ fontSize: 12, color: "#6B6A5F", marginTop: 2 }}>
-                            {Object.entries(product.nutrients)
-                              .map(([el, v]) => `${NUTRIENT_META[el]?.label ?? el} ${v}g/L`)
-                              .join(" · ")}
-                          </div>
-                        </div>
-                        <span
-                          style={{
-                            flexShrink: 0,
-                            marginLeft: 10,
-                            width: 26,
-                            height: 26,
-                            borderRadius: 8,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            background: isSelected ? "#2451B0" : "#EDEAE0",
-                            color: isSelected ? "#fff" : "#8A8776",
-                          }}
-                        >
-                          {isSelected ? <X size={15} /> : <Plus size={15} />}
-                        </span>
-                      </button>
-
-                      {isSelected && (
-                        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                          <label style={{ fontSize: 11, flex: 1 }}>
-                            Dose ({product.unit})
-                            <input
-                              type="number"
-                              step="0.01"
-                              value={agroSelected[product.id].dose}
-                              onChange={(e) => updateAgroSelected(product.id, "dose", e.target.value)}
-                              style={inputStyle}
-                            />
-                          </label>
-                          <label style={{ fontSize: 11, flex: 1 }}>
-                            Preço (R$/{product.unit.split("/")[0]})
-                            <input
-                              type="number"
-                              step="0.01"
-                              value={agroSelected[product.id].price}
-                              onChange={(e) => updateAgroSelected(product.id, "price", e.target.value)}
-                              style={inputStyle}
-                            />
-                          </label>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+              {GRAP_CATALOG.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  color="#2451B0"
+                  isSelected={!!agroSelected[product.id]}
+                  onToggle={() => toggleAgro(product)}
+                  doseValue={agroSelected[product.id]?.dose}
+                  priceValue={agroSelected[product.id]?.price}
+                  onUpdate={(field, value) => updateAgroSelected(product.id, field, value)}
+                />
+              ))}
+            </AccordionSection>
           </div>
 
           {agroceteProducts.length > 0 && (
             <div style={{ fontSize: 11, fontWeight: 600, color: "#6B6A5F", marginBottom: 6 }}>Cadastrados manualmente</div>
           )}
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {agroceteProducts.map((product) => {
-              const isSelected = !!agroSelected[product.id];
-              return (
-                <div
-                  key={product.id}
-                  style={{
-                    border: `1.5px solid ${isSelected ? "#2451B0" : "#E4E1D4"}`,
-                    borderRadius: 10,
-                    padding: 10,
-                    background: isSelected ? "#2451B00D" : "#FCFBF7",
-                  }}
-                >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <button
-                      onClick={() => toggleAgro(product)}
-                      style={{ display: "flex", gap: 10, alignItems: "center", background: "transparent", border: "none", cursor: "pointer", padding: 0, flex: 1, textAlign: "left" }}
-                    >
-                      <span
-                        style={{
-                          width: 26, height: 26, borderRadius: 8, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center",
-                          background: isSelected ? "#2451B0" : "#EDEAE0", color: isSelected ? "#fff" : "#8A8776",
-                        }}
-                      >
-                        {isSelected ? <X size={15} /> : <Plus size={15} />}
-                      </span>
-                      <div>
-                        <div style={{ fontWeight: 600, fontSize: 14 }}>{product.name}</div>
-                        <div style={{ fontSize: 12, color: "#6B6A5F", marginTop: 2 }}>
-                          {Object.entries(product.nutrients).map(([el, v]) => `${NUTRIENT_META[el]?.label ?? el} ${v}g/${product.unit.split("/")[0]}`).join(" · ") || "sem nutrientes"}
-                        </div>
-                      </div>
-                    </button>
-                    <button onClick={() => removeAgroceteProduct(product.id)} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#A23E2B", padding: 4 }}>
-                      <X size={14} />
-                    </button>
-                  </div>
-                  {isSelected && (
-                    <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                      <label style={{ fontSize: 11, flex: 1 }}>
-                        Dose ({product.unit})
-                        <input type="number" step="0.01" value={agroSelected[product.id].dose} onChange={(e) => updateAgroSelected(product.id, "dose", e.target.value)} style={inputStyle} />
-                      </label>
-                      <label style={{ fontSize: 11, flex: 1 }}>
-                        Preço (R$/{product.unit.split("/")[0]})
-                        <input type="number" step="0.01" value={agroSelected[product.id].price} onChange={(e) => updateAgroSelected(product.id, "price", e.target.value)} style={inputStyle} />
-                      </label>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            {agroceteProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                color="#2451B0"
+                isSelected={!!agroSelected[product.id]}
+                onToggle={() => toggleAgro(product)}
+                doseValue={agroSelected[product.id]?.dose}
+                priceValue={agroSelected[product.id]?.price}
+                onUpdate={(field, value) => updateAgroSelected(product.id, field, value)}
+                onRemove={() => removeAgroceteProduct(product.id)}
+              />
+            ))}
           </div>
 
           {!showAddForm ? (
@@ -940,6 +726,118 @@ function SectionTitle({ icon, title, subtitle }) {
         <h2 style={{ fontSize: 14, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>{title}</h2>
       </div>
       {subtitle && <span style={{ fontSize: 11, color: "#8A8776" }}>{subtitle}</span>}
+    </div>
+  );
+}
+
+function nutrientSummary(product) {
+  const suffix = product.unit.startsWith("kg") ? "g/kg" : "g/L";
+  return (
+    Object.entries(product.nutrients)
+      .map(([el, v]) => `${NUTRIENT_META[el]?.label ?? el} ${v}${suffix}`)
+      .join(" · ") || "sem nutrientes"
+  );
+}
+
+function AccordionSection({ color, name, count, isOpen, onToggle, children }) {
+  return (
+    <div style={{ background: "#FFFFFF", borderRadius: 12, border: "1px solid #DEDACB", overflow: "hidden" }}>
+      <button
+        onClick={onToggle}
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "13px 14px",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          textAlign: "left",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ width: 10, height: 10, borderRadius: "50%", background: color, display: "inline-block" }} />
+          <span style={{ fontWeight: 600, fontSize: 15 }}>{name}</span>
+          {count > 0 && (
+            <span style={{ fontSize: 11, background: "#EDEAE0", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>
+              {count} ativo{count > 1 ? "s" : ""}
+            </span>
+          )}
+        </div>
+        {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+      </button>
+
+      {isOpen && <div style={{ padding: "0 12px 12px", display: "flex", flexDirection: "column", gap: 8 }}>{children}</div>}
+    </div>
+  );
+}
+
+function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue, priceValue, onRemove }) {
+  return (
+    <div
+      style={{
+        border: `1.5px solid ${isSelected ? color : "#E4E1D4"}`,
+        borderRadius: 10,
+        padding: 10,
+        background: isSelected ? `${color}0D` : "#FCFBF7",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "flex-start" }}>
+        <button
+          onClick={onToggle}
+          style={{
+            flex: 1,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+            textAlign: "left",
+          }}
+        >
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 14 }}>{product.name}</div>
+            <div style={{ fontSize: 12, color: "#6B6A5F", marginTop: 2 }}>{nutrientSummary(product)}</div>
+          </div>
+          <span
+            style={{
+              flexShrink: 0,
+              marginLeft: 10,
+              width: 26,
+              height: 26,
+              borderRadius: 8,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: isSelected ? color : "#EDEAE0",
+              color: isSelected ? "#fff" : "#8A8776",
+            }}
+          >
+            {isSelected ? <X size={15} /> : <Plus size={15} />}
+          </span>
+        </button>
+        {onRemove && (
+          <button onClick={onRemove} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#A23E2B", padding: 4, marginLeft: 4 }}>
+            <X size={14} />
+          </button>
+        )}
+      </div>
+
+      {isSelected && (
+        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+          <label style={{ fontSize: 11, flex: 1 }}>
+            Dose ({product.unit})
+            <input type="number" step="0.01" value={doseValue} onChange={(e) => onUpdate("dose", e.target.value)} style={inputStyle} />
+          </label>
+          <label style={{ fontSize: 11, flex: 1 }}>
+            Preço (R$/{product.unit.split("/")[0]})
+            <input type="number" step="0.01" value={priceValue} onChange={(e) => onUpdate("price", e.target.value)} style={inputStyle} />
+          </label>
+        </div>
+      )}
     </div>
   );
 }

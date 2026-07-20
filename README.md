@@ -27,13 +27,16 @@ com garantias de nutrientes reais extraídas dos catálogos.
 A seção "2 · Linha Agrocete" já vem pré-carregada com o catálogo oficial
 da **Linha GRAP** (28 produtos), extraído do Folheto de Garantias Agrocete
 de maio/2023 (`GRAP_CATALOG` em `AgroComparador.jsx`). As garantias do
-folheto são percentuais (%m/m); foram convertidas para g/L usando a
-densidade (`d`) informada de cada produto (`g/L = % × densidade × 10`),
-mesma técnica já usada para os produtos Ballagro. Produtos do folheto sem
-garantia de nutriente (adjuvantes, inoculantes, limpeza de equipamento)
-não entraram no catálogo, pois não há o que comparar no gráfico de
-nutrientes. As doses padrão são um valor genérico de partida — ajuste
-conforme a bula/recomendação técnica de cada produto.
+folheto são percentuais (%m/m); a densidade de cada produto foi usada para
+convertê-las para g/L na hora de montar o catálogo (`g/L = % × densidade
+× 10`), mesma técnica já usada para os produtos Ballagro — o código
+armazena apenas o resultado final em `nutrients`, não a densidade de
+origem, então para auditar um valor é preciso voltar ao folheto (`fonte`
+de cada produto). Produtos do folheto sem garantia de nutriente
+(adjuvantes, inoculantes, limpeza de equipamento) não entraram no
+catálogo, pois não há o que comparar no gráfico de nutrientes. As doses
+padrão são um valor genérico de partida — ajuste conforme a
+bula/recomendação técnica de cada produto.
 
 Produtos que não estejam no catálogo oficial podem ser cadastrados à mão
 pelo formulário "Adicionar produto Agrocete" dentro do app.
@@ -67,6 +70,46 @@ vercel
 
 Ou importe o repositório diretamente em https://vercel.com/new — a
 Vercel detecta o framework Vite automaticamente.
+
+## Deploy como arquivo único (Firebase Hosting e afins)
+
+Para hosts estáticos simples (Firebase Hosting, GitHub Pages, ou
+"arrastar e soltar" um único arquivo), gere uma versão com tudo
+embutido em um único `index.html` (CSS e JS inline, sem arquivos
+externos):
+
+```bash
+npm run build:standalone
+```
+
+Isso cria `dist-standalone/index.html` — um arquivo autocontido de
+~950 KB que funciona sozinho, sem servidor (testado até abrindo
+direto via `file://`).
+
+O `firebase.json` do projeto já está configurado (`"public":
+"dist-standalone"`), então não precisa rodar `firebase init` — só
+autenticar, linkar o projeto e publicar:
+
+```bash
+npm i -g firebase-tools   # se ainda não tiver a CLI
+firebase login            # autentica com sua conta Google
+firebase use --add        # escolhe/cria o projeto Firebase e grava .firebaserc
+npm run deploy:firebase   # gera o build standalone e publica
+```
+
+`firebase use --add` grava um `.firebaserc` local com o ID do projeto
+escolhido — esse arquivo não é versionado (fica no `.gitignore`) porque
+o ID do projeto Firebase é específico de cada pessoa/conta. Depois do
+primeiro `firebase use --add`, só rodar `npm run deploy:firebase` nas
+próximas vezes.
+
+Diferença para o build normal (`npm run build`, usado no deploy da
+Vercel): o build normal divide o app em vários arquivos (JS/CSS
+separados, com `jspdf` carregado sob demanda só quando o botão de
+exportar é clicado) — mais eficiente para carregamento inicial. O
+build standalone embute tudo, incluindo o `jspdf`, no próprio
+`index.html`, então o arquivo é maior mas roda em qualquer lugar sem
+depender de múltiplos arquivos.
 
 ## Próximos passos sugeridos (para pedir ao Claude Code)
 
