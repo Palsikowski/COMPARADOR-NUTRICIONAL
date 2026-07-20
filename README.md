@@ -84,17 +84,24 @@ npm run build:standalone
 
 Isso cria `dist-standalone/index.html` — um arquivo autocontido de
 ~950 KB que funciona sozinho, sem servidor (testado até abrindo
-direto via `file://`). Para publicar no Firebase Hosting:
+direto via `file://`).
+
+O `firebase.json` do projeto já está configurado (`"public":
+"dist-standalone"`), então não precisa rodar `firebase init` — só
+autenticar, linkar o projeto e publicar:
 
 ```bash
 npm i -g firebase-tools   # se ainda não tiver a CLI
-firebase login
-firebase init hosting     # aponte o "public directory" para dist-standalone
-firebase deploy
+firebase login            # autentica com sua conta Google
+firebase use --add        # escolhe/cria o projeto Firebase e grava .firebaserc
+npm run deploy:firebase   # gera o build standalone e publica
 ```
 
-Ou, se preferir configurar manualmente, edite `firebase.json` para
-apontar `"public": "dist-standalone"`, e rode `firebase deploy`.
+`firebase use --add` grava um `.firebaserc` local com o ID do projeto
+escolhido — esse arquivo não é versionado (fica no `.gitignore`) porque
+o ID do projeto Firebase é específico de cada pessoa/conta. Depois do
+primeiro `firebase use --add`, só rodar `npm run deploy:firebase` nas
+próximas vezes.
 
 Diferença para o build normal (`npm run build`, usado no deploy da
 Vercel): o build normal divide o app em vários arquivos (JS/CSS

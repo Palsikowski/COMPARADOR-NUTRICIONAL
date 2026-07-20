@@ -3,3 +3,5 @@ dist
 dist-standalone
 .env
 .DS_Store
+.firebaserc
+.firebase
