@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import {
   Leaf,
   ChevronDown,
   ChevronUp,
   Plus,
+  Minus,
   X,
   Download,
   Search,
@@ -12,6 +13,12 @@ import {
   Lightbulb,
   AlertTriangle,
   TrendingUp,
+  Save,
+  FolderOpen,
+  Trash2,
+  Pencil,
+  BadgeCheck,
+  Coins,
 } from "lucide-react";
 import { PRODUCTS } from "./data/products.js";
 import { EQUIVALENCES, EQUIVALENCE_FOOTNOTES } from "./data/equivalences.js";
@@ -46,6 +53,7 @@ function brandColor(brand) {
 }
 
 const STORAGE_KEY = "agro-dashboard-state-v1";
+const TEMPLATES_KEY = "agro-dashboard-templates-v1";
 
 function loadPersistedState() {
   try {
@@ -53,6 +61,15 @@ function loadPersistedState() {
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
+  }
+}
+
+function loadTemplates() {
+  try {
+    const raw = localStorage.getItem(TEMPLATES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
   }
 }
 
@@ -68,6 +85,14 @@ function fmtNum(n) {
   return Number(n).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
 }
 
+function vibrate(pattern) {
+  try {
+    if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(pattern);
+  } catch {
+    // dispositivo sem suporte — ignora silenciosamente
+  }
+}
+
 export default function Dashboard() {
   const [selected, setSelected] = useState(() => loadPersistedState()?.selected ?? {}); // id -> { dose, price }
   const [customProducts, setCustomProducts] = useState(() => loadPersistedState()?.customProducts ?? []);
@@ -77,6 +102,8 @@ export default function Dashboard() {
   const [openBrand, setOpenBrand] = useState(AGROCETE);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProd, setNewProd] = useState({ name: "", unit: "L/ha", dose: 1, price: 0, nutrients: {} });
+  const [templates, setTemplates] = useState(() => loadTemplates());
+  const [showTemplates, setShowTemplates] = useState(false);
 
   useEffect(() => {
     try {
@@ -86,10 +113,45 @@ export default function Dashboard() {
     }
   }, [selected, customProducts]);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(TEMPLATES_KEY, JSON.stringify(templates));
+    } catch {
+      // localStorage indisponível — ignora, templates só não persistem
+    }
+  }, [templates]);
+
+  function saveTemplate() {
+    const name = window.prompt("Nome do manejo (ex: Manejo Soja V4 - Concorrente Stoller):");
+    if (!name || !name.trim()) return;
+    const template = { id: genId("tpl"), name: name.trim(), selected, createdAt: Date.now() };
+    setTemplates((prev) => [template, ...prev]);
+  }
+
+  function loadTemplate(id) {
+    const tpl = templates.find((t) => t.id === id);
+    if (!tpl) return;
+    setSelected(tpl.selected || {});
+    vibrate(15);
+  }
+
+  function renameTemplate(id) {
+    const tpl = templates.find((t) => t.id === id);
+    if (!tpl) return;
+    const name = window.prompt("Novo nome do manejo:", tpl.name);
+    if (!name || !name.trim()) return;
+    setTemplates((prev) => prev.map((t) => (t.id === id ? { ...t, name: name.trim() } : t)));
+  }
+
+  function deleteTemplate(id) {
+    setTemplates((prev) => prev.filter((t) => t.id !== id));
+  }
+
   const allProducts = useMemo(() => [...PRODUCTS, ...customProducts], [customProducts]);
   const productsById = useMemo(() => new Map(allProducts.map((p) => [p.id, p])), [allProducts]);
 
   function toggleProduct(product) {
+    vibrate(12);
     setSelected((prev) => {
       const next = { ...prev };
       if (next[product.id]) {
@@ -175,6 +237,36 @@ export default function Dashboard() {
       max = Math.max(max, totals.agro.nutrients[k] || 0, totals.comp.nutrients[k] || 0);
     });
     return max || 1;
+  }, [allNutrientKeys, totals]);
+
+  // --- índice de custo-benefício por nutriente (R$/kg entregue) ---
+  const costBenefit = useMemo(() => {
+    if (totals.agro.cost <= 0 || totals.comp.cost <= 0) return { rows: [], insights: [] };
+    const rows = [];
+    const insights = [];
+    allNutrientKeys.forEach((key) => {
+      const agroG = totals.agro.nutrients[key] || 0;
+      const compG = totals.comp.nutrients[key] || 0;
+      if (agroG <= 0 || compG <= 0) return;
+      const agroCostPerKg = totals.agro.cost / (agroG / 1000);
+      const compCostPerKg = totals.comp.cost / (compG / 1000);
+      // entrega por real investido (kg de nutriente por R$) — quanto maior, melhor
+      const agroPerReal = 1 / agroCostPerKg;
+      const compPerReal = 1 / compCostPerKg;
+      const diffPct = compPerReal > 0 ? ((agroPerReal - compPerReal) / compPerReal) * 100 : null;
+      const winner = agroCostPerKg < compCostPerKg ? "agro" : agroCostPerKg > compCostPerKg ? "comp" : "empate";
+      rows.push({ key, agroCostPerKg, compCostPerKg, diffPct, winner });
+      if (diffPct != null && Math.abs(diffPct) >= 15) {
+        insights.push({
+          key,
+          label: NUTRIENT_META[key]?.label ?? key,
+          pct: diffPct,
+          favor: diffPct > 0 ? "agro" : "comp",
+        });
+      }
+    });
+    insights.sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct));
+    return { rows, insights };
   }, [allNutrientKeys, totals]);
 
   // --- KPIs ---
@@ -370,6 +462,13 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#0F1720", fontFamily: "'Inter', system-ui, sans-serif", color: "#E8EDF1" }}>
+      <style>{`
+        @keyframes pulseCta {
+          0%, 100% { box-shadow: 0 0 0 0 ${AGROCETE_COLOR}66; }
+          50% { box-shadow: 0 0 0 8px ${AGROCETE_COLOR}00; }
+        }
+        .pulse-cta { animation: pulseCta 1.8s ease-in-out infinite; }
+      `}</style>
       {/* NAVBAR */}
       <header
         style={{
@@ -426,6 +525,90 @@ export default function Dashboard() {
               fontFamily: "inherit",
             }}
           />
+        </div>
+
+        {/* MANEJOS SALVOS / TEMPLATES */}
+        <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden", marginBottom: 14 }}>
+          <button
+            onClick={() => setShowTemplates((v) => !v)}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "12px 14px",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              color: "#E8EDF1",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <FolderOpen size={15} color="#1FBF8F" />
+              <span style={{ fontWeight: 700, fontSize: 13 }}>Manejos salvos</span>
+              {templates.length > 0 && (
+                <span style={{ fontSize: 11, background: "#233241", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>{templates.length}</span>
+              )}
+            </div>
+            {showTemplates ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          {showTemplates && (
+            <div style={{ padding: "0 14px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
+              <button
+                onClick={saveTemplate}
+                disabled={selectedCount === 0}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 7,
+                  padding: "9px",
+                  borderRadius: 8,
+                  border: "1.5px dashed #1FBF8F",
+                  background: "transparent",
+                  color: selectedCount === 0 ? "#4A5866" : "#1FBF8F",
+                  fontWeight: 600,
+                  fontSize: 12,
+                  cursor: selectedCount === 0 ? "default" : "pointer",
+                  opacity: selectedCount === 0 ? 0.6 : 1,
+                }}
+              >
+                <Save size={14} /> Salvar manejo atual como template
+              </button>
+              {templates.length === 0 && <p style={{ fontSize: 12, color: "#5C6B78", margin: 0 }}>Nenhum manejo salvo ainda.</p>}
+              {templates.map((tpl) => (
+                <div
+                  key={tpl.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 8,
+                    background: "#0F1720",
+                    border: "1px solid #24313D",
+                    borderRadius: 8,
+                    padding: "8px 10px",
+                  }}
+                >
+                  <button
+                    onClick={() => loadTemplate(tpl.id)}
+                    style={{ flex: 1, textAlign: "left", background: "transparent", border: "none", cursor: "pointer", color: "#E8EDF1" }}
+                  >
+                    <div style={{ fontSize: 13, fontWeight: 600 }}>{tpl.name}</div>
+                    <div style={{ fontSize: 10, color: "#5C6B78" }}>
+                      {Object.keys(tpl.selected || {}).length} produto(s) · {new Date(tpl.createdAt).toLocaleDateString("pt-BR")}
+                    </div>
+                  </button>
+                  <button onClick={() => renameTemplate(tpl.id)} title="Renomear" style={{ background: "transparent", border: "none", cursor: "pointer", color: "#8CA0AF", padding: 4 }}>
+                    <Pencil size={14} />
+                  </button>
+                  <button onClick={() => deleteTemplate(tpl.id)} title="Excluir" style={{ background: "transparent", border: "none", cursor: "pointer", color: "#F87171", padding: 4 }}>
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* MODE TABS */}
@@ -567,7 +750,7 @@ export default function Dashboard() {
                 <LegendDot color="#6B7A88" label="Concorrentes" />
                 <LegendDot color={AGROCETE_COLOR} label="Agrocete" />
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {allNutrientKeys.map((key) => {
                   const compVal = totals.comp.nutrients[key] || 0;
                   const agroVal = totals.agro.nutrients[key] || 0;
@@ -579,8 +762,7 @@ export default function Dashboard() {
                           {fmtNum(compVal)} g vs {fmtNum(agroVal)} g
                         </span>
                       </div>
-                      <Bar value={compVal} max={maxValue} color="#6B7A88" />
-                      <Bar value={agroVal} max={maxValue} color={AGROCETE_COLOR} style={{ marginTop: 3 }} />
+                      <LeadBar compVal={compVal} agroVal={agroVal} />
                     </div>
                   );
                 })}
@@ -602,6 +784,75 @@ export default function Dashboard() {
                     Manejo Agrocete é <strong style={{ color: "#F5A524" }}>R$ {(totals.agro.cost - totals.comp.cost).toFixed(2)} mais caro</strong> — avalie se a diferença de nutrientes abaixo justifica o custo.
                   </span>
                 )}
+              </div>
+            )}
+
+            {/* CUSTO-BENEFÍCIO POR NUTRIENTE */}
+            {costBenefit.rows.length > 0 && (
+              <div style={{ marginTop: 16 }}>
+                <SectionHeading icon={<Coins size={16} />} title="Custo-benefício por nutriente (R$/kg entregue)" />
+                {costBenefit.insights.map((ins) => (
+                  <div
+                    key={ins.key}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      background: ins.favor === "agro" ? `${AGROCETE_COLOR}1A` : "#F871711A",
+                      border: `1px solid ${ins.favor === "agro" ? AGROCETE_COLOR : "#F87171"}55`,
+                      borderRadius: 10,
+                      padding: "10px 12px",
+                      marginBottom: 8,
+                      fontSize: 12,
+                    }}
+                  >
+                    <BadgeCheck size={16} color={ins.favor === "agro" ? AGROCETE_COLOR : "#F87171"} style={{ flexShrink: 0 }} />
+                    <span>
+                      {ins.favor === "agro" ? (
+                        <>
+                          <strong style={{ color: AGROCETE_COLOR }}>Agrocete</strong> entrega{" "}
+                          <strong style={{ color: AGROCETE_COLOR }}>{fmtNum(Math.abs(ins.pct))}% mais {ins.label}</strong> pelo mesmo investimento.
+                        </>
+                      ) : (
+                        <>
+                          O manejo <strong style={{ color: "#F87171" }}>concorrente</strong> entrega{" "}
+                          <strong style={{ color: "#F87171" }}>{fmtNum(Math.abs(ins.pct))}% mais {ins.label}</strong> pelo mesmo investimento.
+                        </>
+                      )}
+                    </span>
+                  </div>
+                ))}
+                <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr 1fr", padding: "10px 12px", fontSize: 10, color: "#5C6B78", textTransform: "uppercase", letterSpacing: "0.04em", borderBottom: "1px solid #1E2A35" }}>
+                    <span>Nutriente</span>
+                    <span style={{ textAlign: "right" }}>Concorrente</span>
+                    <span style={{ textAlign: "right" }}>Agrocete</span>
+                  </div>
+                  {costBenefit.rows.map((r) => (
+                    <div
+                      key={r.key}
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1.3fr 1fr 1fr",
+                        padding: "9px 12px",
+                        fontSize: 12,
+                        borderBottom: "1px solid #1E2A35",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span style={{ fontWeight: 600 }}>{NUTRIENT_META[r.key]?.label ?? r.key}</span>
+                      <span style={{ textAlign: "right", color: r.winner === "comp" ? "#F87171" : "#8CA0AF", fontWeight: r.winner === "comp" ? 700 : 400 }}>
+                        R$ {fmtNum(r.compCostPerKg)}
+                      </span>
+                      <span style={{ textAlign: "right", color: r.winner === "agro" ? AGROCETE_COLOR : "#8CA0AF", fontWeight: r.winner === "agro" ? 700 : 400 }}>
+                        R$ {fmtNum(r.agroCostPerKg)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <p style={{ fontSize: 10, color: "#5C6B78", marginTop: 6 }}>
+                  Menor R$/kg = mais nutriente entregue por real investido. Valor destacado indica o manejo mais eficiente para aquele nutriente.
+                </p>
               </div>
             )}
 
@@ -652,6 +903,7 @@ export default function Dashboard() {
 
             <button
               onClick={exportPDF}
+              className={totals.agro.cost > 0 && totals.comp.cost > 0 ? "pulse-cta" : undefined}
               style={{
                 marginTop: 16,
                 width: "100%",
@@ -747,11 +999,145 @@ function Bar({ value, max, color, style }) {
   );
 }
 
+// Mini barra de liderança: leitura em <1s de quem entrega mais daquele nutriente.
+// Verde = Agrocete na frente · Vermelho = Agrocete atrás. Preenchimento = participação do líder no total.
+function LeadBar({ compVal, agroVal }) {
+  const total = compVal + agroVal;
+  const agroAhead = agroVal >= compVal;
+  const leadShare = total > 0 ? Math.max(compVal, agroVal) / total : 0.5;
+  const pct = Math.round(leadShare * 100);
+  const color = agroAhead ? AGROCETE_COLOR : "#F87171";
+  return (
+    <div style={{ position: "relative", background: "#0F1720", borderRadius: 5, height: 9, overflow: "hidden" }}>
+      <div
+        style={{
+          width: `${pct}%`,
+          height: "100%",
+          background: color,
+          borderRadius: 5,
+          transition: "width 0.3s, background 0.3s",
+          marginLeft: agroAhead ? "auto" : 0,
+        }}
+      />
+    </div>
+  );
+}
+
 function CostCard({ label, value, color }) {
   return (
     <div style={{ flex: 1, background: "#17212B", border: `1.5px solid ${color}44`, borderRadius: 10, padding: 12 }}>
       <div style={{ fontSize: 11, color: "#8CA0AF" }}>{label}</div>
       <div style={{ fontSize: 20, fontWeight: 700, color, marginTop: 2 }}>R$ {value.toFixed(2)}</div>
+    </div>
+  );
+}
+
+// Stepper de dose: +/- com aceleração em long-press; duplo toque alterna passo fino (0,1) / grosso (1,0).
+function DoseStepper({ label, value, onChange }) {
+  const [fine, setFine] = useState(false);
+  const intervalRef = useRef(null);
+  const timeoutRef = useRef(null);
+  const tickCountRef = useRef(0);
+  const lastTapRef = useRef(0);
+  const stepSize = fine ? 0.1 : 1;
+
+  const apply = useCallback(
+    (delta) => {
+      onChange(String(Math.max(0, Math.round((Number(value || 0) + delta) * 100) / 100)));
+    },
+    [onChange, value]
+  );
+
+  function stopPress() {
+    clearTimeout(timeoutRef.current);
+    clearInterval(intervalRef.current);
+    tickCountRef.current = 0;
+  }
+
+  function startPress(sign) {
+    apply(sign * stepSize);
+    timeoutRef.current = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
+        tickCountRef.current += 1;
+        const accel = tickCountRef.current > 15 ? 4 : tickCountRef.current > 8 ? 2 : 1;
+        apply(sign * stepSize * accel);
+      }, 110);
+    }, 420);
+  }
+
+  function handleTap() {
+    const now = Date.now();
+    if (now - lastTapRef.current < 320) {
+      setFine((f) => !f);
+      vibrate(8);
+    }
+    lastTapRef.current = now;
+  }
+
+  useEffect(() => stopPress, []);
+
+  const btnStyle = {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    border: "1px solid #24313D",
+    background: "#0F1720",
+    color: "#E8EDF1",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    flexShrink: 0,
+    userSelect: "none",
+    touchAction: "manipulation",
+  };
+
+  return (
+    <div>
+      <div style={{ fontSize: 11, color: "#8CA0AF", marginBottom: 4, display: "flex", justifyContent: "space-between" }}>
+        <span>{label}</span>
+        <span style={{ color: "#5C6B78" }}>passo {fmtNum(stepSize)} · duplo toque alterna</span>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 6 }} onClick={handleTap}>
+        <button
+          type="button"
+          style={btnStyle}
+          onMouseDown={() => startPress(-1)}
+          onMouseUp={stopPress}
+          onMouseLeave={stopPress}
+          onTouchStart={() => startPress(-1)}
+          onTouchEnd={stopPress}
+        >
+          <Minus size={14} />
+        </button>
+        <input
+          type="number"
+          step={stepSize}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          style={{ ...inputStyle, margin: 0, textAlign: "center", flex: 1 }}
+        />
+        <button
+          type="button"
+          style={btnStyle}
+          onMouseDown={() => startPress(1)}
+          onMouseUp={stopPress}
+          onMouseLeave={stopPress}
+          onTouchStart={() => startPress(1)}
+          onTouchEnd={stopPress}
+        >
+          <Plus size={14} />
+        </button>
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={Math.max(20, (Number(value) || 0) * 3, 5)}
+        step={stepSize}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        style={{ width: "100%", marginTop: 6, accentColor: AGROCETE_COLOR }}
+      />
     </div>
   );
 }
@@ -819,12 +1205,9 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
       </div>
 
       {isSelected && (
-        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-          <label style={{ fontSize: 11, flex: 1, color: "#8CA0AF" }}>
-            Dose ({product.unit || "un"})
-            <input type="number" step="0.01" value={doseValue} onChange={(e) => onUpdate("dose", e.target.value)} style={inputStyle} />
-          </label>
-          <label style={{ fontSize: 11, flex: 1, color: "#8CA0AF" }}>
+        <div style={{ marginTop: 10 }}>
+          <DoseStepper label={`Dose (${product.unit || "un"})`} value={doseValue} onChange={(v) => onUpdate("dose", v)} />
+          <label style={{ fontSize: 11, display: "block", marginTop: 8, color: "#8CA0AF" }}>
             Preço (R$/{(product.unit || "un").split("/")[0]})
             <input type="number" step="0.01" value={priceValue} onChange={(e) => onUpdate("price", e.target.value)} style={inputStyle} />
           </label>
@@ -835,9 +1218,15 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
 }
 
 function EquivChip({ label, brandLabel, color, isSelected, onClick, disabled }) {
+  const [pressed, setPressed] = useState(false);
   return (
     <button
       onClick={disabled ? undefined : onClick}
+      onMouseDown={() => !disabled && setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onMouseLeave={() => setPressed(false)}
+      onTouchStart={() => !disabled && setPressed(true)}
+      onTouchEnd={() => setPressed(false)}
       title={disabled ? "Sem dados nutricionais cadastrados para este produto" : undefined}
       style={{
         display: "inline-flex",
@@ -851,6 +1240,8 @@ function EquivChip({ label, brandLabel, color, isSelected, onClick, disabled }) 
         fontSize: 11,
         cursor: disabled ? "default" : "pointer",
         opacity: disabled ? 0.7 : 1,
+        transform: pressed ? "scale(1.05)" : "scale(1)",
+        transition: "transform 0.12s ease",
       }}
     >
       <span style={{ width: 6, height: 6, borderRadius: "50%", background: disabled ? "#4A5866" : color, display: "inline-block" }} />
