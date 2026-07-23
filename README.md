@@ -20,6 +20,20 @@ senha" abaixo para trocar).
 - `src/Dashboard.jsx` — componente principal: navegação por categoria
   (equivalência) ou por marca, seleção de produtos, comparativo de
   nutrientes/custo, posicionamento técnico, exportação em PDF.
+- `src/dashboard/DoseStepper.jsx` — stepper +/- com aceleração em
+  long-press, duplo toque alterna passo fino (0,1) / grosso (1,0), e
+  slider horizontal sincronizado.
+- `src/dashboard/CurrentManagement.jsx` — lista "Manejo atual" com
+  remoção por swipe (touch) ou clique.
+- `src/dashboard/TemplatesPanel.jsx` — salvar/carregar/renomear/excluir
+  manejos (combinação de produtos + doses) como templates nomeados.
+- `src/dashboard/BottomSheet.jsx` — resumo fixo arrastável (estilo
+  Google Maps) com macros-chave e custo, expansível em tela cheia.
+- `src/dashboard/CostEfficiency.jsx` — cálculo de R$/kg por nutriente
+  entregue, insights automáticos e a barra de comparação compacta.
+- `src/dashboard.css` — micro-interações que inline styles não
+  expressam: escala ao tocar, accordion com altura suave, pulso do
+  bottom sheet, estilo do slider.
 - `src/PasswordGate.jsx` — tela de senha antes de carregar o dashboard.
 - `src/main.jsx` — ponto de entrada React.
 - `src/data/products.js` — catálogo de 308 produtos (Agrocete + 11
@@ -81,13 +95,57 @@ Além disso, qualquer observação ou alerta já cadastrado na planilha
 para um produto Agrocete selecionado (ex: índice salino, incompatibilidade
 com herbicida, ganho de absorção) aparece nessa mesma seção.
 
+## Custo-benefício por nutriente
+
+Para cada nutriente do comparativo, o painel calcula R$ por kg
+entregue em cada manejo (custo total do manejo ÷ total daquele
+nutriente) — é um índice agregado, não uma alocação exata de custo por
+nutriente de um produto multi-nutriente, mas é o proxy padrão usado no
+agro pra comparar "custo por kg de nutriente" de um programa inteiro.
+Quando a diferença entre os dois manejos passa de 15% num nutriente, um
+selo de insight aparece automaticamente (ex: "Agrocete entrega Cálcio
+23% mais barato por kg que o concorrente") — o texto muda de lado
+conforme o resultado real, não é fixo a favor da Agrocete. Os insights
+entram também na exportação em PDF.
+
+## Manejos salvos (templates)
+
+O botão "Manejos salvos" permite nomear e salvar a seleção atual
+(produtos + doses + preços) como um template, pra recarregar rápido em
+campo — útil pra manejos recorrentes tipo "Soja V4 vs. Stoller". Os
+templates ficam no mesmo `localStorage` do resto do app; dá pra
+renomear ou excluir a qualquer momento.
+
+## Interação pensada pro campo
+
+- **Chips/cards tocáveis**: ficam preenchidos com a cor da marca ao
+  selecionar, com um badge mostrando a dose atual (ex: "2L") e uma
+  leve animação de escala ao toque.
+- **Busca instantânea** por nome, composição, categoria ou nutriente
+  (ex: buscar "Zinco" encontra produtos com esse micronutriente).
+- **Manejo atual**: lista sempre visível dos produtos selecionados —
+  arraste um item pra esquerda (touch) ou toque no X pra remover.
+- **Dose com stepper + slider**: botões +/- com aceleração se
+  mantidos pressionados, valor numérico editável, slider horizontal, e
+  duplo toque nos botões +/- alterna entre passo fino (0,1) e grosso
+  (1,0).
+- **Bottom sheet arrastável** (estilo Google Maps), fixo no rodapé,
+  com o resumo do manejo — toque ou arraste pra expandir e ver os
+  macros-chave (N, P, K, Ca, Mg) e o custo em tela cheia. Pulsa
+  suavemente quando os dois lados (concorrente e Agrocete) já têm
+  produto selecionado.
+- **Alto contraste**: botão de sol/lua no cabeçalho alterna pra um
+  fundo mais escuro, pensado pra leitura sob sol forte.
+- **Vibração tátil leve** (quando o navegador/aparelho suporta) ao
+  selecionar ou remover um produto.
+
 ## Persistência
 
-A seleção de produtos (doses e preços) é salva automaticamente no
-`localStorage` do navegador a cada alteração, sob a chave
-`agro-dashboard-state-v1`. Ao recarregar a página o estado é
-restaurado. É armazenamento local por navegador/dispositivo — não
-sincroniza entre aparelhos.
+A seleção de produtos (doses e preços) e os manejos salvos são
+gravados automaticamente no `localStorage` do navegador a cada
+alteração, sob a chave `agro-dashboard-state-v1`. Ao recarregar a
+página o estado é restaurado. É armazenamento local por
+navegador/dispositivo — não sincroniza entre aparelhos.
 
 ## Tela de senha
 
