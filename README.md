@@ -50,6 +50,33 @@ chave `agro-comparador-state-v1`. Ao recarregar a página o estado é
 restaurado. Isso é armazenamento local por navegador/dispositivo — não
 sincroniza entre aparelhos nem sobrevive a "limpar dados do site".
 
+## Tela de senha
+
+O app fica atrás de uma tela de senha simples (`src/PasswordGate.jsx`)
+antes de carregar o comparador — pensada para publicações em hosts
+gratuitos, onde não dá pra restringir acesso de outra forma sem custo.
+Só o hash SHA-256 da senha fica no código (não a senha em texto puro),
+mas isso **não é segurança de verdade**: qualquer pessoa com acesso ao
+código-fonte da página pode tentar quebrar o hash offline. Serve para
+não deixar o app aberto para quem simplesmente achar o link.
+
+Para trocar a senha, gere o novo hash e substitua a constante
+`PASSWORD_HASH` em `src/PasswordGate.jsx`:
+
+```bash
+node -e "
+const { webcrypto } = require('crypto');
+(async () => {
+  const bytes = new TextEncoder().encode('SUA_SENHA_AQUI');
+  const digest = await webcrypto.subtle.digest('SHA-256', bytes);
+  console.log(Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join(''));
+})();
+"
+```
+
+Depois de acertar a senha uma vez, o navegador lembra (via
+`localStorage`) e não pede de novo nesse dispositivo.
+
 ## Exportar em PDF
 
 O botão "Exportar comparativo em PDF", exibido junto ao comparativo de
