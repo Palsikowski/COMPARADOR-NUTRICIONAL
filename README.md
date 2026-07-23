@@ -1,8 +1,9 @@
-# Comparador de Manejo Foliar
+# Painel Agrocete — Comparador de Portfólio x Mercado
 
-Protótipo para montar um manejo foliar selecionando produtos de diferentes
-empresas, somar os nutrientes fornecidos (g/ha) e comparar custo e nutrição
-com a linha Agrocete.
+Dashboard para agilizar cotações: navegue pelo portfólio completo da
+Agrocete e de 11 marcas concorrentes, monte um comparativo de nutrientes
+(g/ha) e custo, e veja o posicionamento técnico calculado automaticamente
+a partir dos dados reais das planilhas internas.
 
 ## Rodar localmente
 
@@ -11,49 +12,87 @@ npm install
 npm run dev
 ```
 
-Abre em `http://localhost:5173`.
+Abre em `http://localhost:5173`. Senha padrão: `12345678` (veja "Tela de
+senha" abaixo para trocar).
 
 ## Estrutura
 
-- `src/AgroComparador.jsx` — componente principal (dados dos produtos,
-  cálculo de somatória de nutrientes, comparação de custo).
+- `src/Dashboard.jsx` — componente principal: navegação por categoria
+  (equivalência) ou por marca, seleção de produtos, comparativo de
+  nutrientes/custo, posicionamento técnico, exportação em PDF.
+- `src/PasswordGate.jsx` — tela de senha antes de carregar o dashboard.
 - `src/main.jsx` — ponto de entrada React.
+- `src/data/products.js` — catálogo de 308 produtos (Agrocete + 11
+  marcas concorrentes), gerado a partir de planilha interna.
+- `src/data/equivalences.js` — matriz de 35 linhas de produto,
+  mapeando o produto Agrocete e o equivalente de cada marca
+  concorrente (quando existe).
+- `src/data/brands.js` — lista das marcas concorrentes presentes em
+  `products.js`.
 
 ## Dados dos produtos
 
-Os produtos concorrentes (Fortgreen, Stoller, ICL, Ballagro) já vêm
-com garantias de nutrientes reais extraídas dos catálogos.
+Todo o catálogo (`src/data/*.js`) foi gerado automaticamente a partir de
+duas planilhas internas da Agrocete (não versionadas no repositório —
+os dados extraídos já estão embutidos nos arquivos `.js`):
 
-A seção "2 · Linha Agrocete" já vem pré-carregada com o catálogo oficial
-da **Linha GRAP** (28 produtos), extraído do Folheto de Garantias Agrocete
-de maio/2023 (`GRAP_CATALOG` em `AgroComparador.jsx`). As garantias do
-folheto são percentuais (%m/m); a densidade de cada produto foi usada para
-convertê-las para g/L na hora de montar o catálogo (`g/L = % × densidade
-× 10`), mesma técnica já usada para os produtos Ballagro — o código
-armazena apenas o resultado final em `nutrients`, não a densidade de
-origem, então para auditar um valor é preciso voltar ao folheto (`fonte`
-de cada produto). Produtos do folheto sem garantia de nutriente
-(adjuvantes, inoculantes, limpeza de equipamento) não entraram no
-catálogo, pois não há o que comparar no gráfico de nutrientes. As doses
-padrão são um valor genérico de partida — ajuste conforme a
-bula/recomendação técnica de cada produto.
+- **Dados Nutricionais Agrocete x Concorrentes** — uma aba por marca
+  (Agrocete, Arggus, Bioma, Biotrop, F1rst Agbiotech, Giro Agro, ICL,
+  Nodusoja/Noduagri, Satis, Simbiose, Vittia, Viva Bio), com nome,
+  composição, dose, garantia de nutrientes (%m/m) e densidade de cada
+  produto. As garantias foram convertidas para o que o app usa nos
+  cálculos: **g/L** para produtos líquidos (`nutrients = %m/m ×
+  densidade × 10`) e **g/kg** para produtos sólidos, sem densidade
+  informada (`nutrients = %m/m × 10`). O valor percentual original fica
+  guardado em `nutrientsPercent` em cada produto, para auditoria.
+- **Comparativo de Portfólio de Mercado** — matriz "P. Similares", que
+  lista pra cada categoria/composição o produto Agrocete e o nome do
+  produto equivalente em até 20 marcas. Nem toda marca dessa matriz tem
+  aba de dados nutricionais na primeira planilha — quando não tem (ou
+  quando o nome não bateu exatamente com o catalogado), o produto
+  aparece só como referência textual (chip cinza, não clicável) em vez
+  de entrar no comparativo numérico.
 
-Produtos que não estejam no catálogo oficial podem ser cadastrados à mão
-pelo formulário "Adicionar produto Agrocete" dentro do app.
+**Limitações conhecidas dos dados** (herdadas das planilhas-fonte, não
+"corrigidas" para não inventar informação):
+- Doses (`defaultDose`) são estimadas a partir do primeiro número
+  encontrado no texto de dose da planilha — ponto de partida, não
+  recomendação agronômica. Ajuste sempre conforme a bula.
+- Das ~272 referências de produtos concorrentes na matriz de
+  equivalência, só ~50 puderam ser casadas com dados nutricionais
+  reais (a maioria das 20 marcas da matriz não tem aba própria na
+  planilha de nutrientes).
+- Três produtos que apareciam no folheto GRAP em PDF usado numa versão
+  anterior do app (GRAP CAFÉ, GRAP FRUTAS, GRAP PHIL K) não estão na
+  planilha interna mais recente e por isso não aparecem mais no
+  catálogo — se ainda forem vendidos, cadastre-os manualmente.
+
+Produtos que não estejam no catálogo podem ser cadastrados à mão pelo
+botão "Adicionar produto Agrocete manualmente", dentro do painel da
+marca AGROCETE (aba "Por marca").
+
+## Posicionamento técnico
+
+Sempre que exatamente um produto Agrocete e um produto concorrente
+(ambos com dados de nutrientes) estiverem selecionados ao mesmo tempo,
+o painel calcula automaticamente a diferença percentual de cada
+nutriente em comum entre os dois — números reais, não texto genérico.
+Além disso, qualquer observação ou alerta já cadastrado na planilha
+para um produto Agrocete selecionado (ex: índice salino, incompatibilidade
+com herbicida, ganho de absorção) aparece nessa mesma seção.
 
 ## Persistência
 
-O manejo montado (produtos selecionados, doses e preços, tanto dos
-concorrentes quanto os cadastrados na linha Agrocete) é salvo
-automaticamente no `localStorage` do navegador a cada alteração, sob a
-chave `agro-comparador-state-v1`. Ao recarregar a página o estado é
-restaurado. Isso é armazenamento local por navegador/dispositivo — não
-sincroniza entre aparelhos nem sobrevive a "limpar dados do site".
+A seleção de produtos (doses e preços) é salva automaticamente no
+`localStorage` do navegador a cada alteração, sob a chave
+`agro-dashboard-state-v1`. Ao recarregar a página o estado é
+restaurado. É armazenamento local por navegador/dispositivo — não
+sincroniza entre aparelhos.
 
 ## Tela de senha
 
 O app fica atrás de uma tela de senha simples (`src/PasswordGate.jsx`)
-antes de carregar o comparador — pensada para publicações em hosts
+antes de carregar o dashboard — pensada para publicações em hosts
 gratuitos, onde não dá pra restringir acesso de outra forma sem custo.
 Só o hash SHA-256 da senha fica no código (não a senha em texto puro),
 mas isso **não é segurança de verdade**: qualquer pessoa com acesso ao
@@ -79,11 +118,11 @@ Depois de acertar a senha uma vez, o navegador lembra (via
 
 ## Exportar em PDF
 
-O botão "Exportar comparativo em PDF", exibido junto ao comparativo de
-nutrientes, gera um PDF com a lista de produtos selecionados (dose e
-preço), a tabela de nutrientes (g/ha) por lado e o resumo de custo por
-hectare. A biblioteca `jspdf` é carregada sob demanda (import dinâmico)
-só quando o botão é clicado, para não pesar o bundle inicial do app.
+O botão "Exportar comparativo em PDF" gera um PDF com a lista de
+produtos selecionados (dose e preço), a tabela de nutrientes (g/ha) por
+lado, o resumo de custo e as notas de posicionamento técnico. A
+biblioteca `jspdf` é carregada sob demanda (import dinâmico) só quando
+o botão é clicado, para não pesar o bundle inicial do app.
 
 ## Deploy na Vercel
 
@@ -110,8 +149,8 @@ npm run build:standalone
 ```
 
 Isso cria `dist-standalone/index.html` — um arquivo autocontido de
-~950 KB que funciona sozinho, sem servidor (testado até abrindo
-direto via `file://`).
+~1,1 MB que funciona sozinho, sem servidor (testado até abrindo direto
+via `file://`).
 
 O `firebase.json` do projeto já está configurado (`"public":
 "dist-standalone"`), então não precisa rodar `firebase init` — só
@@ -140,8 +179,12 @@ depender de múltiplos arquivos.
 
 ## Próximos passos sugeridos (para pedir ao Claude Code)
 
-- Adicionar as demais empresas do portfólio (Brandt, Multifol, Prime,
-  Genica, Arggus, Valence, União Agro etc.), extraindo as garantias de
-  nutrientes dos PDFs de cada uma.
-- Permitir exportar/importar o manejo montado como JSON, para
-  compartilhar entre dispositivos sem depender só do `localStorage`.
+- Melhorar o casamento de nomes na matriz de equivalência (hoje só
+  ~18% das referências de concorrentes batem com um produto
+  catalogado) para aumentar a cobertura do comparativo automático.
+- Adicionar abas de nutrientes para as marcas que só têm nome de
+  produto na matriz de equivalência (Ballagro, Lallemand, Genica,
+  Koppert, Union Agro, Ubyfol, Nitro, Gran7, Dimicron, Syngenta
+  Biológicals), se houver dados/fichas técnicas disponíveis.
+- Permitir exportar/importar a seleção como JSON, para compartilhar
+  entre dispositivos sem depender só do `localStorage`.
