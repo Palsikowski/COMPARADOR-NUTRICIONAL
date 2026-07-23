@@ -12,10 +12,19 @@ import {
   Lightbulb,
   AlertTriangle,
   TrendingUp,
+  Sun,
+  Moon,
+  Gauge,
 } from "lucide-react";
 import { PRODUCTS } from "./data/products.js";
 import { EQUIVALENCES, EQUIVALENCE_FOOTNOTES } from "./data/equivalences.js";
 import { COMPETITOR_BRANDS } from "./data/brands.js";
+import "./dashboard.css";
+import DoseStepper from "./dashboard/DoseStepper.jsx";
+import CurrentManagement from "./dashboard/CurrentManagement.jsx";
+import TemplatesPanel from "./dashboard/TemplatesPanel.jsx";
+import BottomSheet from "./dashboard/BottomSheet.jsx";
+import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar } from "./dashboard/CostEfficiency.jsx";
 
 const NUTRIENT_META = {
   N: { label: "Nitrogênio", group: "macro" },
@@ -60,6 +69,14 @@ function genId(prefix) {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
+function vibrate(ms) {
+  try {
+    if (navigator.vibrate) navigator.vibrate(ms);
+  } catch {
+    // navegador sem suporte — ignora silenciosamente
+  }
+}
+
 function nutrientUnitSuffix(product) {
   return product.unit === "kg/ha" ? "g/kg" : "g/L";
 }
@@ -71,25 +88,30 @@ function fmtNum(n) {
 export default function Dashboard() {
   const [selected, setSelected] = useState(() => loadPersistedState()?.selected ?? {}); // id -> { dose, price }
   const [customProducts, setCustomProducts] = useState(() => loadPersistedState()?.customProducts ?? []);
+  const [templates, setTemplates] = useState(() => loadPersistedState()?.templates ?? []);
   const [mode, setMode] = useState("categoria"); // 'categoria' | 'marca'
   const [search, setSearch] = useState("");
   const [openEquivCategory, setOpenEquivCategory] = useState(null);
   const [openBrand, setOpenBrand] = useState(AGROCETE);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProd, setNewProd] = useState({ name: "", unit: "L/ha", dose: 1, price: 0, nutrients: {} });
+  const [fineStep, setFineStep] = useState(false); // passo 0,1 (fino) vs 1,0 (grosso) nos steppers de dose
+  const [sheetExpanded, setSheetExpanded] = useState(false);
+  const [highContrast, setHighContrast] = useState(false);
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, customProducts }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, customProducts, templates }));
     } catch {
       // localStorage indisponível — ignora, estado só não persiste
     }
-  }, [selected, customProducts]);
+  }, [selected, customProducts, templates]);
 
   const allProducts = useMemo(() => [...PRODUCTS, ...customProducts], [customProducts]);
   const productsById = useMemo(() => new Map(allProducts.map((p) => [p.id, p])), [allProducts]);
 
   function toggleProduct(product) {
+    vibrate(10);
     setSelected((prev) => {
       const next = { ...prev };
       if (next[product.id]) {
@@ -141,6 +163,22 @@ export default function Dashboard() {
     });
   }
 
+  function saveTemplate(name) {
+    setTemplates((prev) => [...prev, { id: genId("tpl"), name, selected, createdAt: Date.now() }]);
+  }
+
+  function loadTemplate(tpl) {
+    setSelected(tpl.selected);
+  }
+
+  function deleteTemplate(id) {
+    setTemplates((prev) => prev.filter((t) => t.id !== id));
+  }
+
+  function renameTemplate(id, newName) {
+    setTemplates((prev) => prev.map((t) => (t.id === id ? { ...t, name: newName } : t)));
+  }
+
   // --- totais ---
   const totals = useMemo(() => {
     const agro = { nutrients: {}, cost: 0, count: 0 };
@@ -169,13 +207,8 @@ export default function Dashboard() {
     });
   }, [totals]);
 
-  const maxValue = useMemo(() => {
-    let max = 0;
-    allNutrientKeys.forEach((k) => {
-      max = Math.max(max, totals.agro.nutrients[k] || 0, totals.comp.nutrients[k] || 0);
-    });
-    return max || 1;
-  }, [allNutrientKeys, totals]);
+  const costEfficiency = useMemo(() => computeCostEfficiency(totals, allNutrientKeys), [totals, allNutrientKeys]);
+  const insights = useMemo(() => computeInsights(costEfficiency, NUTRIENT_META), [costEfficiency]);
 
   // --- KPIs ---
   const kpis = useMemo(() => {
@@ -233,15 +266,20 @@ export default function Dashboard() {
     return groups;
   }, []);
 
-  // --- produtos por marca, filtrados por busca ---
+  // --- produtos por marca, filtrados por busca (nome, composição, categoria ou nutriente) ---
   const searchNorm = search.trim().toLowerCase();
   function matchesSearch(p) {
     if (!searchNorm) return true;
-    return (
-      p.name.toLowerCase().includes(searchNorm) ||
-      (p.composition && p.composition.toLowerCase().includes(searchNorm)) ||
-      (p.category && p.category.toLowerCase().includes(searchNorm))
-    );
+    if (p.name.toLowerCase().includes(searchNorm)) return true;
+    if (p.composition && p.composition.toLowerCase().includes(searchNorm)) return true;
+    if (p.category && p.category.toLowerCase().includes(searchNorm)) return true;
+    if (p.hasNutrients) {
+      for (const key of Object.keys(p.nutrients)) {
+        const label = (NUTRIENT_META[key]?.label ?? key).toLowerCase();
+        if (key.toLowerCase().includes(searchNorm) || label.includes(searchNorm)) return true;
+      }
+    }
+    return false;
   }
 
   const productsByBrand = useMemo(() => {
@@ -342,6 +380,29 @@ export default function Dashboard() {
       y += 12;
     }
 
+    if (insights.length > 0) {
+      if (y > 255) {
+        doc.addPage();
+        y = 15;
+      }
+      doc.setFontSize(12);
+      doc.setFont(undefined, "bold");
+      doc.text("Custo-benefício por nutriente — insights", 14, y);
+      doc.setFont(undefined, "normal");
+      y += 7;
+      doc.setFontSize(9);
+      insights.forEach((ins) => {
+        const lines = doc.splitTextToSize(`- ${ins.text}`, 180);
+        if (y + lines.length * 5 > 280) {
+          doc.addPage();
+          y = 15;
+        }
+        doc.text(lines, 14, y);
+        y += lines.length * 5 + 1;
+      });
+      y += 5;
+    }
+
     if (selectedAgroWithNotes.length > 0) {
       if (y > 250) {
         doc.addPage();
@@ -368,8 +429,17 @@ export default function Dashboard() {
     doc.save("comparativo-portfolio-agrocete.pdf");
   }
 
+  const hasBothSides = totals.agro.count > 0 && totals.comp.count > 0;
+
   return (
-    <div style={{ minHeight: "100vh", background: "#0F1720", fontFamily: "'Inter', system-ui, sans-serif", color: "#E8EDF1" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: highContrast ? "#000000" : "#0F1720",
+        fontFamily: "'Inter', system-ui, sans-serif",
+        color: "#FFFFFF",
+      }}
+    >
       {/* NAVBAR */}
       <header
         style={{
@@ -392,12 +462,44 @@ export default function Dashboard() {
             <div style={{ fontSize: 11, color: "#8CA0AF" }}>Comparador de Portfólio x Mercado</div>
           </div>
         </div>
-        <div style={{ fontSize: 12, color: "#8CA0AF" }}>
-          {PRODUCTS.length} produtos catalogados · {COMPETITOR_BRANDS.length} marcas concorrentes
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ fontSize: 12, color: "#8CA0AF" }}>
+            {PRODUCTS.length} produtos catalogados · {COMPETITOR_BRANDS.length} marcas concorrentes
+          </div>
+          <button
+            onClick={() => setHighContrast(!highContrast)}
+            className="tap-scale"
+            title={highContrast ? "Desativar alto contraste" : "Ativar alto contraste (sol forte)"}
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 8,
+              border: `1px solid ${highContrast ? AGROCETE_COLOR : "#24313D"}`,
+              background: highContrast ? `${AGROCETE_COLOR}22` : "#17212B",
+              color: highContrast ? AGROCETE_COLOR : "#8CA0AF",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              flexShrink: 0,
+            }}
+          >
+            {highContrast ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
         </div>
       </header>
 
-      <main style={{ maxWidth: 980, margin: "0 auto", padding: "20px 16px 120px" }}>
+      <main style={{ maxWidth: 980, margin: "0 auto", padding: "20px 16px 140px" }}>
+        <CurrentManagement selected={selected} productsById={productsById} brandColor={brandColor} onToggle={toggleProduct} />
+
+        <TemplatesPanel
+          templates={templates}
+          selectedCount={selectedCount}
+          onSave={saveTemplate}
+          onLoad={loadTemplate}
+          onDelete={deleteTemplate}
+          onRename={renameTemplate}
+        />
         {/* KPI ROW */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 22 }}>
           <KpiCard color="#F5A524" label="Produtos Agrocete" value={kpis.agroCount} />
@@ -413,7 +515,7 @@ export default function Dashboard() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar produto, composição ou categoria..."
+            placeholder="Buscar produto, composição, categoria ou nutriente (ex: Zinco)..."
             style={{
               width: "100%",
               padding: "10px 12px 10px 34px",
@@ -450,6 +552,7 @@ export default function Dashboard() {
                 <div key={cat} style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden", marginBottom: 10 }}>
                   <button
                     onClick={() => setOpenEquivCategory(isOpen ? null : cat)}
+                    className="tap-scale"
                     style={{
                       width: "100%",
                       display: "flex",
@@ -466,13 +569,13 @@ export default function Dashboard() {
                     <span style={{ fontWeight: 700, fontSize: 13, letterSpacing: "0.03em", textTransform: "uppercase" }}>{cat}</span>
                     {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                   </button>
-                  {isOpen && (
+                  <div className={`accordion-body${isOpen ? " open" : ""}`}>
                     <div style={{ padding: "0 14px 14px", display: "flex", flexDirection: "column", gap: 12 }}>
                       {filteredRows.map((row, i) => (
                         <EquivRow key={i} row={row} productsById={productsById} selected={selected} onToggle={toggleProduct} />
                       ))}
                     </div>
-                  )}
+                  </div>
                 </div>
               );
             })}
@@ -499,6 +602,7 @@ export default function Dashboard() {
                   <div key={brand} style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden" }}>
                     <button
                       onClick={() => setOpenBrand(isOpen ? null : brand)}
+                      className="tap-scale"
                       style={{
                         width: "100%",
                         display: "flex",
@@ -524,6 +628,8 @@ export default function Dashboard() {
                       </div>
                       {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                     </button>
+                    {/* Montagem condicional (não a transição suave via CSS) de propósito: uma marca pode
+                        ter 60+ produtos, então só renderiza a lista quando o painel está aberto. */}
                     {isOpen && (
                       <div style={{ padding: "0 12px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
                         {products.map((product) => (
@@ -537,6 +643,8 @@ export default function Dashboard() {
                             priceValue={selected[product.id]?.price}
                             onUpdate={(field, value) => updateSelected(product.id, field, value)}
                             onRemove={product.custom ? () => removeCustomProduct(product.id) : undefined}
+                            fineStep={fineStep}
+                            onToggleFineStep={() => setFineStep((v) => !v)}
                           />
                         ))}
                         {products.length === 0 && <p style={{ fontSize: 12, color: "#5C6B78" }}>Nenhum produto encontrado para essa busca.</p>}
@@ -560,12 +668,12 @@ export default function Dashboard() {
 
         {/* COMPARATIVO */}
         {allNutrientKeys.length > 0 && (
-          <section style={{ marginTop: 28 }}>
+          <section id="comparativo" style={{ marginTop: 28, scrollMarginTop: 16 }}>
             <SectionHeading icon={<TrendingUp size={16} />} title="Comparativo de nutrientes (g/ha)" />
-            <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14 }}>
+            <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 12 }}>
               <div style={{ display: "flex", gap: 14, fontSize: 11, marginBottom: 12 }}>
-                <LegendDot color="#6B7A88" label="Concorrentes" />
-                <LegendDot color={AGROCETE_COLOR} label="Agrocete" />
+                <LegendDot color="#22C55E" label="Na frente" />
+                <LegendDot color="#F87171" label="Atrás" />
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {allNutrientKeys.map((key) => {
@@ -579,13 +687,15 @@ export default function Dashboard() {
                           {fmtNum(compVal)} g vs {fmtNum(agroVal)} g
                         </span>
                       </div>
-                      <Bar value={compVal} max={maxValue} color="#6B7A88" />
-                      <Bar value={agroVal} max={maxValue} color={AGROCETE_COLOR} style={{ marginTop: 3 }} />
+                      <CompareBar agroVal={agroVal} compVal={compVal} />
                     </div>
                   );
                 })}
               </div>
             </div>
+
+            <SectionHeading icon={<Gauge size={16} />} title="Custo-benefício por nutriente" />
+            <CostEfficiencyPanel costEfficiency={costEfficiency} insights={insights} nutrientMeta={NUTRIENT_META} />
 
             <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
               <CostCard label="Custo concorrentes" value={totals.comp.cost} color="#6B7A88" />
@@ -652,6 +762,7 @@ export default function Dashboard() {
 
             <button
               onClick={exportPDF}
+              className="tap-scale"
               style={{
                 marginTop: 16,
                 width: "100%",
@@ -680,6 +791,15 @@ export default function Dashboard() {
           </div>
         )}
       </main>
+
+      <BottomSheet
+        totals={totals}
+        nutrientMeta={NUTRIENT_META}
+        expanded={sheetExpanded}
+        setExpanded={setSheetExpanded}
+        hasBothSides={hasBothSides}
+        onExportPDF={exportPDF}
+      />
     </div>
   );
 }
@@ -700,6 +820,7 @@ function ModeTab({ active, onClick, icon, label }) {
   return (
     <button
       onClick={onClick}
+      className="tap-scale"
       style={{
         display: "flex",
         alignItems: "center",
@@ -738,15 +859,6 @@ function LegendDot({ color, label }) {
   );
 }
 
-function Bar({ value, max, color, style }) {
-  const pct = Math.min(100, (value / max) * 100);
-  return (
-    <div style={{ background: "#0F1720", borderRadius: 5, height: 7, overflow: "hidden", ...style }}>
-      <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: 5, transition: "width 0.3s" }} />
-    </div>
-  );
-}
-
 function CostCard({ label, value, color }) {
   return (
     <div style={{ flex: 1, background: "#17212B", border: `1.5px solid ${color}44`, borderRadius: 10, padding: 12 }}>
@@ -756,19 +868,41 @@ function CostCard({ label, value, color }) {
   );
 }
 
-function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue, priceValue, onRemove }) {
+function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue, priceValue, onRemove, fineStep, onToggleFineStep }) {
+  const sliderMax = Math.max((product.defaultDose || 1) * 4, 5);
   return (
     <div
       style={{
+        position: "relative",
         border: `1.5px solid ${isSelected ? color : "#24313D"}`,
         borderRadius: 10,
         padding: 10,
-        background: isSelected ? `${color}14` : "#0F1720",
+        background: isSelected ? color : "#0F1720",
       }}
     >
+      {isSelected && doseValue != null && (
+        <span
+          style={{
+            position: "absolute",
+            top: -8,
+            right: onRemove ? 34 : 8,
+            background: "#0B1319",
+            color,
+            border: `1px solid ${color}`,
+            borderRadius: 999,
+            padding: "1px 8px",
+            fontSize: 10,
+            fontWeight: 700,
+          }}
+        >
+          {doseValue}
+          {product.unit ? product.unit.split("/")[0] : ""}
+        </span>
+      )}
       <div style={{ display: "flex", alignItems: "flex-start" }}>
         <button
           onClick={onToggle}
+          className="tap-scale"
           style={{
             flex: 1,
             display: "flex",
@@ -779,14 +913,17 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
             cursor: "pointer",
             padding: 0,
             textAlign: "left",
-            color: "#E8EDF1",
+            color: isSelected ? "#0B1319" : "#E8EDF1",
           }}
         >
           <div>
             <div style={{ fontWeight: 600, fontSize: 14 }}>
-              {product.name} {product.category && <span style={{ fontSize: 10, color: "#5C6B78", fontWeight: 400 }}> · {product.category}</span>}
+              {product.name}{" "}
+              {product.category && (
+                <span style={{ fontSize: 10, color: isSelected ? "#0B131999" : "#5C6B78", fontWeight: 400 }}> · {product.category}</span>
+              )}
             </div>
-            <div style={{ fontSize: 12, color: "#8CA0AF", marginTop: 2 }}>
+            <div style={{ fontSize: 12, color: isSelected ? "#0B1319CC" : "#8CA0AF", marginTop: 2 }}>
               {product.hasNutrients
                 ? Object.entries(product.nutrients)
                     .map(([el, v]) => `${NUTRIENT_META[el]?.label ?? el} ${fmtNum(v)}${nutrientUnitSuffix(product)}`)
@@ -804,29 +941,39 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: isSelected ? color : "#1B2530",
-              color: isSelected ? "#0B1319" : "#8CA0AF",
+              background: isSelected ? "#0B1319" : "#1B2530",
+              color: isSelected ? color : "#8CA0AF",
             }}
           >
             {isSelected ? <X size={15} /> : <Plus size={15} />}
           </span>
         </button>
         {onRemove && (
-          <button onClick={onRemove} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#F87171", padding: 4, marginLeft: 4 }}>
+          <button
+            onClick={onRemove}
+            className="tap-scale"
+            style={{ background: "transparent", border: "none", cursor: "pointer", color: isSelected ? "#0B1319" : "#F87171", padding: 4, marginLeft: 4 }}
+          >
             <X size={14} />
           </button>
         )}
       </div>
 
       {isSelected && (
-        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-          <label style={{ fontSize: 11, flex: 1, color: "#8CA0AF" }}>
+        <div style={{ display: "flex", gap: 12, marginTop: 10, flexWrap: "wrap" }}>
+          <div style={{ fontSize: 11, color: "#0B1319CC" }}>
             Dose ({product.unit || "un"})
-            <input type="number" step="0.01" value={doseValue} onChange={(e) => onUpdate("dose", e.target.value)} style={inputStyle} />
-          </label>
-          <label style={{ fontSize: 11, flex: 1, color: "#8CA0AF" }}>
+            <DoseStepper value={doseValue} onChange={(v) => onUpdate("dose", v)} fineStep={fineStep} onToggleFineStep={onToggleFineStep} max={sliderMax} />
+          </div>
+          <label style={{ fontSize: 11, flex: 1, minWidth: 90, color: "#0B1319CC" }}>
             Preço (R$/{(product.unit || "un").split("/")[0]})
-            <input type="number" step="0.01" value={priceValue} onChange={(e) => onUpdate("price", e.target.value)} style={inputStyle} />
+            <input
+              type="number"
+              step="0.01"
+              value={priceValue}
+              onChange={(e) => onUpdate("price", e.target.value)}
+              style={{ ...inputStyle, background: "#0F1720" }}
+            />
           </label>
         </div>
       )}
@@ -838,6 +985,7 @@ function EquivChip({ label, brandLabel, color, isSelected, onClick, disabled }) 
   return (
     <button
       onClick={disabled ? undefined : onClick}
+      className={disabled ? undefined : "tap-scale"}
       title={disabled ? "Sem dados nutricionais cadastrados para este produto" : undefined}
       style={{
         display: "inline-flex",
@@ -846,14 +994,15 @@ function EquivChip({ label, brandLabel, color, isSelected, onClick, disabled }) 
         padding: "5px 10px",
         borderRadius: 999,
         border: `1px solid ${isSelected ? color : "#24313D"}`,
-        background: isSelected ? `${color}22` : disabled ? "transparent" : "#0F1720",
-        color: disabled ? "#4A5866" : isSelected ? color : "#C7D2D9",
+        background: isSelected ? color : disabled ? "transparent" : "#0F1720",
+        color: disabled ? "#4A5866" : isSelected ? "#0B1319" : "#C7D2D9",
+        fontWeight: isSelected ? 700 : 400,
         fontSize: 11,
         cursor: disabled ? "default" : "pointer",
         opacity: disabled ? 0.7 : 1,
       }}
     >
-      <span style={{ width: 6, height: 6, borderRadius: "50%", background: disabled ? "#4A5866" : color, display: "inline-block" }} />
+      <span style={{ width: 6, height: 6, borderRadius: "50%", background: disabled ? "#4A5866" : isSelected ? "#0B1319" : color, display: "inline-block" }} />
       {brandLabel && <span style={{ fontWeight: 700, fontSize: 9, textTransform: "uppercase" }}>{brandLabel}</span>}
       {label}
     </button>
