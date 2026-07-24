@@ -64,7 +64,7 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <span style={{ fontSize: 10, color: "#8CA0AF", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+          <span className="muted" style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.04em" }}>
             {hasBothSides ? "Comparar manejo" : "Resumo do manejo"}
           </span>
           <span style={{ fontSize: 13, fontWeight: 700 }}>
@@ -75,7 +75,7 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
                 <span style={{ color: "#F5A524" }}>Agrocete R$ {Math.abs(costDiff).toFixed(2)} mais caro</span>
               )
             ) : (
-              <span style={{ color: "#8CA0AF" }}>Selecione produtos para comparar</span>
+              <span className="muted">Selecione produtos para comparar</span>
             )}
           </span>
         </div>
@@ -95,11 +95,11 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
           ))}
           <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
             <div style={{ flex: 1, background: "#17212B", border: "1.5px solid #6B7A8844", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 10, color: "#8CA0AF" }}>Custo concorrentes</div>
+              <div className="muted" style={{ fontSize: 10 }}>Custo concorrentes</div>
               <div style={{ fontSize: 16, fontWeight: 700 }}>R$ {totals.comp.cost.toFixed(2)}</div>
             </div>
             <div style={{ flex: 1, background: "#17212B", border: "1.5px solid #1FBF8F44", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 10, color: "#8CA0AF" }}>Custo Agrocete</div>
+              <div className="muted" style={{ fontSize: 10 }}>Custo Agrocete</div>
               <div style={{ fontSize: 16, fontWeight: 700, color: "#1FBF8F" }}>R$ {totals.agro.cost.toFixed(2)}</div>
             </div>
           </div>
@@ -128,7 +128,8 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
           <a
             href="#comparativo"
             onClick={() => setExpanded(false)}
-            style={{ display: "block", textAlign: "center", marginTop: 10, fontSize: 12, color: "#8CA0AF" }}
+            className="muted"
+            style={{ display: "block", textAlign: "center", marginTop: 10, fontSize: 12 }}
           >
             Ver comparativo completo abaixo ↓
           </a>
@@ -142,7 +143,7 @@ function LegendDot({ color, label }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
       <span style={{ width: 8, height: 8, borderRadius: "50%", background: color, display: "inline-block" }} />
-      <span style={{ color: "#8CA0AF" }}>{label}</span>
+      <span className="muted">{label}</span>
     </div>
   );
 }
@@ -150,18 +151,17 @@ function LegendDot({ color, label }) {
 function MiniRow({ label, agroVal, compVal }) {
   const total = agroVal + compVal;
   const agroPct = total > 0 ? (agroVal / total) * 100 : 50;
-  const agroAhead = agroVal >= compVal;
   return (
     <div style={{ marginBottom: 9 }}>
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 3 }}>
         <span style={{ fontWeight: 600 }}>{label}</span>
-        <span style={{ color: "#8CA0AF" }}>
+        <span className="muted">
           {fmtNum(compVal)} g vs {fmtNum(agroVal)} g
         </span>
       </div>
       <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden", background: "#0F1720" }}>
-        <div style={{ width: `${agroPct}%`, background: agroAhead ? "#22C55E" : "#3A4753", transition: "width 0.3s" }} />
-        <div style={{ width: `${100 - agroPct}%`, background: agroAhead ? "#3A4753" : "#F87171", transition: "width 0.3s" }} />
+        <div style={{ width: `${agroPct}%`, background: "#1FBF8F", transition: "width 0.3s" }} />
+        <div style={{ width: `${100 - agroPct}%`, background: "#6B7A88", transition: "width 0.3s" }} />
       </div>
     </div>
   );

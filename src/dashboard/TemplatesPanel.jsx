@@ -95,7 +95,7 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
               </button>
             </div>
 
-            {templates.length === 0 && <p style={{ fontSize: 11, color: "#5C6B78", margin: 0 }}>Nenhum manejo salvo ainda.</p>}
+            {templates.length === 0 && <p className="muted-soft" style={{ fontSize: 11, margin: 0 }}>Nenhum manejo salvo ainda.</p>}
 
             {templates.map((t) => (
               <div
@@ -140,7 +140,7 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
                   <>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{t.name}</div>
-                      <div style={{ fontSize: 10, color: "#5C6B78" }}>{Object.keys(t.selected).length} produto(s)</div>
+                      <div className="muted-soft" style={{ fontSize: 10 }}>{Object.keys(t.selected).length} produto(s)</div>
                     </div>
                     <button onClick={() => onLoad(t)} className="tap-scale" style={iconBtnStyle} aria-label={`Carregar ${t.name}`} title="Carregar">
                       <FolderOpen size={14} color="#1FBF8F" />

@@ -4,6 +4,8 @@ import {
   ChevronDown,
   ChevronUp,
   Plus,
+  Minus,
+  Pencil,
   X,
   Download,
   Search,
@@ -20,11 +22,11 @@ import { PRODUCTS } from "./data/products.js";
 import { EQUIVALENCES, EQUIVALENCE_FOOTNOTES } from "./data/equivalences.js";
 import { COMPETITOR_BRANDS } from "./data/brands.js";
 import "./dashboard.css";
-import DoseStepper from "./dashboard/DoseStepper.jsx";
 import CurrentManagement from "./dashboard/CurrentManagement.jsx";
 import TemplatesPanel from "./dashboard/TemplatesPanel.jsx";
 import BottomSheet from "./dashboard/BottomSheet.jsx";
-import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar } from "./dashboard/CostEfficiency.jsx";
+import QuickEditDrawer from "./dashboard/QuickEditDrawer.jsx";
+import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar, nutrientBadge, NutrientBadge } from "./dashboard/CostEfficiency.jsx";
 
 const NUTRIENT_META = {
   N: { label: "Nitrogênio", group: "macro" },
@@ -53,6 +55,20 @@ function brandColor(brand) {
   const idx = COMPETITOR_BRANDS.indexOf(brand);
   return BRAND_PALETTE[idx >= 0 ? idx % BRAND_PALETTE.length : 0];
 }
+
+// Chips de filtro rápido: nutrientes mais buscados e as categorias com mais produtos.
+const NUTRIENT_CHIP_KEYS = ["N", "P2O5", "K2O", "Ca", "Mg", "S", "B", "Zn", "Cu", "Mn"];
+const SIDEBAR_MACROS = ["N", "P2O5", "K2O", "Ca", "Mg"];
+const CATEGORY_CHIPS = (() => {
+  const counts = {};
+  PRODUCTS.forEach((p) => {
+    if (p.category) counts[p.category] = (counts[p.category] || 0) + 1;
+  });
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6)
+    .map(([cat]) => cat);
+})();
 
 const STORAGE_KEY = "agro-dashboard-state-v1";
 
@@ -98,6 +114,9 @@ export default function Dashboard() {
   const [fineStep, setFineStep] = useState(false); // passo 0,1 (fino) vs 1,0 (grosso) nos steppers de dose
   const [sheetExpanded, setSheetExpanded] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
+  const [quickBrandOnly, setQuickBrandOnly] = useState(false); // chip "Somente Agrocete"
+  const [activeChip, setActiveChip] = useState("all");
+  const [editingProductId, setEditingProductId] = useState(null); // produto aberto no drawer de dose/preço
 
   useEffect(() => {
     try {
@@ -291,8 +310,40 @@ export default function Dashboard() {
     return groups;
   }, [allProducts]);
 
-  const allBrands = [AGROCETE, ...COMPETITOR_BRANDS];
+  const allBrands = quickBrandOnly ? [AGROCETE] : [AGROCETE, ...COMPETITOR_BRANDS];
   const selectedCount = Object.keys(selected).length;
+
+  // --- chips de filtro rápido ---
+  function selectAllChip() {
+    setActiveChip("all");
+    setSearch("");
+    setQuickBrandOnly(false);
+  }
+  function selectAgroceteChip() {
+    setActiveChip("agrocete");
+    setSearch("");
+    setQuickBrandOnly(true);
+    setMode("marca");
+    setOpenBrand(AGROCETE);
+  }
+  function selectNutrientChip(key) {
+    setActiveChip(`nutrient:${key}`);
+    setQuickBrandOnly(false);
+    setSearch(NUTRIENT_META[key]?.label ?? key);
+    setMode("marca");
+  }
+  function selectCategoryChip(cat) {
+    setActiveChip(`category:${cat}`);
+    setQuickBrandOnly(false);
+    setSearch(cat);
+    setMode("marca");
+  }
+  function handleSearchChange(value) {
+    setSearch(value);
+    setActiveChip(null);
+  }
+
+  const editingProduct = editingProductId ? productsById.get(editingProductId) : null;
 
   async function exportPDF() {
     const { jsPDF } = await import("jspdf");
@@ -433,6 +484,7 @@ export default function Dashboard() {
 
   return (
     <div
+      className={highContrast ? "high-contrast" : undefined}
       style={{
         minHeight: "100vh",
         background: highContrast ? "#000000" : "#0F1720",
@@ -459,11 +511,11 @@ export default function Dashboard() {
           </div>
           <div>
             <div style={{ fontSize: 15, fontWeight: 700, lineHeight: 1.1 }}>Painel Agrocete</div>
-            <div style={{ fontSize: 11, color: "#8CA0AF" }}>Comparador de Portfólio x Mercado</div>
+            <div className="muted" style={{ fontSize: 11 }}>Comparador de Portfólio x Mercado</div>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ fontSize: 12, color: "#8CA0AF" }}>
+          <div className="muted" style={{ fontSize: 12 }}>
             {PRODUCTS.length} produtos catalogados · {COMPETITOR_BRANDS.length} marcas concorrentes
           </div>
           <button
@@ -489,17 +541,9 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main style={{ maxWidth: 980, margin: "0 auto", padding: "20px 16px 140px" }}>
-        <CurrentManagement selected={selected} productsById={productsById} brandColor={brandColor} onToggle={toggleProduct} />
-
-        <TemplatesPanel
-          templates={templates}
-          selectedCount={selectedCount}
-          onSave={saveTemplate}
-          onLoad={loadTemplate}
-          onDelete={deleteTemplate}
-          onRename={renameTemplate}
-        />
+      <main style={{ maxWidth: 1360, margin: "0 auto", padding: "20px 16px 140px" }}>
+      <div className="dash-grid">
+      <div>
         {/* KPI ROW */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 22 }}>
           <KpiCard color="#F5A524" label="Produtos Agrocete" value={kpis.agroCount} />
@@ -509,12 +553,12 @@ export default function Dashboard() {
         </div>
 
         {/* SEARCH */}
-        <div style={{ position: "relative", marginBottom: 14 }}>
+        <div style={{ position: "relative", marginBottom: 10 }}>
           <Search size={15} color="#8CA0AF" style={{ position: "absolute", left: 12, top: 11 }} />
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Buscar produto, composição, categoria ou nutriente (ex: Zinco)..."
             style={{
               width: "100%",
@@ -528,6 +572,18 @@ export default function Dashboard() {
               fontFamily: "inherit",
             }}
           />
+        </div>
+
+        {/* FILTER CHIPS */}
+        <div className="filter-chip-row" style={{ marginBottom: 14 }}>
+          <FilterChip label="Todos" active={activeChip === "all"} onClick={selectAllChip} />
+          <FilterChip label="Somente Agrocete" active={activeChip === "agrocete"} onClick={selectAgroceteChip} color={AGROCETE_COLOR} />
+          {NUTRIENT_CHIP_KEYS.map((key) => (
+            <FilterChip key={key} label={NUTRIENT_META[key]?.label ?? key} active={activeChip === `nutrient:${key}`} onClick={() => selectNutrientChip(key)} />
+          ))}
+          {CATEGORY_CHIPS.map((cat) => (
+            <FilterChip key={cat} label={cat} active={activeChip === `category:${cat}`} onClick={() => selectCategoryChip(cat)} />
+          ))}
         </div>
 
         {/* MODE TABS */}
@@ -579,7 +635,7 @@ export default function Dashboard() {
                 </div>
               );
             })}
-            <p style={{ fontSize: 11, color: "#5C6B78", marginTop: 8 }}>
+            <p className="muted-soft" style={{ fontSize: 11, marginTop: 8 }}>
               {EQUIVALENCE_FOOTNOTES.map((f, i) => (
                 <span key={i} style={{ display: "block", marginBottom: 3 }}>
                   {f}
@@ -619,7 +675,7 @@ export default function Dashboard() {
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ width: 10, height: 10, borderRadius: "50%", background: color, display: "inline-block" }} />
                         <span style={{ fontWeight: 600, fontSize: 15 }}>{brand === AGROCETE ? "AGROCETE (nossos produtos)" : brand}</span>
-                        <span style={{ fontSize: 11, color: "#5C6B78" }}>{(productsByBrand[brand] || []).length} produtos</span>
+                        <span className="muted-soft" style={{ fontSize: 11 }}>{(productsByBrand[brand] || []).length} produtos</span>
                         {brandSelectedCount > 0 && (
                           <span style={{ fontSize: 11, background: "#233241", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>
                             {brandSelectedCount} ativo{brandSelectedCount > 1 ? "s" : ""}
@@ -643,11 +699,10 @@ export default function Dashboard() {
                             priceValue={selected[product.id]?.price}
                             onUpdate={(field, value) => updateSelected(product.id, field, value)}
                             onRemove={product.custom ? () => removeCustomProduct(product.id) : undefined}
-                            fineStep={fineStep}
-                            onToggleFineStep={() => setFineStep((v) => !v)}
+                            onOpenEditor={() => setEditingProductId(product.id)}
                           />
                         ))}
-                        {products.length === 0 && <p style={{ fontSize: 12, color: "#5C6B78" }}>Nenhum produto encontrado para essa busca.</p>}
+                        {products.length === 0 && <p className="muted-soft" style={{ fontSize: 12 }}>Nenhum produto encontrado para essa busca.</p>}
                         {brand === AGROCETE && (
                           <AddCustomProductForm
                             show={showAddForm}
@@ -672,18 +727,22 @@ export default function Dashboard() {
             <SectionHeading icon={<TrendingUp size={16} />} title="Comparativo de nutrientes (g/ha)" />
             <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 12 }}>
               <div style={{ display: "flex", gap: 14, fontSize: 11, marginBottom: 12 }}>
-                <LegendDot color="#22C55E" label="Na frente" />
-                <LegendDot color="#F87171" label="Atrás" />
+                <LegendDot color="#6B7A88" label="Concorrentes" />
+                <LegendDot color={AGROCETE_COLOR} label="Agrocete" />
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {allNutrientKeys.map((key) => {
                   const compVal = totals.comp.nutrients[key] || 0;
                   const agroVal = totals.agro.nutrients[key] || 0;
+                  const badge = nutrientBadge(agroVal, compVal);
                   return (
                     <div key={key}>
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 4 }}>
-                        <span style={{ fontWeight: 600 }}>{NUTRIENT_META[key]?.label ?? key}</span>
-                        <span style={{ color: "#8CA0AF" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, marginBottom: 4, gap: 8 }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 600 }}>
+                          {NUTRIENT_META[key]?.label ?? key}
+                          <NutrientBadge badge={badge} />
+                        </span>
+                        <span className="muted">
                           {fmtNum(compVal)} g vs {fmtNum(agroVal)} g
                         </span>
                       </div>
@@ -722,7 +781,7 @@ export default function Dashboard() {
                 {headToHead && (
                   <div style={{ background: "#17212B", border: `1px solid ${AGROCETE_COLOR}44`, borderRadius: 10, padding: 12, marginBottom: 10 }}>
                     <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
-                      {headToHead.agroP.name} <span style={{ color: "#8CA0AF" }}>vs</span> {headToHead.compP.name} ({headToHead.compP.brand})
+                      {headToHead.agroP.name} <span className="muted">vs</span> {headToHead.compP.name} ({headToHead.compP.brand})
                     </div>
                     {headToHead.rows.map((r) => (
                       <div key={r.key} style={{ fontSize: 12, color: "#C7D2D9", marginBottom: 4 }}>
@@ -786,20 +845,111 @@ export default function Dashboard() {
         )}
 
         {allNutrientKeys.length === 0 && (
-          <div style={{ marginTop: 24, textAlign: "center", color: "#5C6B78", fontSize: 13, padding: "30px 10px" }}>
+          <div className="muted" style={{ marginTop: 24, textAlign: "center", fontSize: 13, padding: "30px 10px" }}>
             Selecione produtos acima (por categoria ou por marca) para ver o comparativo de nutrientes e custo.
           </div>
         )}
+      </div>
+
+      <aside className="dash-sidebar">
+        <CurrentManagement selected={selected} productsById={productsById} brandColor={brandColor} onToggle={toggleProduct} onEdit={(p) => setEditingProductId(p.id)} />
+
+        {selectedCount > 0 && (
+          <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 16 }}>
+            <div className="muted" style={{ fontSize: 11, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.04em", fontWeight: 700 }}>
+              Resumo em tempo real
+            </div>
+            <div style={{ display: "flex", gap: 12, fontSize: 11, marginBottom: 10 }}>
+              <LegendDot color="#6B7A88" label="Concorrentes" />
+              <LegendDot color={AGROCETE_COLOR} label="Agrocete" />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {SIDEBAR_MACROS.filter((k) => (totals.agro.nutrients[k] || 0) > 0 || (totals.comp.nutrients[k] || 0) > 0).map((k) => {
+                const compVal = totals.comp.nutrients[k] || 0;
+                const agroVal = totals.agro.nutrients[k] || 0;
+                const badge = nutrientBadge(agroVal, compVal);
+                return (
+                  <div key={k}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 11, marginBottom: 3, gap: 6 }}>
+                      <span style={{ display: "flex", alignItems: "center", gap: 5, fontWeight: 600 }}>
+                        {NUTRIENT_META[k]?.label ?? k}
+                        <NutrientBadge badge={badge} />
+                      </span>
+                    </div>
+                    <CompareBar agroVal={agroVal} compVal={compVal} height={7} />
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+              <CostCard label="Concorrentes" value={totals.comp.cost} color="#6B7A88" />
+              <CostCard label="Agrocete" value={totals.agro.cost} color={AGROCETE_COLOR} />
+            </div>
+            <button
+              onClick={exportPDF}
+              className="tap-scale"
+              style={{
+                marginTop: 12,
+                width: "100%",
+                padding: "10px",
+                borderRadius: 10,
+                border: "none",
+                background: AGROCETE_COLOR,
+                color: "#0B1319",
+                fontWeight: 700,
+                fontSize: 12,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+              }}
+            >
+              <Download size={14} /> Exportar em PDF
+            </button>
+            {allNutrientKeys.length > 0 && (
+              <a href="#comparativo" className="muted" style={{ display: "block", textAlign: "center", marginTop: 10, fontSize: 11 }}>
+                Ver comparativo completo ↓
+              </a>
+            )}
+          </div>
+        )}
+
+        <TemplatesPanel
+          templates={templates}
+          selectedCount={selectedCount}
+          onSave={saveTemplate}
+          onLoad={loadTemplate}
+          onDelete={deleteTemplate}
+          onRename={renameTemplate}
+        />
+      </aside>
+      </div>
       </main>
 
-      <BottomSheet
-        totals={totals}
-        nutrientMeta={NUTRIENT_META}
-        expanded={sheetExpanded}
-        setExpanded={setSheetExpanded}
-        hasBothSides={hasBothSides}
-        onExportPDF={exportPDF}
-      />
+      <div className="mobile-only">
+        <BottomSheet
+          totals={totals}
+          nutrientMeta={NUTRIENT_META}
+          expanded={sheetExpanded}
+          setExpanded={setSheetExpanded}
+          hasBothSides={hasBothSides}
+          onExportPDF={exportPDF}
+        />
+      </div>
+
+      {editingProduct && (
+        <QuickEditDrawer
+          product={editingProduct}
+          color={brandColor(editingProduct.brand)}
+          doseValue={selected[editingProduct.id]?.dose}
+          priceValue={selected[editingProduct.id]?.price}
+          onUpdate={(field, value) => updateSelected(editingProduct.id, field, value)}
+          onClose={() => setEditingProductId(null)}
+          fineStep={fineStep}
+          onToggleFineStep={() => setFineStep((v) => !v)}
+        />
+      )}
     </div>
   );
 }
@@ -809,7 +959,7 @@ function KpiCard({ color, label, value }) {
     <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden" }}>
       <div style={{ height: 3, background: color }} />
       <div style={{ padding: "12px 14px" }}>
-        <div style={{ fontSize: 11, color: "#8CA0AF", marginBottom: 4 }}>{label}</div>
+        <div className="muted" style={{ fontSize: 11, marginBottom: 4 }}>{label}</div>
         <div style={{ fontSize: 22, fontWeight: 700 }}>{value}</div>
       </div>
     </div>
@@ -841,6 +991,29 @@ function ModeTab({ active, onClick, icon, label }) {
   );
 }
 
+function FilterChip({ label, active, onClick, color = "#1FBF8F" }) {
+  return (
+    <button
+      onClick={onClick}
+      className="tap-scale"
+      style={{
+        flexShrink: 0,
+        whiteSpace: "nowrap",
+        padding: "6px 12px",
+        borderRadius: 999,
+        border: `1px solid ${active ? color : "#24313D"}`,
+        background: active ? `${color}22` : "#17212B",
+        color: active ? color : "#9AACB8",
+        fontSize: 12,
+        fontWeight: active ? 700 : 500,
+        cursor: "pointer",
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
 function SectionHeading({ icon, title }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
@@ -854,7 +1027,7 @@ function LegendDot({ color, label }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
       <span style={{ width: 8, height: 8, borderRadius: "50%", background: color, display: "inline-block" }} />
-      <span style={{ color: "#8CA0AF" }}>{label}</span>
+      <span className="muted">{label}</span>
     </div>
   );
 }
@@ -862,124 +1035,180 @@ function LegendDot({ color, label }) {
 function CostCard({ label, value, color }) {
   return (
     <div style={{ flex: 1, background: "#17212B", border: `1.5px solid ${color}44`, borderRadius: 10, padding: 12 }}>
-      <div style={{ fontSize: 11, color: "#8CA0AF" }}>{label}</div>
+      <div className="muted" style={{ fontSize: 11 }}>{label}</div>
       <div style={{ fontSize: 20, fontWeight: 700, color, marginTop: 2 }}>R$ {value.toFixed(2)}</div>
     </div>
   );
 }
 
-function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue, priceValue, onRemove, fineStep, onToggleFineStep }) {
-  const sliderMax = Math.max((product.defaultDose || 1) * 4, 5);
-  return (
-    <div
-      style={{
-        position: "relative",
-        border: `1.5px solid ${isSelected ? color : "#24313D"}`,
-        borderRadius: 10,
-        padding: 10,
-        background: isSelected ? color : "#0F1720",
-      }}
-    >
-      {isSelected && doseValue != null && (
-        <span
-          style={{
-            position: "absolute",
-            top: -8,
-            right: onRemove ? 34 : 8,
-            background: "#0B1319",
-            color,
-            border: `1px solid ${color}`,
-            borderRadius: 999,
-            padding: "1px 8px",
-            fontSize: 10,
-            fontWeight: 700,
-          }}
-        >
-          {doseValue}
-          {product.unit ? product.unit.split("/")[0] : ""}
-        </span>
-      )}
-      <div style={{ display: "flex", alignItems: "flex-start" }}>
-        <button
-          onClick={onToggle}
-          className="tap-scale"
-          style={{
-            flex: 1,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
-            textAlign: "left",
-            color: isSelected ? "#0B1319" : "#E8EDF1",
-          }}
-        >
-          <div>
-            <div style={{ fontWeight: 600, fontSize: 14 }}>
-              {product.name}{" "}
-              {product.category && (
-                <span style={{ fontSize: 10, color: isSelected ? "#0B131999" : "#5C6B78", fontWeight: 400 }}> · {product.category}</span>
-              )}
-            </div>
-            <div style={{ fontSize: 12, color: isSelected ? "#0B1319CC" : "#8CA0AF", marginTop: 2 }}>
-              {product.hasNutrients
-                ? Object.entries(product.nutrients)
-                    .map(([el, v]) => `${NUTRIENT_META[el]?.label ?? el} ${fmtNum(v)}${nutrientUnitSuffix(product)}`)
-                    .join(" · ")
-                : product.composition || product.description || "Sem dados nutricionais cadastrados"}
-            </div>
-          </div>
-          <span
-            style={{
-              flexShrink: 0,
-              marginLeft: 10,
-              width: 26,
-              height: 26,
-              borderRadius: 8,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: isSelected ? "#0B1319" : "#1B2530",
-              color: isSelected ? color : "#8CA0AF",
-            }}
-          >
-            {isSelected ? <X size={15} /> : <Plus size={15} />}
-          </span>
-        </button>
-        {onRemove && (
-          <button
-            onClick={onRemove}
-            className="tap-scale"
-            style={{ background: "transparent", border: "none", cursor: "pointer", color: isSelected ? "#0B1319" : "#F87171", padding: 4, marginLeft: 4 }}
-          >
-            <X size={14} />
-          </button>
-        )}
-      </div>
+// Card compacto: sem lista selecionada é 1 linha (nome + garantias + botão
+// +), quando selecionado ganha só uma segunda linha com dose rápida (+/-) e
+// preço — a edição completa (slider, passo fino) mora no QuickEditDrawer,
+// pra não empilhar formulário dentro da rolagem do catálogo.
+function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue, priceValue, onRemove, onOpenEditor }) {
+  const [dx, setDx] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const startX = React.useRef(0);
 
-      {isSelected && (
-        <div style={{ display: "flex", gap: 12, marginTop: 10, flexWrap: "wrap" }}>
-          <div style={{ fontSize: 11, color: "#0B1319CC" }}>
-            Dose ({product.unit || "un"})
-            <DoseStepper value={doseValue} onChange={(v) => onUpdate("dose", v)} fineStep={fineStep} onToggleFineStep={onToggleFineStep} max={sliderMax} />
-          </div>
-          <label style={{ fontSize: 11, flex: 1, minWidth: 90, color: "#0B1319CC" }}>
-            Preço (R$/{(product.unit || "un").split("/")[0]})
-            <input
-              type="number"
-              step="0.01"
-              value={priceValue}
-              onChange={(e) => onUpdate("price", e.target.value)}
-              style={{ ...inputStyle, background: "#0F1720" }}
-            />
-          </label>
+  function onTouchStart(e) {
+    if (isSelected) return;
+    startX.current = e.touches[0].clientX;
+    setDragging(true);
+  }
+  function onTouchMove(e) {
+    if (isSelected || !dragging) return;
+    const delta = e.touches[0].clientX - startX.current;
+    if (delta > 0) setDx(delta);
+  }
+  function onTouchEnd() {
+    if (isSelected) return;
+    setDragging(false);
+    if (dx > 72) onToggle();
+    setDx(0);
+  }
+
+  function quickBump(dir) {
+    const step = 1;
+    const next = Math.max(0, Math.round(((parseFloat(doseValue) || 0) + dir * step) * 100) / 100);
+    onUpdate("dose", String(next));
+  }
+
+  return (
+    <div style={{ position: "relative", overflow: !isSelected ? "hidden" : "visible", borderRadius: 10 }}>
+      {!isSelected && (
+        <div className="swipe-add-hint">
+          <Plus size={16} color="#0B1319" />
         </div>
       )}
+      <div
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        style={{
+          position: "relative",
+          border: `1.5px solid ${isSelected ? color : "#24313D"}`,
+          borderRadius: 10,
+          padding: "9px 10px",
+          background: isSelected ? color : "#0F1720",
+          transform: `translateX(${dx}px)`,
+          transition: dragging ? "none" : "transform 0.2s ease",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "flex-start" }}>
+          <button
+            onClick={onToggle}
+            className="tap-scale"
+            style={{
+              flex: 1,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+              textAlign: "left",
+              color: isSelected ? "#0B1319" : "#E8EDF1",
+              minWidth: 0,
+            }}
+          >
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>
+                {product.name}{" "}
+                {product.category && (
+                  <span style={{ fontSize: 10, color: isSelected ? "#0B131999" : "#8298A6", fontWeight: 400 }}> · {product.category}</span>
+                )}
+              </div>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: isSelected ? "#0B1319CC" : "#9AACB8",
+                  marginTop: 2,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {product.hasNutrients
+                  ? Object.entries(product.nutrients)
+                      .map(([el, v]) => `${NUTRIENT_META[el]?.label ?? el} ${fmtNum(v)}${nutrientUnitSuffix(product)}`)
+                      .join(" · ")
+                  : product.composition || product.description || "Sem dados nutricionais cadastrados"}
+              </div>
+            </div>
+            <span
+              style={{
+                flexShrink: 0,
+                marginLeft: 10,
+                width: 26,
+                height: 26,
+                borderRadius: 8,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: isSelected ? "#0B1319" : "#1B2530",
+                color: isSelected ? color : "#9AACB8",
+              }}
+            >
+              {isSelected ? <X size={15} /> : <Plus size={15} />}
+            </span>
+          </button>
+          {onRemove && (
+            <button
+              onClick={onRemove}
+              className="tap-scale"
+              style={{ background: "transparent", border: "none", cursor: "pointer", color: isSelected ? "#0B1319" : "#F87171", padding: 4, marginLeft: 4 }}
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+
+        {isSelected && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <button type="button" onClick={() => quickBump(-1)} className="tap-scale" style={quickStepBtnStyle} aria-label="Diminuir dose">
+                <Minus size={12} />
+              </button>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#0B1319", minWidth: 42, textAlign: "center" }}>
+                {doseValue}
+                {product.unit ? product.unit.split("/")[0] : ""}
+              </span>
+              <button type="button" onClick={() => quickBump(1)} className="tap-scale" style={quickStepBtnStyle} aria-label="Aumentar dose">
+                <Plus size={12} />
+              </button>
+            </div>
+            <span style={{ fontSize: 11, color: "#0B1319CC" }}>R$ {fmtNum(parseFloat(priceValue) || 0)}</span>
+            <button
+              type="button"
+              onClick={onOpenEditor}
+              className="tap-scale"
+              style={{ marginLeft: "auto", background: "#0B1319", border: "none", borderRadius: 7, width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", color, cursor: "pointer", flexShrink: 0 }}
+              aria-label="Editar dose e preço"
+              title="Editar dose, preço e passo fino"
+            >
+              <Pencil size={12} />
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
+const quickStepBtnStyle = {
+  width: 22,
+  height: 22,
+  borderRadius: 6,
+  border: "1px solid #0B131944",
+  background: "#0B131922",
+  color: "#0B1319",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  flexShrink: 0,
+};
 
 function EquivChip({ label, brandLabel, color, isSelected, onClick, disabled }) {
   return (
@@ -1013,7 +1242,7 @@ function EquivRow({ row, productsById, selected, onToggle }) {
   const agroProduct = row.agroceteProductId ? productsById.get(row.agroceteProductId) : null;
   return (
     <div style={{ borderTop: "1px solid #1E2A35", paddingTop: 10 }}>
-      <div style={{ fontSize: 12, color: "#8CA0AF", marginBottom: 6 }}>{row.composition}</div>
+      <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>{row.composition}</div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
         {agroProduct ? (
           <EquivChip

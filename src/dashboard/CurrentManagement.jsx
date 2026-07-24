@@ -54,8 +54,9 @@ function SwipeRow({ children, onRemove }) {
 }
 
 // Lista compacta do manejo em montagem — sempre visível, com remoção por
-// swipe (mobile) ou clique no X (desktop).
-export default function CurrentManagement({ selected, productsById, brandColor, onToggle }) {
+// swipe (mobile) ou clique no X (desktop), e edição de dose/preço por toque
+// no item (abre o QuickEditDrawer no componente pai).
+export default function CurrentManagement({ selected, productsById, brandColor, onToggle, onEdit }) {
   const ids = Object.keys(selected);
   if (ids.length === 0) return null;
 
@@ -87,27 +88,46 @@ export default function CurrentManagement({ selected, productsById, brandColor, 
                 }}
               >
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0 }} />
-                <span style={{ flex: 1, fontSize: 13, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
-                {sel.dose != null && (
-                  <span
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 700,
-                      background: `${color}22`,
-                      color,
-                      padding: "2px 7px",
-                      borderRadius: 999,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {sel.dose}
-                    {p.unit ? p.unit.split("/")[0] : ""}
-                  </span>
-                )}
+                <button
+                  onClick={() => onEdit && onEdit(p)}
+                  className="tap-scale"
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    background: "transparent",
+                    border: "none",
+                    padding: 0,
+                    cursor: onEdit ? "pointer" : "default",
+                    textAlign: "left",
+                    color: "#E8EDF1",
+                  }}
+                  title={onEdit ? "Editar dose e preço" : undefined}
+                >
+                  <span style={{ flex: 1, fontSize: 13, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
+                  {sel.dose != null && (
+                    <span
+                      style={{
+                        fontSize: 10,
+                        fontWeight: 700,
+                        background: `${color}22`,
+                        color,
+                        padding: "2px 7px",
+                        borderRadius: 999,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {sel.dose}
+                      {p.unit ? p.unit.split("/")[0] : ""}
+                    </span>
+                  )}
+                </button>
                 <button
                   onClick={() => onToggle(p)}
-                  className="tap-scale"
-                  style={{ background: "transparent", border: "none", color: "#8CA0AF", cursor: "pointer", padding: 3, flexShrink: 0 }}
+                  className="tap-scale muted"
+                  style={{ background: "transparent", border: "none", cursor: "pointer", padding: 3, flexShrink: 0 }}
                   aria-label={`Remover ${p.name}`}
                 >
                   <X size={14} />
@@ -117,7 +137,7 @@ export default function CurrentManagement({ selected, productsById, brandColor, 
           );
         })}
       </div>
-      <p style={{ fontSize: 10, color: "#4A5866", marginTop: 5 }}>Arraste um item para a esquerda ou toque no X para remover.</p>
+      <p className="muted-soft" style={{ fontSize: 10, marginTop: 5 }}>Toque no item para editar dose/preço · arraste para a esquerda ou toque no X para remover.</p>
     </div>
   );
 }
