@@ -28,9 +28,16 @@ senha" abaixo para trocar).
 - `src/dashboard/TemplatesPanel.jsx` — salvar/carregar/renomear/excluir
   manejos (combinação de produtos + doses) como templates nomeados.
 - `src/dashboard/BottomSheet.jsx` — resumo fixo arrastável (estilo
-  Google Maps) com macros-chave e custo, expansível em tela cheia.
+  Google Maps) com macros-chave e custo, expansível em tela cheia. Só
+  aparece em telas estreitas (`.mobile-only`); no desktop o resumo
+  equivalente fica na barra lateral fixa.
+- `src/dashboard/QuickEditDrawer.jsx` — drawer que abre por cima do
+  conteúdo para editar dose (stepper + slider + passo fino) e preço de
+  um produto, sem precisar expandir o card na lista.
 - `src/dashboard/CostEfficiency.jsx` — cálculo de R$/kg por nutriente
-  entregue, insights automáticos e a barra de comparação compacta.
+  entregue, insights automáticos, a barra de comparação compacta
+  (`CompareBar`, cor fixa por identidade: verde = Agrocete, cinza =
+  concorrente) e o selo `NutrientBadge` ("▲ +23%" / "só Agrocete").
 - `src/dashboard.css` — micro-interações que inline styles não
   expressam: escala ao tocar, accordion com altura suave, pulso do
   bottom sheet, estilo do slider.
@@ -116,26 +123,54 @@ campo — útil pra manejos recorrentes tipo "Soja V4 vs. Stoller". Os
 templates ficam no mesmo `localStorage` do resto do app; dá pra
 renomear ou excluir a qualquer momento.
 
+## Layout
+
+Em telas largas (≥1080px) o catálogo fica em duas colunas: a esquerda
+com busca, filtros e a lista de produtos; a direita fixa (`sticky`,
+acompanha a rolagem) com o "Manejo atual", um resumo em tempo real
+(macros-chave, custo, botão de exportar) e os manejos salvos — sem
+precisar descer a página pra ver o que já foi montado. Em telas
+estreitas essa coluna vira o bottom sheet arrastável no rodapé (ver
+abaixo), que cobre a mesma função com menos espaço de tela.
+
+## Chips de filtro rápido
+
+Acima do catálogo, uma fileira de chips roláveis filtra o catálogo com
+um toque: "Todos", "Somente Agrocete" (isola só o nosso portfólio),
+os nutrientes mais buscados (Zinco, Boro, Cálcio, etc. — reaproveita a
+busca por nutriente já existente) e as categorias com mais produtos.
+Clicar num chip de nutriente ou categoria muda pra visão "Por marca" e
+preenche a busca automaticamente.
+
 ## Interação pensada pro campo
 
-- **Chips/cards tocáveis**: ficam preenchidos com a cor da marca ao
-  selecionar, com um badge mostrando a dose atual (ex: "2L") e uma
-  leve animação de escala ao toque.
+- **Cards compactos**: sem seleção, o card tem só nome, categoria e o
+  resumo das garantias — uma linha. Ao selecionar, ganha uma segunda
+  linha compacta com dose ajustável por +/- e o preço; a edição
+  completa (slider, passo fino, dose e preço lado a lado) abre num
+  drawer ao tocar no ícone de lápis, sem lotar a lista de scroll.
+- **Adicionar por swipe** (mobile): arraste um card do catálogo pra
+  direita pra adicionar ao manejo com a dose padrão — complementa o
+  toque no `+`.
+- **Manejo atual**: lista sempre visível dos produtos selecionados —
+  toque num item pra abrir o editor de dose/preço, arraste pra
+  esquerda (touch) ou toque no X pra remover.
 - **Busca instantânea** por nome, composição, categoria ou nutriente
   (ex: buscar "Zinco" encontra produtos com esse micronutriente).
-- **Manejo atual**: lista sempre visível dos produtos selecionados —
-  arraste um item pra esquerda (touch) ou toque no X pra remover.
-- **Dose com stepper + slider**: botões +/- com aceleração se
-  mantidos pressionados, valor numérico editável, slider horizontal, e
-  duplo toque nos botões +/- alterna entre passo fino (0,1) e grosso
-  (1,0).
-- **Bottom sheet arrastável** (estilo Google Maps), fixo no rodapé,
-  com o resumo do manejo — toque ou arraste pra expandir e ver os
-  macros-chave (N, P, K, Ca, Mg) e o custo em tela cheia. Pulsa
+- **Comparativo com cor fixa por identidade**: nas barras de nutriente,
+  verde é sempre Agrocete e cinza é sempre o concorrente (não muda de
+  cor conforme quem está na frente) — o lado à frente ganha um
+  contorno sutil, e um selo compacto ("▲ +23%" ou "só Agrocete")
+  aparece ao lado do nutriente quando a diferença é grande.
+- **Bottom sheet arrastável** (estilo Google Maps, só em telas
+  estreitas — no desktop a barra lateral já mostra tudo), fixo no
+  rodapé, com o resumo do manejo — toque ou arraste pra expandir e ver
+  os macros-chave (N, P, K, Ca, Mg) e o custo em tela cheia. Pulsa
   suavemente quando os dois lados (concorrente e Agrocete) já têm
   produto selecionado.
 - **Alto contraste**: botão de sol/lua no cabeçalho alterna pra um
-  fundo mais escuro, pensado pra leitura sob sol forte.
+  fundo mais escuro e reforça o contraste dos textos secundários,
+  pensado pra leitura sob sol forte.
 - **Vibração tátil leve** (quando o navegador/aparelho suporta) ao
   selecionar ou remover um produto.
 
@@ -246,3 +281,13 @@ depender de múltiplos arquivos.
   Biológicals), se houver dados/fichas técnicas disponíveis.
 - Permitir exportar/importar a seleção como JSON, para compartilhar
   entre dispositivos sem depender só do `localStorage`.
+- Modo "versus" com dois manejos nomeados de forma independente lado a
+  lado (hoje o app já separa Agrocete x concorrente automaticamente
+  pelos produtos selecionados, mas não permite nomear/salvar cada lado
+  como um manejo distinto).
+- Presets prontos por cultura/estádio (ex: "Soja V4", "Milho V6") com
+  produtos e doses sugeridos pré-carregados — não implementado ainda
+  porque exigiria uma recomendação agronômica real por estádio, que não
+  está nas planilhas-fonte; dá pra fazer assim que houver essa lista
+  definida (equipe técnica passa os produtos/doses por estádio e eu
+  cadastro como templates prontos).

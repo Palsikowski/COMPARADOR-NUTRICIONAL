@@ -57,3 +57,77 @@ input[type="range"]::-moz-range-thumb {
   cursor: pointer;
   border: 2px solid #0B1319;
 }
+
+/* Texto secundário com contraste reforçado no modo alto-contraste (leitura a sol forte). */
+.muted {
+  color: #96A8B5;
+}
+.high-contrast .muted {
+  color: #D9E3EA;
+}
+.muted-soft {
+  color: #6E8090;
+}
+.high-contrast .muted-soft {
+  color: #B7C4CD;
+}
+
+/* Layout em grade: catálogo à esquerda, manejo/resumo fixo (sticky) à direita, só em telas largas. */
+.dash-grid {
+  display: block;
+}
+.dash-sidebar {
+  margin-top: 24px;
+}
+@media (min-width: 1080px) {
+  .dash-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 24px;
+    align-items: start;
+  }
+  .dash-sidebar {
+    position: sticky;
+    top: 16px;
+    margin-top: 0;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+  }
+}
+
+/* Some some (bottom sheet) só faz sentido em telas estreitas — no desktop a barra lateral já mostra tudo. */
+.mobile-only {
+  display: block;
+}
+@media (min-width: 1080px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* Chips de filtro rápido: fileira rolável horizontalmente. */
+.filter-chip-row {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+}
+.filter-chip-row::-webkit-scrollbar {
+  height: 5px;
+}
+.filter-chip-row::-webkit-scrollbar-thumb {
+  background: #24313D;
+  border-radius: 999px;
+}
+
+/* Swipe-to-add nos cards de produto (mobile): arraste para a direita para adicionar ao manejo. */
+.swipe-add-hint {
+  position: absolute;
+  inset: 0;
+  background: #1FBF8F;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-radius: 10px;
+}

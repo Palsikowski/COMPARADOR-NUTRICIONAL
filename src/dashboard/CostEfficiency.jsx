@@ -48,7 +48,7 @@ export function CostEfficiencyPanel({ costEfficiency, insights, nutrientMeta }) 
   if (rows.length === 0) return null;
   return (
     <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 12 }}>
-      <div style={{ fontSize: 11, color: "#8CA0AF", marginBottom: 10 }}>
+      <div className="muted" style={{ fontSize: 11, marginBottom: 10 }}>
         R$ por kg de nutriente entregue — quanto menor, mais eficiente o manejo naquele nutriente.
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -97,16 +97,62 @@ export function CostEfficiencyPanel({ costEfficiency, insights, nutrientMeta }) 
   );
 }
 
-// Barra única por nutriente: verde do lado que está na frente, cinza do
-// lado que está atrás — leitura em menos de 1 segundo.
+// Barra única por nutriente: verde fixo = Agrocete, cinza fixo = concorrente
+// (identidade por cor, não por quem está na frente) — leitura em menos de 1
+// segundo. O lado à frente ganha um contorno sutil.
 export function CompareBar({ agroVal, compVal, height = 9 }) {
   const total = agroVal + compVal;
   const agroPct = total > 0 ? (agroVal / total) * 100 : 50;
-  const agroAhead = agroVal >= compVal;
+  const agroAhead = agroVal > compVal;
+  const compAhead = compVal > agroVal;
   return (
     <div style={{ display: "flex", height, borderRadius: height / 2, overflow: "hidden", background: "#0F1720" }}>
-      <div style={{ width: `${agroPct}%`, background: agroAhead ? "#22C55E" : "#3A4753", transition: "width 0.3s" }} />
-      <div style={{ width: `${100 - agroPct}%`, background: agroAhead ? "#3A4753" : "#F87171", transition: "width 0.3s" }} />
+      <div
+        style={{
+          width: `${agroPct}%`,
+          background: "#1FBF8F",
+          boxShadow: agroAhead ? "inset 0 0 0 1px #FFFFFF55" : "none",
+          transition: "width 0.3s",
+        }}
+      />
+      <div
+        style={{
+          width: `${100 - agroPct}%`,
+          background: "#6B7A88",
+          boxShadow: compAhead ? "inset 0 0 0 1px #FFFFFF55" : "none",
+          transition: "width 0.3s",
+        }}
+      />
     </div>
+  );
+}
+
+// Selo compacto de vitória/alerta por nutriente — "+23%" verde quando a
+// Agrocete entrega mais daquele nutriente, âmbar quando é o concorrente.
+export function nutrientBadge(agroVal, compVal) {
+  if (agroVal === 0 && compVal === 0) return null;
+  if (compVal === 0 && agroVal > 0) return { text: "só Agrocete", positive: true };
+  if (agroVal === 0 && compVal > 0) return { text: "só concorrente", positive: false };
+  const diffPct = ((agroVal - compVal) / compVal) * 100;
+  if (Math.abs(diffPct) < 20) return null;
+  return { text: `${diffPct > 0 ? "+" : ""}${fmtNum(diffPct)}%`, positive: diffPct > 0 };
+}
+
+export function NutrientBadge({ badge }) {
+  if (!badge) return null;
+  return (
+    <span
+      style={{
+        fontSize: 10,
+        fontWeight: 700,
+        padding: "1px 7px",
+        borderRadius: 999,
+        background: badge.positive ? "#1FBF8F22" : "#F5A52422",
+        color: badge.positive ? "#1FBF8F" : "#F5A524",
+        border: `1px solid ${badge.positive ? "#1FBF8F55" : "#F5A52455"}`,
+      }}
+    >
+      {badge.positive ? "▲" : "▼"} {badge.text}
+    </span>
   );
 }
