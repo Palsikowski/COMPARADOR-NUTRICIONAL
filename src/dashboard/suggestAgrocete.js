@@ -62,20 +62,30 @@ export function suggestAgroceteProducts({ totals, allNutrientKeys, allProducts, 
 
     if (!best || bestScore < MIN_SCORE) break;
 
-    // dose = a menor dose que cobre totalmente o nutriente mais restritivo
-    // que esse produto ajuda (evita estourar muito esse nutriente).
-    let dose = Infinity;
+    // dose = a MAIOR dose entre as necessárias pra cobrir cada nutriente que
+    // esse produto ajuda — ou seja, a dose que atende o nutriente em que o
+    // produto é mais "diluído" relativamente ao que falta (o mais
+    // restritivo). Os outros nutrientes, mais concentrados nesse produto,
+    // acabam sobrando (o que é bom, não um problema). Usar a MENOR dose
+    // aqui (como numa versão anterior) sub-cobre todo o resto e, com
+    // déficits pequenos e produtos concentrados, podia arredondar pra 0 e
+    // descartar silenciosamente um produto que na verdade era uma ótima
+    // indicação — capado abaixo pra não estourar longe da dose de
+    // referência do catálogo.
+    let dose = 0;
     Object.entries(best.nutrients).forEach(([k, gPerUnit]) => {
       const need = remaining[k];
       if (!need || need <= 0 || !gPerUnit) return;
       const neededDose = need / gPerUnit;
-      if (neededDose < dose) dose = neededDose;
+      if (neededDose > dose) dose = neededDose;
     });
     used.add(best.id);
     if (!isFinite(dose) || dose <= 0) continue;
 
     const cap = (best.defaultDose || 1) * 8;
-    dose = Math.round(Math.min(dose, cap) * 100) / 100;
+    const rawDose = Math.min(dose, cap);
+    dose = Math.round(rawDose * 100) / 100;
+    if (dose <= 0) dose = rawDose > 0 ? 0.01 : 0; // não descarta um produto bom só por arredondamento
     if (dose <= 0) continue;
 
     const covers = [];

@@ -161,12 +161,15 @@ ter ajustado manualmente e querer só complementar o que sobrou.
 - É uma **heurística de aproximação por nutriente** (`suggestAgrocete.js`),
   não um solver exato nem uma recomendação agronômica validada — o
   próprio painel deixa esse aviso visível.
-- A dose sugerida de cada produto é a que cobre o nutriente mais
-  restritivo dele sem estourar muito além da dose de referência do
-  catálogo; nutrientes que sobrarem descobertos (ex: um micronutriente
-  raro que nenhum produto Agrocete concentra o bastante) ficam
-  sinalizados como "só concorrente" no comparativo, e o painel avisa
-  quando não consegue mais ajudar automaticamente.
+- A dose sugerida de cada produto é a que cobre o nutriente em que ele é
+  mais "diluído" em relação ao que falta (o mais restritivo) — os
+  outros nutrientes daquele produto, mais concentrados, tendem a sobrar
+  além do necessário, o que é intencional (melhor sobrar do que faltar
+  numa base rápida de manejo). Nutrientes que nenhum produto Agrocete do
+  catálogo cobre o bastante (ex: Cálcio e Níquel, hoje ausentes de todo
+  o portfólio) ficam sinalizados como "só concorrente" no comparativo, e
+  o painel/botão avisam explicitamente quando isso acontece, em vez de
+  não fazer nada.
 - Reage em tempo real: ao adicionar uma sugestão (ou remover algo do
   manejo concorrente), a lista recalcula o que ainda falta.
 
