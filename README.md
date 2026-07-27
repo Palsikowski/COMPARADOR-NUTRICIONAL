@@ -55,6 +55,11 @@ senha" abaixo para trocar).
   baseados no material oficial "Manejo Atualizado 2024" da Agrocete.
 - `src/dashboard/ManagementPresetsPanel.jsx` — painel na barra lateral
   pra escolher cultura + nível e carregar o manejo pronto de um toque.
+- `src/dashboard/suggestAgrocete.js` — heurística que sugere produtos
+  Agrocete pra cobrir o déficit de nutrientes de um manejo concorrente
+  (qualquer combinação de marcas).
+- `src/dashboard/SuggestionPanel.jsx` — painel que mostra e aplica essa
+  sugestão automática dentro do comparativo.
 
 ## Dados dos produtos
 
@@ -119,6 +124,34 @@ selo de insight aparece automaticamente (ex: "Agrocete entrega Cálcio
 23% mais barato por kg que o concorrente") — o texto muda de lado
 conforme o resultado real, não é fixo a favor da Agrocete. Os insights
 entram também na exportação em PDF.
+
+## Manejo concorrente multi-marca + sugestão automática de manejo Agrocete
+
+Você pode montar um manejo só com produtos concorrentes escolhendo
+livremente entre as 11 marcas mapeadas (ex: um produto da Vittia + um
+da Bioma) — todo produto que não for da Agrocete entra automaticamente
+no mesmo lado "concorrentes" do comparativo, então já dá pra montar
+esse manejo hoje sem nenhuma mudança adicional.
+
+O que é novo: assim que existe pelo menos um produto concorrente
+selecionado, aparece no comparativo o painel **"Sugestão de manejo
+Agrocete equivalente"**. Ele calcula o que falta cobrir (nutriente por
+nutriente, descontando o que o manejo Agrocete já selecionado cobre) e
+propõe, um produto por vez, o produto real do catálogo que mais ajuda
+a fechar essa diferença — com um botão pra adicionar cada um ou todos
+de uma vez.
+
+- É uma **heurística de aproximação por nutriente** (`suggestAgrocete.js`),
+  não um solver exato nem uma recomendação agronômica validada — o
+  próprio painel deixa esse aviso visível.
+- A dose sugerida de cada produto é a que cobre o nutriente mais
+  restritivo dele sem estourar muito além da dose de referência do
+  catálogo; nutrientes que sobrarem descobertos (ex: um micronutriente
+  raro que nenhum produto Agrocete concentra o bastante) ficam
+  sinalizados como "só concorrente" no comparativo, e o painel avisa
+  quando não consegue mais ajudar automaticamente.
+- Reage em tempo real: ao adicionar uma sugestão (ou remover algo do
+  manejo concorrente), a lista recalcula o que ainda falta.
 
 ## Manejos prontos por cultura
 

@@ -27,6 +27,7 @@ import TemplatesPanel from "./dashboard/TemplatesPanel.jsx";
 import BottomSheet from "./dashboard/BottomSheet.jsx";
 import QuickEditDrawer from "./dashboard/QuickEditDrawer.jsx";
 import ManagementPresetsPanel from "./dashboard/ManagementPresetsPanel.jsx";
+import SuggestionPanel from "./dashboard/SuggestionPanel.jsx";
 import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar, nutrientBadge, NutrientBadge } from "./dashboard/CostEfficiency.jsx";
 
 const NUTRIENT_META = {
@@ -203,6 +204,22 @@ export default function Dashboard() {
   function loadPreset(selection, notes, label) {
     setSelected(selection);
     setPresetInfo({ label, notes });
+    vibrate(15);
+  }
+
+  function addSuggested(s) {
+    setSelected((prev) => ({ ...prev, [s.productId]: { dose: s.dose, price: s.price } }));
+    vibrate(10);
+  }
+
+  function addAllSuggested(list) {
+    setSelected((prev) => {
+      const next = { ...prev };
+      list.forEach((s) => {
+        next[s.productId] = { dose: s.dose, price: s.price };
+      });
+      return next;
+    });
     vibrate(15);
   }
 
@@ -760,6 +777,17 @@ export default function Dashboard() {
                 })}
               </div>
             </div>
+
+            <SuggestionPanel
+              totals={totals}
+              allNutrientKeys={allNutrientKeys}
+              allProducts={allProducts}
+              selected={selected}
+              productsById={productsById}
+              nutrientMeta={NUTRIENT_META}
+              onAdd={addSuggested}
+              onAddAll={addAllSuggested}
+            />
 
             <SectionHeading icon={<Gauge size={16} />} title="Custo-benefício por nutriente" />
             <CostEfficiencyPanel costEfficiency={costEfficiency} insights={insights} nutrientMeta={NUTRIENT_META} />
