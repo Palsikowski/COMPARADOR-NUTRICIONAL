@@ -1,6 +1,6 @@
 const AGROCETE = "AGROCETE";
 const MAX_SUGGESTIONS = 6;
-const MIN_SCORE = 0.05; // abaixo disso o produto não ajuda o suficiente pra valer a pena sugerir
+const MIN_SCORE = 0.005; // abaixo disso o produto não ajuda o suficiente pra valer a pena sugerir
 const STILL_NEEDED_RATIO = 0.15; // segue sugerindo enquanto restar >15% do déficit original de algum nutriente
 
 // Heurística gulosa de aproximação de nutrientes — NÃO é um solver exato
@@ -11,6 +11,13 @@ const STILL_NEEDED_RATIO = 0.15; // segue sugerindo enquanto restar >15% do déf
 // nutrientes que ainda faltam, e calcula uma dose que cobre o nutriente
 // mais restritivo daquele produto sem estourar muito além da dose de
 // referência do catálogo.
+//
+// Retorna { suggestions, remaining, deficit }. "remaining" é o que sobrou
+// sem cobertura ao final — para saber se isso é significativo (ex: um
+// nutriente que nenhum produto Agrocete do catálogo contém) ou só um
+// resíduo de arredondamento, compare com "deficit" (o valor original,
+// antes de qualquer sugestão) usando uncoveredKeys() abaixo, em vez de
+// checar remaining[k] > 0 diretamente.
 export function suggestAgroceteProducts({ totals, allNutrientKeys, allProducts, selected }) {
   const deficit = {};
   allNutrientKeys.forEach((k) => {
@@ -20,7 +27,7 @@ export function suggestAgroceteProducts({ totals, allNutrientKeys, allProducts, 
   });
 
   const deficitKeys = allNutrientKeys.filter((k) => deficit[k] > 0);
-  if (deficitKeys.length === 0) return [];
+  if (deficitKeys.length === 0) return { suggestions: [], remaining: {}, deficit };
 
   const candidates = allProducts.filter(
     (p) =>
@@ -85,5 +92,13 @@ export function suggestAgroceteProducts({ totals, allNutrientKeys, allProducts, 
     if (!stillNeeded) break;
   }
 
-  return suggestions;
+  return { suggestions, remaining, deficit };
+}
+
+// Nutrientes cuja cobertura ficou genuinamente insuficiente (ainda resta
+// mais de 20% do déficit original) — filtra ruído de arredondamento de
+// dose, que deixa uma sobra minúscula mesmo quando o nutriente foi bem
+// coberto (ex: 1,32 g vs 1,32 g não deveria aparecer como "não coberto").
+export function uncoveredKeys(remaining, deficit, ratio = 0.2) {
+  return Object.keys(remaining).filter((k) => deficit[k] > 0 && remaining[k] > deficit[k] * ratio);
 }

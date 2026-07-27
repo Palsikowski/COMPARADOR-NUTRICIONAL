@@ -133,14 +133,23 @@ da Bioma) — todo produto que não for da Agrocete entra automaticamente
 no mesmo lado "concorrentes" do comparativo, então já dá pra montar
 esse manejo hoje sem nenhuma mudança adicional.
 
-O que é novo: assim que existe pelo menos um produto concorrente
-selecionado, aparece um botão **"Transformar em manejo Agrocete"**
-logo abaixo do "Manejo atual" na barra lateral — um clique só. Ele
-descarta o que estiver selecionado do lado Agrocete e monta do zero,
-a partir do total de nutrientes do manejo concorrente inteiro (qualquer
-combinação de marcas), a melhor aproximação com produtos Agrocete reais
-do catálogo, pra já ter uma base de manejo pronta e só ir ajustando
-depois — sem precisar montar produto por produto manualmente.
+O "Manejo atual" agora aparece **lado a lado**: uma coluna
+"Concorrentes" e uma coluna "Agrocete", cada uma com seus produtos e
+doses, pra comparar de relance quem tem o quê — sem precisar abrir o
+comparativo completo pra isso.
+
+Assim que existe pelo menos um produto concorrente selecionado, aparece
+um botão **"Transformar em manejo Agrocete"** logo abaixo dessas
+colunas — um clique só. Ele descarta o que estiver selecionado do lado
+Agrocete e monta do zero, a partir do total de nutrientes do manejo
+concorrente inteiro (qualquer combinação de marcas), a melhor
+aproximação com produtos Agrocete reais do catálogo, pra já ter uma
+base de manejo pronta e só ir ajustando depois. O botão **sempre dá um
+retorno visível**: mostra quantos produtos foram adicionados e, se
+sobrar algum nutriente sem cobertura completa (ex: um nutriente que
+nenhum produto Agrocete do catálogo concentra o bastante, como
+Cálcio ou Níquel — nenhuma linha do portfólio Agrocete tem esses dois
+hoje), avisa explicitamente em vez de simplesmente não fazer nada.
 
 Mais abaixo, no comparativo, o mesmo cálculo aparece de novo no painel
 **"Sugestão de manejo Agrocete equivalente"**, mas em modo incremental:
@@ -201,13 +210,19 @@ renomear ou excluir a qualquer momento.
 
 ## Layout
 
-Em telas largas (≥1080px) o catálogo fica em duas colunas: a esquerda
-com busca, filtros e a lista de produtos; a direita fixa (`sticky`,
-acompanha a rolagem) com o "Manejo atual", um resumo em tempo real
-(macros-chave, custo, botão de exportar) e os manejos salvos — sem
-precisar descer a página pra ver o que já foi montado. Em telas
-estreitas essa coluna vira o bottom sheet arrastável no rodapé (ver
-abaixo), que cobre a mesma função com menos espaço de tela.
+Em telas largas (≥1080px) a tela é dividida em duas colunas de
+proporção bem diferente: a **esquerda, compacta** (360px), só com
+busca, filtros e a lista de produtos do catálogo; a **direita, grande**
+(o resto da tela, fixa/`sticky`, acompanha a rolagem), com tudo relativo
+a montar e comparar o manejo — manejos prontos, o **manejo atual lado a
+lado** (Concorrentes | Agrocete, cada um na sua coluna), o botão
+"Transformar em manejo Agrocete", manejos salvos e o comparativo
+completo de nutrientes e custo. A ideia é que o catálogo (onde você só
+navega/seleciona) ocupe pouco espaço, e a comparação (o que realmente
+importa na cotação) fique grande e visível sem precisar rolar a página
+inteira. Em telas estreitas essas duas colunas empilham (catálogo
+primeiro), e o bottom sheet arrastável no rodapé (ver abaixo) cobre o
+resumo rápido com menos espaço de tela.
 
 ## Chips de filtro rápido
 

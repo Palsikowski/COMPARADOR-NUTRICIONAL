@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Wand2, Plus, CheckCircle2 } from "lucide-react";
-import { suggestAgroceteProducts } from "./suggestAgrocete.js";
+import { suggestAgroceteProducts, uncoveredKeys } from "./suggestAgrocete.js";
 
 function fmtNum(n) {
   return Number(n).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
@@ -12,7 +12,7 @@ function fmtNum(n) {
 // Ver suggestAgrocete.js pra a heurística — é uma aproximação, não uma
 // recomendação agronômica fechada.
 export default function SuggestionPanel({ totals, allNutrientKeys, allProducts, selected, productsById, nutrientMeta, onAdd, onAddAll }) {
-  const suggestions = useMemo(
+  const { suggestions, remaining, deficit } = useMemo(
     () => suggestAgroceteProducts({ totals, allNutrientKeys, allProducts, selected }),
     [totals, allNutrientKeys, allProducts, selected]
   );
@@ -31,12 +31,16 @@ export default function SuggestionPanel({ totals, allNutrientKeys, allProducts, 
   }
 
   if (suggestions.length === 0) {
+    const uncovered = uncoveredKeys(remaining, deficit).map((k) => nutrientMeta[k]?.label ?? k);
     return (
       <div className="muted-soft" style={{ background: "#17212B", border: "1px solid #24313D", borderRadius: 10, padding: 12, marginBottom: 12, fontSize: 12 }}>
-        Não encontramos produtos Agrocete no catálogo que cubram automaticamente os nutrientes restantes — adicione manualmente pela busca ou pelos chips de nutriente.
+        Não encontramos produtos Agrocete no catálogo que cubram automaticamente{" "}
+        {uncovered.length > 0 ? <>o(s) nutriente(s) <strong style={{ color: "#C7D2D9" }}>{uncovered.join(", ")}</strong> do manejo concorrente selecionado</> : "os nutrientes restantes"} — adicione manualmente pela busca ou pelos chips de nutriente.
       </div>
     );
   }
+
+  const stillIncomplete = uncoveredKeys(remaining, deficit).map((k) => nutrientMeta[k]?.label ?? k);
 
   return (
     <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 12 }}>
@@ -48,6 +52,12 @@ export default function SuggestionPanel({ totals, allNutrientKeys, allProducts, 
       </div>
       <p className="muted-soft" style={{ fontSize: 11, marginBottom: 10, lineHeight: 1.4 }}>
         Aproximação automática pelos nutrientes que faltam cobrir em relação ao manejo concorrente selecionado — não é uma recomendação agronômica validada. Ajuste as doses e confirme com a equipe técnica antes de cotar.
+        {stillIncomplete.length > 0 && (
+          <>
+            {" "}
+            Mesmo adicionando tudo abaixo, a cobertura ainda fica incompleta para: <strong style={{ color: "#C7D2D9" }}>{stillIncomplete.join(", ")}</strong>.
+          </>
+        )}
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
