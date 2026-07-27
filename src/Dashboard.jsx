@@ -17,6 +17,7 @@ import {
   Sun,
   Moon,
   Gauge,
+  ArrowRightLeft,
 } from "lucide-react";
 import { PRODUCTS } from "./data/products.js";
 import { EQUIVALENCES, EQUIVALENCE_FOOTNOTES } from "./data/equivalences.js";
@@ -28,6 +29,7 @@ import BottomSheet from "./dashboard/BottomSheet.jsx";
 import QuickEditDrawer from "./dashboard/QuickEditDrawer.jsx";
 import ManagementPresetsPanel from "./dashboard/ManagementPresetsPanel.jsx";
 import SuggestionPanel from "./dashboard/SuggestionPanel.jsx";
+import { suggestAgroceteProducts } from "./dashboard/suggestAgrocete.js";
 import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar, nutrientBadge, NutrientBadge } from "./dashboard/CostEfficiency.jsx";
 
 const NUTRIENT_META = {
@@ -221,6 +223,28 @@ export default function Dashboard() {
       return next;
     });
     vibrate(15);
+  }
+
+  // "Transformar em manejo Agrocete": descarta o lado Agrocete atual (se
+  // houver) e monta do zero, a partir do total de nutrientes do manejo
+  // concorrente inteiro (qualquer combinação de marcas), a melhor
+  // aproximação com produtos Agrocete reais — pra já ter uma base pronta
+  // e só ajustar depois, sem precisar montar o comparativo manualmente.
+  function transformToAgrocete() {
+    const fakeTotals = { comp: totals.comp, agro: { nutrients: {}, cost: 0, count: 0 } };
+    const suggestions = suggestAgroceteProducts({ totals: fakeTotals, allNutrientKeys, allProducts, selected: {} });
+    setSelected((prev) => {
+      const next = {};
+      Object.entries(prev).forEach(([id, sel]) => {
+        const p = productsById.get(id);
+        if (p && p.brand !== AGROCETE) next[id] = sel;
+      });
+      suggestions.forEach((s) => {
+        next[s.productId] = { dose: s.dose, price: s.price };
+      });
+      return next;
+    });
+    vibrate(20);
   }
 
   // --- totais ---
@@ -914,6 +938,32 @@ export default function Dashboard() {
         )}
 
         <CurrentManagement selected={selected} productsById={productsById} brandColor={brandColor} onToggle={toggleProduct} onEdit={(p) => setEditingProductId(p.id)} />
+
+        {totals.comp.count > 0 && (
+          <button
+            onClick={transformToAgrocete}
+            className="tap-scale"
+            title="Descarta o lado Agrocete atual e monta um novo, a partir dos nutrientes do manejo concorrente selecionado (qualquer marca)."
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              padding: "12px",
+              borderRadius: 10,
+              border: `1.5px solid ${AGROCETE_COLOR}`,
+              background: `${AGROCETE_COLOR}1A`,
+              color: AGROCETE_COLOR,
+              fontWeight: 700,
+              fontSize: 13,
+              cursor: "pointer",
+              marginBottom: 16,
+            }}
+          >
+            <ArrowRightLeft size={15} /> Transformar em manejo Agrocete
+          </button>
+        )}
 
         {selectedCount > 0 && (
           <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 16 }}>
