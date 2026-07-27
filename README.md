@@ -50,6 +50,11 @@ senha" abaixo para trocar).
   concorrente (quando existe).
 - `src/data/brands.js` — lista das marcas concorrentes presentes em
   `products.js`.
+- `src/data/managementPresets.js` — manejos prontos por cultura (Soja,
+  Milho, Algodão) x nível de investimento (Básico/Médio/Completo),
+  baseados no material oficial "Manejo Atualizado 2024" da Agrocete.
+- `src/dashboard/ManagementPresetsPanel.jsx` — painel na barra lateral
+  pra escolher cultura + nível e carregar o manejo pronto de um toque.
 
 ## Dados dos produtos
 
@@ -114,6 +119,36 @@ selo de insight aparece automaticamente (ex: "Agrocete entrega Cálcio
 23% mais barato por kg que o concorrente") — o texto muda de lado
 conforme o resultado real, não é fixo a favor da Agrocete. Os insights
 entram também na exportação em PDF.
+
+## Manejos prontos por cultura
+
+O painel "Manejos prontos" (barra lateral) carrega, com um toque, o
+manejo Agrocete de Soja, Milho ou Algodão em 3 níveis de investimento:
+**Básico**, **Médio** e **Completo**.
+
+- **Fonte**: os produtos, estágios fenológicos e doses vêm do material
+  oficial "Manejo Atualizado 2024" da própria Agrocete (fornecido pelo
+  usuário) — não foram inventados nem pesquisados externamente.
+- **Os 3 níveis são um agrupamento nosso**, não 3 níveis definidos
+  oficialmente pela Agrocete: cada cultura tem uma sequência de
+  estágios (ex. Soja: Plantio → V3-V5 → R1-R3 → R4-R5) e cada nível
+  inclui um subconjunto crescente desses estágios. **Completo** = manejo
+  integral do material oficial. Quando um produto se repete em mais de
+  um estágio incluído (ex: EVIC-S na Soja aparece em R1-R3 e R4-R5), a
+  dose carregada é a **soma da safra inteira**, não a de uma aplicação
+  isolada.
+- **Doses de tratamento de sementes (TS)** variam conforme a taxa de
+  semeadura da cultivar — foi usada a dose de aplicação em **sulco**
+  (já em L/ha ou kg/ha no material oficial) por não depender dessa
+  variável; onde só havia faixa (ex: "0,4 a 1,2 L/ha"), foi usado o
+  limite inferior. As notas de cada produto carregado (incluindo a
+  dose de TS por kg de semente, quando existe) aparecem no aviso que
+  some ao carregar o manejo.
+- **Preços não estão incluídos** (entram como R$ 0,00) — adicione os
+  preços reais de cada produto antes de gerar uma cotação.
+- **Revise sempre com a equipe técnica antes de cotar**: os 3 níveis são
+  um ponto de partida rápido, não uma recomendação agronômica fechada
+  pra cada talhão.
 
 ## Manejos salvos (templates)
 
@@ -285,9 +320,6 @@ depender de múltiplos arquivos.
   lado (hoje o app já separa Agrocete x concorrente automaticamente
   pelos produtos selecionados, mas não permite nomear/salvar cada lado
   como um manejo distinto).
-- Presets prontos por cultura/estádio (ex: "Soja V4", "Milho V6") com
-  produtos e doses sugeridos pré-carregados — não implementado ainda
-  porque exigiria uma recomendação agronômica real por estádio, que não
-  está nas planilhas-fonte; dá pra fazer assim que houver essa lista
-  definida (equipe técnica passa os produtos/doses por estádio e eu
-  cadastro como templates prontos).
+- Adicionar preços reais aos manejos prontos (`src/data/managementPresets.js`)
+  assim que definidos, e trazer mais culturas além de Soja/Milho/Algodão
+  se houver material oficial equivalente.
