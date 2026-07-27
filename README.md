@@ -134,12 +134,20 @@ no mesmo lado "concorrentes" do comparativo, então já dá pra montar
 esse manejo hoje sem nenhuma mudança adicional.
 
 O que é novo: assim que existe pelo menos um produto concorrente
-selecionado, aparece no comparativo o painel **"Sugestão de manejo
-Agrocete equivalente"**. Ele calcula o que falta cobrir (nutriente por
-nutriente, descontando o que o manejo Agrocete já selecionado cobre) e
-propõe, um produto por vez, o produto real do catálogo que mais ajuda
-a fechar essa diferença — com um botão pra adicionar cada um ou todos
-de uma vez.
+selecionado, aparece um botão **"Transformar em manejo Agrocete"**
+logo abaixo do "Manejo atual" na barra lateral — um clique só. Ele
+descarta o que estiver selecionado do lado Agrocete e monta do zero,
+a partir do total de nutrientes do manejo concorrente inteiro (qualquer
+combinação de marcas), a melhor aproximação com produtos Agrocete reais
+do catálogo, pra já ter uma base de manejo pronta e só ir ajustando
+depois — sem precisar montar produto por produto manualmente.
+
+Mais abaixo, no comparativo, o mesmo cálculo aparece de novo no painel
+**"Sugestão de manejo Agrocete equivalente"**, mas em modo incremental:
+em vez de substituir tudo, ele calcula só o que ainda falta cobrir
+(descontando o que já está selecionado do lado Agrocete) e deixa
+adicionar produto por produto ou todos de uma vez — útil depois de já
+ter ajustado manualmente e querer só complementar o que sobrou.
 
 - É uma **heurística de aproximação por nutriente** (`suggestAgrocete.js`),
   não um solver exato nem uma recomendação agronômica validada — o
