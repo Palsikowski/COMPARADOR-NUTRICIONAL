@@ -26,6 +26,7 @@ import CurrentManagement from "./dashboard/CurrentManagement.jsx";
 import TemplatesPanel from "./dashboard/TemplatesPanel.jsx";
 import BottomSheet from "./dashboard/BottomSheet.jsx";
 import QuickEditDrawer from "./dashboard/QuickEditDrawer.jsx";
+import ManagementPresetsPanel from "./dashboard/ManagementPresetsPanel.jsx";
 import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar, nutrientBadge, NutrientBadge } from "./dashboard/CostEfficiency.jsx";
 
 const NUTRIENT_META = {
@@ -117,6 +118,7 @@ export default function Dashboard() {
   const [quickBrandOnly, setQuickBrandOnly] = useState(false); // chip "Somente Agrocete"
   const [activeChip, setActiveChip] = useState("all");
   const [editingProductId, setEditingProductId] = useState(null); // produto aberto no drawer de dose/preço
+  const [presetInfo, setPresetInfo] = useState(null); // { label, notes } do último manejo pronto carregado
 
   useEffect(() => {
     try {
@@ -196,6 +198,12 @@ export default function Dashboard() {
 
   function renameTemplate(id, newName) {
     setTemplates((prev) => prev.map((t) => (t.id === id ? { ...t, name: newName } : t)));
+  }
+
+  function loadPreset(selection, notes, label) {
+    setSelected(selection);
+    setPresetInfo({ label, notes });
+    vibrate(15);
   }
 
   // --- totais ---
@@ -852,6 +860,31 @@ export default function Dashboard() {
       </div>
 
       <aside className="dash-sidebar">
+        <ManagementPresetsPanel onLoad={loadPreset} />
+
+        {presetInfo && (
+          <div style={{ background: "#F5A52414", border: "1px solid #F5A52444", borderRadius: 10, padding: 12, marginBottom: 16, fontSize: 11 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: presetInfo.notes.length > 0 ? 8 : 0 }}>
+              <strong style={{ fontSize: 12 }}>{presetInfo.label} carregado</strong>
+              <button onClick={() => setPresetInfo(null)} className="tap-scale" style={{ background: "transparent", border: "none", color: "#F5A524", cursor: "pointer", padding: 2 }} aria-label="Dispensar">
+                <X size={13} />
+              </button>
+            </div>
+            {presetInfo.notes.length > 0 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                {presetInfo.notes.map((n, i) => {
+                  const prod = productsById.get(n.productId);
+                  return (
+                    <div key={i} className="muted-soft">
+                      <strong style={{ color: "#C7D2D9" }}>{prod?.name ?? n.productId}</strong> ({n.stage}): {n.note}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
         <CurrentManagement selected={selected} productsById={productsById} brandColor={brandColor} onToggle={toggleProduct} onEdit={(p) => setEditingProductId(p.id)} />
 
         {selectedCount > 0 && (
