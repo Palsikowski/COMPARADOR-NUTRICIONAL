@@ -29,7 +29,7 @@ import BottomSheet from "./dashboard/BottomSheet.jsx";
 import QuickEditDrawer from "./dashboard/QuickEditDrawer.jsx";
 import ManagementPresetsPanel from "./dashboard/ManagementPresetsPanel.jsx";
 import SuggestionPanel from "./dashboard/SuggestionPanel.jsx";
-import { suggestAgroceteProducts } from "./dashboard/suggestAgrocete.js";
+import { suggestAgroceteProducts, uncoveredKeys } from "./dashboard/suggestAgrocete.js";
 import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar, nutrientBadge, NutrientBadge } from "./dashboard/CostEfficiency.jsx";
 
 const NUTRIENT_META = {
@@ -62,7 +62,6 @@ function brandColor(brand) {
 
 // Chips de filtro rápido: nutrientes mais buscados e as categorias com mais produtos.
 const NUTRIENT_CHIP_KEYS = ["N", "P2O5", "K2O", "Ca", "Mg", "S", "B", "Zn", "Cu", "Mn"];
-const SIDEBAR_MACROS = ["N", "P2O5", "K2O", "Ca", "Mg"];
 const CATEGORY_CHIPS = (() => {
   const counts = {};
   PRODUCTS.forEach((p) => {
@@ -122,6 +121,7 @@ export default function Dashboard() {
   const [activeChip, setActiveChip] = useState("all");
   const [editingProductId, setEditingProductId] = useState(null); // produto aberto no drawer de dose/preço
   const [presetInfo, setPresetInfo] = useState(null); // { label, notes } do último manejo pronto carregado
+  const [transformInfo, setTransformInfo] = useState(null); // { count, uncovered } do último "Transformar em manejo Agrocete"
 
   useEffect(() => {
     try {
@@ -230,9 +230,11 @@ export default function Dashboard() {
   // concorrente inteiro (qualquer combinação de marcas), a melhor
   // aproximação com produtos Agrocete reais — pra já ter uma base pronta
   // e só ajustar depois, sem precisar montar o comparativo manualmente.
+  // Sempre dá um retorno visível (mesmo quando não acha nada pra
+  // sugerir), pra nunca parecer que o botão não fez nada.
   function transformToAgrocete() {
     const fakeTotals = { comp: totals.comp, agro: { nutrients: {}, cost: 0, count: 0 } };
-    const suggestions = suggestAgroceteProducts({ totals: fakeTotals, allNutrientKeys, allProducts, selected: {} });
+    const { suggestions, remaining, deficit } = suggestAgroceteProducts({ totals: fakeTotals, allNutrientKeys, allProducts, selected: {} });
     setSelected((prev) => {
       const next = {};
       Object.entries(prev).forEach(([id, sel]) => {
@@ -244,6 +246,8 @@ export default function Dashboard() {
       });
       return next;
     });
+    const uncovered = uncoveredKeys(remaining, deficit).map((k) => NUTRIENT_META[k]?.label ?? k);
+    setTransformInfo({ count: suggestions.length, uncovered });
     vibrate(20);
   }
 
@@ -770,9 +774,101 @@ export default function Dashboard() {
           </section>
         )}
 
+      </div>
+
+      <aside className="dash-sidebar">
+        <ManagementPresetsPanel onLoad={loadPreset} />
+
+        {presetInfo && (
+          <div style={{ background: "#F5A52414", border: "1px solid #F5A52444", borderRadius: 10, padding: 12, marginBottom: 16, fontSize: 11 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: presetInfo.notes.length > 0 ? 8 : 0 }}>
+              <strong style={{ fontSize: 12 }}>{presetInfo.label} carregado</strong>
+              <button onClick={() => setPresetInfo(null)} className="tap-scale" style={{ background: "transparent", border: "none", color: "#F5A524", cursor: "pointer", padding: 2 }} aria-label="Dispensar">
+                <X size={13} />
+              </button>
+            </div>
+            {presetInfo.notes.length > 0 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                {presetInfo.notes.map((n, i) => {
+                  const prod = productsById.get(n.productId);
+                  return (
+                    <div key={i} className="muted-soft">
+                      <strong style={{ color: "#C7D2D9" }}>{prod?.name ?? n.productId}</strong> ({n.stage}): {n.note}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        <CurrentManagement selected={selected} productsById={productsById} brandColor={brandColor} onToggle={toggleProduct} onEdit={(p) => setEditingProductId(p.id)} />
+
+        {totals.comp.count > 0 && (
+          <button
+            onClick={transformToAgrocete}
+            className="tap-scale"
+            title="Descarta o lado Agrocete atual e monta um novo, a partir dos nutrientes do manejo concorrente selecionado (qualquer marca)."
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              padding: "12px",
+              borderRadius: 10,
+              border: `1.5px solid ${AGROCETE_COLOR}`,
+              background: `${AGROCETE_COLOR}1A`,
+              color: AGROCETE_COLOR,
+              fontWeight: 700,
+              fontSize: 13,
+              cursor: "pointer",
+              marginBottom: transformInfo ? 8 : 16,
+            }}
+          >
+            <ArrowRightLeft size={15} /> Transformar em manejo Agrocete
+          </button>
+        )}
+
+        {transformInfo && (
+          <div
+            style={{
+              background: transformInfo.count > 0 ? "#1FBF8F14" : "#F5A52414",
+              border: `1px solid ${transformInfo.count > 0 ? "#1FBF8F44" : "#F5A52444"}`,
+              borderRadius: 10,
+              padding: 12,
+              marginBottom: 16,
+              fontSize: 11,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: transformInfo.uncovered.length > 0 ? 6 : 0 }}>
+              <strong style={{ fontSize: 12, color: transformInfo.count > 0 ? AGROCETE_COLOR : "#F5A524" }}>
+                {transformInfo.count > 0 ? `${transformInfo.count} produto${transformInfo.count > 1 ? "s" : ""} Agrocete adicionado${transformInfo.count > 1 ? "s" : ""}` : "Nenhum produto Agrocete encontrado"}
+              </strong>
+              <button onClick={() => setTransformInfo(null)} className="tap-scale" style={{ background: "transparent", border: "none", color: "#8CA0AF", cursor: "pointer", padding: 2 }} aria-label="Dispensar">
+                <X size={13} />
+              </button>
+            </div>
+            {transformInfo.uncovered.length > 0 && (
+              <p className="muted-soft" style={{ margin: 0 }}>
+                Cobertura ainda incompleta para: <strong style={{ color: "#C7D2D9" }}>{transformInfo.uncovered.join(", ")}</strong> — pode ser que nenhum produto do catálogo concentre o suficiente, ou que valha a pena complementar manualmente.
+              </p>
+            )}
+          </div>
+        )}
+
+        <TemplatesPanel
+          templates={templates}
+          selectedCount={selectedCount}
+          onSave={saveTemplate}
+          onLoad={loadTemplate}
+          onDelete={deleteTemplate}
+          onRename={renameTemplate}
+        />
+
         {/* COMPARATIVO */}
         {allNutrientKeys.length > 0 && (
-          <section id="comparativo" style={{ marginTop: 28, scrollMarginTop: 16 }}>
+          <section id="comparativo" style={{ scrollMarginTop: 16 }}>
             <SectionHeading icon={<TrendingUp size={16} />} title="Comparativo de nutrientes (g/ha)" />
             <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 12 }}>
               <div style={{ display: "flex", gap: 14, fontSize: 11, marginBottom: 12 }}>
@@ -795,7 +891,7 @@ export default function Dashboard() {
                           {fmtNum(compVal)} g vs {fmtNum(agroVal)} g
                         </span>
                       </div>
-                      <CompareBar agroVal={agroVal} compVal={compVal} />
+                      <CompareBar agroVal={agroVal} compVal={compVal} height={12} />
                     </div>
                   );
                 })}
@@ -905,135 +1001,10 @@ export default function Dashboard() {
         )}
 
         {allNutrientKeys.length === 0 && (
-          <div className="muted" style={{ marginTop: 24, textAlign: "center", fontSize: 13, padding: "30px 10px" }}>
-            Selecione produtos acima (por categoria ou por marca) para ver o comparativo de nutrientes e custo.
+          <div className="muted" style={{ textAlign: "center", fontSize: 13, padding: "30px 10px" }}>
+            Selecione produtos no catálogo (por categoria ou por marca) para ver o comparativo de nutrientes e custo lado a lado.
           </div>
         )}
-      </div>
-
-      <aside className="dash-sidebar">
-        <ManagementPresetsPanel onLoad={loadPreset} />
-
-        {presetInfo && (
-          <div style={{ background: "#F5A52414", border: "1px solid #F5A52444", borderRadius: 10, padding: 12, marginBottom: 16, fontSize: 11 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: presetInfo.notes.length > 0 ? 8 : 0 }}>
-              <strong style={{ fontSize: 12 }}>{presetInfo.label} carregado</strong>
-              <button onClick={() => setPresetInfo(null)} className="tap-scale" style={{ background: "transparent", border: "none", color: "#F5A524", cursor: "pointer", padding: 2 }} aria-label="Dispensar">
-                <X size={13} />
-              </button>
-            </div>
-            {presetInfo.notes.length > 0 && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                {presetInfo.notes.map((n, i) => {
-                  const prod = productsById.get(n.productId);
-                  return (
-                    <div key={i} className="muted-soft">
-                      <strong style={{ color: "#C7D2D9" }}>{prod?.name ?? n.productId}</strong> ({n.stage}): {n.note}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
-
-        <CurrentManagement selected={selected} productsById={productsById} brandColor={brandColor} onToggle={toggleProduct} onEdit={(p) => setEditingProductId(p.id)} />
-
-        {totals.comp.count > 0 && (
-          <button
-            onClick={transformToAgrocete}
-            className="tap-scale"
-            title="Descarta o lado Agrocete atual e monta um novo, a partir dos nutrientes do manejo concorrente selecionado (qualquer marca)."
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-              padding: "12px",
-              borderRadius: 10,
-              border: `1.5px solid ${AGROCETE_COLOR}`,
-              background: `${AGROCETE_COLOR}1A`,
-              color: AGROCETE_COLOR,
-              fontWeight: 700,
-              fontSize: 13,
-              cursor: "pointer",
-              marginBottom: 16,
-            }}
-          >
-            <ArrowRightLeft size={15} /> Transformar em manejo Agrocete
-          </button>
-        )}
-
-        {selectedCount > 0 && (
-          <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 16 }}>
-            <div className="muted" style={{ fontSize: 11, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.04em", fontWeight: 700 }}>
-              Resumo em tempo real
-            </div>
-            <div style={{ display: "flex", gap: 12, fontSize: 11, marginBottom: 10 }}>
-              <LegendDot color="#6B7A88" label="Concorrentes" />
-              <LegendDot color={AGROCETE_COLOR} label="Agrocete" />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {SIDEBAR_MACROS.filter((k) => (totals.agro.nutrients[k] || 0) > 0 || (totals.comp.nutrients[k] || 0) > 0).map((k) => {
-                const compVal = totals.comp.nutrients[k] || 0;
-                const agroVal = totals.agro.nutrients[k] || 0;
-                const badge = nutrientBadge(agroVal, compVal);
-                return (
-                  <div key={k}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 11, marginBottom: 3, gap: 6 }}>
-                      <span style={{ display: "flex", alignItems: "center", gap: 5, fontWeight: 600 }}>
-                        {NUTRIENT_META[k]?.label ?? k}
-                        <NutrientBadge badge={badge} />
-                      </span>
-                    </div>
-                    <CompareBar agroVal={agroVal} compVal={compVal} height={7} />
-                  </div>
-                );
-              })}
-            </div>
-            <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
-              <CostCard label="Concorrentes" value={totals.comp.cost} color="#6B7A88" />
-              <CostCard label="Agrocete" value={totals.agro.cost} color={AGROCETE_COLOR} />
-            </div>
-            <button
-              onClick={exportPDF}
-              className="tap-scale"
-              style={{
-                marginTop: 12,
-                width: "100%",
-                padding: "10px",
-                borderRadius: 10,
-                border: "none",
-                background: AGROCETE_COLOR,
-                color: "#0B1319",
-                fontWeight: 700,
-                fontSize: 12,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 6,
-              }}
-            >
-              <Download size={14} /> Exportar em PDF
-            </button>
-            {allNutrientKeys.length > 0 && (
-              <a href="#comparativo" className="muted" style={{ display: "block", textAlign: "center", marginTop: 10, fontSize: 11 }}>
-                Ver comparativo completo ↓
-              </a>
-            )}
-          </div>
-        )}
-
-        <TemplatesPanel
-          templates={templates}
-          selectedCount={selectedCount}
-          onSave={saveTemplate}
-          onLoad={loadTemplate}
-          onDelete={deleteTemplate}
-          onRename={renameTemplate}
-        />
       </aside>
       </div>
       </main>
