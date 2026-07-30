@@ -1,6 +1,7 @@
 // Marcas concorrentes presentes em products.js (extraído automaticamente).
 export const COMPETITOR_BRANDS = [
   "ARGGUS",
+  "BIOCHIM",
   "BIOMA",
   "BIOTROP",
   "F1RST AGBIOTECH",
@@ -9,6 +10,7 @@ export const COMPETITOR_BRANDS = [
   "Nodusoja - NODUAGRI",
   "SATIS",
   "SIMBIOSE",
+  "UBYFOL",
   "VITTIA",
   "VIVA BIO"
 ];

@@ -83,6 +83,16 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
   quando o nome não bateu exatamente com o catalogado), o produto
   aparece só como referência textual (chip cinza, não clicável) em vez
   de entrar no comparativo numérico.
+- **BIOCHIM e UBYFOL** — 26 produtos (16 + 10) vieram de uma planilha à
+  parte enviada pelo usuário (`DIEL.pdf`), já com concentração em g/L ou
+  g/kg calculada (não passou pela conversão %m/m → g/L acima). A dose de
+  cada produto foi extraída por coordenada exata das células do PDF
+  (não por OCR visual) e cada coluna de nutriente foi conferida contra a
+  linha "TOTAL" da própria planilha até bater 100% — inclusive corrigiu
+  dois erros de leitura que só apareceram nessa conferência. "L/ha" foi
+  assumido como unidade padrão por não estar especificado na planilha;
+  corrija pra "kg/ha" nos produtos que forem sólidos/em pó. O produto
+  "ML 14" da Ubyfol não tinha dose informada — preencha antes de cotar.
 
 **Limitações conhecidas dos dados** (herdadas das planilhas-fonte, não
 "corrigidas" para não inventar informação):
