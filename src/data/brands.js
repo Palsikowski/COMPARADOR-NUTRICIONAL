@@ -1,16 +1,28 @@
 // Marcas concorrentes presentes em products.js (extraído automaticamente).
 export const COMPETITOR_BRANDS = [
+  "AGRIVALLE",
   "ARGGUS",
+  "BALLAGRO",
   "BIOCHIM",
   "BIOMA",
   "BIOTROP",
+  "DIMICRON",
   "F1RST AGBIOTECH",
+  "FORTGREEN / F1RST AGBIOTECH",
+  "GENICA",
   "GIRO AGRO",
+  "GIRO AGRO / VIVA BIO",
+  "GRAN7",
   "ICL",
+  "KOPPERT",
+  "LALLEMAND",
+  "NITRO",
   "Nodusoja - NODUAGRI",
   "SATIS",
   "SIMBIOSE",
+  "SYNGENTA BIOLÓGICALS",
   "UBYFOL",
+  "UNION AGRO",
   "VITTIA",
   "VIVA BIO"
 ];
