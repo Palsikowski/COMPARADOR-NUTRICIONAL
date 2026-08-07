@@ -93,6 +93,21 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
   assumido como unidade padrão por não estar especificado na planilha;
   corrija pra "kg/ha" nos produtos que forem sólidos/em pó. O produto
   "ML 14" da Ubyfol não tinha dose informada — preencha antes de cotar.
+- **218 produtos "só nome"** — todo produto concorrente que aparecia na
+  matriz de equivalência apenas como referência textual (chip cinza, não
+  clicável, sem dado nutricional) virou um produto de verdade no
+  catálogo: `hasNutrients: false`, sem concentração cadastrada ainda,
+  mas já selecionável, com dose/preço editáveis e contando no custo
+  total do manejo. 3 desses nomes na verdade já eram os produtos reais
+  da Ubyfol cadastrados acima (grafados diferente na matriz — "Mag-8" =
+  "Mag8", "MS-Boro" = "MS Boro", "CoMo ML14" = "ML 14") e foram ligados
+  ao produto certo em vez de duplicados. Isso também trouxe 12 marcas
+  novas pro catálogo (Agrivalle, Ballagro, Dimicron, Fortgreen/F1rst
+  Agbiotech, Genica, Giro Agro/Viva Bio, Gran7, Koppert, Lallemand,
+  Nitro, Syngenta Biológicals, Union Agro — algumas aparecem com o nome
+  duplo exatamente como constava na planilha de equivalência). Preencha
+  as concentrações desses produtos abrindo o card e editando, ou peça
+  pro Claude Code cadastrar a partir de uma ficha técnica/planilha.
 
 **Limitações conhecidas dos dados** (herdadas das planilhas-fonte, não
 "corrigidas" para não inventar informação):
@@ -100,9 +115,10 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
   encontrado no texto de dose da planilha — ponto de partida, não
   recomendação agronômica. Ajuste sempre conforme a bula.
 - Das ~272 referências de produtos concorrentes na matriz de
-  equivalência, só ~50 puderam ser casadas com dados nutricionais
-  reais (a maioria das 20 marcas da matriz não tem aba própria na
-  planilha de nutrientes).
+  equivalência, ~50 têm dados nutricionais reais cadastrados (das
+  planilhas de nutrientes, Biochim e Ubyfol); as outras ~218 estão no
+  catálogo com nome, marca e categoria, mas sem concentração — ver
+  "218 produtos 'só nome'" acima.
 - Três produtos que apareciam no folheto GRAP em PDF usado numa versão
   anterior do app (GRAP CAFÉ, GRAP FRUTAS, GRAP PHIL K) não estão na
   planilha interna mais recente e por isso não aparecem mais no

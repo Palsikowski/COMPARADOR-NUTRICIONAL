@@ -1,10 +1,10 @@
 // GERADO A PARTIR DE PLANILHA INTERNA DA AGROCETE — não editar à mão.
 // Fonte: COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx, aba "P. Similares".
 // Para cada categoria/composição, lista o produto Agrocete e o equivalente de
-// cada marca concorrente (quando existe). productId aponta para PRODUCTS quando
-// foi possível casar o nome com um produto cadastrado em products.js — quando
-// null, o nome do produto concorrente é exibido só como referência textual
-// (não há dados nutricionais cadastrados para ele nas planilhas fornecidas).
+// cada marca concorrente (quando existe). productId aponta para PRODUCTS —
+// hoje todo produto da matriz tem um productId (mesmo os que não têm dados
+// nutricionais cadastrados ainda, com hasNutrients: false em products.js) —
+// exceto quando o nome do concorrente é genérico/não identificado.
 
 export const EQUIVALENCE_FOOTNOTES = [
   "As comparações dos produtos são de similaridades com a composição dos nutrientes presentes, não necessariamente os produtos comparados possuem a mesma concentração",
@@ -38,12 +38,12 @@ export const EQUIVALENCES = [
       {
         "brand": "BALLAGRO",
         "name": "Hober Phos",
-        "productId": null
+        "productId": "ballagro__hober-phos"
       },
       {
         "brand": "GENICA",
         "name": "Inceptor",
-        "productId": null
+        "productId": "genica__inceptor"
       },
       {
         "brand": "BIOTROP",
@@ -53,7 +53,7 @@ export const EQUIVALENCES = [
       {
         "brand": "DIMICRON",
         "name": "Dimi Phos",
-        "productId": null
+        "productId": "dimicron__dimi-phos"
       }
     ]
   },
@@ -66,12 +66,12 @@ export const EQUIVALENCES = [
       {
         "brand": "SIMBIOSE",
         "name": "SimbioseNod Soja T",
-        "productId": null
+        "productId": "simbiose__simbiosenod-soja-t"
       },
       {
         "brand": "ICL",
         "name": "ActibioX Brady T",
-        "productId": null
+        "productId": "icl__actibiox-brady-t"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
@@ -81,27 +81,27 @@ export const EQUIVALENCES = [
       {
         "brand": "VITTIA",
         "name": "Biomax Premium T Soja",
-        "productId": null
+        "productId": "vittia__biomax-premium-t-soja"
       },
       {
         "brand": "BALLAGRO",
         "name": "Hober Soy Turfoso",
-        "productId": null
+        "productId": "ballagro__hober-soy-turfoso"
       },
       {
         "brand": "GENICA",
         "name": "Fixaron Brady-T",
-        "productId": null
+        "productId": "genica__fixaron-brady-t"
       },
       {
         "brand": "KOPPERT",
         "name": "Rizokop Turfa",
-        "productId": null
+        "productId": "koppert__rizokop-turfa"
       },
       {
         "brand": "DIMICRON",
         "name": "Dimi Brad T",
-        "productId": null
+        "productId": "dimicron__dimi-brad-t"
       }
     ]
   },
@@ -114,17 +114,17 @@ export const EQUIVALENCES = [
       {
         "brand": "SIMBIOSE",
         "name": "SimbioseMaíz T",
-        "productId": null
+        "productId": "simbiose__simbiosemaiz-t"
       },
       {
         "brand": "ICL",
         "name": "ActibioX Azos T",
-        "productId": null
+        "productId": "icl__actibiox-azos-t"
       },
       {
         "brand": "DIMICRON",
         "name": "Dimi Azos T",
-        "productId": null
+        "productId": "dimicron__dimi-azos-t"
       }
     ]
   },
@@ -137,7 +137,7 @@ export const EQUIVALENCES = [
       {
         "brand": "SIMBIOSE",
         "name": "SimbioseMaíz L",
-        "productId": null
+        "productId": "simbiose__simbiosemaiz-l"
       },
       {
         "brand": "BIOMA",
@@ -157,7 +157,7 @@ export const EQUIVALENCES = [
       {
         "brand": "NITRO",
         "name": "Rizoplant Azos",
-        "productId": null
+        "productId": "nitro__rizoplant-azos"
       },
       {
         "brand": "VITTIA",
@@ -167,17 +167,17 @@ export const EQUIVALENCES = [
       {
         "brand": "BALLAGRO",
         "name": "Hober Azos",
-        "productId": null
+        "productId": "ballagro__hober-azos"
       },
       {
         "brand": "LALLEMAND",
         "name": "Lalrise Azos SC",
-        "productId": null
+        "productId": "lallemand__lalrise-azos-sc"
       },
       {
         "brand": "GENICA",
         "name": "Fixaron Azos",
-        "productId": null
+        "productId": "genica__fixaron-azos"
       },
       {
         "brand": "BIOTROP",
@@ -187,27 +187,27 @@ export const EQUIVALENCES = [
       {
         "brand": "AGRIVALLE",
         "name": "Welt",
-        "productId": null
+        "productId": "agrivalle__welt"
       },
       {
         "brand": "KOPPERT",
         "name": "Azokop",
-        "productId": null
+        "productId": "koppert__azokop"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Azoflex",
-        "productId": null
+        "productId": "giro-agro-viva-bio__azoflex"
       },
       {
         "brand": "GRAN7",
         "name": "Verdesian Accolade",
-        "productId": null
+        "productId": "gran7__verdesian-accolade"
       },
       {
         "brand": "DIMICRON",
         "name": "Dimi Azos",
-        "productId": null
+        "productId": "dimicron__dimi-azos"
       }
     ]
   },
@@ -240,62 +240,62 @@ export const EQUIVALENCES = [
       {
         "brand": "NITRO",
         "name": "Rizoplant L",
-        "productId": null
+        "productId": "nitro__rizoplant-l"
       },
       {
         "brand": "VITTIA",
         "name": "Biomax Premium L Soja",
-        "productId": null
+        "productId": "vittia__biomax-premium-l-soja"
       },
       {
         "brand": "BALLAGRO",
         "name": "Hober Soy",
-        "productId": null
+        "productId": "ballagro__hober-soy"
       },
       {
         "brand": "LALLEMAND",
         "name": "Starfix Soja",
-        "productId": null
+        "productId": "lallemand__starfix-soja"
       },
       {
         "brand": "GENICA",
         "name": "Fixaron Brady-L",
-        "productId": null
+        "productId": "genica__fixaron-brady-l"
       },
       {
         "brand": "BIOTROP",
         "name": "RhizoTrop",
-        "productId": null
+        "productId": "biotrop__rhizotrop"
       },
       {
         "brand": "AGRIVALLE",
         "name": "N-haus",
-        "productId": null
+        "productId": "agrivalle__n-haus"
       },
       {
         "brand": "KOPPERT",
         "name": "Rizokop",
-        "productId": null
+        "productId": "koppert__rizokop"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "NitroSoy",
-        "productId": null
+        "productId": "giro-agro-viva-bio__nitrosoy"
       },
       {
         "brand": "GRAN7",
         "name": "Verdesian Primo",
-        "productId": null
+        "productId": "gran7__verdesian-primo"
       },
       {
         "brand": "DIMICRON",
         "name": "Dimi Brady",
-        "productId": null
+        "productId": "dimicron__dimi-brady"
       },
       {
         "brand": "SYNGENTA BIOLÓGICALS",
         "name": "Rizoliq LLI",
-        "productId": null
+        "productId": "syngenta-biologicals__rizoliq-lli"
       }
     ]
   },
@@ -313,7 +313,7 @@ export const EQUIVALENCES = [
       {
         "brand": "BIOMA",
         "name": "Bioma Rhizo",
-        "productId": null
+        "productId": "bioma__bioma-rhizo"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
@@ -323,12 +323,12 @@ export const EQUIVALENCES = [
       {
         "brand": "NITRO",
         "name": "Rizoplant F",
-        "productId": null
+        "productId": "nitro__rizoplant-f"
       },
       {
         "brand": "VITTIA",
         "name": "Biomax Premium L Feijão",
-        "productId": null
+        "productId": "vittia__biomax-premium-l-feijao"
       }
     ]
   },
@@ -361,17 +361,17 @@ export const EQUIVALENCES = [
       {
         "brand": "LALLEMAND",
         "name": "Bioprotector",
-        "productId": null
+        "productId": "lallemand__bioprotector"
       },
       {
         "brand": "AGRIVALLE",
         "name": "Kapsel",
-        "productId": null
+        "productId": "agrivalle__kapsel"
       },
       {
         "brand": "SYNGENTA BIOLÓGICALS",
         "name": "Premax LLI",
-        "productId": null
+        "productId": "syngenta-biologicals__premax-lli"
       }
     ]
   },
@@ -384,12 +384,12 @@ export const EQUIVALENCES = [
       {
         "brand": "SIMBIOSE",
         "name": "StimuSpray O",
-        "productId": null
+        "productId": "simbiose__stimuspray-o"
       },
       {
         "brand": "UNION AGRO",
         "name": "Bravium",
-        "productId": null
+        "productId": "union-agro__bravium"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
@@ -399,27 +399,27 @@ export const EQUIVALENCES = [
       {
         "brand": "NITRO",
         "name": "Contact Wsp",
-        "productId": null
+        "productId": "nitro__contact-wsp"
       },
       {
         "brand": "VITTIA",
         "name": "Aurantia",
-        "productId": null
+        "productId": "vittia__aurantia"
       },
       {
         "brand": "BIOTROP",
         "name": "BioCalda",
-        "productId": null
+        "productId": "biotrop__biocalda"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Acti Oil",
-        "productId": null
+        "productId": "giro-agro-viva-bio__acti-oil"
       },
       {
         "brand": "GRAN7",
         "name": "Citrus Prime",
-        "productId": null
+        "productId": "gran7__citrus-prime"
       }
     ]
   },
@@ -432,7 +432,7 @@ export const EQUIVALENCES = [
       {
         "brand": "SIMBIOSE",
         "name": "StimuSpray F",
-        "productId": null
+        "productId": "simbiose__stimuspray-f"
       },
       {
         "brand": "ICL",
@@ -442,22 +442,22 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "Nexus",
-        "productId": null
+        "productId": "union-agro__nexus"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "LI700 / Top Zero",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__li700-top-zero"
       },
       {
         "brand": "NITRO",
         "name": "Dropon",
-        "productId": null
+        "productId": "nitro__dropon"
       },
       {
         "brand": "UBYFOL",
         "name": "Satus / Disperse Ultra",
-        "productId": null
+        "productId": "ubyfol__satus-disperse-ultra"
       },
       {
         "brand": "VITTIA",
@@ -467,37 +467,37 @@ export const EQUIVALENCES = [
       {
         "brand": "BALLAGRO",
         "name": "Pick Up Rubber",
-        "productId": null
+        "productId": "ballagro__pick-up-rubber"
       },
       {
         "brand": "GENICA",
         "name": "Vycit Neutro",
-        "productId": null
+        "productId": "genica__vycit-neutro"
       },
       {
         "brand": "AGRIVALLE",
         "name": "HiperFixx",
-        "productId": null
+        "productId": "agrivalle__hiperfixx"
       },
       {
         "brand": "KOPPERT",
         "name": "Ranchero",
-        "productId": null
+        "productId": "koppert__ranchero"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Acquamax",
-        "productId": null
+        "productId": "giro-agro-viva-bio__acquamax"
       },
       {
         "brand": "GRAN7",
         "name": "Brenn Oil",
-        "productId": null
+        "productId": "gran7__brenn-oil"
       },
       {
         "brand": "DIMICRON",
         "name": "Dimi A20+",
-        "productId": null
+        "productId": "dimicron__dimi-a20-mais"
       }
     ]
   },
@@ -510,7 +510,7 @@ export const EQUIVALENCES = [
       {
         "brand": "SIMBIOSE",
         "name": "StimuSpray D",
-        "productId": null
+        "productId": "simbiose__stimuspray-d"
       },
       {
         "brand": "ICL",
@@ -520,17 +520,17 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "Triomax",
-        "productId": null
+        "productId": "union-agro__triomax"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "MIG / Rsolve Duo",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__mig-rsolve-duo"
       },
       {
         "brand": "NITRO",
         "name": "New Reduce",
-        "productId": null
+        "productId": "nitro__new-reduce"
       },
       {
         "brand": "VITTIA",
@@ -540,17 +540,17 @@ export const EQUIVALENCES = [
       {
         "brand": "GENICA",
         "name": "Vycit Redutor",
-        "productId": null
+        "productId": "genica__vycit-redutor"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Acquamax Power+",
-        "productId": null
+        "productId": "giro-agro-viva-bio__acquamax-power-mais"
       },
       {
         "brand": "GRAN7",
         "name": "Orama",
-        "productId": null
+        "productId": "gran7__orama"
       }
     ]
   },
@@ -563,7 +563,7 @@ export const EQUIVALENCES = [
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Invictus",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__invictus"
       },
       {
         "brand": "VITTIA",
@@ -573,12 +573,12 @@ export const EQUIVALENCES = [
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Clean",
-        "productId": null
+        "productId": "giro-agro-viva-bio__clean"
       },
       {
         "brand": "GRAN7",
         "name": "Dinamus",
-        "productId": null
+        "productId": "gran7__dinamus"
       }
     ]
   },
@@ -591,12 +591,12 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "Agris",
-        "productId": null
+        "productId": "union-agro__agris"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Rsolve",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__rsolve"
       },
       {
         "brand": "VITTIA",
@@ -614,12 +614,12 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "MSO",
-        "productId": null
+        "productId": "union-agro__mso"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Magic-Oil",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__magic-oil"
       },
       {
         "brand": "VITTIA",
@@ -629,7 +629,7 @@ export const EQUIVALENCES = [
       {
         "brand": "GRAN7",
         "name": "Emulsoy",
-        "productId": null
+        "productId": "gran7__emulsoy"
       }
     ]
   },
@@ -642,27 +642,27 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "S Gold",
-        "productId": null
+        "productId": "union-agro__s-gold"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Sulper",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__sulper"
       },
       {
         "brand": "VITTIA",
         "name": "Thiomax",
-        "productId": null
+        "productId": "vittia__thiomax"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Essence",
-        "productId": null
+        "productId": "giro-agro-viva-bio__essence"
       },
       {
         "brand": "GRAN7",
         "name": "Expell",
-        "productId": null
+        "productId": "gran7__expell"
       }
     ]
   },
@@ -680,12 +680,12 @@ export const EQUIVALENCES = [
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Awaken / Germinate",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__awaken-germinate"
       },
       {
         "brand": "NITRO",
         "name": "Support",
-        "productId": null
+        "productId": "nitro__support"
       },
       {
         "brand": "VITTIA",
@@ -695,22 +695,22 @@ export const EQUIVALENCES = [
       {
         "brand": "AGRIVALLE",
         "name": "CoMoNi / Raizer",
-        "productId": null
+        "productId": "agrivalle__comoni-raizer"
       },
       {
         "brand": "KOPPERT",
         "name": "Acadian **",
-        "productId": null
+        "productId": "koppert__acadian"
       },
       {
         "brand": "GRAN7",
         "name": "Max Raiz",
-        "productId": null
+        "productId": "gran7__max-raiz"
       },
       {
         "brand": "DIMICRON",
         "name": "TMSP Power",
-        "productId": null
+        "productId": "dimicron__tmsp-power"
       }
     ]
   },
@@ -723,22 +723,22 @@ export const EQUIVALENCES = [
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Mobile",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__mobile"
       },
       {
         "brand": "BIOTROP",
         "name": "BioNautus **",
-        "productId": null
+        "productId": "biotrop__bionautus"
       },
       {
         "brand": "KOPPERT",
         "name": "Roadster **",
-        "productId": null
+        "productId": "koppert__roadster"
       },
       {
         "brand": "GRAN7",
         "name": "Domain Complex",
-        "productId": null
+        "productId": "gran7__domain-complex"
       }
     ]
   },
@@ -756,12 +756,12 @@ export const EQUIVALENCES = [
       {
         "brand": "BALLAGRO",
         "name": "Pick Up Arrel",
-        "productId": null
+        "productId": "ballagro__pick-up-arrel"
       },
       {
         "brand": "KOPPERT",
         "name": "Stingray **",
-        "productId": null
+        "productId": "koppert__stingray"
       }
     ]
   },
@@ -784,57 +784,57 @@ export const EQUIVALENCES = [
       {
         "brand": "ICL",
         "name": "Concorde",
-        "productId": null
+        "productId": "icl__concorde"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "BlackGold",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__blackgold"
       },
       {
         "brand": "NITRO",
         "name": "Sustent *",
-        "productId": null
+        "productId": "nitro__sustent"
       },
       {
         "brand": "UBYFOL",
         "name": "Kymon",
-        "productId": null
+        "productId": "ubyfol__kymon"
       },
       {
         "brand": "VITTIA",
         "name": "Fertium",
-        "productId": null
+        "productId": "vittia__fertium"
       },
       {
         "brand": "BALLAGRO",
         "name": "Pick Up Sten",
-        "productId": null
+        "productId": "ballagro__pick-up-sten"
       },
       {
         "brand": "GENICA",
         "name": "Volt",
-        "productId": null
+        "productId": "genica__volt"
       },
       {
         "brand": "AGRIVALLE",
         "name": "MixFull *",
-        "productId": null
+        "productId": "agrivalle__mixfull"
       },
       {
         "brand": "GRAN7",
         "name": "Orggam / Ferggum",
-        "productId": null
+        "productId": "gran7__orggam-ferggum"
       },
       {
         "brand": "DIMICRON",
         "name": "DimiLom",
-        "productId": null
+        "productId": "dimicron__dimilom"
       },
       {
         "brand": "SYNGENTA BIOLÓGICALS",
         "name": "Megafol",
-        "productId": null
+        "productId": "syngenta-biologicals__megafol"
       }
     ]
   },
@@ -847,22 +847,22 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "Nutry Amino",
-        "productId": null
+        "productId": "union-agro__nutry-amino"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Physio Crop Full",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__physio-crop-full"
       },
       {
         "brand": "NITRO",
         "name": "Revita",
-        "productId": null
+        "productId": "nitro__revita"
       },
       {
         "brand": "UBYFOL",
         "name": "Ubyverde",
-        "productId": null
+        "productId": "ubyfol__ubyverde"
       },
       {
         "brand": "VITTIA",
@@ -872,37 +872,37 @@ export const EQUIVALENCES = [
       {
         "brand": "LALLEMAND",
         "name": "Lalstim Nutri",
-        "productId": null
+        "productId": "lallemand__lalstim-nutri"
       },
       {
         "brand": "GENICA",
         "name": "No-Dry",
-        "productId": null
+        "productId": "genica__no-dry"
       },
       {
         "brand": "BIOTROP",
         "name": "BioAtivus",
-        "productId": null
+        "productId": "biotrop__bioativus"
       },
       {
         "brand": "AGRIVALLE",
         "name": "GramTop",
-        "productId": null
+        "productId": "agrivalle__gramtop"
       },
       {
         "brand": "GRAN7",
         "name": "Microsix Complex",
-        "productId": null
+        "productId": "gran7__microsix-complex"
       },
       {
         "brand": "DIMICRON",
         "name": "DimiTônico Full",
-        "productId": null
+        "productId": "dimicron__dimitonico-full"
       },
       {
         "brand": "SYNGENTA BIOLÓGICALS",
         "name": "Yield On",
-        "productId": null
+        "productId": "syngenta-biologicals__yield-on"
       }
     ]
   },
@@ -915,37 +915,37 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "Fosfito 20",
-        "productId": null
+        "productId": "union-agro__fosfito-20"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Curative",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__curative"
       },
       {
         "brand": "UBYFOL",
         "name": "Aminofosfito de Cobre",
-        "productId": null
+        "productId": "ubyfol__aminofosfito-de-cobre"
       },
       {
         "brand": "VITTIA",
         "name": "Phitopress Cobre",
-        "productId": null
+        "productId": "vittia__phitopress-cobre"
       },
       {
         "brand": "BALLAGRO",
         "name": "Prosit",
-        "productId": null
+        "productId": "ballagro__prosit"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Strong",
-        "productId": null
+        "productId": "giro-agro-viva-bio__strong"
       },
       {
         "brand": "DIMICRON",
         "name": "Dimi Cobre",
-        "productId": null
+        "productId": "dimicron__dimi-cobre"
       }
     ]
   },
@@ -958,37 +958,37 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "N30",
-        "productId": null
+        "productId": "union-agro__n30"
       },
       {
         "brand": "NITRO",
         "name": "Grow N",
-        "productId": null
+        "productId": "nitro__grow-n"
       },
       {
         "brand": "UBYFOL",
         "name": "N32",
-        "productId": null
+        "productId": "ubyfol__n32"
       },
       {
         "brand": "BALLAGRO",
         "name": "Nitromais",
-        "productId": null
+        "productId": "ballagro__nitromais"
       },
       {
         "brand": "AGRIVALLE",
         "name": "N30",
-        "productId": null
+        "productId": "agrivalle__n30"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "New",
-        "productId": null
+        "productId": "giro-agro-viva-bio__new"
       },
       {
         "brand": "DIMICRON",
         "name": "N42",
-        "productId": null
+        "productId": "dimicron__n42"
       }
     ]
   },
@@ -1001,17 +1001,17 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "MnR7",
-        "productId": null
+        "productId": "union-agro__mnr7"
       },
       {
         "brand": "NITRO",
         "name": "Compat Complex",
-        "productId": null
+        "productId": "nitro__compat-complex"
       },
       {
         "brand": "UBYFOL",
         "name": "Mn130RR",
-        "productId": null
+        "productId": "ubyfol__mn130rr"
       },
       {
         "brand": "VITTIA",
@@ -1021,17 +1021,17 @@ export const EQUIVALENCES = [
       {
         "brand": "AGRIVALLE",
         "name": "Plexxus Mn",
-        "productId": null
+        "productId": "agrivalle__plexxus-mn"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Time RR / Top Mn",
-        "productId": null
+        "productId": "giro-agro-viva-bio__time-rr-top-mn"
       },
       {
         "brand": "GRAN7",
         "name": "Polyamine Mn Complex",
-        "productId": null
+        "productId": "gran7__polyamine-mn-complex"
       }
     ]
   },
@@ -1044,42 +1044,42 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "Mg 8",
-        "productId": null
+        "productId": "union-agro__mg-8"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "MagGreen",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__maggreen"
       },
       {
         "brand": "UBYFOL",
         "name": "Mag-8",
-        "productId": null
+        "productId": "ubyfol__mag8"
       },
       {
         "brand": "VITTIA",
         "name": "Magnésio Max",
-        "productId": null
+        "productId": "vittia__magnesio-max"
       },
       {
         "brand": "BALLAGRO",
         "name": "Nutri Pro Magnésio",
-        "productId": null
+        "productId": "ballagro__nutri-pro-magnesio"
       },
       {
         "brand": "AGRIVALLE",
         "name": "Algon",
-        "productId": null
+        "productId": "agrivalle__algon"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Evo Mag",
-        "productId": null
+        "productId": "giro-agro-viva-bio__evo-mag"
       },
       {
         "brand": "GRAN7",
         "name": "MG 8,5",
-        "productId": null
+        "productId": "gran7__mg-8-5"
       }
     ]
   },
@@ -1092,12 +1092,12 @@ export const EQUIVALENCES = [
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Exodus",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__exodus"
       },
       {
         "brand": "GRAN7",
         "name": "Set-in",
-        "productId": null
+        "productId": "gran7__set-in"
       }
     ]
   },
@@ -1110,47 +1110,47 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "Boro L",
-        "productId": null
+        "productId": "union-agro__boro-l"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Boro 10",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__boro-10"
       },
       {
         "brand": "NITRO",
         "name": "BorOn",
-        "productId": null
+        "productId": "nitro__boron"
       },
       {
         "brand": "UBYFOL",
         "name": "MS-Boro",
-        "productId": null
+        "productId": "ubyfol__ms-boro"
       },
       {
         "brand": "VITTIA",
         "name": "Boro",
-        "productId": null
+        "productId": "vittia__boro"
       },
       {
         "brand": "BALLAGRO",
         "name": "Pick Up Boro",
-        "productId": null
+        "productId": "ballagro__pick-up-boro"
       },
       {
         "brand": "AGRIVALLE",
         "name": "BoroPlex",
-        "productId": null
+        "productId": "agrivalle__boroplex"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Bor Folha",
-        "productId": null
+        "productId": "giro-agro-viva-bio__bor-folha"
       },
       {
         "brand": "GRAN7",
         "name": "Boro 10",
-        "productId": null
+        "productId": "gran7__boro-10"
       }
     ]
   },
@@ -1163,42 +1163,42 @@ export const EQUIVALENCES = [
       {
         "brand": "ICL",
         "name": "Kellus Manganes (Sais)",
-        "productId": null
+        "productId": "icl__kellus-manganes-sais"
       },
       {
         "brand": "UNION AGRO",
         "name": "Nutry Mn 10",
-        "productId": null
+        "productId": "union-agro__nutry-mn-10"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "MnEDTA",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__mnedta"
       },
       {
         "brand": "VITTIA",
         "name": "Express",
-        "productId": null
+        "productId": "vittia__express"
       },
       {
         "brand": "BALLAGRO",
         "name": "Pick Up Mn EDTA",
-        "productId": null
+        "productId": "ballagro__pick-up-mn-edta"
       },
       {
         "brand": "AGRIVALLE",
         "name": "EfetiveR",
-        "productId": null
+        "productId": "agrivalle__efetiver"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Foto Gen",
-        "productId": null
+        "productId": "giro-agro-viva-bio__foto-gen"
       },
       {
         "brand": "DIMICRON",
         "name": "DimiManganes",
-        "productId": null
+        "productId": "dimicron__dimimanganes"
       }
     ]
   },
@@ -1211,12 +1211,12 @@ export const EQUIVALENCES = [
       {
         "brand": "ICL",
         "name": "Kellus  Zinco (Sais)",
-        "productId": null
+        "productId": "icl__kellus-zinco-sais"
       },
       {
         "brand": "UNION AGRO",
         "name": "Zinco S",
-        "productId": null
+        "productId": "union-agro__zinco-s"
       },
       {
         "brand": "VITTIA",
@@ -1226,17 +1226,17 @@ export const EQUIVALENCES = [
       {
         "brand": "AGRIVALLE",
         "name": "Zinco15",
-        "productId": null
+        "productId": "agrivalle__zinco15"
       },
       {
         "brand": "GRAN7",
         "name": "Zinco 10",
-        "productId": null
+        "productId": "gran7__zinco-10"
       },
       {
         "brand": "DIMICRON",
         "name": "DimiZinco",
-        "productId": null
+        "productId": "dimicron__dimizinco"
       }
     ]
   },
@@ -1249,32 +1249,32 @@ export const EQUIVALENCES = [
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "CoMo15",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__como15"
       },
       {
         "brand": "NITRO",
         "name": "Nitro 22",
-        "productId": null
+        "productId": "nitro__nitro-22"
       },
       {
         "brand": "UBYFOL",
         "name": "CoMo ML14",
-        "productId": null
+        "productId": "ubyfol__ml-14"
       },
       {
         "brand": "VITTIA",
         "name": "Nodulus Premium",
-        "productId": null
+        "productId": "vittia__nodulus-premium"
       },
       {
         "brand": "AGRIVALLE",
         "name": "Molibdênio 14",
-        "productId": null
+        "productId": "agrivalle__molibdenio-14"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Evo MoP",
-        "productId": null
+        "productId": "giro-agro-viva-bio__evo-mop"
       }
     ]
   },
@@ -1297,32 +1297,32 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "Soja CoMo",
-        "productId": null
+        "productId": "union-agro__soja-como"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "CoMo10",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__como10"
       },
       {
         "brand": "NITRO",
         "name": "Nitro Ni",
-        "productId": null
+        "productId": "nitro__nitro-ni"
       },
       {
         "brand": "VITTIA",
         "name": "Nodulus Gold",
-        "productId": null
+        "productId": "vittia__nodulus-gold"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "TSN CoMo",
-        "productId": null
+        "productId": "giro-agro-viva-bio__tsn-como"
       },
       {
         "brand": "GRAN7",
         "name": "Mo10%Co1%",
-        "productId": null
+        "productId": "gran7__mo10-co1"
       }
     ]
   },
@@ -1335,7 +1335,7 @@ export const EQUIVALENCES = [
       {
         "brand": "UBYFOL",
         "name": "K-50",
-        "productId": null
+        "productId": "ubyfol__k-50"
       },
       {
         "brand": "VITTIA",
@@ -1345,22 +1345,22 @@ export const EQUIVALENCES = [
       {
         "brand": "BALLAGRO",
         "name": "Nutri Pro Potássio",
-        "productId": null
+        "productId": "ballagro__nutri-pro-potassio"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Evo K",
-        "productId": null
+        "productId": "giro-agro-viva-bio__evo-k"
       },
       {
         "brand": "GRAN7",
         "name": "Gran Finnale",
-        "productId": null
+        "productId": "gran7__gran-finnale"
       },
       {
         "brand": "DIMICRON",
         "name": "K- 400 Full",
-        "productId": null
+        "productId": "dimicron__k-400-full"
       }
     ]
   },
@@ -1373,32 +1373,32 @@ export const EQUIVALENCES = [
       {
         "brand": "UNION AGRO",
         "name": "P51",
-        "productId": null
+        "productId": "union-agro__p51"
       },
       {
         "brand": "UBYFOL",
         "name": "P-50",
-        "productId": null
+        "productId": "ubyfol__p-50"
       },
       {
         "brand": "VITTIA",
         "name": "P30",
-        "productId": null
+        "productId": "vittia__p30"
       },
       {
         "brand": "BALLAGRO",
         "name": "Rubber",
-        "productId": null
+        "productId": "ballagro__rubber"
       },
       {
         "brand": "AGRIVALLE",
         "name": "P52",
-        "productId": null
+        "productId": "agrivalle__p52"
       },
       {
         "brand": "DIMICRON",
         "name": "Drop",
-        "productId": null
+        "productId": "dimicron__drop"
       }
     ]
   },
@@ -1411,22 +1411,22 @@ export const EQUIVALENCES = [
       {
         "brand": "ICL",
         "name": "Profol Produtividade (Sais)",
-        "productId": null
+        "productId": "icl__profol-produtividade-sais"
       },
       {
         "brand": "UNION AGRO",
         "name": "Nutry Virtus",
-        "productId": null
+        "productId": "union-agro__nutry-virtus"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
         "name": "Soja Plus Gold",
-        "productId": null
+        "productId": "fortgreen-f1rst-agbiotech__soja-plus-gold"
       },
       {
         "brand": "NITRO",
         "name": "Force Mn",
-        "productId": null
+        "productId": "nitro__force-mn"
       },
       {
         "brand": "VITTIA",
@@ -1436,27 +1436,27 @@ export const EQUIVALENCES = [
       {
         "brand": "BALLAGRO",
         "name": "Pick Up Win EDTA",
-        "productId": null
+        "productId": "ballagro__pick-up-win-edta"
       },
       {
         "brand": "GENICA",
         "name": "Vigorus",
-        "productId": null
+        "productId": "genica__vigorus"
       },
       {
         "brand": "AGRIVALLE",
         "name": "SoySixx",
-        "productId": null
+        "productId": "agrivalle__soysixx"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Complex Mais",
-        "productId": null
+        "productId": "giro-agro-viva-bio__complex-mais"
       },
       {
         "brand": "GRAN7",
         "name": "Brave Max",
-        "productId": null
+        "productId": "gran7__brave-max"
       }
     ]
   },
@@ -1489,22 +1489,22 @@ export const EQUIVALENCES = [
       {
         "brand": "BALLAGRO",
         "name": "Acera / Helymax EC",
-        "productId": null
+        "productId": "ballagro__acera-helymax-ec"
       },
       {
         "brand": "LALLEMAND",
         "name": "Crystal",
-        "productId": null
+        "productId": "lallemand__crystal"
       },
       {
         "brand": "GENICA",
         "name": "Tarik EC",
-        "productId": null
+        "productId": "genica__tarik-ec"
       },
       {
         "brand": "BIOTROP",
         "name": "BioBrev  Full",
-        "productId": null
+        "productId": "biotrop__biobrev-full"
       }
     ]
   },
@@ -1517,12 +1517,12 @@ export const EQUIVALENCES = [
       {
         "brand": "SIMBIOSE",
         "name": "Stimu / GreenControl",
-        "productId": null
+        "productId": "simbiose__stimu-greencontrol"
       },
       {
         "brand": "BIOMA",
         "name": "TrichProtection",
-        "productId": null
+        "productId": "bioma__trichprotection"
       },
       {
         "brand": "FORTGREEN / F1RST AGBIOTECH",
@@ -1532,7 +1532,7 @@ export const EQUIVALENCES = [
       {
         "brand": "NITRO",
         "name": "Trichodermaiz WP Pro",
-        "productId": null
+        "productId": "nitro__trichodermaiz-wp-pro"
       },
       {
         "brand": "VITTIA",
@@ -1542,42 +1542,42 @@ export const EQUIVALENCES = [
       {
         "brand": "BALLAGRO",
         "name": "Pardella / Ecotrich",
-        "productId": null
+        "productId": "ballagro__pardella-ecotrich"
       },
       {
         "brand": "LALLEMAND",
         "name": "Quality WG",
-        "productId": null
+        "productId": "lallemand__quality-wg"
       },
       {
         "brand": "GENICA",
         "name": "Congregga",
-        "productId": null
+        "productId": "genica__congregga"
       },
       {
         "brand": "BIOTROP",
         "name": "NatuControl / Bombardeiro",
-        "productId": null
+        "productId": "biotrop__natucontrol-bombardeiro"
       },
       {
         "brand": "AGRIVALLE",
         "name": "Shocker",
-        "productId": null
+        "productId": "agrivalle__shocker"
       },
       {
         "brand": "KOPPERT",
         "name": "Trichodermil / Trianum",
-        "productId": null
+        "productId": "koppert__trichodermil-trianum"
       },
       {
         "brand": "GIRO AGRO / VIVA BIO",
         "name": "Tricho Combat Pro",
-        "productId": null
+        "productId": "giro-agro-viva-bio__tricho-combat-pro"
       },
       {
         "brand": "SYNGENTA BIOLÓGICALS",
         "name": "Arvatico",
-        "productId": null
+        "productId": "syngenta-biologicals__arvatico"
       }
     ]
   },
@@ -1605,7 +1605,7 @@ export const EQUIVALENCES = [
       {
         "brand": "NITRO",
         "name": "Ceres / Dunna / Elmo",
-        "productId": null
+        "productId": "nitro__ceres-dunna-elmo"
       },
       {
         "brand": "VITTIA",
@@ -1615,42 +1615,42 @@ export const EQUIVALENCES = [
       {
         "brand": "BALLAGRO",
         "name": "Nemat",
-        "productId": null
+        "productId": "ballagro__nemat"
       },
       {
         "brand": "LALLEMAND",
         "name": "Rizos OG",
-        "productId": null
+        "productId": "lallemand__rizos-og"
       },
       {
         "brand": "GENICA",
         "name": "Dulia / Paladyo",
-        "productId": null
+        "productId": "genica__dulia-paladyo"
       },
       {
         "brand": "BIOTROP",
         "name": "Biomagno / Furatrop",
-        "productId": null
+        "productId": "biotrop__biomagno-furatrop"
       },
       {
         "brand": "AGRIVALLE",
         "name": "Profix",
-        "productId": null
+        "productId": "agrivalle__profix"
       },
       {
         "brand": "KOPPERT",
         "name": "Veraneio / Boneville / Chevelle",
-        "productId": null
+        "productId": "koppert__veraneio-boneville-chevelle"
       },
       {
         "brand": "GRAN7",
         "name": "Vigga / Nematak",
-        "productId": null
+        "productId": "gran7__vigga-nematak"
       },
       {
         "brand": "SYNGENTA BIOLÓGICALS",
         "name": "Arvatico",
-        "productId": null
+        "productId": "syngenta-biologicals__arvatico"
       }
     ]
   }
