@@ -1,10 +1,13 @@
 import React from "react";
-import { X } from "lucide-react";
+import { X, Lock, LockOpen } from "lucide-react";
 import DoseStepper from "./DoseStepper.jsx";
 
 // Drawer/modal leve para ajustar dose e preço de um produto sem poluir a
 // lista de cards — abre por cima do conteúdo, fecha ao tocar fora ou no X.
-export default function QuickEditDrawer({ product, color, doseValue, priceValue, onUpdate, onClose, fineStep, onToggleFineStep }) {
+// O cadeado trava a dose atual como padrão desse produto (persistido no
+// aparelho) — próxima vez que for selecionado, já começa com essa dose,
+// mesmo produtos sem dose de referência cadastrada.
+export default function QuickEditDrawer({ product, color, doseValue, priceValue, onUpdate, onClose, fineStep, onToggleFineStep, locked, onToggleLock }) {
   if (!product) return null;
   const sliderMax = Math.max((product.defaultDose || 1) * 4, 5);
   const unitBase = (product.unit || "un").split("/")[0];
@@ -45,8 +48,38 @@ export default function QuickEditDrawer({ product, color, doseValue, priceValue,
           </button>
         </div>
 
-        <div className="muted" style={{ fontSize: 11, marginBottom: 5 }}>Dose ({product.unit || "un"})</div>
-        <DoseStepper value={doseValue} onChange={(v) => onUpdate("dose", v)} fineStep={fineStep} onToggleFineStep={onToggleFineStep} max={sliderMax} />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+          <div className="muted" style={{ fontSize: 11 }}>Dose ({product.unit || "un"})</div>
+          <button
+            onClick={() => onToggleLock(doseValue)}
+            className="tap-scale"
+            title={locked ? "Destravar dose (voltar a editar)" : "Travar esta dose como padrão do produto"}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+              background: locked ? `${color}22` : "#17212B",
+              border: `1px solid ${locked ? color : "#24313D"}`,
+              borderRadius: 999,
+              padding: "3px 9px",
+              color: locked ? color : "#8CA0AF",
+              fontSize: 10,
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            {locked ? <Lock size={12} /> : <LockOpen size={12} />}
+            {locked ? "Travada" : "Travar"}
+          </button>
+        </div>
+        {locked && (
+          <p className="muted-soft" style={{ fontSize: 10, margin: "0 0 8px" }}>
+            Essa dose vira o padrão desse produto neste aparelho — destrave pra ajustar.
+          </p>
+        )}
+        <div style={{ opacity: locked ? 0.5 : 1, pointerEvents: locked ? "none" : "auto" }}>
+          <DoseStepper value={doseValue} onChange={(v) => onUpdate("dose", v)} fineStep={fineStep} onToggleFineStep={onToggleFineStep} max={sliderMax} />
+        </div>
 
         <label className="muted" style={{ display: "block", fontSize: 11, marginTop: 16 }}>
           Preço (R$/{unitBase})
