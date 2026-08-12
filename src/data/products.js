@@ -13,6 +13,29 @@
 // (não passaram pela mesma conversão %m/m → g/L descrita acima).
 // "unit": "L/ha" foi assumido pra todos por não haver essa informação na
 // planilha de origem — corrija pra "kg/ha" nos que forem sólidos/em pó.
+//
+// 969 produtos de 33 marcas (algumas novas no catálogo, outras já
+// existentes) vieram da planilha "Produtos Nutricionais" enviada pelo
+// usuário (ago/2026) — %m/m e densidade por produto, sem dose nenhuma
+// informada (a planilha de origem não tem coluna de dose). "nutrients" foi
+// calculado com a mesma fórmula acima (%m/m × densidade × 10 = g/L, ou
+// %m/m × 10 = g/kg quando não há densidade). Como não há dose, defaultDose
+// e doseRaw ficaram null em todos — use o painel "Cadastro de doses" do
+// app pra preencher e travar a dose de cada um (a concentração por ha é
+// calculada na hora a partir da dose travada). Nomes repetidos dentro da
+// mesma marca (ex: variações de um mesmo produto-base com dosagens de
+// garantia diferentes) ganharam um sufixo entre parênteses com o nutriente
+// que os diferencia, pra não aparecerem como cards idênticos no catálogo.
+// Onde essa planilha batia com um produto já cadastrado, os dados foram
+// tratados caso a caso: 6 produtos "só nome" da Giro Agro/Viva Bio e 1 da
+// Ubyfol (Kymon) ganharam a concentração que não tinham; 16 produtos
+// Agrocete já cadastrados tiveram a densidade atualizada (diferenças
+// pequenas de arredondamento) mantendo o %m/m já cadastrado — exceto o
+// GRAP 140 FLUID, onde a planilha nova sugeria um %m/m diferente do
+// cadastrado mas a própria observação do produto contradiz essa mudança;
+// ver nota em "fonte" desse produto específico. GRAP CAFÉ e GRAP FRUTAS,
+// removidos em versão anterior do catálogo por não estarem na planilha
+// interna da época, voltaram com os dados desta planilha nova.
 
 export const PRODUCTS = [
   {
@@ -122,14 +145,14 @@ export const PRODUCTS = [
     "name": "GRAP 104 FLUID",
     "hasNutrients": true,
     "nutrients": {
-      "S": 52.8,
-      "Zn": 132.0
+      "S": 52.0,
+      "Zn": 130.0
     },
     "nutrientsPercent": {
       "S": 4.0,
       "Zn": 10.0
     },
-    "density": 1.32,
+    "density": 1.3,
     "unit": "L/ha",
     "defaultDose": 0.5,
     "doseRaw": "500",
@@ -148,14 +171,14 @@ export const PRODUCTS = [
     "name": "GRAP 140 FLUID",
     "hasNutrients": true,
     "nutrients": {
-      "S": 100.1,
-      "Mn": 171.6
+      "S": 98.0,
+      "Mn": 168.0
     },
     "nutrientsPercent": {
       "S": 7.0,
       "Mn": 12.0
     },
-    "density": 1.43,
+    "density": 1.4,
     "unit": "L/ha",
     "defaultDose": 0.75,
     "doseRaw": "500 a 1000",
@@ -165,7 +188,7 @@ export const PRODUCTS = [
     "observations": "Dobrou-se a quantidade de complexante (em relação a formulação anterior 14%). Absorção acelerada. Maior performance, portanto recomenda-se as mesmas dosagens. Maior possibilidade em misturas, menos íons livres. Maior estabilidade em prateleira                     Mn=12% (171,6g/L)\nS=7% (100,1g/L)",
     "warning": "Incompatibilidade com Herbicida",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes — ATENÇÃO: a planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) traz Enxofre 8%/Manganês 14% para este produto, mas a observação já cadastrada abaixo diz que 12%/7% é a formulação atual (mais concentrada em complexante) e 14%/8% era a formulação anterior — %m/m mantido em 12%/7% até confirmação; densidade atualizada para 1,40 (era 1,43)."
   },
   {
     "id": "agrocete__grap-110-je",
@@ -174,14 +197,14 @@ export const PRODUCTS = [
     "name": "GRAP 110 JE",
     "hasNutrients": true,
     "nutrients": {
-      "Co": 14.0,
-      "Mo": 140.0
+      "Co": 14.2,
+      "Mo": 142.0
     },
     "nutrientsPercent": {
       "Co": 1.0,
       "Mo": 10.0
     },
-    "density": 1.4,
+    "density": 1.42,
     "unit": "L/ha",
     "defaultDose": 0.15,
     "doseRaw": "100 a 200",
@@ -200,14 +223,14 @@ export const PRODUCTS = [
     "name": "GRAP 165 JE",
     "hasNutrients": true,
     "nutrients": {
-      "Co": 24.15,
-      "Mo": 241.5
+      "Co": 24.0,
+      "Mo": 240.0
     },
     "nutrientsPercent": {
       "Co": 1.5,
       "Mo": 15.0
     },
-    "density": 1.61,
+    "density": 1.6,
     "unit": "L/ha",
     "defaultDose": 0.125,
     "doseRaw": "100 a150",
@@ -226,16 +249,16 @@ export const PRODUCTS = [
     "name": "GRAP 180 JE",
     "hasNutrients": true,
     "nutrients": {
-      "S": 16.9,
-      "Co": 33.8,
-      "Mo": 304.2
+      "S": 16.5,
+      "Co": 33.0,
+      "Mo": 297.0
     },
     "nutrientsPercent": {
       "S": 1.0,
       "Co": 2.0,
       "Mo": 18.0
     },
-    "density": 1.69,
+    "density": 1.65,
     "unit": "L/ha",
     "defaultDose": 0.085,
     "doseRaw": "70 a 100",
@@ -254,12 +277,12 @@ export const PRODUCTS = [
     "name": "GRAP 15 MOL",
     "hasNutrients": true,
     "nutrients": {
-      "Mo": 226.5
+      "Mo": 225.0
     },
     "nutrientsPercent": {
       "Mo": 15.0
     },
-    "density": 1.51,
+    "density": 1.5,
     "unit": "L/ha",
     "defaultDose": 0.125,
     "doseRaw": "100 a 150",
@@ -302,12 +325,12 @@ export const PRODUCTS = [
     "name": "GRAP BORIC",
     "hasNutrients": true,
     "nutrients": {
-      "B": 130.0
+      "B": 135.0
     },
     "nutrientsPercent": {
       "B": 10.0
     },
-    "density": 1.3,
+    "density": 1.35,
     "unit": "L/ha",
     "defaultDose": 0.5,
     "doseRaw": "500",
@@ -326,14 +349,14 @@ export const PRODUCTS = [
     "name": "GRAP COBRE",
     "hasNutrients": true,
     "nutrients": {
-      "S": 38.94,
-      "Cu": 76.7
+      "S": 37.62,
+      "Cu": 74.1
     },
     "nutrientsPercent": {
       "S": 3.3,
       "Cu": 6.5
     },
-    "density": 1.18,
+    "density": 1.14,
     "unit": "L/ha",
     "defaultDose": 0.4,
     "doseRaw": "300 a 500",
@@ -452,14 +475,14 @@ export const PRODUCTS = [
     "name": "GRAP Manganês RR Plus",
     "hasNutrients": true,
     "nutrients": {
-      "S": 50.0,
-      "Mn": 87.5
+      "S": 50.8,
+      "Mn": 88.9
     },
     "nutrientsPercent": {
       "S": 4.0,
       "Mn": 7.0
     },
-    "density": 1.25,
+    "density": 1.27,
     "unit": "L/ha",
     "defaultDose": 0.75,
     "doseRaw": "500 a 1000",
@@ -478,12 +501,12 @@ export const PRODUCTS = [
     "name": "GRAP MONT 15",
     "hasNutrients": true,
     "nutrients": {
-      "S": 67.5,
-      "B": 6.75,
-      "Cu": 6.75,
-      "Mn": 81.0,
-      "Mo": 1.35,
-      "Zn": 40.5
+      "S": 70.0,
+      "B": 7.0,
+      "Cu": 7.0,
+      "Mn": 84.0,
+      "Mo": 1.4,
+      "Zn": 42.0
     },
     "nutrientsPercent": {
       "S": 5.0,
@@ -493,7 +516,7 @@ export const PRODUCTS = [
       "Mo": 0.1,
       "Zn": 3.0
     },
-    "density": 1.35,
+    "density": 1.4,
     "unit": "L/ha",
     "defaultDose": 1.25,
     "doseRaw": "1000 a 1500",
@@ -512,12 +535,12 @@ export const PRODUCTS = [
     "name": "GRAP NITRO",
     "hasNutrients": true,
     "nutrients": {
-      "N": 384.0
+      "N": 390.0
     },
     "nutrientsPercent": {
       "N": 30.0
     },
-    "density": 1.28,
+    "density": 1.3,
     "unit": "L/ha",
     "defaultDose": 2.5,
     "doseRaw": "2000 a 3000",
@@ -536,14 +559,14 @@ export const PRODUCTS = [
     "name": "GRAP P-306",
     "hasNutrients": true,
     "nutrients": {
-      "N": 76.8,
-      "P2O5": 384.0
+      "N": 75.0,
+      "P2O5": 375.0
     },
     "nutrientsPercent": {
       "N": 6.0,
       "P2O5": 30.0
     },
-    "density": 1.28,
+    "density": 1.25,
     "unit": "L/ha",
     "defaultDose": 0.5,
     "doseRaw": "500",
@@ -586,14 +609,14 @@ export const PRODUCTS = [
     "name": "GRAP PHIL FOSFITO",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 420.0,
-      "K2O": 280.0
+      "P2O5": 429.0,
+      "K2O": 286.0
     },
     "nutrientsPercent": {
       "P2O5": 30.0,
       "K2O": 20.0
     },
-    "density": 1.4,
+    "density": 1.43,
     "unit": "L/ha",
     "defaultDose": 1.5,
     "doseRaw": "1000 a 2000",
@@ -644,7 +667,7 @@ export const PRODUCTS = [
       "Mg": 20.25,
       "B": 1.35,
       "Mn": 20.25,
-      "Mo": 0.68,
+      "Mo": 0.675,
       "Zn": 27.0
     },
     "nutrientsPercent": {
@@ -9292,7 +9315,7 @@ export const PRODUCTS = [
     "nutrients": {},
     "nutrientsPercent": {},
     "density": null,
-    "unit": null,
+    "unit": "kg/ha",
     "defaultDose": null,
     "doseRaw": null,
     "composition": "Limpeza tanque",
@@ -9828,11 +9851,37 @@ export const PRODUCTS = [
     "brand": "UBYFOL",
     "category": "NUTRIÇÃO E FISIOLOGIA",
     "name": "Kymon",
-    "hasNutrients": false,
-    "nutrients": {},
-    "nutrientsPercent": {},
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 40.0,
+      "K2O": 60.0,
+      "Ca": 10.0,
+      "Mg": 5.0,
+      "S": 8.0,
+      "Co": 0.5,
+      "Cu": 1.0,
+      "Fe": 0.5,
+      "Mo": 0.5,
+      "Zn": 8.0,
+      "C_Org": 115.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "P2O5": 4.0,
+      "K2O": 6.0,
+      "Ca": 1.0,
+      "Mg": 0.5,
+      "S": 0.8,
+      "Co": 0.05,
+      "Cu": 0.1,
+      "Fe": 0.05,
+      "Mo": 0.05,
+      "Zn": 0.8,
+      "C_Org": 11.5
+    },
     "density": null,
-    "unit": null,
+    "unit": "kg/ha",
     "defaultDose": null,
     "doseRaw": null,
     "composition": "Macro e micro + Bioestimulante",
@@ -10308,11 +10357,17 @@ export const PRODUCTS = [
     "brand": "GIRO AGRO / VIVA BIO",
     "category": "NUTRIÇÃO E FISIOLOGIA",
     "name": "Strong",
-    "hasNutrients": false,
-    "nutrients": {},
-    "nutrientsPercent": {},
-    "density": null,
-    "unit": null,
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 187.5,
+      "Cu": 62.5
+    },
+    "nutrientsPercent": {
+      "P2O5": 15.0,
+      "Cu": 5.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
     "defaultDose": null,
     "doseRaw": null,
     "composition": "Fosfito de Cu",
@@ -10448,11 +10503,15 @@ export const PRODUCTS = [
     "brand": "GIRO AGRO / VIVA BIO",
     "category": "NUTRIÇÃO E FISIOLOGIA",
     "name": "New",
-    "hasNutrients": false,
-    "nutrients": {},
-    "nutrientsPercent": {},
-    "density": null,
-    "unit": null,
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 300.0
+    },
+    "nutrientsPercent": {
+      "N": 25.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
     "defaultDose": null,
     "doseRaw": null,
     "composition": "Nitrogênio",
@@ -10708,11 +10767,15 @@ export const PRODUCTS = [
     "brand": "GIRO AGRO / VIVA BIO",
     "category": "NUTRIÇÃO E FISIOLOGIA",
     "name": "Evo Mag",
-    "hasNutrients": false,
-    "nutrients": {},
-    "nutrientsPercent": {},
-    "density": null,
-    "unit": null,
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 304.5
+    },
+    "nutrientsPercent": {
+      "Mg": 21.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
     "defaultDose": null,
     "doseRaw": null,
     "composition": "Magnésio",
@@ -11288,11 +11351,17 @@ export const PRODUCTS = [
     "brand": "GIRO AGRO / VIVA BIO",
     "category": "NUTRIÇÃO E FISIOLOGIA",
     "name": "Evo MoP",
-    "hasNutrients": false,
-    "nutrients": {},
-    "nutrientsPercent": {},
-    "density": null,
-    "unit": null,
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 255.75,
+      "Mo": 255.75
+    },
+    "nutrientsPercent": {
+      "P2O5": 15.5,
+      "Mo": 15.5
+    },
+    "density": 1.65,
+    "unit": "L/ha",
     "defaultDose": null,
     "doseRaw": null,
     "composition": "CoMo",
@@ -11468,11 +11537,15 @@ export const PRODUCTS = [
     "brand": "GIRO AGRO / VIVA BIO",
     "category": "NUTRIÇÃO E FISIOLOGIA",
     "name": "Evo K",
-    "hasNutrients": false,
-    "nutrients": {},
-    "nutrientsPercent": {},
-    "density": null,
-    "unit": null,
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 480.0
+    },
+    "nutrientsPercent": {
+      "K2O": 32.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
     "defaultDose": null,
     "doseRaw": null,
     "composition": "Potássio",
@@ -12282,5 +12355,27887 @@ export const PRODUCTS = [
     "warning": null,
     "shelfLife": null,
     "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+  },
+  {
+    "id": "nutriplant__aminonutri",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "AMINONUTRI",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 112.5,
+      "P2O5": 25.0,
+      "K2O": 12.5,
+      "C_Org": 106.25
+    },
+    "nutrientsPercent": {
+      "N": 9.0,
+      "P2O5": 2.0,
+      "K2O": 1.0,
+      "C_Org": 8.5
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__humic-nutri",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "HUMIC-NUTRI",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 52.8,
+      "C_Org": 165.0
+    },
+    "nutrientsPercent": {
+      "K2O": 4.8,
+      "C_Org": 15.0
+    },
+    "density": 1.1,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__kelplant",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "KELPLANT",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 61.48,
+      "C_Org": 69.6
+    },
+    "nutrientsPercent": {
+      "K2O": 5.3,
+      "C_Org": 6.0
+    },
+    "density": 1.16,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__nutriorganic",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "NUTRIORGANIC",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "P2O5": 104.0,
+      "K2O": 104.0,
+      "Ca": 13.0,
+      "Mg": 6.5,
+      "B": 6.5,
+      "Cu": 2.6,
+      "Mn": 6.5,
+      "Mo": 1.3,
+      "Zn": 13.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 8.0,
+      "K2O": 8.0,
+      "Ca": 1.0,
+      "Mg": 0.5,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Mn": 0.5,
+      "Mo": 0.1,
+      "Zn": 1.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__nutri-enraiza",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "NUTRI ENRAIZA",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 174.0,
+      "S": 31.175,
+      "Mo": 87.0,
+      "Zn": 72.5
+    },
+    "nutrientsPercent": {
+      "P2O5": 12.0,
+      "S": 2.15,
+      "Mo": 6.0,
+      "Zn": 5.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__nutri-k-star",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "NUTRI K STAR",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 417.0
+    },
+    "nutrientsPercent": {
+      "K2O": 30.0
+    },
+    "density": 1.39,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__nutriflorada",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "NUTRIFLORADA",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 100.0,
+      "B": 100.0
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__cab-2031",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "CAB 2031",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 200.0,
+      "Mg": 10.0,
+      "B": 30.0
+    },
+    "nutrientsPercent": {
+      "Ca": 20.0,
+      "Mg": 1.0,
+      "B": 3.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-cash-70",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN CASH 70",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "P2O5": 520.0,
+      "K2O": 80.0,
+      "S": 24.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Fe": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 52.0,
+      "K2O": 8.0,
+      "S": 2.4,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Fe": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__complex-151",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "COMPLEX 151",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "P2O5": 120.0,
+      "K2O": 180.0,
+      "Ca": 20.0,
+      "Mg": 25.0,
+      "S": 50.0,
+      "B": 15.0,
+      "Cu": 5.0,
+      "Fe": 1.0,
+      "Mn": 5.0,
+      "Mo": 2.0,
+      "Zn": 40.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 12.0,
+      "K2O": 18.0,
+      "Ca": 2.0,
+      "Mg": 2.5,
+      "S": 5.0,
+      "B": 1.5,
+      "Cu": 0.5,
+      "Fe": 0.1,
+      "Mn": 0.5,
+      "Mo": 0.2,
+      "Zn": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__power-t-41",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "POWER T-41",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "P2O5": 120.0,
+      "K2O": 180.0,
+      "Mg": 18.0,
+      "S": 65.0,
+      "B": 15.0,
+      "Cu": 5.0,
+      "Fe": 1.0,
+      "Mn": 25.0,
+      "Mo": 1.0,
+      "Zn": 60.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 12.0,
+      "K2O": 18.0,
+      "Mg": 1.8,
+      "S": 6.5,
+      "B": 1.5,
+      "Cu": 0.5,
+      "Fe": 0.1,
+      "Mn": 2.5,
+      "Mo": 0.1,
+      "Zn": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__flash",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "FLASH",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 25.0,
+      "S": 133.0,
+      "B": 30.0,
+      "Fe": 10.0,
+      "Mn": 70.0,
+      "Mo": 2.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "Mg": 2.5,
+      "S": 13.3,
+      "B": 3.0,
+      "Fe": 1.0,
+      "Mn": 7.0,
+      "Mo": 0.2,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__sul-15-plus",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "SUL 15 PLUS",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 136.0,
+      "S": 150.0,
+      "B": 0.2,
+      "Fe": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 13.6,
+      "S": 15.0,
+      "B": 0.02,
+      "Fe": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-nitro-s",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP NITRO-S",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 361.2,
+      "S": 24.51
+    },
+    "nutrientsPercent": {
+      "N": 28.0,
+      "S": 1.9
+    },
+    "density": 1.29,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-urefos",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP UREFÓS",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 159.6,
+      "P2O5": 399.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "P2O5": 30.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-mag-max",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP MAG MAX",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 82.8,
+      "Mg": 82.8
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "Mg": 6.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-evolution-plus",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP EVOLUTION PLUS",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 135.0,
+      "B": 6.75,
+      "Mn": 81.0,
+      "Zn": 27.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 0.5,
+      "Mn": 6.0,
+      "Zn": 2.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-evolution-power",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP EVOLUTION POWER",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 129.0,
+      "B": 2.967,
+      "Mn": 51.6,
+      "Zn": 81.27
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 0.23,
+      "Mn": 4.0,
+      "Zn": 6.3
+    },
+    "density": 1.29,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-get-up-wp",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP GET UP WP",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.2,
+      "S": 66.0,
+      "B": 6.6,
+      "Cu": 6.6,
+      "Mn": 79.2,
+      "Mo": 0.66,
+      "Zn": 39.6
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "S": 5.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 6.0,
+      "Mo": 0.05,
+      "Zn": 3.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-micros-q",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP MICROS-Q",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 6.35,
+      "Cu": 0.889,
+      "Fe": 63.5,
+      "Mn": 12.7,
+      "Mo": 0.9525,
+      "Zn": 5.08
+    },
+    "nutrientsPercent": {
+      "B": 0.5,
+      "Cu": 0.07,
+      "Fe": 5.0,
+      "Mn": 1.0,
+      "Mo": 0.075,
+      "Zn": 0.4
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-ca-b105",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP CA+B105",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 131.0,
+      "B": 6.55
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 0.5
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-cab-1020",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP CAB 1020",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 14.5,
+      "Ca": 145.0,
+      "B": 29.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Ca": 10.0,
+      "B": 2.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-calcio-alone",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP CÁLCIO ALONE",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.5,
+      "Ca": 175.5
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Ca": 13.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-boro-10",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP BORO 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 132.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-cobre-8",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP COBRE 8",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 12.8,
+      "S": 44.8,
+      "Cu": 102.4
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "S": 3.5,
+      "Cu": 8.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-liquefer-q",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP LIQUEFER-Q",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 58.5,
+      "Fe": 78.0
+    },
+    "nutrientsPercent": {
+      "S": 4.5,
+      "Fe": 6.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-mangan-7-wp",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP MANGAN 7 WP",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 54.0,
+      "Mn": 94.5
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "Mn": 7.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-mangan-14",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP MANGAN 14",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 193.2
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-zinco-10",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP ZINCO 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.4,
+      "S": 60.3,
+      "Zn": 134.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "S": 4.5,
+      "Zn": 10.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-zinco-21",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP ZINCO 21",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 15.0,
+      "Zn": 315.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Zn": 21.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__green-top-fast-zinc",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "GREEN TOP FAST ZINC",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 76.7,
+      "Zn": 100.3
+    },
+    "nutrientsPercent": {
+      "N": 6.5,
+      "Zn": 8.5
+    },
+    "density": 1.18,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__energize",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "ENERGIZE",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 20.0,
+      "S": 19.0,
+      "Co": 20.0,
+      "Mo": 400.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "P2O5": 2.0,
+      "S": 1.9,
+      "Co": 2.0,
+      "Mo": 40.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__comosol-15-1-0-plex",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "COMOSOL 15-1,0 PLEX",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 16.0,
+      "Co": 16.0,
+      "Mo": 240.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Co": 1.0,
+      "Mo": 15.0
+    },
+    "density": 1.6,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__comosol-lc-10-1-0",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "COMOSOL LC 10-1,0",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 42.9,
+      "Co": 14.3,
+      "Mo": 143.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 3.0,
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__comosol-maxx",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "COMOSOL MAXX",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 45.0,
+      "Co": 15.0,
+      "Mo": 150.0,
+      "C_Org": 50.4
+    },
+    "nutrientsPercent": {
+      "P2O5": 3.0,
+      "Co": 1.0,
+      "Mo": 10.0,
+      "C_Org": 3.36
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__molisol-15",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "MOLISOL 15%",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 56.8,
+      "Mo": 213.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 4.0,
+      "Mo": 15.0
+    },
+    "density": 1.42,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__molisol-10",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "MOLISOL 10%",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 51.6,
+      "Mo": 129.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 4.0,
+      "Mo": 10.0
+    },
+    "density": 1.29,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__foskalium-28-26",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "FOSKALIUM 28-26",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 403.2,
+      "K2O": 374.4
+    },
+    "nutrientsPercent": {
+      "P2O5": 28.0,
+      "K2O": 26.0
+    },
+    "density": 1.44,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__foskalium-30-20",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "FOSKALIUM 30-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 423.0,
+      "K2O": 282.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__foskalium-40-20",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "FOSKALIUM 40-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 584.0,
+      "K2O": 292.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 40.0,
+      "K2O": 20.0
+    },
+    "density": 1.46,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__foskaliium-boro",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "FOSKALIIUM BORO",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 435.0,
+      "K2O": 290.0,
+      "B": 14.5
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0,
+      "B": 1.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__foskalium-copper",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "FOSKALIUM COPPER",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 240.0,
+      "Cu": 54.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "Cu": 4.5
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__foskalium-manganese",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "FOSKALIUM MANGANESE",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 429.0,
+      "Mn": 128.7
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "Mn": 9.0
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__compat-zinc",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "COMPAT ZINC",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.1,
+      "S": 23.58,
+      "Zn": 52.4
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "S": 1.8,
+      "Zn": 4.0
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__derivat",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "DERIVAT",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 63.0,
+      "P2O5": 189.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 15.0
+    },
+    "density": 1.26,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__nutriwet",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "NUTRIWET",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 5.8,
+      "Zn": 52.2
+    },
+    "nutrientsPercent": {
+      "Mn": 0.5,
+      "Zn": 4.5
+    },
+    "density": 1.16,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-30-10-10",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP 30-10-10",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 300.0,
+      "P2O5": 100.0,
+      "K2O": 100.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Fe": 1.0,
+      "Mn": 1.0,
+      "Mo": 0.2,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0,
+      "P2O5": 10.0,
+      "K2O": 10.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.1,
+      "Mo": 0.02,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-13-39-13",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP 13-39-13",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "P2O5": 390.0,
+      "K2O": 130.0
+    },
+    "nutrientsPercent": {
+      "N": 13.0,
+      "P2O5": 39.0,
+      "K2O": 13.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-06-12-36",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP 06-12-36",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 120.0,
+      "K2O": 360.0,
+      "B": 0.3,
+      "Fe": 2.0,
+      "Mo": 0.1
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "P2O5": 12.0,
+      "K2O": 36.0,
+      "B": 0.03,
+      "Fe": 0.2,
+      "Mo": 0.01
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-20-20-20",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP 20-20-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 200.0,
+      "P2O5": 200.0,
+      "K2O": 200.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Fe": 1.0,
+      "Mn": 1.0,
+      "Mo": 0.2,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 20.0,
+      "P2O5": 20.0,
+      "K2O": 20.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.1,
+      "Mo": 0.02,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-apf2",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP APF2",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 20.0,
+      "S": 70.0,
+      "B": 60.0,
+      "Mn": 80.0,
+      "Mo": 1.0,
+      "Zn": 30.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 2.0,
+      "S": 7.0,
+      "B": 6.0,
+      "Mn": 8.0,
+      "Mo": 0.1,
+      "Zn": 3.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-boromag",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP BOROMAG",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 10.0,
+      "Mg": 60.0,
+      "S": 75.0,
+      "B": 60.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "Mg": 6.0,
+      "S": 7.5,
+      "B": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-formula-c-top",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP FÓRMULA C TOP",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 30.0,
+      "K2O": 100.0,
+      "Mg": 15.0,
+      "S": 118.0,
+      "B": 20.0,
+      "Fe": 50.0,
+      "Mn": 75.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "K2O": 10.0,
+      "Mg": 1.5,
+      "S": 11.8,
+      "B": 2.0,
+      "Fe": 5.0,
+      "Mn": 7.5,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-k-zinb",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP K-ZINB",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "S": 80.0,
+      "B": 40.0,
+      "Zn": 150.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "S": 8.0,
+      "B": 4.0,
+      "Zn": 15.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-mature",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP MATURE",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 125.0,
+      "K2O": 460.0,
+      "S": 12.5
+    },
+    "nutrientsPercent": {
+      "N": 12.5,
+      "K2O": 46.0,
+      "S": 1.25
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-producao-wp",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP PRODUÇÃO WP",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 5.0,
+      "S": 100.0,
+      "B": 15.0,
+      "Cu": 15.0,
+      "Mn": 140.0,
+      "Zn": 45.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 0.5,
+      "S": 10.0,
+      "B": 1.5,
+      "Cu": 1.5,
+      "Mn": 14.0,
+      "Zn": 4.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-serrano-s-plus",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP SERRANO S PLUS",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 110.0,
+      "Mg": 30.0,
+      "S": 110.0,
+      "B": 30.0,
+      "Mn": 30.0,
+      "Mo": 2.0,
+      "Zn": 110.0
+    },
+    "nutrientsPercent": {
+      "K2O": 11.0,
+      "Mg": 3.0,
+      "S": 11.0,
+      "B": 3.0,
+      "Mn": 3.0,
+      "Mo": 0.2,
+      "Zn": 11.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-tabuleiro-vip-cafe",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP TABULEIRO/VIP CAFÉ",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 100.0,
+      "B": 30.0,
+      "Cu": 45.0,
+      "Mn": 60.0,
+      "Mo": 1.5,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "S": 10.0,
+      "B": 3.0,
+      "Cu": 4.5,
+      "Mn": 6.0,
+      "Mo": 0.15,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-tabuleiro-plus",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP TABULEIRO PLUS",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 10.0,
+      "S": 115.0,
+      "B": 30.0,
+      "Cu": 45.0,
+      "Fe": 53.0,
+      "Mn": 60.0,
+      "Mo": 2.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "S": 11.5,
+      "B": 3.0,
+      "Cu": 4.5,
+      "Fe": 5.3,
+      "Mn": 6.0,
+      "Mo": 0.2,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-top-manganes",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP TOP MANGÂNES",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 130.0,
+      "B": 20.0,
+      "Mn": 200.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "S": 13.0,
+      "B": 2.0,
+      "Mn": 20.0,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__vip-top-zinco",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "VIP TOP ZINCO",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 140.0,
+      "S": 100.0,
+      "B": 15.0,
+      "Mn": 60.0,
+      "Zn": 150.0
+    },
+    "nutrientsPercent": {
+      "K2O": 14.0,
+      "S": 10.0,
+      "B": 1.5,
+      "Mn": 6.0,
+      "Zn": 15.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__original-cafe",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "ORIGINAL CAFÉ",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 10.0,
+      "S": 100.0,
+      "B": 30.0,
+      "Cu": 100.0,
+      "Mn": 20.0,
+      "Zn": 60.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 1.0,
+      "S": 10.0,
+      "B": 3.0,
+      "Cu": 10.0,
+      "Mn": 2.0,
+      "Zn": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__original-cafe-ba-es",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "ORIGINAL CAFÉ BA/ES",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 10.0,
+      "S": 100.0,
+      "B": 27.0,
+      "Cu": 100.0,
+      "Fe": 40.0,
+      "Mn": 20.0,
+      "Zn": 40.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 1.0,
+      "S": 10.0,
+      "B": 2.7,
+      "Cu": 10.0,
+      "Fe": 4.0,
+      "Mn": 2.0,
+      "Zn": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__original-cafe-mn",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "ORIGINAL CAFÉ Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 50.0,
+      "Mg": 10.0,
+      "S": 130.0,
+      "B": 30.0,
+      "Cu": 100.0,
+      "Mn": 70.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "K2O": 5.0,
+      "Mg": 1.0,
+      "S": 13.0,
+      "B": 3.0,
+      "Cu": 10.0,
+      "Mn": 7.0,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "nutriplant__original-cafe-zn",
+    "brand": "NUTRIPLANT",
+    "category": "Nutrição e Fisiologia",
+    "name": "ORIGINAL CAFÉ Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 10.0,
+      "S": 100.0,
+      "B": 30.0,
+      "Cu": 100.0,
+      "Mn": 20.0,
+      "Zn": 82.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 1.0,
+      "S": 10.0,
+      "B": 3.0,
+      "Cu": 10.0,
+      "Mn": 2.0,
+      "Zn": 8.2
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-b",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá B",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 100.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-ca",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá Ca",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 140.0
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-cab",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 80.0,
+      "B": 5.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 0.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-cab-ii",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá CaB II",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 80.0,
+      "B": 20.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-cafe",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "Mg": 10.0,
+      "S": 20.0,
+      "B": 5.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 1.0,
+      "S": 2.0,
+      "B": 0.5,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-citrus",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "Mg": 15.0,
+      "S": 70.0,
+      "B": 5.0,
+      "Mn": 20.0,
+      "Zn": 35.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 1.5,
+      "S": 7.0,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Zn": 3.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-mg",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 40.0,
+      "S": 50.0
+    },
+    "nutrientsPercent": {
+      "Mg": 4.0,
+      "S": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-mn-ii",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá Mn II",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 50.0,
+      "Mn": 110.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "Mn": 11.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-mn-iii",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá Mn III",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 140.0
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-zn-ii",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá Zn II",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 50.0,
+      "Zn": 120.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "Zn": 12.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agraria__nutrija-zn-iii",
+    "brand": "AGRÁRIA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá Zn III",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 210.0
+    },
+    "nutrientsPercent": {
+      "Zn": 21.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrolatina__agrolmin",
+    "brand": "AGROLATINA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Agrolmin",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 15.15,
+      "P2O5": 15.15,
+      "B": 1.01,
+      "Zn": 1.616,
+      "SubsHumicas": 101.0
+    },
+    "nutrientsPercent": {
+      "N": 1.5,
+      "P2O5": 1.5,
+      "B": 0.1,
+      "Zn": 0.16,
+      "SubsHumicas": 10.0
+    },
+    "density": 1.01,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__boro",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 100.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__cabor",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cabor",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 80.0,
+      "B": 20.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__cafe",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "Mg": 15.0,
+      "S": 20.0,
+      "B": 0.5,
+      "Fe": 50.0,
+      "Zn": 40.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 1.5,
+      "S": 2.0,
+      "B": 0.05,
+      "Fe": 5.0,
+      "Zn": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__calcio-boro",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cálcio Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 100.0,
+      "B": 5.0
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 0.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__cobalto",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cobalto",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 50.0
+    },
+    "nutrientsPercent": {
+      "Co": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__cobalmoly-mo-15",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "CobalMoly (Mo 15%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 222.0
+    },
+    "nutrientsPercent": {
+      "Mo": 15.0
+    },
+    "density": 1.48,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__cobalmoly-mo-7-co-1-5",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "CobalMoly (Mo 7% · Co 1,5%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 18.9,
+      "Mo": 88.2
+    },
+    "nutrientsPercent": {
+      "Co": 1.5,
+      "Mo": 7.0
+    },
+    "density": 1.26,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__cobalmoly-mo-10-co-1-5",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "CobalMoly (Mo 10% · Co 1,5%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 20.85,
+      "Mo": 139.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.5,
+      "Mo": 10.0
+    },
+    "density": 1.39,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__cobalmoly-mo-15-co-1-5",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "CobalMoly (Mo 15% · Co 1,5%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 23.85,
+      "Mo": 238.5
+    },
+    "nutrientsPercent": {
+      "Co": 1.5,
+      "Mo": 15.0
+    },
+    "density": 1.59,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__cobre-aqc",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cobre AQC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 70.0
+    },
+    "nutrientsPercent": {
+      "Cu": 7.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__g",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "G",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 40.0,
+      "B": 5.0,
+      "Cu": 5.0,
+      "Mn": 30.0,
+      "Mo": 0.5,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 3.0,
+      "Mo": 0.05,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__g1",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "G1",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 40.0,
+      "B": 5.0,
+      "Cu": 5.0,
+      "Mn": 50.0,
+      "Mo": 0.5,
+      "Zn": 30.0
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 5.0,
+      "Mo": 0.05,
+      "Zn": 3.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__magnesio",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Magnésio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 40.0,
+      "S": 40.0
+    },
+    "nutrientsPercent": {
+      "Mg": 4.0,
+      "S": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__manganes",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 100.0
+    },
+    "nutrientsPercent": {
+      "Mn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__nutricao-citrus",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrição Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "Mg": 10.0,
+      "S": 15.0,
+      "B": 5.0,
+      "Cu": 2.0,
+      "Mn": 25.0,
+      "Mo": 2.0,
+      "Zn": 30.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 1.0,
+      "S": 1.5,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Mn": 2.5,
+      "Mo": 0.2,
+      "Zn": 3.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__only-calcio",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Only Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 130.0
+    },
+    "nutrientsPercent": {
+      "Ca": 13.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__wake-up",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wake-up",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 5.0,
+      "Cu": 5.0,
+      "Mn": 60.0,
+      "Mo": 0.5,
+      "Zn": 30.0
+    },
+    "nutrientsPercent": {
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 6.0,
+      "Mo": 0.05,
+      "Zn": 3.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__zinco",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 70.0
+    },
+    "nutrientsPercent": {
+      "Zn": 7.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agroplanta__zinco-boro",
+    "brand": "AGROPLANTA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Zinco / Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 5.0,
+      "Zn": 70.0
+    },
+    "nutrientsPercent": {
+      "B": 0.5,
+      "Zn": 7.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__nutrija-b",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrijá B",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 100.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__agri-k",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Agri K",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 720.0
+    },
+    "nutrientsPercent": {
+      "K2O": 48.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__booster-mo",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Booster Mo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 23.2
+    },
+    "nutrientsPercent": {
+      "Mo": 2.0
+    },
+    "density": 1.16,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__broadacre-mn",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Broadacre Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 502.2
+    },
+    "nutrientsPercent": {
+      "Mn": 27.0
+    },
+    "density": 1.86,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__cal-super",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cal Super",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 676.5
+    },
+    "nutrientsPercent": {
+      "Ca": 41.0
+    },
+    "density": 1.65,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__high-cooper",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "High Cooper",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 845.0
+    },
+    "nutrientsPercent": {
+      "Cu": 50.0
+    },
+    "density": 1.69,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__reforce",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Reforce",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 472.5,
+      "K2O": 337.5
+    },
+    "nutrientsPercent": {
+      "P2O5": 35.0,
+      "K2O": 25.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__supa-bor",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Supa Bor",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 120.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__supa-cobre",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Supa Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 328.9,
+      "Cu": 81.51
+    },
+    "nutrientsPercent": {
+      "Ca": 23.0,
+      "Cu": 5.7
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__supa-moly-como",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Supa Moly CoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 435.6,
+      "Mo": 412.5
+    },
+    "nutrientsPercent": {
+      "P2O5": 26.4,
+      "Mo": 25.0
+    },
+    "density": 1.65,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__supa-silica",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Supa Silica",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 324.69
+    },
+    "nutrientsPercent": {
+      "K2O": 23.7
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__broadacre-zm",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Broadacre ZM",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 447.5,
+      "Zn": 626.5
+    },
+    "nutrientsPercent": {
+      "Mn": 25.0,
+      "Zn": 35.0
+    },
+    "density": 1.79,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__broadacre-zn-cu",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Broadacre Zn Cu",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 286.2,
+      "Zn": 1134.0
+    },
+    "nutrientsPercent": {
+      "Cu": 15.9,
+      "Zn": 63.0
+    },
+    "density": 1.8,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrichem__maxizinc",
+    "brand": "AGRICHEM",
+    "category": "Nutrição e Fisiologia",
+    "name": "MaxiZinc",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 1000.0
+    },
+    "nutrientsPercent": {
+      "Zn": 50.0
+    },
+    "density": 2.0,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__aminoplus",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoplus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 137.5,
+      "K2O": 12.5,
+      "C_Org": 75.0
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "K2O": 1.0,
+      "C_Org": 6.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 149.0,
+      "K2O": 29.8,
+      "S": 52.15,
+      "B": 14.9,
+      "Mn": 29.8,
+      "Zn": 74.5,
+      "C_Org": 89.4
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "K2O": 2.0,
+      "S": 3.5,
+      "B": 1.0,
+      "Mn": 2.0,
+      "Zn": 5.0,
+      "C_Org": 6.0
+    },
+    "density": 1.49,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-gold",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol Gold",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.0,
+      "B": 3.9,
+      "Cu": 6.5,
+      "Mn": 65.0,
+      "Mo": 2.6,
+      "Zn": 13.0,
+      "C_Org": 39.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "B": 0.3,
+      "Cu": 0.5,
+      "Mn": 5.0,
+      "Mo": 0.2,
+      "Zn": 1.0,
+      "C_Org": 3.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-premium",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol Premium",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 25.0,
+      "K2O": 12.5,
+      "B": 2.5,
+      "Mn": 6.25,
+      "Mo": 1.25,
+      "Zn": 87.5,
+      "C_Org": 37.5
+    },
+    "nutrientsPercent": {
+      "N": 2.0,
+      "K2O": 1.0,
+      "B": 0.2,
+      "Mn": 0.5,
+      "Mo": 0.1,
+      "Zn": 7.0,
+      "C_Org": 3.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-citrus",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 75.0,
+      "B": 6.25,
+      "Mn": 25.0,
+      "Mo": 2.5,
+      "Zn": 25.0,
+      "C_Org": 62.5
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Mo": 0.2,
+      "Zn": 2.0,
+      "C_Org": 5.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-kmg-potency",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol KMg Potency",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 115.0,
+      "Mg": 5.75,
+      "C_Org": 34.5
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 0.5,
+      "C_Org": 3.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-calcio",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 92.0,
+      "C_Org": 11.5
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "C_Org": 1.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-cabk",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol CaBK",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 26.0,
+      "Ca": 104.0,
+      "B": 26.0,
+      "C_Org": 39.0
+    },
+    "nutrientsPercent": {
+      "K2O": 2.0,
+      "Ca": 8.0,
+      "B": 2.0,
+      "C_Org": 3.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-sm-boro",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol SM Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 57.5,
+      "C_Org": 57.5
+    },
+    "nutrientsPercent": {
+      "B": 5.0,
+      "C_Org": 5.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-como",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol CoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.5,
+      "Mo": 135.0,
+      "C_Org": 40.5
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0,
+      "C_Org": 3.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-rhizo-mo",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol Rhizo-Mo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 210.0,
+      "C_Org": 14.0
+    },
+    "nutrientsPercent": {
+      "Mo": 15.0,
+      "C_Org": 1.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-zinco",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 120.0,
+      "C_Org": 6.0
+    },
+    "nutrientsPercent": {
+      "Zn": 10.0,
+      "C_Org": 0.5
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-manganes",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 130.0,
+      "C_Org": 19.5
+    },
+    "nutrientsPercent": {
+      "Mn": 10.0,
+      "C_Org": 1.5
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajipower",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajipower",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 56.0,
+      "P2O5": 266.0,
+      "C_Org": 112.0
+    },
+    "nutrientsPercent": {
+      "N": 4.0,
+      "P2O5": 19.0,
+      "C_Org": 8.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ajinomoto__ajifol-cobre",
+    "brand": "AJINOMOTO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ajifol Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 65.0,
+      "C_Org": 78.0
+    },
+    "nutrientsPercent": {
+      "Cu": 5.0,
+      "C_Org": 6.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "alltech__copper-crop",
+    "brand": "ALLTECH",
+    "category": "Nutrição e Fisiologia",
+    "name": "Copper crop",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 54.806,
+      "Cu": 134.0,
+      "C_Org": 38.86
+    },
+    "nutrientsPercent": {
+      "N": 4.09,
+      "Cu": 10.0,
+      "C_Org": 2.9
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__litho-calcio-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Litho Cálcio SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 331.8,
+      "Mg": 20.54
+    },
+    "nutrientsPercent": {
+      "Ca": 21.0,
+      "Mg": 1.3
+    },
+    "density": 1.58,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__cab-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "CaB SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 199.8,
+      "B": 49.95
+    },
+    "nutrientsPercent": {
+      "Ca": 14.8,
+      "B": 3.7
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__calcio-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cálcio SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 400.205
+    },
+    "nutrientsPercent": {
+      "Ca": 23.5
+    },
+    "density": 1.703,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__cu-mn-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cu + Mn SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 81.83,
+      "Mn": 402.47
+    },
+    "nutrientsPercent": {
+      "Cu": 4.9,
+      "Mn": 24.1
+    },
+    "density": 1.67,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__cobre-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cobre SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 500.31
+    },
+    "nutrientsPercent": {
+      "Cu": 32.7
+    },
+    "density": 1.53,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__cu-mo-zn-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cu + Mo + Zn SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 218.5,
+      "Mo": 47.5,
+      "Zn": 437.0
+    },
+    "nutrientsPercent": {
+      "Cu": 11.5,
+      "Mo": 2.5,
+      "Zn": 23.0
+    },
+    "density": 1.9,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__magnesio-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Magnésio SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 296.01
+    },
+    "nutrientsPercent": {
+      "Mg": 20.7
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__stimullus-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Stimullus SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 22.95,
+      "Zn": 148.5
+    },
+    "nutrientsPercent": {
+      "Mo": 1.7,
+      "Zn": 11.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__manganes-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Manganês SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 500.5
+    },
+    "nutrientsPercent": {
+      "Mn": 28.6
+    },
+    "density": 1.75,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__vigor-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Vigor SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 82.08,
+      "Mn": 331.74,
+      "Zn": 140.22
+    },
+    "nutrientsPercent": {
+      "Cu": 4.8,
+      "Mn": 19.4,
+      "Zn": 8.2
+    },
+    "density": 1.71,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__zinco-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Zinco SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 748.0
+    },
+    "nutrientsPercent": {
+      "Zn": 40.0
+    },
+    "density": 1.87,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__zinco-total-sc",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Zinco Total SC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 1000.0
+    },
+    "nutrientsPercent": {
+      "Zn": 50.0
+    },
+    "density": 2.0,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__boro",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 154.0
+    },
+    "nutrientsPercent": {
+      "B": 11.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__mop",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "MoP",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 249.55,
+      "Mo": 249.55
+    },
+    "nutrientsPercent": {
+      "P2O5": 15.5,
+      "Mo": 15.5
+    },
+    "density": 1.61,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__resiste-k",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Resiste K",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 465.0,
+      "K2O": 465.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 30.0
+    },
+    "density": 1.55,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__potassio",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Potássio",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 300.08
+    },
+    "nutrientsPercent": {
+      "K2O": 24.2
+    },
+    "density": 1.24,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__ferrux",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ferrux",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 300.0
+    },
+    "nutrientsPercent": {
+      "Fe": 6.0
+    },
+    "density": 5.0,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__organico",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Orgânico",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 81.153,
+      "C_Org": 279.4
+    },
+    "nutrientsPercent": {
+      "N": 6.39,
+      "C_Org": 22.0
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__orto-humus",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Orto Humus",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 42.6,
+      "C_Org": 139.8
+    },
+    "nutrientsPercent": {
+      "K2O": 3.55,
+      "C_Org": 11.65
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "altagro__redux",
+    "brand": "ALTAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Redux",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 74.0,
+      "P2O5": 444.0,
+      "Mg": 22.2
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 30.0,
+      "Mg": 1.5
+    },
+    "density": 1.48,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-boro",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 130.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-cab",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 104.0,
+      "B": 26.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-calcio",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 189.0
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-como-10",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro CoMo 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.0,
+      "Mo": 130.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-como-15",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro CoMo 15",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 19.5,
+      "Mo": 195.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.5,
+      "Mo": 15.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-como-ni",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro CoMo Ni",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.0,
+      "Mo": 130.0,
+      "Ni": 13.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0,
+      "Ni": 1.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 6.5,
+      "S": 78.0,
+      "B": 6.5,
+      "Cu": 6.5,
+      "Mn": 65.0,
+      "Mo": 1.3,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "Mg": 0.5,
+      "S": 6.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 5.0,
+      "Mo": 0.1,
+      "Zn": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-cacau",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Cacau",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 39.0,
+      "P2O5": 65.0,
+      "K2O": 130.0,
+      "B": 6.5,
+      "Cu": 2.6,
+      "Mn": 13.0,
+      "Zn": 13.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 5.0,
+      "K2O": 10.0,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Mn": 1.0,
+      "Zn": 1.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-cafe",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "Mg": 13.0,
+      "S": 78.0,
+      "B": 6.5,
+      "Mn": 52.0,
+      "Zn": 78.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 1.0,
+      "S": 6.0,
+      "B": 0.5,
+      "Mn": 4.0,
+      "Zn": 6.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-cafe-master",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Café Master",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 65.0,
+      "Mg": 6.5,
+      "S": 46.41,
+      "B": 6.5,
+      "Mo": 1.3,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Mg": 0.5,
+      "S": 3.57,
+      "B": 0.5,
+      "Mo": 0.1,
+      "Zn": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-citros",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Citros",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 45.5,
+      "B": 6.5,
+      "Mn": 26.0,
+      "Mo": 1.3,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "S": 3.5,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Mo": 0.1,
+      "Zn": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-citros-cloreto",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Citros Cloreto",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 6.5,
+      "Mn": 26.0,
+      "Mo": 1.3,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "B": 0.5,
+      "Mn": 2.0,
+      "Mo": 0.1,
+      "Zn": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-gramineas",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Gramíneas",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 195.0,
+      "S": 31.46,
+      "Mo": 6.5,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "N": 15.0,
+      "S": 2.42,
+      "Mo": 0.5,
+      "Zn": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-horti-fruti",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Horti Fruti",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 39.0,
+      "P2O5": 65.0,
+      "K2O": 130.0,
+      "B": 6.5,
+      "Cu": 2.6,
+      "Mn": 13.0,
+      "Mo": 1.3,
+      "Zn": 13.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 5.0,
+      "K2O": 10.0,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Mn": 1.0,
+      "Mo": 0.1,
+      "Zn": 1.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-leguminosa",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Leguminosa",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 3.72,
+      "S": 49.6,
+      "B": 4.96,
+      "Cu": 6.2,
+      "Mn": 62.0,
+      "Mo": 1.24,
+      "Zn": 24.8
+    },
+    "nutrientsPercent": {
+      "Mg": 0.3,
+      "S": 4.0,
+      "B": 0.4,
+      "Cu": 0.5,
+      "Mn": 5.0,
+      "Mo": 0.1,
+      "Zn": 2.0
+    },
+    "density": 1.24,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-milho",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Milho",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 65.0,
+      "Cu": 13.0,
+      "Mn": 78.0,
+      "Zn": 39.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "Cu": 1.0,
+      "Mn": 6.0,
+      "Zn": 3.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-nitro",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Nitro",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "B": 6.5,
+      "Mn": 39.0,
+      "Zn": 52.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Zn": 4.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-soja",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Soja",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 65.0,
+      "Cu": 13.0,
+      "Mn": 78.0,
+      "Zn": 39.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "Cu": 1.0,
+      "Mn": 6.0,
+      "Zn": 3.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-ferro",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Ferro",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 36.0,
+      "Fe": 60.0
+    },
+    "nutrientsPercent": {
+      "S": 3.0,
+      "Fe": 5.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-fosfito",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Fosfito",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 390.0,
+      "K2O": 260.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-fosfito-40-20",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Fosfito 40-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 520.0,
+      "K2O": 260.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 40.0,
+      "K2O": 20.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-magnesio",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Magnésio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 49.6,
+      "S": 62.0
+    },
+    "nutrientsPercent": {
+      "Mg": 4.0,
+      "S": 5.0
+    },
+    "density": 1.24,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-manganes-10",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Manganês 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 65.0,
+      "Mn": 130.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "Mn": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-manganes-14",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Manganês 14",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 182.0
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-molibdenio",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Molibdênio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 195.0
+    },
+    "nutrientsPercent": {
+      "Mo": 15.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-p30",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro P30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 39.0,
+      "P2O5": 390.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 30.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-n30",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro N30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 381.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-silicio",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Silício",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 210.0,
+      "Si": 168.0
+    },
+    "nutrientsPercent": {
+      "K2O": 15.0,
+      "Si": 12.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-zinco-10",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Zinco 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 58.5,
+      "Zn": 130.0
+    },
+    "nutrientsPercent": {
+      "S": 4.5,
+      "Zn": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-zinco-21",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Zinco 21",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 315.0
+    },
+    "nutrientsPercent": {
+      "Zn": 21.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-p50",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro P50",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 800.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 50.0
+    },
+    "density": 1.6,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-omini",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Omini",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0
+    },
+    "density": 1.0,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-oveni",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Oveni",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0
+    },
+    "density": 1.0,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-ph-menor",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro pH menor",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 800.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 50.0
+    },
+    "density": 1.6,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-cobre",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 36.4,
+      "Cu": 78.0
+    },
+    "nutrientsPercent": {
+      "S": 2.8,
+      "Cu": 6.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-ad",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro AD+",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 70.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 7.0
+    },
+    "density": 1.0,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-ad-nitro",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro AD+ Nitro",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0
+    },
+    "density": 1.0,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-alga",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Alga +",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 115.0,
+      "Mn": 11.5,
+      "Zn": 5.75,
+      "C_Org": 92.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mn": 1.0,
+      "Zn": 0.5,
+      "C_Org": 8.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-boro-plus",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Boro Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 130.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-calcio-aquamarine",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Cálcio Aquamarine",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 189.0
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-complex-plus",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Complex Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 6.5,
+      "S": 78.0,
+      "B": 6.5,
+      "Cu": 6.5,
+      "Mn": 65.0,
+      "Mo": 1.3,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "Mg": 0.5,
+      "S": 6.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 5.0,
+      "Mo": 0.1,
+      "Zn": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-defesa",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Defesa",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 325.0,
+      "K2O": 260.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 25.0,
+      "K2O": 20.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-dormencia",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Dormência",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 115.0,
+      "Mn": 11.5,
+      "Zn": 5.75,
+      "C_Org": 92.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mn": 1.0,
+      "Zn": 0.5,
+      "C_Org": 8.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-energy",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Energy",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 104.0,
+      "B": 26.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-flor",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Flor",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 126.5,
+      "Ca": 65.55,
+      "B": 5.75,
+      "C_Org": 126.5
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "Ca": 5.7,
+      "B": 0.5,
+      "C_Org": 11.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-folha",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Folha",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 115.0,
+      "Zn": 5.75,
+      "C_Org": 92.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Zn": 0.5,
+      "C_Org": 8.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-folha-top",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Folha Top",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 115.0,
+      "K2O": 11.5,
+      "Mn": 17.25,
+      "Zn": 5.75,
+      "C_Org": 103.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "K2O": 1.0,
+      "Mn": 1.5,
+      "Zn": 0.5,
+      "C_Org": 9.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-fruto",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Fruto",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 45.0,
+      "P2O5": 450.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 30.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-fruto-plus",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Fruto Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 429.0,
+      "K2O": 390.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 33.0,
+      "K2O": 30.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-inducao",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Indução",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 381.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-manganes-plus",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Manganês Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 39.0,
+      "S": 52.0,
+      "Mn": 91.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "S": 4.0,
+      "Mn": 7.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-maturacao",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Maturação",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 420.0
+    },
+    "nutrientsPercent": {
+      "K2O": 28.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-mol",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Mol",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 115.0,
+      "K2O": 11.5,
+      "C_Org": 92.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "K2O": 1.0,
+      "C_Org": 8.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-raiz",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Raiz",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 126.5,
+      "K2O": 11.5,
+      "C_Org": 115.0
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "K2O": 1.0,
+      "C_Org": 10.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "aminoagro__aminoagro-vegetacao",
+    "brand": "AMINOAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminoagro Vegetação",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 39.0,
+      "Mg": 6.5,
+      "S": 49.4,
+      "B": 3.9,
+      "Cu": 3.9,
+      "Mn": 39.0,
+      "Mo": 1.04,
+      "Zn": 39.0,
+      "C_Org": 29.9
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "Mg": 0.5,
+      "S": 3.8,
+      "B": 0.3,
+      "Cu": 0.3,
+      "Mn": 3.0,
+      "Mo": 0.08,
+      "Zn": 3.0,
+      "C_Org": 2.3
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__fulvumin-br",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fulvumin BR",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 30.0,
+      "S": 16.0,
+      "C_Org": 152.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "S": 1.6,
+      "C_Org": 15.2
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__fylloton",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fylloton",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "C_Org": 208.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "C_Org": 20.8
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__k-bomber",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "K-Bomber",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 50.0,
+      "K2O": 550.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 5.0,
+      "K2O": 55.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__phosfik-cu-4",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Phosfik Cu 4",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 148.5,
+      "P2O5": 297.0,
+      "Cu": 54.0
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "P2O5": 22.0,
+      "Cu": 4.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__phosfik-mg",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Phosfik Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 39.6,
+      "P2O5": 356.4,
+      "Mg": 55.836
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 27.0,
+      "Mg": 4.23
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__phosfik-mn-zn",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Phosfik Mn-Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 42.75,
+      "P2O5": 427.5,
+      "Mn": 71.25,
+      "Zn": 71.25
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 30.0,
+      "Mn": 5.0,
+      "Zn": 5.0
+    },
+    "density": 1.425,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__phosfik-pk",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Phosfik PK",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 423.0,
+      "K2O": 282.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__greenleaf-ps-20-20-20",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Greenleaf PS 20.20.20",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 200.0,
+      "P2O5": 200.0,
+      "K2O": 200.0,
+      "B": 1.0,
+      "Cu": 0.5,
+      "Fe": 2.0,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 20.0,
+      "P2O5": 20.0,
+      "K2O": 20.0,
+      "B": 0.1,
+      "Cu": 0.05,
+      "Fe": 0.2,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__greenleaf-ps-12-48-8",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Greenleaf PS 12.48.8",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "P2O5": 480.0,
+      "K2O": 80.0,
+      "B": 1.0,
+      "Cu": 0.5,
+      "Fe": 2.0,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "P2O5": 48.0,
+      "K2O": 8.0,
+      "B": 0.1,
+      "Cu": 0.05,
+      "Fe": 0.2,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__greenleaf-ps-34-6-12",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Greenleaf PS 34.6.12",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 340.0,
+      "P2O5": 60.0,
+      "K2O": 120.0,
+      "B": 1.5
+    },
+    "nutrientsPercent": {
+      "N": 34.0,
+      "P2O5": 6.0,
+      "K2O": 12.0,
+      "B": 0.15
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__greenleaf-8-15-40",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Greenleaf 8.15.40",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 80.0,
+      "P2O5": 150.0,
+      "K2O": 400.0,
+      "S": 18.0,
+      "B": 1.0,
+      "Cu": 0.5,
+      "Fe": 2.0,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 8.0,
+      "P2O5": 15.0,
+      "K2O": 40.0,
+      "S": 1.8,
+      "B": 0.1,
+      "Cu": 0.05,
+      "Fe": 0.2,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__restorer",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Restorer",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.2,
+      "P2O5": 60.2,
+      "K2O": 60.2,
+      "B": 6.02,
+      "Cu": 1.204,
+      "Fe": 6.02,
+      "Mn": 1.204,
+      "Mo": 0.1204,
+      "Zn": 1.204,
+      "C_Org": 19.264
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 5.0,
+      "K2O": 5.0,
+      "B": 0.5,
+      "Cu": 0.1,
+      "Fe": 0.5,
+      "Mn": 0.1,
+      "Mo": 0.01,
+      "Zn": 0.1,
+      "C_Org": 1.6
+    },
+    "density": 1.204,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__rizammina",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Rizammina",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "P2O5": 80.0,
+      "K2O": 210.0,
+      "Mg": 20.0,
+      "S": 55.0,
+      "B": 0.3,
+      "Cu": 0.5,
+      "Fe": 2.0,
+      "Zn": 1.0,
+      "C_Org": 13.0
+    },
+    "nutrientsPercent": {
+      "N": 13.0,
+      "P2O5": 8.0,
+      "K2O": 21.0,
+      "Mg": 2.0,
+      "S": 5.5,
+      "B": 0.03,
+      "Cu": 0.05,
+      "Fe": 0.2,
+      "Zn": 0.1,
+      "C_Org": 1.3
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__spray-dunger-124",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Spray Dünger 124",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "P2O5": 100.0,
+      "K2O": 200.0,
+      "Ca": 14.0,
+      "Mg": 15.0,
+      "S": 48.0,
+      "B": 15.0,
+      "Cu": 5.0,
+      "Fe": 2.0,
+      "Mn": 5.0,
+      "Mo": 5.0,
+      "Zn": 40.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 10.0,
+      "K2O": 20.0,
+      "Ca": 1.4,
+      "Mg": 1.5,
+      "S": 4.8,
+      "B": 1.5,
+      "Cu": 0.5,
+      "Fe": 0.2,
+      "Mn": 0.5,
+      "Mo": 0.5,
+      "Zn": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__sprintalga-ts",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Sprintalga TS",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 127.0,
+      "Mo": 22.86,
+      "C_Org": 190.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mo": 1.8,
+      "C_Org": 15.0
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__sunred",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Sunred",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 26.6,
+      "K2O": 93.1,
+      "C_Org": 186.2
+    },
+    "nutrientsPercent": {
+      "N": 2.0,
+      "K2O": 7.0,
+      "C_Org": 14.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__agrumax-mz",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Agrumax MZ",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "S": 108.0,
+      "B": 10.0,
+      "Cu": 1.0,
+      "Fe": 2.0,
+      "Mn": 100.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "S": 10.8,
+      "B": 1.0,
+      "Cu": 0.1,
+      "Fe": 0.2,
+      "Mn": 10.0,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__agrumax-cafe",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Agrumax Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "Mg": 10.0,
+      "S": 110.0,
+      "B": 30.0,
+      "Cu": 100.0,
+      "Fe": 1.0,
+      "Mn": 25.0,
+      "Mo": 1.0,
+      "Zn": 80.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "Mg": 1.0,
+      "S": 11.0,
+      "B": 3.0,
+      "Cu": 10.0,
+      "Fe": 0.1,
+      "Mn": 2.5,
+      "Mo": 0.1,
+      "Zn": 8.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__boromin",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Boromin",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 136.5
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.365,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__fosfimol",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fosfimol",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 426.0,
+      "Co": 28.4,
+      "Mo": 284.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 24.0,
+      "Co": 1.6,
+      "Mo": 16.0
+    },
+    "density": 1.775,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__glibor-ca",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Glibor-Ca",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 120.4,
+      "B": 42.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.6,
+      "B": 3.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__gliman-30",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gliman 30",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 170.0,
+      "Mn": 300.0
+    },
+    "nutrientsPercent": {
+      "S": 17.0,
+      "Mn": 30.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__keliron-combi",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Keliron Combi",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 54.3,
+      "S": 67.0,
+      "B": 5.0,
+      "Cu": 15.0,
+      "Fe": 40.0,
+      "Mn": 40.0,
+      "Mo": 1.0,
+      "Zn": 15.0
+    },
+    "nutrientsPercent": {
+      "Mg": 5.43,
+      "S": 6.7,
+      "B": 0.5,
+      "Cu": 1.5,
+      "Fe": 4.0,
+      "Mn": 4.0,
+      "Mo": 0.1,
+      "Zn": 1.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__keliron-6",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Keliron 6",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 60.0
+    },
+    "nutrientsPercent": {
+      "Fe": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__ligoplex-ca",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ligoplex CA",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 31.29,
+      "Ca": 159.43
+    },
+    "nutrientsPercent": {
+      "N": 2.1,
+      "Ca": 10.7
+    },
+    "density": 1.49,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__nitrocam",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nitrocam",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 133.2,
+      "Ca": 105.82,
+      "Mg": 45.14,
+      "Mo": 1.036
+    },
+    "nutrientsPercent": {
+      "N": 9.0,
+      "Ca": 7.15,
+      "Mg": 3.05,
+      "Mo": 0.07
+    },
+    "density": 1.48,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__nutri-gemma",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutri-Gemma",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 67.5,
+      "Zn": 67.5
+    },
+    "nutrientsPercent": {
+      "B": 5.0,
+      "Zn": 5.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biolchim__nov",
+    "brand": "BIOLCHIM",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nov@",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 11.3,
+      "K2O": 11.3,
+      "C_Org": 79.1
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "K2O": 1.0,
+      "C_Org": 7.0
+    },
+    "density": 1.13,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-boro",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 135.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-calcio",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 193.2
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-cab",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 127.0,
+      "B": 6.35
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 0.5
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-cab-1",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis CaB 1",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 133.0,
+      "B": 13.3
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 1.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-cab-2",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis CaB 2",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 136.0,
+      "B": 27.2
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 2.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-cobalto",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Cobalto",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 60.0
+    },
+    "nutrientsPercent": {
+      "Co": 5.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-cobre",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 50.0,
+      "Cu": 75.0
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "Cu": 6.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-ferro",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Ferro",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 48.0,
+      "Fe": 72.0
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "Fe": 6.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-fosfito-00-20-20",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Fosfito 00-20-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 280.0,
+      "K2O": 280.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "K2O": 20.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-fosfito-00-28-26",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Fosfito 00-28-26",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 420.0,
+      "K2O": 390.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 28.0,
+      "K2O": 26.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-fosfito-00-30-20",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Fosfito 00-30-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 420.0,
+      "K2O": 280.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-fosfito-00-40-20",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Fosfito 00-40-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 560.0,
+      "K2O": 280.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 40.0,
+      "K2O": 20.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-magnesio",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Magnésio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 50.0,
+      "S": 62.5
+    },
+    "nutrientsPercent": {
+      "Mg": 4.0,
+      "S": 5.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-magnesio-cloreto",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Magnésio cloreto",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 126.0
+    },
+    "nutrientsPercent": {
+      "Mg": 9.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-manganes",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 78.0,
+      "Mn": 130.0
+    },
+    "nutrientsPercent": {
+      "S": 6.0,
+      "Mn": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-manganes-cloreto",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Manganês cloreto",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 196.0
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-mega-k",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Mega K",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 570.0
+    },
+    "nutrientsPercent": {
+      "K2O": 38.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-mega-top",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Mega Top",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 159.5,
+      "P2O5": 159.5,
+      "K2O": 116.0,
+      "S": 4.35,
+      "B": 8.7,
+      "Co": 0.0087,
+      "Mn": 3.625,
+      "Mo": 0.029
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "P2O5": 11.0,
+      "K2O": 8.0,
+      "S": 0.3,
+      "B": 0.6,
+      "Co": 0.0006,
+      "Mn": 0.25,
+      "Mo": 0.002
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-mol",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Mol",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 198.0
+    },
+    "nutrientsPercent": {
+      "Mo": 15.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-seed-zinco-l",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Seed Zinco L",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 6.5,
+      "Cu": 13.0,
+      "Mn": 26.0,
+      "Mo": 1.3
+    },
+    "nutrientsPercent": {
+      "B": 0.5,
+      "Cu": 1.0,
+      "Mn": 2.0,
+      "Mo": 0.1
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-zinco",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 43.75
+    },
+    "nutrientsPercent": {
+      "S": 3.5
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-zinco-cloreto",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Zinco cloreto",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-zinco-master",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Zinco Master",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 65.0,
+      "B": 6.5,
+      "Cu": 6.5,
+      "Mn": 39.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 3.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-zinco-turbo",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Zinco Turbo",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 99.4,
+      "B": 7.1,
+      "Cu": 28.4,
+      "Mn": 42.6,
+      "Mo": 1.42
+    },
+    "nutrientsPercent": {
+      "S": 7.0,
+      "B": 0.5,
+      "Cu": 2.0,
+      "Mn": 3.0,
+      "Mo": 0.1
+    },
+    "density": 1.42,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-04-14-12-micros",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis 04-14-12 + micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 48.0,
+      "P2O5": 168.0,
+      "K2O": 144.0,
+      "B": 0.36,
+      "Cu": 0.6,
+      "Mn": 0.48,
+      "Mo": 0.06
+    },
+    "nutrientsPercent": {
+      "N": 4.0,
+      "P2O5": 14.0,
+      "K2O": 12.0,
+      "B": 0.03,
+      "Cu": 0.05,
+      "Mn": 0.04,
+      "Mo": 0.005
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-05-15-05-micros",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis 05-15-05 + micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 180.0,
+      "K2O": 60.0,
+      "B": 0.36,
+      "Cu": 0.6,
+      "Mn": 0.48,
+      "Mo": 0.06
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 15.0,
+      "K2O": 5.0,
+      "B": 0.03,
+      "Cu": 0.05,
+      "Mn": 0.04,
+      "Mo": 0.005
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-06-30-00-mg",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis 06-30-00 + Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 82.8,
+      "P2O5": 414.0,
+      "K2O": 0.0,
+      "Mg": 20.7
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "P2O5": 30.0,
+      "K2O": 0.0,
+      "Mg": 1.5
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-08-08-08-micros",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis 08-08-08 + micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 96.0,
+      "P2O5": 96.0,
+      "K2O": 96.0,
+      "B": 0.36,
+      "Cu": 0.6,
+      "Mn": 0.48,
+      "Mo": 0.06
+    },
+    "nutrientsPercent": {
+      "N": 8.0,
+      "P2O5": 8.0,
+      "K2O": 8.0,
+      "B": 0.03,
+      "Cu": 0.05,
+      "Mn": 0.04,
+      "Mo": 0.005
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-16-04-04-micros",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis 16-04-04 + micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 192.0,
+      "P2O5": 48.0,
+      "K2O": 48.0,
+      "B": 0.36,
+      "Cu": 0.6,
+      "Mn": 0.48,
+      "Mo": 0.06
+    },
+    "nutrientsPercent": {
+      "N": 16.0,
+      "P2O5": 4.0,
+      "K2O": 4.0,
+      "B": 0.03,
+      "Cu": 0.05,
+      "Mn": 0.04,
+      "Mo": 0.005
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-30-00-00",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis 30-00-00",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 405.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-arroz-cerrado",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Arroz Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 65.0,
+      "B": 6.5,
+      "Cu": 6.5,
+      "Mn": 39.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 3.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-balsas",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Balsas",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 65.0,
+      "B": 13.0,
+      "Cu": 26.0,
+      "Mn": 78.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "B": 1.0,
+      "Cu": 2.0,
+      "Mn": 6.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-batata",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Batata",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 132.0,
+      "Mg": 39.6,
+      "S": 79.2,
+      "B": 6.6,
+      "Cu": 2.64,
+      "Mn": 26.4,
+      "Mo": 2.64
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 3.0,
+      "S": 6.0,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Mn": 2.0,
+      "Mo": 0.2
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-cafe",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "Mg": 26.0,
+      "S": 65.0,
+      "B": 6.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 2.0,
+      "S": 5.0,
+      "B": 0.5
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-cafe-do-cerrado",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Café do Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 132.0,
+      "S": 79.2,
+      "B": 6.6,
+      "Mn": 52.8
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 6.0,
+      "B": 0.5,
+      "Mn": 4.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-cerrado",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 65.0,
+      "B": 6.5,
+      "Cu": 13.0,
+      "Mn": 78.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "B": 0.5,
+      "Cu": 1.0,
+      "Mn": 6.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-cerrado-turbo",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Cerrado Turbo",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 99.4,
+      "B": 7.1,
+      "Cu": 28.4,
+      "Mn": 99.4,
+      "Mo": 1.42
+    },
+    "nutrientsPercent": {
+      "S": 7.0,
+      "B": 0.5,
+      "Cu": 2.0,
+      "Mn": 7.0,
+      "Mo": 0.1
+    },
+    "density": 1.42,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-citrus",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "S": 52.0,
+      "B": 6.5,
+      "Mn": 39.0,
+      "Mo": 1.3
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 4.0,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Mo": 0.1
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__fertilis-chapadao",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fertilis Chapadão",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 16.8,
+      "Mn": 84.0
+    },
+    "nutrientsPercent": {
+      "Cu": 1.2,
+      "Mn": 6.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__bioamino-premium",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "BIOAMINO Premium",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 67.5,
+      "P2O5": 108.0,
+      "K2O": 67.5,
+      "Ca": 1.35,
+      "Mg": 8.1,
+      "S": 33.75,
+      "B": 5.4,
+      "Cu": 2.7,
+      "Fe": 2.7,
+      "Mn": 6.75,
+      "Mo": 1.35
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 8.0,
+      "K2O": 5.0,
+      "Ca": 0.1,
+      "Mg": 0.6,
+      "S": 2.5,
+      "B": 0.4,
+      "Cu": 0.2,
+      "Fe": 0.2,
+      "Mn": 0.5,
+      "Mo": 0.1
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nodulus-premium",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NODULUS Premium",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 25.5,
+      "Mo": 255.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.7,
+      "Mo": 17.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-blend-jco",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Blend JCO",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 17.5,
+      "Cu": 70.0,
+      "Mn": 122.5,
+      "Ni": 52.5,
+      "Zn": 332.5
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Cu": 4.0,
+      "Mn": 7.0,
+      "Ni": 3.0,
+      "Zn": 19.0
+    },
+    "density": 1.75,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-blend-mg",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Blend Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 228.0,
+      "B": 12.92,
+      "Zn": 98.8
+    },
+    "nutrientsPercent": {
+      "Mg": 15.0,
+      "B": 0.85,
+      "Zn": 6.5
+    },
+    "density": 1.52,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-blend-zmb",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Blend ZMB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 50.0,
+      "B": 30.0,
+      "Zn": 200.0
+    },
+    "nutrientsPercent": {
+      "Mg": 5.0,
+      "B": 3.0,
+      "Zn": 20.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-blend-zn",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Blend Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 46.2,
+      "Mn": 81.62,
+      "Zn": 299.992
+    },
+    "nutrientsPercent": {
+      "B": 3.0,
+      "Mn": 5.3,
+      "Zn": 19.48
+    },
+    "density": 1.54,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-calcio-max",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Cálcio Max",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 417.5
+    },
+    "nutrientsPercent": {
+      "Ca": 25.0
+    },
+    "density": 1.67,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-cobre-super",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Cobre Super",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 407.5
+    },
+    "nutrientsPercent": {
+      "Cu": 25.0
+    },
+    "density": 1.63,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-como",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT CoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 49.8,
+      "Mo": 498.0
+    },
+    "nutrientsPercent": {
+      "Co": 3.0,
+      "Mo": 30.0
+    },
+    "density": 1.66,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-magnesio",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Magnésio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 300.3
+    },
+    "nutrientsPercent": {
+      "Mg": 21.0
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-manganes",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Manganês +",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 412.5
+    },
+    "nutrientsPercent": {
+      "Mn": 25.0
+    },
+    "density": 1.65,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-mega-k",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Mega K",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 15.5,
+      "K2O": 496.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "K2O": 32.0
+    },
+    "density": 1.55,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nhp-p-boro-p",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHP P-Boro-P",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 103.7
+    },
+    "nutrientsPercent": {
+      "B": 8.5
+    },
+    "density": 1.22,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "biosoja__nht-zinco",
+    "brand": "BIOSOJA",
+    "category": "Nutrição e Fisiologia",
+    "name": "NHT Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 1000.0
+    },
+    "nutrientsPercent": {
+      "Zn": 50.0
+    },
+    "density": 2.0,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-b",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal B",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 104.0
+    },
+    "nutrientsPercent": {
+      "B": 8.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-co",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Co",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 46.8
+    },
+    "nutrientsPercent": {
+      "Co": 3.9
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-cobre",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 98.8
+    },
+    "nutrientsPercent": {
+      "Cu": 7.6
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-fe",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Fe",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 65.0
+    },
+    "nutrientsPercent": {
+      "Fe": 5.2
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-hydro",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Hydro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 35.0,
+      "Cu": 3.0,
+      "Fe": 54.0,
+      "Mn": 50.0,
+      "Mo": 4.0,
+      "Zn": 30.0
+    },
+    "nutrientsPercent": {
+      "B": 3.5,
+      "Cu": 0.3,
+      "Fe": 5.4,
+      "Mn": 5.0,
+      "Mo": 0.4,
+      "Zn": 3.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-kubig",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Kubig",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 99.2
+    },
+    "nutrientsPercent": {
+      "Cu": 8.0
+    },
+    "density": 1.24,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-mag",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal MaG",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 90.0,
+      "S": 120.0
+    },
+    "nutrientsPercent": {
+      "Mg": 9.0,
+      "S": 12.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-mn",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 92.4
+    },
+    "nutrientsPercent": {
+      "Mn": 6.6
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-mo",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Mo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 75.6
+    },
+    "nutrientsPercent": {
+      "Mo": 6.3
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-omnical",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Omnical",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 71.98
+    },
+    "nutrientsPercent": {
+      "Ca": 6.1
+    },
+    "density": 1.18,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-rd",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal RD",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 20.0,
+      "Cu": 5.0,
+      "Fe": 33.0,
+      "Mn": 40.0,
+      "Zn": 51.0
+    },
+    "nutrientsPercent": {
+      "B": 2.0,
+      "Cu": 0.5,
+      "Fe": 3.3,
+      "Mn": 4.0,
+      "Zn": 5.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-si",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Si",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 75.52,
+      "Si": 75.52
+    },
+    "nutrientsPercent": {
+      "K2O": 5.9,
+      "Si": 5.9
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__chelal-zn",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Chelal Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 91.0
+    },
+    "nutrientsPercent": {
+      "Zn": 7.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__landamine-bmo",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Landamine Bmo",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 319.2,
+      "K2O": 349.6,
+      "B": 16.72,
+      "Mo": 4.56
+    },
+    "nutrientsPercent": {
+      "P2O5": 21.0,
+      "K2O": 23.0,
+      "B": 1.1,
+      "Mo": 0.3
+    },
+    "density": 1.52,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__landamine-cobre",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Landamine Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 321.3,
+      "K2O": 367.2,
+      "Cu": 19.89
+    },
+    "nutrientsPercent": {
+      "P2O5": 21.0,
+      "K2O": 24.0,
+      "Cu": 1.3
+    },
+    "density": 1.53,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__landamine-mn",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Landamine Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 201.6,
+      "K2O": 216.0,
+      "Mn": 302.4
+    },
+    "nutrientsPercent": {
+      "P2O5": 14.0,
+      "K2O": 15.0,
+      "Mn": 21.0
+    },
+    "density": 1.44,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__landamine-zn",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Landamine Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 319.2,
+      "K2O": 364.8,
+      "Zn": 24.32
+    },
+    "nutrientsPercent": {
+      "P2O5": 21.0,
+      "K2O": 24.0,
+      "Zn": 1.6
+    },
+    "density": 1.52,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__fructol",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fructol",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "P2O5": 80.0,
+      "K2O": 150.0,
+      "Mg": 24.0,
+      "B": 20.0,
+      "Fe": 8.0,
+      "Mn": 8.0,
+      "Mo": 0.8,
+      "Zn": 8.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 8.0,
+      "K2O": 15.0,
+      "Mg": 2.4,
+      "B": 2.0,
+      "Fe": 0.8,
+      "Mn": 0.8,
+      "Mo": 0.08,
+      "Zn": 0.8
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__kappa-v",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Kappa V",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 180.0,
+      "P2O5": 120.0,
+      "K2O": 270.0,
+      "B": 3.0,
+      "Fe": 3.0
+    },
+    "nutrientsPercent": {
+      "N": 18.0,
+      "P2O5": 12.0,
+      "K2O": 27.0,
+      "B": 0.3,
+      "Fe": 0.3
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__kappa-g",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Kappa G",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 90.0,
+      "P2O5": 200.0,
+      "K2O": 300.0,
+      "Fe": 3.0
+    },
+    "nutrientsPercent": {
+      "N": 9.0,
+      "P2O5": 20.0,
+      "K2O": 30.0,
+      "Fe": 0.3
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "bms__viener-zn",
+    "brand": "BMS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Viener Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 364.0
+    },
+    "nutrientsPercent": {
+      "Zn": 26.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualyfol-k320",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualyfol K320",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 308.0
+    },
+    "nutrientsPercent": {
+      "K2O": 22.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualyfol-fosfito-mn",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualyfol Fosfito Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 414.0,
+      "Mn": 124.2
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "Mn": 9.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualyfol-combate",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualyfol Combate",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 6.15,
+      "Cu": 6.15,
+      "Mn": 73.8,
+      "Mo": 0.615,
+      "Zn": 36.9
+    },
+    "nutrientsPercent": {
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 6.0,
+      "Mo": 0.05,
+      "Zn": 3.0
+    },
+    "density": 1.23,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualyfol-12-5",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualyfol 12,5",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 52.44,
+      "Mn": 52.44,
+      "Zn": 69.0
+    },
+    "nutrientsPercent": {
+      "Mg": 3.8,
+      "Mn": 3.8,
+      "Zn": 5.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualyfol-fosfito-00-28-26",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualyfol Fosfito 00-28-26",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 414.4,
+      "K2O": 384.8
+    },
+    "nutrientsPercent": {
+      "P2O5": 28.0,
+      "K2O": 26.0
+    },
+    "density": 1.48,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualymix-08-08-40-micro",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualymix 08.08.40 + micro",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 80.0,
+      "P2O5": 80.0,
+      "K2O": 400.0,
+      "Mg": 5.0,
+      "Cu": 0.5,
+      "Mn": 0.5,
+      "Mo": 0.2,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 8.0,
+      "P2O5": 8.0,
+      "K2O": 40.0,
+      "Mg": 0.5,
+      "Cu": 0.05,
+      "Mn": 0.05,
+      "Mo": 0.02,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualymix-09-48-09-micro",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualymix 09.48.09 + micro",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 90.0,
+      "P2O5": 480.0,
+      "K2O": 90.0,
+      "Mg": 5.0,
+      "Cu": 0.5,
+      "Mn": 0.5,
+      "Mo": 0.2,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 9.0,
+      "P2O5": 48.0,
+      "K2O": 9.0,
+      "Mg": 0.5,
+      "Cu": 0.05,
+      "Mn": 0.05,
+      "Mo": 0.02,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualymix-14-14-28-micro",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualymix 14.14.28 + micro",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 140.0,
+      "P2O5": 140.0,
+      "K2O": 280.0,
+      "Mg": 5.0,
+      "Cu": 0.5,
+      "Mn": 0.5,
+      "Mo": 0.2,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 14.0,
+      "P2O5": 14.0,
+      "K2O": 28.0,
+      "Mg": 0.5,
+      "Cu": 0.05,
+      "Mn": 0.05,
+      "Mo": 0.02,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualymix-30-10-10-micro",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualymix 30.10.10 + micro",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 300.0,
+      "P2O5": 100.0,
+      "K2O": 100.0,
+      "Mg": 5.0,
+      "Cu": 0.5,
+      "Mn": 0.5,
+      "Mo": 0.2,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0,
+      "P2O5": 10.0,
+      "K2O": 10.0,
+      "Mg": 0.5,
+      "Cu": 0.05,
+      "Mn": 0.05,
+      "Mo": 0.02,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualymix-25-00-25-micro",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualymix 25.00.25 + micro",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 250.0,
+      "P2O5": 0.0,
+      "K2O": 250.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Mn": 0.5,
+      "Mo": 0.2,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 25.0,
+      "P2O5": 0.0,
+      "K2O": 25.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Mn": 0.05,
+      "Mo": 0.02,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualymix-citros",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualymix Citros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 150.0,
+      "Mg": 7.0,
+      "S": 90.0,
+      "B": 20.0,
+      "Cu": 1.0,
+      "Fe": 2.0,
+      "Mn": 70.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "N": 15.0,
+      "Mg": 0.7,
+      "S": 9.0,
+      "B": 2.0,
+      "Cu": 0.1,
+      "Fe": 0.2,
+      "Mn": 7.0,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualymix-cana-de-acucar",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualymix Cana-de-açúcar",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 30.0,
+      "S": 110.0,
+      "B": 60.0,
+      "Zn": 150.0
+    },
+    "nutrientsPercent": {
+      "Mg": 3.0,
+      "S": 11.0,
+      "B": 6.0,
+      "Zn": 15.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualymix-suporte",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualymix Suporte",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 120.0,
+      "S": 100.0,
+      "B": 15.0,
+      "Cu": 15.0,
+      "Mn": 140.0,
+      "Zn": 45.0
+    },
+    "nutrientsPercent": {
+      "K2O": 12.0,
+      "S": 10.0,
+      "B": 1.5,
+      "Cu": 1.5,
+      "Mn": 14.0,
+      "Zn": 4.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualymix-gramineas",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualymix Gramíneas",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 150.0,
+      "Mg": 7.0,
+      "S": 90.0,
+      "B": 20.0,
+      "Cu": 1.0,
+      "Fe": 2.0,
+      "Mn": 70.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "N": 15.0,
+      "Mg": 0.7,
+      "S": 9.0,
+      "B": 2.0,
+      "Cu": 0.1,
+      "Fe": 0.2,
+      "Mn": 7.0,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__amino-speed-foliar",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amino Speed Foliar",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 67.0,
+      "P2O5": 80.4,
+      "K2O": 80.4,
+      "Mg": 8.04,
+      "B": 5.36,
+      "Cu": 2.68,
+      "Mn": 6.7,
+      "Mo": 1.34,
+      "Zn": 13.4,
+      "C_Org": 80.4
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 6.0,
+      "K2O": 6.0,
+      "Mg": 0.6,
+      "B": 0.4,
+      "Cu": 0.2,
+      "Mn": 0.5,
+      "Mo": 0.1,
+      "Zn": 1.0,
+      "C_Org": 6.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__amino-speed-fertitop-i",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amino Speed Fertitop I",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 75.0,
+      "C_Org": 225.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "C_Org": 18.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__amino-speed-gram",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amino Speed Gram",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 21.93,
+      "B": 3.87,
+      "Mo": 1.29,
+      "Zn": 193.5,
+      "C_Org": 77.4
+    },
+    "nutrientsPercent": {
+      "N": 1.7,
+      "B": 0.3,
+      "Mo": 0.1,
+      "Zn": 15.0,
+      "C_Org": 6.0
+    },
+    "density": 1.29,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__amino-speed-cerrado",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amino Speed Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 26.8,
+      "B": 4.02,
+      "Mn": 80.4,
+      "Mo": 6.7,
+      "Zn": 40.2,
+      "C_Org": 80.4
+    },
+    "nutrientsPercent": {
+      "N": 2.0,
+      "B": 0.3,
+      "Mn": 6.0,
+      "Mo": 0.5,
+      "Zn": 3.0,
+      "C_Org": 6.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__amino-speed-leg",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amino Speed Leg",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 15.73,
+      "Co": 6.05,
+      "Mo": 60.5,
+      "Zn": 60.5,
+      "C_Org": 72.6
+    },
+    "nutrientsPercent": {
+      "N": 1.3,
+      "Co": 0.5,
+      "Mo": 5.0,
+      "Zn": 5.0,
+      "C_Org": 6.0
+    },
+    "density": 1.21,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__amino-speed-vigor",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amino Speed Vigor",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 275.0,
+      "C_Org": 75.0
+    },
+    "nutrientsPercent": {
+      "N": 22.0,
+      "C_Org": 6.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__amino-speed-raiz",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amino Speed Raiz",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 75.0,
+      "C_Org": 250.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "C_Org": 20.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__amino-speed-8-0",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amino Speed 8.0",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 69.5,
+      "P2O5": 83.4,
+      "K2O": 83.4,
+      "Mg": 8.34,
+      "B": 5.56,
+      "Cu": 2.78,
+      "Mn": 6.95,
+      "Mo": 1.39,
+      "Zn": 13.9,
+      "C_Org": 111.2
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 6.0,
+      "K2O": 6.0,
+      "Mg": 0.6,
+      "B": 0.4,
+      "Cu": 0.2,
+      "Mn": 0.5,
+      "Mo": 0.1,
+      "Zn": 1.0,
+      "C_Org": 8.0
+    },
+    "density": 1.39,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__amino-speed-gramineas",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amino Speed Gramíneas",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 282.0,
+      "Mg": 14.1,
+      "S": 28.2,
+      "B": 1.41,
+      "Cu": 2.82,
+      "Mo": 7.05,
+      "Zn": 56.4,
+      "C_Org": 84.6
+    },
+    "nutrientsPercent": {
+      "N": 20.0,
+      "Mg": 1.0,
+      "S": 2.0,
+      "B": 0.1,
+      "Cu": 0.2,
+      "Mo": 0.5,
+      "Zn": 4.0,
+      "C_Org": 6.0
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-acido-borico",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Ácido Bórico",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 170.0
+    },
+    "nutrientsPercent": {
+      "B": 17.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-cloreto-de-calcio",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Cloreto de Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 270.0
+    },
+    "nutrientsPercent": {
+      "Ca": 27.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-map-purificado",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais MAP Purificado",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 110.0,
+      "P2O5": 600.0
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "P2O5": 60.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-mkp",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais MKP",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 515.0,
+      "K2O": 340.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 51.5,
+      "K2O": 34.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-molibdato-de-sodio",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Molibdato de Sódio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 390.0
+    },
+    "nutrientsPercent": {
+      "Mo": 39.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-nitrato-de-potassio",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Nitrato de Potássio",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "K2O": 440.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "K2O": 44.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-sulfato-de-cobalto",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Sulfato de Cobalto",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 100.0,
+      "Co": 200.0
+    },
+    "nutrientsPercent": {
+      "S": 10.0,
+      "Co": 20.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-sulfato-de-cobre",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Sulfato de Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 120.0,
+      "Cu": 250.0
+    },
+    "nutrientsPercent": {
+      "S": 12.0,
+      "Cu": 25.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-sulfato-ferroso",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Sulfato Ferroso",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 180.0,
+      "Fe": 280.0
+    },
+    "nutrientsPercent": {
+      "S": 18.0,
+      "Fe": 28.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-sulfato-de-magnesio",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Sulfato de Magnésio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 95.0,
+      "S": 110.0
+    },
+    "nutrientsPercent": {
+      "Mg": 9.5,
+      "S": 11.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-sulfato-de-manganes",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Sulfato de Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 180.0,
+      "Mn": 300.0
+    },
+    "nutrientsPercent": {
+      "S": 18.0,
+      "Mn": 30.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-sais-sulfato-de-zinco",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Sais Sulfato de Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 105.0,
+      "Zn": 200.0
+    },
+    "nutrientsPercent": {
+      "S": 10.5,
+      "Zn": 20.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-aplic-lt-101",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Aplic  LT 101",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-aplic-s21",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Aplic  S21",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 118.0,
+      "P2O5": 59.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 5.0
+    },
+    "density": 1.18,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-aplic-s31",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Aplic  S31",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 36.0,
+      "P2O5": 204.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 17.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-aplic-top-spray",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Aplic Top Spray",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 110.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0
+    },
+    "density": 1.1,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-aplic-s21-aereo",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Aplic  S21 Aéreo",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "P2O5": 60.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 5.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__qualy-aplic-nflex",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Qualy Aplic  NFlex",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 241.5
+    },
+    "nutrientsPercent": {
+      "N": 21.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__speed-marine",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Speed Marine",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 43.75,
+      "C_Org": 187.5
+    },
+    "nutrientsPercent": {
+      "N": 3.5,
+      "C_Org": 15.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__speed-marine-como",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Speed Marine CoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.3,
+      "Mo": 133.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__speed-organic",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Speed Organic",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 43.75,
+      "SubsHumicas": 225.0,
+      "C_Org": 187.5
+    },
+    "nutrientsPercent": {
+      "N": 3.5,
+      "SubsHumicas": 18.0,
+      "C_Org": 15.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__comocontact-10-1-0",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "COMOContact 10/1.0",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.3,
+      "Mo": 133.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__comocontact-15-1-0",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "COMOContact 15/1.0",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 15.8,
+      "Mo": 237.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 15.0
+    },
+    "density": 1.58,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "brasilquimica__comocontact-15-1-5",
+    "brand": "BRASILQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "COMOContact 15/1.5",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-boro",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 135.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-cab",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 104.0,
+      "B": 6.5
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 0.5
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-cab-plus",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar CaB Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 105.6,
+      "B": 26.4
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-cafe",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "S": 20.0,
+      "B": 5.0,
+      "Mn": 40.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 2.0,
+      "B": 0.5,
+      "Mn": 4.0,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-calcio",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 195.5
+    },
+    "nutrientsPercent": {
+      "Ca": 17.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-citrus",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 138.0,
+      "S": 51.06,
+      "B": 6.9,
+      "Mn": 41.4,
+      "Zn": 55.2
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 3.7,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Zn": 4.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-cobre",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 70.0
+    },
+    "nutrientsPercent": {
+      "Cu": 7.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-comol-cerrado",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar CoMol Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 27.8,
+      "Mo": 139.0
+    },
+    "nutrientsPercent": {
+      "Co": 2.0,
+      "Mo": 10.0
+    },
+    "density": 1.39,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-comol-hc",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar CoMol HC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 2.6,
+      "Mo": 156.0
+    },
+    "nutrientsPercent": {
+      "Co": 0.2,
+      "Mo": 12.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-manganes",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 130.0
+    },
+    "nutrientsPercent": {
+      "Mn": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-plus",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 125.0,
+      "Mg": 1.25,
+      "S": 31.25,
+      "B": 6.25,
+      "Mn": 25.0,
+      "Zn": 37.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 0.1,
+      "S": 2.5,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Zn": 3.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-uan",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar UAN",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 364.0
+    },
+    "nutrientsPercent": {
+      "N": 28.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__basfoliar-zinco",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Basfoliar Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 84.7
+    },
+    "nutrientsPercent": {
+      "Zn": 7.0
+    },
+    "density": 1.21,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__nitrofoska-a",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nitrofoska A",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 119.0,
+      "P2O5": 47.6,
+      "K2O": 83.3,
+      "B": 0.238,
+      "Cu": 0.595,
+      "Mn": 0.238,
+      "Mo": 0.0059,
+      "Zn": 0.595
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 4.0,
+      "K2O": 7.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Mn": 0.02,
+      "Mo": 0.0005,
+      "Zn": 0.05
+    },
+    "density": 1.19,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compo__nitrofoska-cafe",
+    "brand": "COMPO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nitrofoska Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 132.0,
+      "S": 26.4,
+      "B": 6.6,
+      "Mn": 52.8,
+      "Zn": 66.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 2.0,
+      "B": 0.5,
+      "Mn": 4.0,
+      "Zn": 5.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "defensive__algaren-mc",
+    "brand": "DEFENSIVE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Algaren MC",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 3.0,
+      "Mn": 15.0,
+      "Mo": 1.5,
+      "Zn": 33.0
+    },
+    "nutrientsPercent": {
+      "B": 0.2,
+      "Mn": 1.0,
+      "Mo": 0.1,
+      "Zn": 2.2
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "defensive__calboron",
+    "brand": "DEFENSIVE",
+    "category": "Nutrição e Fisiologia",
+    "name": "CalboroN",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 300.0,
+      "B": 10.0
+    },
+    "nutrientsPercent": {
+      "Ca": 30.0,
+      "B": 1.0
+    },
+    "density": 1.0,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "defensive__foliacon-22",
+    "brand": "DEFENSIVE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Foliacon 22",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "Ca": 150.0,
+      "Mg": 75.0
+    },
+    "nutrientsPercent": {
+      "N": 8.0,
+      "Ca": 10.0,
+      "Mg": 5.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "defensive__m-10",
+    "brand": "DEFENSIVE",
+    "category": "Nutrição e Fisiologia",
+    "name": "M-10",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 210.0,
+      "K2O": 280.0,
+      "B": 1.4,
+      "Mn": 1.4,
+      "Mo": 0.14
+    },
+    "nutrientsPercent": {
+      "P2O5": 15.0,
+      "K2O": 20.0,
+      "B": 0.1,
+      "Mn": 0.1,
+      "Mo": 0.01
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-zncu",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH ZnCu",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 30.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "Cu": 3.0,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-multi-micros-fe",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH Multi Micros + Fe",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 10.0,
+      "S": 56.0,
+      "B": 40.0,
+      "Fe": 8.0,
+      "Mn": 35.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 1.0,
+      "S": 5.6,
+      "B": 4.0,
+      "Fe": 0.8,
+      "Mn": 3.5,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-cafe-s-10-cu-10-zn-7",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH Café (S 10% · Cu 10% · Zn 7%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 30.0,
+      "Mg": 35.0,
+      "S": 100.0,
+      "B": 40.0,
+      "Cu": 100.0,
+      "Zn": 70.0
+    },
+    "nutrientsPercent": {
+      "K2O": 3.0,
+      "Mg": 3.5,
+      "S": 10.0,
+      "B": 4.0,
+      "Cu": 10.0,
+      "Zn": 7.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-cafe-foliar-mn",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH Café Foliar Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 10.0,
+      "S": 99.0,
+      "B": 30.0,
+      "Cu": 100.0,
+      "Mn": 50.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 1.0,
+      "S": 9.9,
+      "B": 3.0,
+      "Cu": 10.0,
+      "Mn": 5.0,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-cafe-conilon",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH Café Conilon",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 20.0,
+      "Mg": 25.0,
+      "S": 90.0,
+      "B": 40.0,
+      "Cu": 50.0,
+      "Fe": 5.0,
+      "Mn": 40.0,
+      "Zn": 60.0
+    },
+    "nutrientsPercent": {
+      "K2O": 2.0,
+      "Mg": 2.5,
+      "S": 9.0,
+      "B": 4.0,
+      "Cu": 5.0,
+      "Fe": 0.5,
+      "Mn": 4.0,
+      "Zn": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-cafe-zn-10-s-6-1-b-6",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH Café (Zn 10% · S 6,1% · B 6%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "K2O": 30.0,
+      "Mg": 10.0,
+      "S": 61.0,
+      "B": 60.0,
+      "Mn": 25.0,
+      "Mo": 0.5,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "K2O": 3.0,
+      "Mg": 1.0,
+      "S": 6.1,
+      "B": 6.0,
+      "Mn": 2.5,
+      "Mo": 0.05,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-feijao-foliar-vegetativo",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH Feijão Foliar Vegetativo",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "P2O5": 100.0,
+      "K2O": 50.0,
+      "Mg": 20.0,
+      "S": 60.0,
+      "B": 5.0,
+      "Cu": 3.5,
+      "Mn": 30.0,
+      "Mo": 10.0,
+      "Zn": 40.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 10.0,
+      "K2O": 5.0,
+      "Mg": 2.0,
+      "S": 6.0,
+      "B": 0.5,
+      "Cu": 0.35,
+      "Mn": 3.0,
+      "Mo": 1.0,
+      "Zn": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-feijao-foliar-reprodutivo",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH Feijão Foliar Reprodutivo",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Ca": 30.0,
+      "S": 70.0,
+      "B": 10.0,
+      "Co": 2.0,
+      "Cu": 10.0,
+      "Mn": 100.0,
+      "Ni": 9.0,
+      "Zn": 20.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Ca": 3.0,
+      "S": 7.0,
+      "B": 1.0,
+      "Co": 0.2,
+      "Cu": 1.0,
+      "Mn": 10.0,
+      "Ni": 0.9,
+      "Zn": 2.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-mn-power",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH Mn Power",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 130.0
+    },
+    "nutrientsPercent": {
+      "Mn": 13.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-cab",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 190.0,
+      "B": 38.0
+    },
+    "nutrientsPercent": {
+      "Ca": 19.0,
+      "B": 3.8
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-hf-start",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH HF Start",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 110.0,
+      "P2O5": 110.0,
+      "K2O": 110.0,
+      "Mg": 12.0,
+      "S": 90.0,
+      "B": 1.5,
+      "Cu": 3.0,
+      "Fe": 1.0,
+      "Mn": 2.5,
+      "Mo": 0.4,
+      "Zn": 5.0
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "P2O5": 11.0,
+      "K2O": 11.0,
+      "Mg": 1.2,
+      "S": 9.0,
+      "B": 0.15,
+      "Cu": 0.3,
+      "Fe": 0.1,
+      "Mn": 0.25,
+      "Mo": 0.04,
+      "Zn": 0.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-hf-prod",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH HF Prod",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 40.0,
+      "P2O5": 100.0,
+      "K2O": 140.0,
+      "Ca": 15.0,
+      "Mg": 15.0,
+      "S": 40.0,
+      "B": 15.0,
+      "Cu": 5.0,
+      "Fe": 1.0,
+      "Mn": 5.0,
+      "Mo": 2.0,
+      "Zn": 40.0
+    },
+    "nutrientsPercent": {
+      "N": 4.0,
+      "P2O5": 10.0,
+      "K2O": 14.0,
+      "Ca": 1.5,
+      "Mg": 1.5,
+      "S": 4.0,
+      "B": 1.5,
+      "Cu": 0.5,
+      "Fe": 0.1,
+      "Mn": 0.5,
+      "Mo": 0.2,
+      "Zn": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "fertilizantes-heringer__fh-cana-tolete",
+    "brand": "FERTILIZANTES HERINGER",
+    "category": "Nutrição e Fisiologia",
+    "name": "FH Cana Tolete",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 10.0,
+      "P2O5": 60.0,
+      "S": 70.0,
+      "B": 30.0,
+      "Cu": 30.0,
+      "Mn": 30.0,
+      "Mo": 8.0,
+      "Zn": 90.0,
+      "SubsHumicas": 40.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "P2O5": 6.0,
+      "S": 7.0,
+      "B": 3.0,
+      "Cu": 3.0,
+      "Mn": 3.0,
+      "Mo": 0.8,
+      "Zn": 9.0,
+      "SubsHumicas": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__acquamax-flight",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Acquamax Flight",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 115.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__acquamax-full",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Acquamax Full +",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 58.5,
+      "P2O5": 175.5
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 15.0
+    },
+    "density": 1.17,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__acquamax-power-max",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Acquamax Power Max",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 35.1,
+      "P2O5": 198.9
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 17.0
+    },
+    "density": 1.17,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__acquamax-top",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Acquamax Top",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 46.8,
+      "P2O5": 187.2
+    },
+    "nutrientsPercent": {
+      "N": 4.0,
+      "P2O5": 16.0
+    },
+    "density": 1.17,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__siner-max",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Siner Max",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 36.0,
+      "P2O5": 180.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 15.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-bor",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo Bor",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 154.0
+    },
+    "nutrientsPercent": {
+      "B": 11.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-bor-solo",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo Bor Solo",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 140.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-cal",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo Cal",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 417.5
+    },
+    "nutrientsPercent": {
+      "Ca": 25.0
+    },
+    "density": 1.67,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-cobre-green",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo Cobre Green",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 507.0
+    },
+    "nutrientsPercent": {
+      "Cu": 30.0
+    },
+    "density": 1.69,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-cz",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo CZ",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 153.0,
+      "Zn": 595.0
+    },
+    "nutrientsPercent": {
+      "Cu": 9.0,
+      "Zn": 35.0
+    },
+    "density": 1.7,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-magbz",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo MAGBZ",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 235.6,
+      "B": 15.2,
+      "Zn": 98.8
+    },
+    "nutrientsPercent": {
+      "Mg": 15.5,
+      "B": 1.0,
+      "Zn": 6.5
+    },
+    "density": 1.52,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-manzic",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo ManZiC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 79.2,
+      "Mn": 320.1,
+      "Zn": 135.3
+    },
+    "nutrientsPercent": {
+      "Cu": 4.8,
+      "Mn": 19.4,
+      "Zn": 8.2
+    },
+    "density": 1.65,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-mn",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 502.2
+    },
+    "nutrientsPercent": {
+      "Mn": 27.0
+    },
+    "density": 1.86,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-mozic",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo MoZiC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 236.22,
+      "Mo": 59.52,
+      "Zn": 472.44
+    },
+    "nutrientsPercent": {
+      "Cu": 12.7,
+      "Mo": 3.2,
+      "Zn": 25.4
+    },
+    "density": 1.86,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__evo-top-zinco",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Evo Top Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 1075.0
+    },
+    "nutrientsPercent": {
+      "Zn": 50.0
+    },
+    "density": 2.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__new-organic",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "New Organic",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 300.0
+    },
+    "nutrientsPercent": {
+      "N": 25.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__cobre-mix",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cobre Mix",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 225.6,
+      "Cu": 56.4
+    },
+    "nutrientsPercent": {
+      "Ca": 16.0,
+      "Cu": 4.0
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__cobre-red",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cobre Red",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 574.6
+    },
+    "nutrientsPercent": {
+      "Cu": 34.0
+    },
+    "density": 1.69,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__fence",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fence",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 390.0,
+      "K2O": 260.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__time-rr",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Time RR",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 216.0,
+      "S": 74.304,
+      "Mn": 144.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 15.0,
+      "S": 5.16,
+      "Mn": 10.0
+    },
+    "density": 1.44,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__xanthex-200-125",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Xanthex 200/125",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 220.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0
+    },
+    "density": 1.1,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__seven",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Seven",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 184.0,
+      "P2O5": 23.0,
+      "K2O": 46.0,
+      "Mg": 0.575,
+      "S": 11.5,
+      "B": 0.23,
+      "Mo": 0.115
+    },
+    "nutrientsPercent": {
+      "N": 16.0,
+      "P2O5": 2.0,
+      "K2O": 4.0,
+      "Mg": 0.05,
+      "S": 1.0,
+      "B": 0.02,
+      "Mo": 0.01
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__spin",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Spin",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 11.7,
+      "P2O5": 23.4,
+      "K2O": 11.7,
+      "Mo": 8.775
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "P2O5": 2.0,
+      "K2O": 1.0,
+      "Mo": 0.75
+    },
+    "density": 1.17,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__ts-500-gr",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "TS 500 GR",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 42.0,
+      "Zn": 84.0
+    },
+    "nutrientsPercent": {
+      "Mo": 3.0,
+      "Zn": 6.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "giro-agro__ts-500-leg",
+    "brand": "GIRO AGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "TS 500 Leg",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.0,
+      "Mo": 130.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-garden-jardins",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Garden Jardins",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 20.0,
+      "P2O5": 50.0,
+      "K2O": 50.0
+    },
+    "nutrientsPercent": {
+      "N": 2.0,
+      "P2O5": 5.0,
+      "K2O": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-garden-plus",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Garden Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 0.7537,
+      "P2O5": 0.2512,
+      "K2O": 0.3518,
+      "Mg": 0.0503,
+      "S": 0.0703,
+      "Mn": 0.1005,
+      "Zn": 0.1005
+    },
+    "nutrientsPercent": {
+      "N": 0.075,
+      "P2O5": 0.025,
+      "K2O": 0.035,
+      "Mg": 0.005,
+      "S": 0.007,
+      "Mn": 0.01,
+      "Zn": 0.01
+    },
+    "density": 1.005,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-garden-super",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Garden Super",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 198.0,
+      "P2O5": 52.8,
+      "K2O": 79.2,
+      "Mg": 19.8,
+      "S": 13.2,
+      "B": 1.32,
+      "Mn": 19.8,
+      "Mo": 0.66,
+      "Zn": 26.4
+    },
+    "nutrientsPercent": {
+      "N": 15.0,
+      "P2O5": 4.0,
+      "K2O": 6.0,
+      "Mg": 1.5,
+      "S": 1.0,
+      "B": 0.1,
+      "Mn": 1.5,
+      "Mo": 0.05,
+      "Zn": 2.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-enxofre",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Enxofre",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 728.0
+    },
+    "nutrientsPercent": {
+      "S": 52.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-enxofre-99",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Enxofre 99",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 995.0
+    },
+    "nutrientsPercent": {
+      "S": 99.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-100-fluid",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap 100 Fluid",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 78.0,
+      "Mn": 130.0
+    },
+    "nutrientsPercent": {
+      "S": 6.0,
+      "Mn": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-101-cab",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap 101 Cab",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 133.0,
+      "B": 13.3
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 1.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-102-cab",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap 102 Cab",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 135.0,
+      "B": 27.0
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 2.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-147-fluid",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap 147 Fluid",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 196.0,
+      "B": 9.8
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0,
+      "B": 0.7
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-cafe",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "S": 32.5,
+      "B": 13.0,
+      "Mo": 0.65,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 2.5,
+      "B": 1.0,
+      "Mo": 0.05,
+      "Zn": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-calcio",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 200.1
+    },
+    "nutrientsPercent": {
+      "Ca": 14.5
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-cana",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Cana",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 28.0,
+      "B": 11.9,
+      "Cu": 11.9,
+      "Mn": 42.0,
+      "Mo": 9.8,
+      "Zn": 140.0
+    },
+    "nutrientsPercent": {
+      "S": 2.0,
+      "B": 0.85,
+      "Cu": 0.85,
+      "Mn": 3.0,
+      "Mo": 0.7,
+      "Zn": 10.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-como-11",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap CoMo 11",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 23.46,
+      "Mo": 110.4
+    },
+    "nutrientsPercent": {
+      "Co": 1.7,
+      "Mo": 8.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-como-raiz",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap CoMo Raiz",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 12.0,
+      "Mo": 84.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 7.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-frutas",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Frutas",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 29.25,
+      "B": 5.85,
+      "Cu": 5.85,
+      "Fe": 5.85,
+      "Mn": 5.85,
+      "Mo": 0.234,
+      "Zn": 35.1
+    },
+    "nutrientsPercent": {
+      "S": 2.5,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Fe": 0.5,
+      "Mn": 0.5,
+      "Mo": 0.02,
+      "Zn": 3.0
+    },
+    "density": 1.17,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-mont-16",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Mont 16",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 56.0,
+      "B": 14.0,
+      "Cu": 21.0,
+      "Mn": 42.0,
+      "Mo": 14.0,
+      "Zn": 84.0
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "B": 1.0,
+      "Cu": 1.5,
+      "Mn": 3.0,
+      "Mo": 1.0,
+      "Zn": 6.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-mont-ng",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Mont NG",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 42.56,
+      "P2O5": 91.2,
+      "S": 91.2,
+      "B": 10.64,
+      "Cu": 30.4,
+      "Mn": 91.2,
+      "Mo": 10.64,
+      "Zn": 60.8
+    },
+    "nutrientsPercent": {
+      "N": 2.8,
+      "P2O5": 6.0,
+      "S": 6.0,
+      "B": 0.7,
+      "Cu": 2.0,
+      "Mn": 6.0,
+      "Mo": 0.7,
+      "Zn": 4.0
+    },
+    "density": 1.52,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-phil-40-20-fosfito",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Phil 40/20 - fosfito",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 576.0,
+      "K2O": 288.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 40.0,
+      "K2O": 20.0
+    },
+    "density": 1.44,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-phil-mn-fosfito",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Phil Mn - Fosfito",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 432.0,
+      "Mn": 86.4
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "Mn": 6.0
+    },
+    "density": 1.44,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-amyno-mix",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Amyno MIX",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "S": 23.4,
+      "B": 11.7,
+      "Cu": 9.1,
+      "Fe": 10.4,
+      "Mn": 13.0,
+      "Zn": 9.1
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 1.8,
+      "B": 0.9,
+      "Cu": 0.7,
+      "Fe": 0.8,
+      "Mn": 1.0,
+      "Zn": 0.7
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-amyno-n",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Amyno N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 195.0
+    },
+    "nutrientsPercent": {
+      "N": 15.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-amyno-n11",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Amyno N11",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 132.0,
+      "S": 18.0,
+      "B": 6.0,
+      "Cu": 3.6,
+      "Mn": 18.0,
+      "Zn": 8.4
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "S": 1.5,
+      "B": 0.5,
+      "Cu": 0.3,
+      "Mn": 1.5,
+      "Zn": 0.7
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-organo-n",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Organo N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "B": 2.4,
+      "Co": 0.24,
+      "Cu": 0.6,
+      "Fe": 12.0,
+      "Mn": 0.6,
+      "Mo": 2.4,
+      "Zn": 1.2
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "B": 0.2,
+      "Co": 0.02,
+      "Cu": 0.05,
+      "Fe": 1.0,
+      "Mn": 0.05,
+      "Mo": 0.2,
+      "Zn": 0.1
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-moco",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap Moco",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 10.0,
+      "Co": 20.0,
+      "Mo": 250.0
+    },
+    "nutrientsPercent": {
+      "S": 1.0,
+      "Co": 2.0,
+      "Mo": 25.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-rf-44",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap RF 44",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 40.0,
+      "Mo": 100.0,
+      "Zn": 300.0
+    },
+    "nutrientsPercent": {
+      "B": 4.0,
+      "Mo": 10.0,
+      "Zn": 30.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "agrocete__grap-rf-48",
+    "brand": "AGROCETE",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grap RF 48",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 15.0,
+      "Co": 10.0,
+      "Mo": 100.0,
+      "Zn": 210.0
+    },
+    "nutrientsPercent": {
+      "B": 1.5,
+      "Co": 1.0,
+      "Mo": 10.0,
+      "Zn": 21.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-axcell",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster Axcell",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 53.2,
+      "B": 6.65,
+      "Co": 6.65,
+      "Mn": 39.9,
+      "Zn": 66.5
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "B": 0.5,
+      "Co": 0.5,
+      "Mn": 3.0,
+      "Zn": 5.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-b",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster B",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 130.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-ca",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster Ca",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 102.75,
+      "Ca": 137.0
+    },
+    "nutrientsPercent": {
+      "N": 7.5,
+      "Ca": 10.0
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-cab",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 92.4,
+      "Ca": 118.8,
+      "B": 6.6
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "Ca": 9.0,
+      "B": 0.5
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-cab-ii",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster CaB II",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 81.6,
+      "Ca": 108.8,
+      "B": 27.2
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-ca-qz",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster Ca QZ",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 67.8
+    },
+    "nutrientsPercent": {
+      "Ca": 6.0
+    },
+    "density": 1.13,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-mg",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 89.6,
+      "Mg": 76.8
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "Mg": 6.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-mn",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 98.7,
+      "Mn": 197.4
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "Mn": 14.0
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-mo",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster Mo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 96.0
+    },
+    "nutrientsPercent": {
+      "Mo": 8.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-05-30-00-mg",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster 05-30-00 + Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 70.5,
+      "P2O5": 423.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 30.0
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-zn",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 65.5,
+      "Zn": 157.2
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Zn": 12.0
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-10-10-10",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster 10-10-10",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 125.0,
+      "P2O5": 125.0,
+      "K2O": 125.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 10.0,
+      "K2O": 10.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-00-20-20",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster 00-20-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 244.0,
+      "K2O": 244.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "K2O": 20.0
+    },
+    "density": 1.22,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "intercuf__growmaster-00-30-20",
+    "brand": "INTERCUF",
+    "category": "Nutrição e Fisiologia",
+    "name": "Growmaster 00-30-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 405.0,
+      "K2O": 270.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-amino",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Amino",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 69.0,
+      "P2O5": 110.4,
+      "K2O": 110.4,
+      "Mg": 6.9,
+      "B": 4.14,
+      "Cu": 2.76,
+      "Fe": 1.38,
+      "Mn": 9.66,
+      "Mo": 1.38,
+      "Zn": 13.8,
+      "AminoAcidos": 345.0,
+      "C_Org": 82.8
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 8.0,
+      "K2O": 8.0,
+      "Mg": 0.5,
+      "B": 0.3,
+      "Cu": 0.2,
+      "Fe": 0.1,
+      "Mn": 0.7,
+      "Mo": 0.1,
+      "Zn": 1.0,
+      "AminoAcidos": 25.0,
+      "C_Org": 6.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-ative",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Ative",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 116.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0
+    },
+    "density": 1.16,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-force",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Force",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 3.84,
+      "Cu": 6.4,
+      "Mn": 38.4,
+      "Mo": 1.28,
+      "Zn": 76.8,
+      "AminoAcidos": 211.2
+    },
+    "nutrientsPercent": {
+      "B": 0.3,
+      "Cu": 0.5,
+      "Mn": 3.0,
+      "Mo": 0.1,
+      "Zn": 6.0,
+      "AminoAcidos": 16.5
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-top",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Top",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 138.0,
+      "B": 27.6,
+      "AminoAcidos": 20.7
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 2.0,
+      "AminoAcidos": 1.5
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-k-mais",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion K Mais",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 542.5
+    },
+    "nutrientsPercent": {
+      "K2O": 35.0
+    },
+    "density": 1.55,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-max",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Max",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 3.81,
+      "Cu": 6.35,
+      "Mn": 76.2,
+      "Mo": 1.27,
+      "Zn": 38.1,
+      "AminoAcidos": 254.0
+    },
+    "nutrientsPercent": {
+      "B": 0.3,
+      "Cu": 0.5,
+      "Mn": 6.0,
+      "Mo": 0.1,
+      "Zn": 3.0,
+      "AminoAcidos": 20.0
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-mn-11",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Mn 11%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 141.9,
+      "AminoAcidos": 335.4
+    },
+    "nutrientsPercent": {
+      "Mn": 11.0,
+      "AminoAcidos": 26.0
+    },
+    "density": 1.29,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-nitrom",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Nitrom",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 266.0,
+      "Ca": 11.97,
+      "Mg": 11.97,
+      "B": 3.99,
+      "Cu": 1.33,
+      "Mn": 7.98,
+      "Mo": 0.665,
+      "Zn": 15.96,
+      "AminoAcidos": 15.96
+    },
+    "nutrientsPercent": {
+      "N": 20.0,
+      "Ca": 0.9,
+      "Mg": 0.9,
+      "B": 0.3,
+      "Cu": 0.1,
+      "Mn": 0.6,
+      "Mo": 0.05,
+      "Zn": 1.2,
+      "AminoAcidos": 1.2
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-peg",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Peg",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 102.4,
+      "Mg": 25.6,
+      "B": 6.4,
+      "Mo": 1.28,
+      "AminoAcidos": 192.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "Mg": 2.0,
+      "B": 0.5,
+      "Mo": 0.1,
+      "AminoAcidos": 15.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-potencer",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Potencer",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 10.6,
+      "Mg": 5.3,
+      "AminoAcidos": 106.0
+    },
+    "nutrientsPercent": {
+      "Ca": 1.0,
+      "Mg": 0.5,
+      "AminoAcidos": 10.0
+    },
+    "density": 1.06,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-vida",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Vida",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 47.52,
+      "B": 13.2,
+      "Zn": 19.8,
+      "AminoAcidos": 39.6,
+      "SubsHumicas": 316.8
+    },
+    "nutrientsPercent": {
+      "Mg": 3.6,
+      "B": 1.0,
+      "Zn": 1.5,
+      "AminoAcidos": 3.0,
+      "SubsHumicas": 24.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-semental",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Semental",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 1.53,
+      "Zn": 459.0,
+      "AminoAcidos": 229.5
+    },
+    "nutrientsPercent": {
+      "Mo": 0.1,
+      "Zn": 30.0,
+      "AminoAcidos": 15.0
+    },
+    "density": 1.53,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-total",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion Total",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 1.12,
+      "Zn": 54.88,
+      "AminoAcidos": 246.4
+    },
+    "nutrientsPercent": {
+      "Mo": 0.1,
+      "Zn": 4.9,
+      "AminoAcidos": 22.0
+    },
+    "density": 1.12,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__exion-d-a",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Exion D.A.",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 7.56,
+      "Mo": 75.6,
+      "AminoAcidos": 163.8
+    },
+    "nutrientsPercent": {
+      "Co": 0.6,
+      "Mo": 6.0,
+      "AminoAcidos": 13.0
+    },
+    "density": 1.26,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-05-30-00",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril 05-30-00",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 69.0,
+      "P2O5": 414.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 30.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-boro",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Boro +",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 128.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-calcio-14",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Cálcio 14%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 184.8
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-magnesio-8-5",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Magnésio 8,5%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 112.2
+    },
+    "nutrientsPercent": {
+      "Mg": 8.5
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-manganes-14",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Manganês 14%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 190.4
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-manganes-rr",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Manganês RR",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 140.8
+    },
+    "nutrientsPercent": {
+      "Mn": 11.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-molibidenio-270",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Molibidênio 270",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 268.95
+    },
+    "nutrientsPercent": {
+      "Mo": 16.3
+    },
+    "density": 1.65,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-zinco-21",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Zinco 21%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 315.0
+    },
+    "nutrientsPercent": {
+      "Zn": 21.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-cab-10",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril CaB 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 136.0,
+      "B": 27.2
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 2.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-cab-s",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril CaB S",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 128.0,
+      "B": 6.4
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 0.5
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-citrus",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 126.0,
+      "Mg": 6.3,
+      "B": 6.3,
+      "Mn": 25.2,
+      "Zn": 50.4
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 0.5,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Zn": 4.0
+    },
+    "density": 1.26,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-comol-10",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Comol 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 14.0,
+      "Mo": 140.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-flower-2",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Flower 2",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 99.2,
+      "Mg": 24.8,
+      "Mo": 0.124
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "Mg": 2.0,
+      "Mo": 0.01
+    },
+    "density": 1.24,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-k-bor",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril K-Bor",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 312.0,
+      "Ca": 18.2,
+      "B": 33.8
+    },
+    "nutrientsPercent": {
+      "K2O": 24.0,
+      "Ca": 1.4,
+      "B": 2.6
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-microcan",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Microcan",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 4.288,
+      "Cu": 7.504,
+      "Mn": 14.338,
+      "Mo": 2.01,
+      "Zn": 118.188,
+      "AminoAcidos": 147.4
+    },
+    "nutrientsPercent": {
+      "B": 0.32,
+      "Cu": 0.56,
+      "Mn": 1.07,
+      "Mo": 0.15,
+      "Zn": 8.82,
+      "AminoAcidos": 11.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-micromax",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Micromax",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 131.0,
+      "B": 3.93,
+      "Mn": 39.3,
+      "Mo": 0.131,
+      "Zn": 78.6
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 0.3,
+      "Mn": 3.0,
+      "Mo": 0.01,
+      "Zn": 6.0
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-oligo",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Óligo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 67.5,
+      "Cu": 3.645,
+      "Mn": 22.95,
+      "Zn": 78.3
+    },
+    "nutrientsPercent": {
+      "Mg": 5.0,
+      "Cu": 0.27,
+      "Mn": 1.7,
+      "Zn": 5.8
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-organo-mineral",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Organo Mineral",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 69.0,
+      "P2O5": 110.4,
+      "K2O": 110.4,
+      "Mg": 6.9,
+      "B": 4.14,
+      "Cu": 2.76,
+      "Fe": 1.38,
+      "Mn": 9.66,
+      "Mo": 1.38,
+      "Zn": 13.8,
+      "AminoAcidos": 276.0,
+      "C_Org": 82.8
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 8.0,
+      "K2O": 8.0,
+      "Mg": 0.5,
+      "B": 0.3,
+      "Cu": 0.2,
+      "Fe": 0.1,
+      "Mn": 0.7,
+      "Mo": 0.1,
+      "Zn": 1.0,
+      "AminoAcidos": 20.0,
+      "C_Org": 6.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-supremo",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Supremo",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 3.87,
+      "Mn": 103.2,
+      "Mo": 0.903,
+      "Zn": 38.7
+    },
+    "nutrientsPercent": {
+      "B": 0.3,
+      "Mn": 8.0,
+      "Mo": 0.07,
+      "Zn": 3.0
+    },
+    "density": 1.29,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-vigor-mix",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Vigor Mix",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 282.0,
+      "Mn": 56.4,
+      "Zn": 112.8
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "Mn": 4.0,
+      "Zn": 8.0
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-vigor-da-00-30-20",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Vigor DA 00-30-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 408.0,
+      "K2O": 272.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-vigor-bf",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Vigor BF",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 417.0,
+      "K2O": 278.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.39,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "kimberlit__nutril-vigor-borado",
+    "brand": "KIMBERLIT",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutril Vigor Borado",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 435.0,
+      "K2O": 290.0,
+      "B": 29.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0,
+      "B": 2.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microfol__ni",
+    "brand": "MICROFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "NI",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 69.5,
+      "P2O5": 111.2,
+      "K2O": 111.2,
+      "Ca": 6.95,
+      "Mg": 6.95,
+      "B": 4.17,
+      "Cu": 2.78,
+      "Fe": 1.39,
+      "Mn": 9.73,
+      "Mo": 1.39,
+      "Zn": 13.9,
+      "C_Org": 83.4
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 8.0,
+      "K2O": 8.0,
+      "Ca": 0.5,
+      "Mg": 0.5,
+      "B": 0.3,
+      "Cu": 0.2,
+      "Fe": 0.1,
+      "Mn": 0.7,
+      "Mo": 0.1,
+      "Zn": 1.0,
+      "C_Org": 6.0
+    },
+    "density": 1.39,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microfol__star-one",
+    "brand": "MICROFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "STAR ONE",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 3.84,
+      "Cu": 7.68,
+      "Mn": 38.4,
+      "Mo": 0.896,
+      "Zn": 76.8
+    },
+    "nutrientsPercent": {
+      "B": 0.3,
+      "Cu": 0.6,
+      "Mn": 3.0,
+      "Mo": 0.07,
+      "Zn": 6.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microfol__star-top",
+    "brand": "MICROFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "STAR TOP",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 3.99,
+      "Cu": 7.98,
+      "Mn": 39.9,
+      "Mo": 13.3,
+      "Zn": 79.8
+    },
+    "nutrientsPercent": {
+      "B": 0.3,
+      "Cu": 0.6,
+      "Mn": 3.0,
+      "Mo": 1.0,
+      "Zn": 6.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microfol__star-plus",
+    "brand": "MICROFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "STAR PLUS",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 4.05,
+      "Cu": 8.1,
+      "Mn": 81.0,
+      "Mo": 0.945,
+      "Zn": 40.5
+    },
+    "nutrientsPercent": {
+      "B": 0.3,
+      "Cu": 0.6,
+      "Mn": 6.0,
+      "Mo": 0.07,
+      "Zn": 3.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microfol__star-grow",
+    "brand": "MICROFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "STAR GROW",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 3.99,
+      "Cu": 7.98,
+      "Mn": 79.8,
+      "Mo": 13.3,
+      "Zn": 39.9
+    },
+    "nutrientsPercent": {
+      "B": 0.3,
+      "Cu": 0.6,
+      "Mn": 6.0,
+      "Mo": 1.0,
+      "Zn": 3.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microfol__mf-karga",
+    "brand": "MICROFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "MF KARGA",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 510.0
+    },
+    "nutrientsPercent": {
+      "K2O": 34.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__cuprus",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cuprus",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 148.73
+    },
+    "nutrientsPercent": {
+      "Cu": 10.7
+    },
+    "density": 1.39,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__ager-boro",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ager Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 130.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__ager-calcio",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ager Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 193.2
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__ager-cobre",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ager Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 203.0
+    },
+    "nutrientsPercent": {
+      "Cu": 14.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__ager-ferro",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ager Ferro",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 110.4
+    },
+    "nutrientsPercent": {
+      "Fe": 8.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__ager-magnesio",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ager Magnésio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 96.0
+    },
+    "nutrientsPercent": {
+      "Mg": 7.5
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__ager-manganes",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ager Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 198.8
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": 1.42,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__ager-molibdenio",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ager Molibdênio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 100.0
+    },
+    "nutrientsPercent": {
+      "Mo": 8.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__ager-zinco",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ager Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 315.0
+    },
+    "nutrientsPercent": {
+      "Zn": 21.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__grex-citrus",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grex Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "Mg": 26.0,
+      "B": 5.2,
+      "Mn": 26.0,
+      "Zn": 52.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 2.0,
+      "B": 0.4,
+      "Mn": 2.0,
+      "Zn": 4.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__grex-citrus-mo",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grex Citrus + Mo",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "Mg": 13.0,
+      "B": 6.5,
+      "Mn": 26.0,
+      "Mo": 1.3,
+      "Zn": 39.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 1.0,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Mo": 0.1,
+      "Zn": 3.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__grex-pera-rio",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grex Pera Rio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 58.48,
+      "Mg": 19.04,
+      "Mn": 39.44,
+      "Zn": 95.2
+    },
+    "nutrientsPercent": {
+      "Ca": 4.3,
+      "Mg": 1.4,
+      "Mn": 2.9,
+      "Zn": 7.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__biocrop-arroz-sequeiro",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Biocrop Arroz sequeiro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 20.0,
+      "Zn": 500.0
+    },
+    "nutrientsPercent": {
+      "B": 2.0,
+      "Zn": 50.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__biocrop-feijao",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Biocrop Feijão",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 20.0,
+      "Co": 5.0,
+      "Mo": 90.0,
+      "Zn": 380.0
+    },
+    "nutrientsPercent": {
+      "B": 2.0,
+      "Co": 0.5,
+      "Mo": 9.0,
+      "Zn": 38.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__biocrop-fluid",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Biocrop Fluid",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 14.0,
+      "Mo": 140.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.4,
+      "Mo": 14.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__biocrop-milho",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Biocrop Milho",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 25.0,
+      "Zn": 400.0
+    },
+    "nutrientsPercent": {
+      "B": 2.5,
+      "Zn": 40.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__biocrop-soja",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Biocrop Soja",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 20.0,
+      "Co": 10.0,
+      "Mo": 120.0,
+      "Zn": 350.0
+    },
+    "nutrientsPercent": {
+      "B": 2.0,
+      "Co": 1.0,
+      "Mo": 12.0,
+      "Zn": 35.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__biocrop-soja-cerrado",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Biocrop Soja cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 20.0,
+      "Co": 10.0,
+      "Cu": 20.0,
+      "Mn": 200.0,
+      "Mo": 120.0,
+      "Zn": 150.0
+    },
+    "nutrientsPercent": {
+      "B": 2.0,
+      "Co": 1.0,
+      "Cu": 2.0,
+      "Mn": 20.0,
+      "Mo": 12.0,
+      "Zn": 15.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__grex-cab-ii",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grex CaB II",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 110.4,
+      "B": 20.7
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 1.5
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__grex-cafe",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Grex Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 136.0,
+      "Mg": 40.8,
+      "B": 5.44,
+      "Zn": 95.2
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 3.0,
+      "B": 0.4,
+      "Zn": 7.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__molybdate-250",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Molybdate 250",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 251.1
+    },
+    "nutrientsPercent": {
+      "Mo": 15.5
+    },
+    "density": 1.62,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "microquimica__nectar",
+    "brand": "MICROQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nectar",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 25.16,
+      "Mo": 249.9
+    },
+    "nutrientsPercent": {
+      "Co": 1.48,
+      "Mo": 14.7
+    },
+    "density": 1.7,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__adjust-k",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Adjust K",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 13.5,
+      "Zn": 27.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "Zn": 2.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__all-crops-ii-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "All Crops II N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.5,
+      "B": 6.75,
+      "Cu": 6.75,
+      "Mn": 81.0,
+      "Zn": 40.5
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 6.0,
+      "Zn": 3.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__blend-coffee-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Blend Coffee N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 12.8,
+      "S": 34.432,
+      "B": 6.4,
+      "Cu": 6.4,
+      "Mn": 51.2,
+      "Zn": 76.8
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "S": 2.69,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 4.0,
+      "Zn": 6.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__blend-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Blend N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 12.2,
+      "B": 6.1,
+      "Cu": 6.1,
+      "Mn": 36.6,
+      "Zn": 73.2
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 3.0,
+      "Zn": 6.0
+    },
+    "density": 1.22,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__boromag-k",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "BoroMag K",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 10.0,
+      "Mg": 80.0,
+      "S": 100.0,
+      "B": 80.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "Mg": 8.0,
+      "S": 10.0,
+      "B": 8.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "S": 120.0,
+      "B": 15.0,
+      "Cu": 15.0,
+      "Mn": 140.0,
+      "Zn": 45.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "S": 12.0,
+      "B": 1.5,
+      "Cu": 1.5,
+      "Mn": 14.0,
+      "Zn": 4.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-cab",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 10.0,
+      "Ca": 200.0,
+      "B": 40.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Ca": 20.0,
+      "B": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-cafe",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 25.0,
+      "S": 99.0,
+      "B": 45.0,
+      "Mn": 35.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 2.5,
+      "S": 9.9,
+      "B": 4.5,
+      "Mn": 3.5,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-cafe-mn",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold Café Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 50.0,
+      "S": 100.0,
+      "B": 50.0,
+      "Mn": 100.0,
+      "Zn": 105.0
+    },
+    "nutrientsPercent": {
+      "K2O": 5.0,
+      "S": 10.0,
+      "B": 5.0,
+      "Mn": 10.0,
+      "Zn": 10.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-cafe-zn",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold Café Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 25.0,
+      "S": 90.7,
+      "B": 50.0,
+      "Mn": 25.0,
+      "Mo": 14.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 2.5,
+      "S": 9.07,
+      "B": 5.0,
+      "Mn": 2.5,
+      "Mo": 1.4,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-cana-total",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold Cana Total",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 10.0,
+      "S": 114.3,
+      "B": 43.0,
+      "Cu": 43.0,
+      "Mn": 85.0,
+      "Mo": 10.0,
+      "Zn": 105.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "S": 11.43,
+      "B": 4.3,
+      "Cu": 4.3,
+      "Mn": 8.5,
+      "Mo": 1.0,
+      "Zn": 10.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-cana-zinco",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold Cana Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 10.0,
+      "S": 77.7,
+      "B": 75.0,
+      "Mo": 18.0,
+      "Zn": 170.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "S": 7.77,
+      "B": 7.5,
+      "Mo": 1.8,
+      "Zn": 17.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-citros",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold Citros",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 10.0,
+      "Mg": 22.0,
+      "S": 146.35,
+      "B": 17.0,
+      "Mn": 120.0,
+      "Zn": 120.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "Mg": 2.2,
+      "S": 14.635,
+      "B": 1.7,
+      "Mn": 12.0,
+      "Zn": 12.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-citros-master",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold Citros Master",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "K2O": 100.0,
+      "Mg": 25.0,
+      "S": 99.35,
+      "B": 16.0,
+      "Mn": 70.0,
+      "Mo": 0.6,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "K2O": 10.0,
+      "Mg": 2.5,
+      "S": 9.935,
+      "B": 1.6,
+      "Mn": 7.0,
+      "Mo": 0.06,
+      "Zn": 6.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-citros-mix",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold Citros Mix",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 10.0,
+      "S": 158.5,
+      "Mn": 164.0,
+      "Mo": 1.0,
+      "Zn": 150.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "S": 15.85,
+      "Mn": 16.4,
+      "Mo": 0.1,
+      "Zn": 15.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-mol",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold MoL",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 110.0,
+      "S": 120.3,
+      "B": 15.0,
+      "Cu": 15.0,
+      "Mn": 150.0,
+      "Mo": 10.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "K2O": 11.0,
+      "S": 12.03,
+      "B": 1.5,
+      "Cu": 1.5,
+      "Mn": 15.0,
+      "Mo": 1.0,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__gold-zinco",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Gold Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 43.7,
+      "S": 128.7,
+      "B": 20.0,
+      "Mn": 50.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 4.37,
+      "S": 12.87,
+      "B": 2.0,
+      "Mn": 5.0,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multi-mkp",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Multi MKP",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 510.0,
+      "K2O": 330.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 51.0,
+      "K2O": 33.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multi-turbo",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Multi Turbo",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 59.5,
+      "Zn": 101.15
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Zn": 8.5
+    },
+    "density": 1.19,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multialgas-mo",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiAlgas Mo",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 91.0,
+      "Mo": 0.065
+    },
+    "nutrientsPercent": {
+      "K2O": 7.0,
+      "Mo": 0.005
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multibiocomo",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultibioCoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 43.12,
+      "Co": 7.7,
+      "Mo": 77.0
+    },
+    "nutrientsPercent": {
+      "K2O": 2.8,
+      "Co": 0.5,
+      "Mo": 5.0
+    },
+    "density": 1.54,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multibiocomoni",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultibioCoMoNi",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 28.6,
+      "Co": 7.15,
+      "Mo": 71.5,
+      "Ni": 7.15
+    },
+    "nutrientsPercent": {
+      "P2O5": 2.0,
+      "Co": 0.5,
+      "Mo": 5.0,
+      "Ni": 0.5
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multiboro-10-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiBoro 10 N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.6,
+      "B": 136.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "B": 10.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multicalcio-14-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiCálcio 14 N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.1,
+      "Ca": 183.4
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Ca": 14.0
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multicana",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiCana",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 12.0,
+      "S": 13.32,
+      "B": 10.2,
+      "Cu": 10.2,
+      "Mn": 12.6,
+      "Mo": 4.2,
+      "Zn": 45.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "S": 1.11,
+      "B": 0.85,
+      "Cu": 0.85,
+      "Mn": 1.05,
+      "Mo": 0.35,
+      "Zn": 3.75
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multicitros-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiCitros N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 122.0,
+      "B": 6.1,
+      "Mn": 36.6,
+      "Mo": 1.22,
+      "Zn": 48.8
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Mo": 0.1,
+      "Zn": 4.0
+    },
+    "density": 1.22,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multicobre-8-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiCobre 8 N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 12.6,
+      "S": 46.242,
+      "Cu": 100.8
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "S": 3.67,
+      "Cu": 8.0
+    },
+    "density": 1.26,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multicobre-ql",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiCobre QL",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.0,
+      "Cu": 84.5
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Cu": 6.5
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multicomo-ni-p",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiCoMo Ni P",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 28.6,
+      "Co": 14.3,
+      "Mo": 143.0,
+      "Ni": 14.3
+    },
+    "nutrientsPercent": {
+      "P2O5": 2.0,
+      "Co": 1.0,
+      "Mo": 10.0,
+      "Ni": 1.0
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multicomo-p",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiCoMo P",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 29.3,
+      "Co": 17.58,
+      "Mo": 175.8
+    },
+    "nutrientsPercent": {
+      "P2O5": 2.0,
+      "Co": 1.2,
+      "Mo": 12.0
+    },
+    "density": 1.465,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multicomo-lc-p",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiCoMo LC P",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 26.6,
+      "Co": 13.3,
+      "Mo": 133.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 2.0,
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multi-ferro-7",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Multi Ferro 7",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 12.5,
+      "S": 45.0,
+      "Fe": 87.5
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "S": 3.6,
+      "Fe": 7.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multifito-28",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiFito 28",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 406.0,
+      "K2O": 377.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 28.0,
+      "K2O": 26.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multifito-30",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiFito 30",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 420.0,
+      "K2O": 280.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multifito-cobre",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiFito Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 240.0,
+      "Cu": 54.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "Cu": 4.5
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multifito-mg",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiFito Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 378.0,
+      "Mg": 40.5,
+      "S": 49.95
+    },
+    "nutrientsPercent": {
+      "P2O5": 28.0,
+      "Mg": 3.0,
+      "S": 3.7
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multifito-mn",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiFito Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 435.0,
+      "Mn": 130.5
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "Mn": 9.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multifito-floresta",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiFito Floresta",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 10.0,
+      "Mg": 40.0,
+      "S": 61.94,
+      "B": 80.0,
+      "Cu": 20.0,
+      "Mo": 5.0,
+      "Zn": 20.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "Mg": 4.0,
+      "S": 6.194,
+      "B": 8.0,
+      "Cu": 2.0,
+      "Mo": 0.5,
+      "Zn": 2.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multifloresta-plus",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiFloresta Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 10.0,
+      "S": 133.56,
+      "Cu": 37.0,
+      "Fe": 112.0,
+      "Mn": 75.0,
+      "Zn": 18.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.0,
+      "S": 13.356,
+      "Cu": 3.7,
+      "Fe": 11.2,
+      "Mn": 7.5,
+      "Zn": 1.8
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multimacro-20-10-25",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiMacro 20-10-25",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 200.0,
+      "P2O5": 100.0,
+      "K2O": 250.0
+    },
+    "nutrientsPercent": {
+      "N": 20.0,
+      "P2O5": 10.0,
+      "K2O": 25.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multimacro-20-20-20",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiMacro 20-20-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 200.0,
+      "P2O5": 200.0,
+      "K2O": 200.0
+    },
+    "nutrientsPercent": {
+      "N": 20.0,
+      "P2O5": 20.0,
+      "K2O": 20.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multimacro-30-15-10",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiMacro 30-15-10",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 300.0,
+      "P2O5": 150.0,
+      "K2O": 100.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0,
+      "P2O5": 15.0,
+      "K2O": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multimag-8-5-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiMag 8,5 N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.2,
+      "Mg": 112.2
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Mg": 8.5
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multiman-10",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiMan 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 65.5,
+      "Mn": 131.0
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "Mn": 10.0
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multiman-14-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiMan 14 N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 13.8,
+      "Mn": 193.2
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Mn": 14.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multimol-15-p",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiMol 15 P",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 26.8,
+      "Mo": 201.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 2.0,
+      "Mo": 15.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multin-cab",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiN CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 14.88,
+      "Ca": 148.8,
+      "B": 29.76
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Ca": 10.0,
+      "B": 2.0
+    },
+    "density": 1.488,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-30",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro 30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 384.0,
+      "S": 38.4
+    },
+    "nutrientsPercent": {
+      "N": 30.0,
+      "S": 3.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-ca-mg",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro Ca Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 192.5,
+      "Ca": 42.0,
+      "Mg": 24.5
+    },
+    "nutrientsPercent": {
+      "N": 13.75,
+      "Ca": 3.0,
+      "Mg": 1.75
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-cab",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.5,
+      "Ca": 152.25,
+      "B": 2.9
+    },
+    "nutrientsPercent": {
+      "N": 9.0,
+      "Ca": 10.5,
+      "B": 0.2
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-calcio-12",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro Cálcio 12",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "Ca": 180.0
+    },
+    "nutrientsPercent": {
+      "N": 8.0,
+      "Ca": 12.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-calcio-6",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro Cálcio 6",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 191.8,
+      "Ca": 82.2
+    },
+    "nutrientsPercent": {
+      "N": 14.0,
+      "Ca": 6.0
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-k",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro K",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "K2O": 440.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "K2O": 44.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-mag-7",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro Mag 7",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 94.5,
+      "Mg": 94.5
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "Mg": 7.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-man-12",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro Man 12",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 84.0,
+      "Mn": 168.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "Mn": 12.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-mix-i",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro Mix I",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 75.647,
+      "Mn": 71.5,
+      "Mo": 0.715,
+      "Zn": 114.4
+    },
+    "nutrientsPercent": {
+      "N": 5.29,
+      "Mn": 5.0,
+      "Mo": 0.05,
+      "Zn": 8.0
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-mix-ii",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro Mix II",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 80.898,
+      "Mg": 37.113,
+      "Mn": 43.09,
+      "Mo": 0.417,
+      "Zn": 64.774
+    },
+    "nutrientsPercent": {
+      "N": 5.82,
+      "Mg": 2.67,
+      "Mn": 3.1,
+      "Mo": 0.03,
+      "Zn": 4.66
+    },
+    "density": 1.39,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-mix-iii",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro Mix III",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 76.728,
+      "Mg": 28.98,
+      "B": 0.552,
+      "Mn": 71.346,
+      "Mo": 0.552,
+      "Zn": 44.85
+    },
+    "nutrientsPercent": {
+      "N": 5.56,
+      "Mg": 2.1,
+      "B": 0.04,
+      "Mn": 5.17,
+      "Mo": 0.04,
+      "Zn": 3.25
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitro-zinco-15",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitro Zinco 15",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 105.0,
+      "Zn": 225.0
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "Zn": 15.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multinitropotassio",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiNitropotássio",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "K2O": 440.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "K2O": 44.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multip-30",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiP 30",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 390.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multip-52",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiP 52",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 847.6
+    },
+    "nutrientsPercent": {
+      "P2O5": 52.0
+    },
+    "density": 1.63,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multipotassio",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiPotássio",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 47.4,
+      "K2O": 553.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 3.0,
+      "K2O": 35.0
+    },
+    "density": 1.58,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multizinco-10-n",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiZinco 10 N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 14.0,
+      "S": 63.0,
+      "Zn": 140.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "S": 4.5,
+      "Zn": 10.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__multizinco-21-p",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "MultiZinco 21 P",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 30.0,
+      "Zn": 315.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 2.0,
+      "Zn": 21.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__new-max",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "New Max",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 140.0,
+      "P2O5": 112.0,
+      "K2O": 84.0,
+      "B": 4.2,
+      "Cu": 4.2,
+      "Mn": 14.0,
+      "Mo": 1.4,
+      "Zn": 14.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 8.0,
+      "K2O": 6.0,
+      "B": 0.3,
+      "Cu": 0.3,
+      "Mn": 1.0,
+      "Mo": 0.1,
+      "Zn": 1.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__promoter",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Promoter",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 11.1,
+      "P2O5": 22.2,
+      "K2O": 11.1
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "P2O5": 2.0,
+      "K2O": 1.0
+    },
+    "density": 1.11,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-cerrado",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 16.0,
+      "S": 96.0,
+      "B": 51.0,
+      "Mn": 41.0,
+      "Zn": 99.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 1.6,
+      "S": 9.6,
+      "B": 5.1,
+      "Mn": 4.1,
+      "Zn": 9.9
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-cerrado-i",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerrado I",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 95.0,
+      "S": 10.1,
+      "B": 49.0,
+      "Mn": 85.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "K2O": 9.5,
+      "S": 1.01,
+      "B": 4.9,
+      "Mn": 8.5,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-cerado-ii",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerado II",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 14.0,
+      "P2O5": 79.0,
+      "K2O": 100.0,
+      "Mg": 29.0,
+      "S": 91.0,
+      "B": 36.0,
+      "Mn": 41.0,
+      "Zn": 55.0
+    },
+    "nutrientsPercent": {
+      "N": 1.4,
+      "P2O5": 7.9,
+      "K2O": 10.0,
+      "Mg": 2.9,
+      "S": 9.1,
+      "B": 3.6,
+      "Mn": 4.1,
+      "Zn": 5.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-cerrado-iii",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerrado III",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 113.0,
+      "Mg": 24.0,
+      "S": 75.0,
+      "B": 73.0,
+      "Mn": 54.0,
+      "Zn": 16.0
+    },
+    "nutrientsPercent": {
+      "K2O": 11.3,
+      "Mg": 2.4,
+      "S": 7.5,
+      "B": 7.3,
+      "Mn": 5.4,
+      "Zn": 1.6
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-cerrado-iv",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerrado IV",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 107.0,
+      "Mg": 21.0,
+      "S": 94.0,
+      "B": 53.0,
+      "Mn": 53.0,
+      "Zn": 68.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.7,
+      "Mg": 2.1,
+      "S": 9.4,
+      "B": 5.3,
+      "Mn": 5.3,
+      "Zn": 6.8
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-cerrado-v",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerrado V",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 103.0,
+      "Mg": 30.0,
+      "S": 95.0,
+      "B": 57.0,
+      "Mo": 1.0,
+      "Zn": 42.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.3,
+      "Mg": 3.0,
+      "S": 9.5,
+      "B": 5.7,
+      "Mo": 0.1,
+      "Zn": 4.2
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-cerrado-vi",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerrado VI",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 108.0,
+      "Mg": 26.0,
+      "S": 101.0,
+      "B": 42.0,
+      "Mn": 40.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.8,
+      "Mg": 2.6,
+      "S": 10.1,
+      "B": 4.2,
+      "Mn": 4.0,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-cerrado-hc",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerrado HC",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 115.0,
+      "Mg": 16.0,
+      "S": 78.0,
+      "B": 60.0,
+      "Mn": 48.0,
+      "Zn": 70.0
+    },
+    "nutrientsPercent": {
+      "K2O": 11.5,
+      "Mg": 1.6,
+      "S": 7.8,
+      "B": 6.0,
+      "Mn": 4.8,
+      "Zn": 7.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-cerrado-hc-plus",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerrado HC Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 17.0,
+      "P2O5": 90.0,
+      "K2O": 40.0,
+      "Mg": 24.0,
+      "S": 76.0,
+      "B": 60.0,
+      "Mn": 85.0
+    },
+    "nutrientsPercent": {
+      "N": 1.7,
+      "P2O5": 9.0,
+      "K2O": 4.0,
+      "Mg": 2.4,
+      "S": 7.6,
+      "B": 6.0,
+      "Mn": 8.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-correcao",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Correção",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 120.0,
+      "Mg": 10.0,
+      "S": 100.0,
+      "B": 40.0,
+      "Mn": 62.0,
+      "Zn": 99.0
+    },
+    "nutrientsPercent": {
+      "K2O": 12.0,
+      "Mg": 1.0,
+      "S": 10.0,
+      "B": 4.0,
+      "Mn": 6.2,
+      "Zn": 9.9
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-conilon-i",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Conilon I",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 15.0,
+      "S": 149.0,
+      "B": 20.0,
+      "Cu": 20.0,
+      "Fe": 85.0,
+      "Mn": 80.0,
+      "Zn": 80.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.5,
+      "S": 14.9,
+      "B": 2.0,
+      "Cu": 2.0,
+      "Fe": 8.5,
+      "Mn": 8.0,
+      "Zn": 8.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-conilon-ii",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Conilon II",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 18.0,
+      "S": 140.0,
+      "B": 20.0,
+      "Cu": 20.0,
+      "Fe": 120.0,
+      "Mn": 25.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "K2O": 1.8,
+      "S": 14.0,
+      "B": 2.0,
+      "Cu": 2.0,
+      "Fe": 12.0,
+      "Mn": 2.5,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-manutencao",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Manutenção",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 150.0,
+      "Mg": 12.0,
+      "S": 95.0,
+      "B": 38.0,
+      "Mn": 54.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "K2O": 15.0,
+      "Mg": 1.2,
+      "S": 9.5,
+      "B": 3.8,
+      "Mn": 5.4,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-das-montanhas-multisais",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café das Montanhas (MultiSais)",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 110.0,
+      "Mg": 22.0,
+      "S": 103.0,
+      "B": 40.0,
+      "Mn": 32.0,
+      "Zn": 110.0
+    },
+    "nutrientsPercent": {
+      "K2O": 11.0,
+      "Mg": 2.2,
+      "S": 10.3,
+      "B": 4.0,
+      "Mn": 3.2,
+      "Zn": 11.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cafe-manutencao-conilon",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Manutenção Conilon",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 90.0,
+      "Mg": 23.0,
+      "S": 120.0,
+      "B": 30.0,
+      "Fe": 41.0,
+      "Mn": 40.0,
+      "Zn": 91.0
+    },
+    "nutrientsPercent": {
+      "K2O": 9.0,
+      "Mg": 2.3,
+      "S": 12.0,
+      "B": 3.0,
+      "Fe": 4.1,
+      "Mn": 4.0,
+      "Zn": 9.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "multitecnica__cereais-ii",
+    "brand": "MULTITÉCNICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cereais II",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 150.0,
+      "Mg": 12.0,
+      "S": 95.0,
+      "B": 38.0,
+      "Mn": 54.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "K2O": 15.0,
+      "Mg": 1.2,
+      "S": 9.5,
+      "B": 3.8,
+      "Mn": 5.4,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__cuprogarb-500",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "CUPROGARB 500",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__docitros",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "DOCITROS",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 125.0,
+      "B": 8.75,
+      "Mn": 37.5,
+      "Mo": 1.25,
+      "Zn": 62.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 0.7,
+      "Mn": 3.0,
+      "Mo": 0.1,
+      "Zn": 5.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__docerrado-cafe",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "DoCerrado Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "S": 39.0,
+      "B": 9.1,
+      "Cu": 6.5,
+      "Fe": 2.6,
+      "Mn": 52.0,
+      "Mo": 1.3,
+      "Zn": 78.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 3.0,
+      "B": 0.7,
+      "Cu": 0.5,
+      "Fe": 0.2,
+      "Mn": 4.0,
+      "Mo": 0.1,
+      "Zn": 6.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__kalium",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "KALIUM",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 560.0,
+      "Mg": 14.0,
+      "B": 14.0,
+      "Mn": 21.0,
+      "Mo": 1.4,
+      "Zn": 84.0
+    },
+    "nutrientsPercent": {
+      "K2O": 40.0,
+      "Mg": 1.0,
+      "B": 1.0,
+      "Mn": 1.5,
+      "Mo": 0.1,
+      "Zn": 6.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__nutrioxi-boro",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrioxi Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 130.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__nutrioxi-cab",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrioxi CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 196.0,
+      "B": 9.8
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0,
+      "B": 0.7
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__nutrioxi-mais-citrus",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrioxi Mais Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 140.0,
+      "B": 14.0,
+      "Mn": 56.0,
+      "Mo": 1.4,
+      "Zn": 112.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 1.0,
+      "Mn": 4.0,
+      "Mo": 0.1,
+      "Zn": 8.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__nutrioxi-manganes",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrioxi Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 196.0
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__nutrioxi-p30",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrioxi P30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 71.5,
+      "P2O5": 429.0,
+      "Mg": 17.16,
+      "S": 18.59
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 30.0,
+      "Mg": 1.2,
+      "S": 1.3
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__nutrioxi-sais-citrus",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrioxi Sais Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 20.0,
+      "S": 120.0,
+      "B": 35.0,
+      "Mn": 80.0,
+      "Mo": 1.0,
+      "Zn": 120.0
+    },
+    "nutrientsPercent": {
+      "Mg": 2.0,
+      "S": 12.0,
+      "B": 3.5,
+      "Mn": 8.0,
+      "Mo": 0.1,
+      "Zn": 12.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__nutrioxi-zinco",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrioxi Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 322.5
+    },
+    "nutrientsPercent": {
+      "Zn": 21.5
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__phos-k-p2o5-40-k2o-20",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "PHÓS-K (P2O5 40% · K2O 20%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 400.0,
+      "K2O": 200.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 40.0,
+      "K2O": 20.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__phos-k-p2o5-30-k2o-20",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "PHÓS-K (P2O5 30% · K2O 20%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 300.0,
+      "K2O": 200.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__phos-k-p2o5-20-k2o-20",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "PHÓS-K (P2O5 20% · K2O 20%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 200.0,
+      "K2O": 200.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "K2O": 20.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "oxiquimica__torped",
+    "brand": "OXIQUÍMICA",
+    "category": "Nutrição e Fisiologia",
+    "name": "TORPED",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 68.5,
+      "P2O5": 109.6,
+      "K2O": 109.6,
+      "Ca": 13.7,
+      "Mg": 6.85,
+      "S": 34.25,
+      "B": 6.85,
+      "Cu": 2.74,
+      "Fe": 1.37,
+      "Mn": 6.85,
+      "Mo": 1.37,
+      "Zn": 13.7
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 8.0,
+      "K2O": 8.0,
+      "Ca": 1.0,
+      "Mg": 0.5,
+      "S": 2.5,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Fe": 0.1,
+      "Mn": 0.5,
+      "Mo": 0.1,
+      "Zn": 1.0
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__concorde",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "CONCORDE",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 116.1,
+      "P2O5": 25.8,
+      "K2O": 12.9,
+      "SubsHumicas": 322.5
+    },
+    "nutrientsPercent": {
+      "N": 9.0,
+      "P2O5": 2.0,
+      "K2O": 1.0,
+      "SubsHumicas": 25.0
+    },
+    "density": 1.29,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__monitor",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "MONITOR",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 830.0,
+      "Zn": 5.0
+    },
+    "nutrientsPercent": {
+      "S": 83.0,
+      "Zn": 0.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__starphos-00-30-20",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Starphos 00-30-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 414.0,
+      "K2O": 276.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__starphos-00-40-20",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Starphos 00-40-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 572.0,
+      "K2O": 286.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 40.0,
+      "K2O": 20.0
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-boro",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 133.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cab-ca-10-b-0-5",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol CaB (Ca 10% · B 0,5%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 128.0,
+      "B": 6.4
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 0.5
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cab-1",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol CaB 1",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 134.0,
+      "B": 13.4
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 1.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cab-2",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol CaB 2",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 107.2,
+      "B": 26.8
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-calcio",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 190.4
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-calcio-nitrico",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Cálcio Nítrico",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 137.0,
+      "Ca": 164.4
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Ca": 12.0
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-citrus-master",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Citrus Master",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 126.0,
+      "B": 6.3,
+      "Mn": 37.8,
+      "Mo": 1.26,
+      "Zn": 50.4
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Mo": 0.1,
+      "Zn": 4.0
+    },
+    "density": 1.26,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-citrus-pos-florada",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Citrus Pós-florada",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 93.1,
+      "Zn": 159.6
+    },
+    "nutrientsPercent": {
+      "Mn": 7.0,
+      "Zn": 12.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-citrus-s",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Citrus S",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "S": 52.0,
+      "B": 6.5,
+      "Mn": 39.0,
+      "Zn": 52.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 4.0,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Zn": 4.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cobalto",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Cobalto",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 70.2
+    },
+    "nutrientsPercent": {
+      "Co": 6.0
+    },
+    "density": 1.17,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cobre-ac",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Cobre AC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 73.2
+    },
+    "nutrientsPercent": {
+      "Cu": 6.0
+    },
+    "density": 1.22,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cobre-edta",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Cobre EDTA",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 89.7
+    },
+    "nutrientsPercent": {
+      "Cu": 6.5
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-comol-ii",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol CoMol II",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 12.0,
+      "Mo": 72.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 6.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-comol-10-1",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol CoMol 10.1",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.3,
+      "Mo": 133.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-comol-26-2",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol CoMol 26.2",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 26.219,
+      "Mo": 262.19
+    },
+    "nutrientsPercent": {
+      "Co": 1.57,
+      "Mo": 15.7
+    },
+    "density": 1.67,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-ferro-edta",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Ferro EDTA",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 25.6,
+      "Fe": 89.6
+    },
+    "nutrientsPercent": {
+      "N": 2.0,
+      "Fe": 7.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-gallop",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol GALLOP",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 6.2,
+      "B": 3.72,
+      "Cu": 6.2,
+      "Mn": 74.4,
+      "Mo": 0.62,
+      "Zn": 24.8
+    },
+    "nutrientsPercent": {
+      "Mg": 0.5,
+      "B": 0.3,
+      "Cu": 0.5,
+      "Mn": 6.0,
+      "Mo": 0.05,
+      "Zn": 2.0
+    },
+    "density": 1.24,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-gallop-s",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol GALLOP S",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 9.17,
+      "S": 74.67,
+      "Cu": 13.1,
+      "Mn": 78.6,
+      "Zn": 26.2
+    },
+    "nutrientsPercent": {
+      "Mg": 0.7,
+      "S": 5.7,
+      "Cu": 1.0,
+      "Mn": 6.0,
+      "Zn": 2.0
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-magnesio",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Magnésio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 107.95
+    },
+    "nutrientsPercent": {
+      "Mg": 8.5
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-magnesio-nitrico",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Magnésio Nítrico",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 139.0,
+      "Mg": 97.3
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 7.0
+    },
+    "density": 1.39,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-manganes",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 193.2
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-mn-dry",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Mn Dry",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 130.0
+    },
+    "nutrientsPercent": {
+      "Mn": 13.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-mn-prime-200",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Mn Prime 200",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 49.4,
+      "Mn": 91.0
+    },
+    "nutrientsPercent": {
+      "S": 3.8,
+      "Mn": 7.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-nicomo",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol NiCoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 14.4,
+      "Mo": 144.0,
+      "Ni": 14.4
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0,
+      "Ni": 1.0
+    },
+    "density": 1.44,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-nicomo-dry",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol NiCoMo Dry",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 15.0,
+      "Co": 20.0,
+      "Mo": 220.0,
+      "Ni": 10.0
+    },
+    "nutrientsPercent": {
+      "S": 1.5,
+      "Co": 2.0,
+      "Mo": 22.0,
+      "Ni": 1.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-sais-nitropotassio",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Sais Nitropotássio",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "K2O": 440.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "K2O": 44.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-sais-soja-mt",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Sais Soja MT",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "S": 100.0,
+      "B": 15.0,
+      "Cu": 15.0,
+      "Mn": 140.0,
+      "Zn": 45.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "S": 10.0,
+      "B": 1.5,
+      "Cu": 1.5,
+      "Mn": 14.0,
+      "Zn": 4.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-master",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Master",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 6.4,
+      "Cu": 6.4,
+      "Mn": 25.6,
+      "Zn": 76.8
+    },
+    "nutrientsPercent": {
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 2.0,
+      "Zn": 6.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-master-sl",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Master SL",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 132.0,
+      "S": 48.84,
+      "B": 6.6,
+      "Mn": 39.6,
+      "Zn": 52.8
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 3.7,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Zn": 4.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-molibdenio",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Molibdênio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 159.6
+    },
+    "nutrientsPercent": {
+      "Mo": 12.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-n-30",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol N 30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 393.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-pro-30",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Pró 30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 26.0,
+      "P2O5": 390.0
+    },
+    "nutrientsPercent": {
+      "N": 2.0,
+      "P2O5": 30.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-zinco-zn-24",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Zinco (Zn 24%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 372.0
+    },
+    "nutrientsPercent": {
+      "Zn": 24.0
+    },
+    "density": 1.55,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-zinco-zn-21",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Zinco (Zn 21%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 315.0
+    },
+    "nutrientsPercent": {
+      "Zn": 21.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cotton",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Cotton",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 20.0,
+      "P2O5": 110.0,
+      "K2O": 380.0,
+      "B": 30.0
+    },
+    "nutrientsPercent": {
+      "N": 2.0,
+      "P2O5": 11.0,
+      "K2O": 38.0,
+      "B": 3.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-exclusive",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Exclusive",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "K2O": 30.0,
+      "Mg": 10.0,
+      "S": 94.0,
+      "B": 20.0,
+      "Cu": 1.0,
+      "Fe": 2.0,
+      "Mn": 65.0,
+      "Mo": 1.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "K2O": 3.0,
+      "Mg": 1.0,
+      "S": 9.4,
+      "B": 2.0,
+      "Cu": 0.1,
+      "Fe": 0.2,
+      "Mn": 6.5,
+      "Mo": 0.1,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-produtividade",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Produtividade",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "S": 100.0,
+      "B": 15.0,
+      "Cu": 15.0,
+      "Mn": 140.0,
+      "Zn": 45.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "S": 10.0,
+      "B": 1.5,
+      "Cu": 1.5,
+      "Mn": 14.0,
+      "Zn": 4.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-supera",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Supera",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 10.0,
+      "S": 115.0,
+      "B": 15.0,
+      "Mn": 140.0,
+      "Mo": 5.0,
+      "Zn": 45.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 1.0,
+      "S": 11.5,
+      "B": 1.5,
+      "Mn": 14.0,
+      "Mo": 0.5,
+      "Zn": 4.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-boromag",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Boromag",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 80.0,
+      "S": 86.0,
+      "B": 80.0
+    },
+    "nutrientsPercent": {
+      "Mg": 8.0,
+      "S": 8.6,
+      "B": 8.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-8-5",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 8,5",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 100.0,
+      "Mg": 20.0,
+      "S": 100.0,
+      "B": 20.0,
+      "Mn": 50.0,
+      "Zn": 90.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Mg": 2.0,
+      "S": 10.0,
+      "B": 2.0,
+      "Mn": 5.0,
+      "Zn": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cab-ca-19-b-5",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol CaB (Ca 19% · B 5%)",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 190.0,
+      "B": 50.0
+    },
+    "nutrientsPercent": {
+      "Ca": 19.0,
+      "B": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-nitropotassio",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Nitropotássio",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "P2O5": 20.0,
+      "K2O": 440.0
+    },
+    "nutrientsPercent": {
+      "N": 13.0,
+      "P2O5": 2.0,
+      "K2O": 44.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-10-10-40-micros",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 10-10-40 + Micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "P2O5": 100.0,
+      "K2O": 400.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Fe": 1.0,
+      "Mn": 1.0,
+      "Mo": 2.0,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 10.0,
+      "K2O": 40.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.1,
+      "Mo": 0.2,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-15-15-30-micros",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 15-15-30 + Micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 150.0,
+      "P2O5": 150.0,
+      "K2O": 300.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Fe": 1.0,
+      "Mn": 1.0,
+      "Mo": 2.0,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 15.0,
+      "P2O5": 15.0,
+      "K2O": 30.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.1,
+      "Mo": 0.2,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-15-30-15-micros",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 15-30-15 + Micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 150.0,
+      "P2O5": 300.0,
+      "K2O": 150.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Fe": 1.0,
+      "Mn": 1.0,
+      "Mo": 2.0,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 15.0,
+      "P2O5": 30.0,
+      "K2O": 15.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.1,
+      "Mo": 0.2,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-18-06-16-micros",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 18-06-16 + Micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 180.0,
+      "P2O5": 60.0,
+      "K2O": 160.0,
+      "S": 57.0,
+      "Cu": 15.0,
+      "Fe": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 18.0,
+      "P2O5": 6.0,
+      "K2O": 16.0,
+      "S": 5.7,
+      "Cu": 1.5,
+      "Fe": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-20-10-25-micros",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 20-10-25 + Micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 200.0,
+      "P2O5": 100.0,
+      "K2O": 250.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Fe": 1.0,
+      "Mn": 1.0,
+      "Mo": 2.0,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 20.0,
+      "P2O5": 10.0,
+      "K2O": 25.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.1,
+      "Mo": 0.2,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-20-20-20",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 20-20-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 200.0,
+      "P2O5": 200.0,
+      "K2O": 200.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Fe": 1.0,
+      "Mn": 1.0,
+      "Mo": 2.0,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 20.0,
+      "P2O5": 20.0,
+      "K2O": 20.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.1,
+      "Mo": 0.2,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-30-10-10-micros",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 30-10-10 + Micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 300.0,
+      "P2O5": 100.0,
+      "K2O": 100.0,
+      "B": 0.2,
+      "Cu": 0.5,
+      "Mn": 1.0,
+      "Mo": 2.0,
+      "Zn": 1.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0,
+      "P2O5": 10.0,
+      "K2O": 10.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Mn": 0.1,
+      "Mo": 0.2,
+      "Zn": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-k-24",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol K 24",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 240.04
+    },
+    "nutrientsPercent": {
+      "K2O": 17.65
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__hidrofol-mn",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Hidrofol Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 75.04,
+      "Mn": 134.0
+    },
+    "nutrientsPercent": {
+      "S": 5.6,
+      "Mn": 10.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__hidrofol-zn",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Hidrofol Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 72.6,
+      "Zn": 132.0
+    },
+    "nutrientsPercent": {
+      "S": 5.5,
+      "Zn": 10.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cafe",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol + Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 136.0,
+      "S": 76.16,
+      "B": 13.6,
+      "Cu": 6.8,
+      "Mn": 54.4,
+      "Mo": 0.68,
+      "Zn": 81.6
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 5.6,
+      "B": 1.0,
+      "Cu": 0.5,
+      "Mn": 4.0,
+      "Mo": 0.05,
+      "Zn": 6.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-batata",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Batata",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 25.0,
+      "Cu": 1.25,
+      "Mn": 31.25,
+      "Mo": 31.25,
+      "Zn": 37.5
+    },
+    "nutrientsPercent": {
+      "Mg": 2.0,
+      "Cu": 0.1,
+      "Mn": 2.5,
+      "Mo": 2.5,
+      "Zn": 3.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cafe-plus",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Café Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 128.0,
+      "Mg": 32.0,
+      "B": 2.56,
+      "Zn": 89.6
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 2.5,
+      "B": 0.2,
+      "Zn": 7.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-cebola",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Cebola",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 6.75,
+      "Co": 1.35,
+      "Cu": 20.25,
+      "Mn": 94.5,
+      "Mo": 6.75,
+      "Zn": 54.0
+    },
+    "nutrientsPercent": {
+      "B": 0.5,
+      "Co": 0.1,
+      "Cu": 1.5,
+      "Mn": 7.0,
+      "Mo": 0.5,
+      "Zn": 4.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-feijao",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Feijão",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 12.5,
+      "Cu": 2.5,
+      "Mn": 50.0,
+      "Mo": 37.5,
+      "Zn": 25.0
+    },
+    "nutrientsPercent": {
+      "Mg": 1.0,
+      "Cu": 0.2,
+      "Mn": 4.0,
+      "Mo": 3.0,
+      "Zn": 2.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-milho",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Milho",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 1.22,
+      "Cu": 1.22,
+      "Mn": 48.8,
+      "Mo": 9.76,
+      "Zn": 48.8
+    },
+    "nutrientsPercent": {
+      "B": 0.1,
+      "Cu": 0.1,
+      "Mn": 4.0,
+      "Mo": 0.8,
+      "Zn": 4.0
+    },
+    "density": 1.22,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-soja",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol Soja",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 6.35,
+      "B": 2.54,
+      "Co": 3.81,
+      "Mn": 50.8,
+      "Mo": 38.1,
+      "Zn": 25.4
+    },
+    "nutrientsPercent": {
+      "Mg": 0.5,
+      "B": 0.2,
+      "Co": 0.3,
+      "Mn": 4.0,
+      "Mo": 3.0,
+      "Zn": 2.0
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-16-06-04",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 16-06-04",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 193.6,
+      "P2O5": 72.6,
+      "K2O": 48.4,
+      "B": 0.242,
+      "Cu": 0.726,
+      "Mn": 0.363,
+      "Zn": 0.847
+    },
+    "nutrientsPercent": {
+      "N": 16.0,
+      "P2O5": 6.0,
+      "K2O": 4.0,
+      "B": 0.02,
+      "Cu": 0.06,
+      "Mn": 0.03,
+      "Zn": 0.07
+    },
+    "density": 1.21,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__profol-16-06-04-micros",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Profol 16-06-04 + Micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 195.2,
+      "P2O5": 73.2,
+      "K2O": 48.8,
+      "B": 2.44,
+      "Cu": 0.732,
+      "Mn": 0.366,
+      "Zn": 1.22
+    },
+    "nutrientsPercent": {
+      "N": 16.0,
+      "P2O5": 6.0,
+      "K2O": 4.0,
+      "B": 0.2,
+      "Cu": 0.06,
+      "Mn": 0.03,
+      "Zn": 0.1
+    },
+    "density": 1.22,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "compass-minerals__sulfurgran",
+    "brand": "COMPASS MINERALS",
+    "category": "Nutrição e Fisiologia",
+    "name": "Sulfurgran",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 900.0
+    },
+    "nutrientsPercent": {
+      "S": 90.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__niphokam-108",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Niphokam 108",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 135.0,
+      "P2O5": 108.0,
+      "K2O": 108.0,
+      "Ca": 13.5,
+      "Mg": 6.75,
+      "S": 27.0,
+      "B": 6.75,
+      "Cu": 2.7,
+      "Fe": 1.35,
+      "Mn": 6.75,
+      "Mo": 1.35,
+      "Zn": 13.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 8.0,
+      "K2O": 8.0,
+      "Ca": 1.0,
+      "Mg": 0.5,
+      "S": 2.0,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Fe": 0.1,
+      "Mn": 0.5,
+      "Mo": 0.1,
+      "Zn": 1.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-p-30",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol P 30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 69.0,
+      "P2O5": 414.0,
+      "Mg": 16.56
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 30.0,
+      "Mg": 1.2
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-phfos",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Phfos",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 16.0,
+      "P2O5": 800.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "P2O5": 50.0
+    },
+    "density": 1.6,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-30-n",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol 30 N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 360.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-arrank",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Arrank",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 50.8,
+      "B": 6.35,
+      "Cu": 7.62,
+      "Mn": 38.1,
+      "Mo": 0.762,
+      "Zn": 63.5
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "B": 0.5,
+      "Cu": 0.6,
+      "Mn": 3.0,
+      "Mo": 0.06,
+      "Zn": 5.0
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-arrank-si",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Arrank Si",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 51.2,
+      "B": 6.4,
+      "Cu": 7.68,
+      "Mn": 38.4,
+      "Mo": 0.768,
+      "Zn": 64.0
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "B": 0.5,
+      "Cu": 0.6,
+      "Mn": 3.0,
+      "Mo": 0.06,
+      "Zn": 5.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-arroz-super",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Arroz Super",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 50.0,
+      "S": 130.0,
+      "B": 20.0,
+      "Cu": 23.0,
+      "Mn": 30.0,
+      "Mo": 10.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "Mg": 5.0,
+      "S": 13.0,
+      "B": 2.0,
+      "Cu": 2.3,
+      "Mn": 3.0,
+      "Mo": 1.0,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-boro",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 38.0,
+      "S": 70.0,
+      "B": 100.0,
+      "Mo": 1.0
+    },
+    "nutrientsPercent": {
+      "Mg": 3.8,
+      "S": 7.0,
+      "B": 10.0,
+      "Mo": 0.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-boro-l",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Boro L",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 134.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-borodez",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol BoroDez",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 100.0,
+      "Mo": 10.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0,
+      "Mo": 1.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-borodez-mg",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol BoroDez Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 33.0,
+      "S": 45.0,
+      "B": 100.0,
+      "Mo": 10.0
+    },
+    "nutrientsPercent": {
+      "Mg": 3.3,
+      "S": 4.5,
+      "B": 10.0,
+      "Mo": 1.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-cafe",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "Mg": 26.0,
+      "B": 13.0,
+      "Zn": 78.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 2.0,
+      "B": 1.0,
+      "Zn": 6.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-cafe-cerrado",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Café Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 135.0,
+      "B": 13.5,
+      "Cu": 6.75,
+      "Mn": 54.0,
+      "Mo": 0.675,
+      "Zn": 81.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 1.0,
+      "Cu": 0.5,
+      "Mn": 4.0,
+      "Mo": 0.05,
+      "Zn": 6.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-calcio",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 125.0
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-calcio-e-boro",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Cálcio e Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 125.0,
+      "B": 6.25
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 0.5
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-calcio-e-boro-ii",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Cálcio e Boro II",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 100.0,
+      "B": 25.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-calcio-f",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Cálcio F",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 240.0
+    },
+    "nutrientsPercent": {
+      "Ca": 24.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-cerrado",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 13.0,
+      "S": 13.0,
+      "B": 6.5,
+      "Cu": 13.0,
+      "Mn": 78.0,
+      "Mo": 3.9,
+      "Zn": 39.0
+    },
+    "nutrientsPercent": {
+      "Mg": 1.0,
+      "S": 1.0,
+      "B": 0.5,
+      "Cu": 1.0,
+      "Mn": 6.0,
+      "Mo": 0.3,
+      "Zn": 3.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-citros",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Citros",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 27.0,
+      "B": 13.5,
+      "Mn": 27.0,
+      "Zn": 81.0
+    },
+    "nutrientsPercent": {
+      "Mg": 2.0,
+      "B": 1.0,
+      "Mn": 2.0,
+      "Zn": 6.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-citros-15",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Citros 15",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 13.0,
+      "Mn": 78.0,
+      "Mo": 1.3,
+      "Zn": 104.0
+    },
+    "nutrientsPercent": {
+      "B": 1.0,
+      "Mn": 6.0,
+      "Mo": 0.1,
+      "Zn": 8.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-cobre",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Cobre",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 23.0,
+      "S": 50.0,
+      "B": 12.0,
+      "Cu": 210.0,
+      "Fe": 1.0,
+      "Mn": 3.0,
+      "Mo": 1.0,
+      "Zn": 21.0
+    },
+    "nutrientsPercent": {
+      "Mg": 2.3,
+      "S": 5.0,
+      "B": 1.2,
+      "Cu": 21.0,
+      "Fe": 0.1,
+      "Mn": 0.3,
+      "Mo": 0.1,
+      "Zn": 2.1
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-como-plus",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Como Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 12.0,
+      "Mo": 72.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 6.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-como-plus-250",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Como Plus 250",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 25.5,
+      "Mo": 255.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.7,
+      "Mo": 17.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-comob",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol CoMoB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 6.0,
+      "B": 6.0,
+      "Co": 6.0,
+      "Mo": 72.0,
+      "Zn": 30.0
+    },
+    "nutrientsPercent": {
+      "Mg": 0.5,
+      "B": 0.5,
+      "Co": 0.5,
+      "Mo": 6.0,
+      "Zn": 2.5
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-como-l",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol CoMo L",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 11.2,
+      "Mo": 44.8
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 4.0
+    },
+    "density": 1.12,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-ferro",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Ferro",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 46.0
+    },
+    "nutrientsPercent": {
+      "Fe": 4.0
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-florada",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Florada",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 112.5,
+      "B": 12.5
+    },
+    "nutrientsPercent": {
+      "Ca": 9.0,
+      "B": 1.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-fosfito",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Fosfito",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 640.0,
+      "K2O": 320.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 40.0,
+      "K2O": 20.0
+    },
+    "density": 1.6,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-fosfito-20-20",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Fosfito 20-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 266.0,
+      "K2O": 266.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "K2O": 20.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-fosfito-ca",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Fosfito Ca",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 270.0,
+      "Ca": 108.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "Ca": 8.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-fosfito-combat",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Fosfito Combat",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 420.0,
+      "K2O": 280.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-k",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol K",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "K2O": 250.0,
+      "Mg": 10.0,
+      "S": 70.0,
+      "B": 5.0,
+      "Mn": 15.0,
+      "Mo": 1.0,
+      "Zn": 60.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "K2O": 25.0,
+      "Mg": 1.0,
+      "S": 7.0,
+      "B": 0.5,
+      "Mn": 1.5,
+      "Mo": 0.1,
+      "Zn": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-k-40",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol K 40",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "K2O": 400.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "K2O": 40.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-maturuva",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Maturuva",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 72.0,
+      "P2O5": 360.0,
+      "K2O": 72.0,
+      "S": 14.4,
+      "Co": 7.2,
+      "Fe": 14.4,
+      "Mo": 28.8
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 25.0,
+      "K2O": 5.0,
+      "S": 1.0,
+      "Co": 0.5,
+      "Fe": 1.0,
+      "Mo": 2.0
+    },
+    "density": 1.44,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-mg-8",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Mg 8",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 104.0
+    },
+    "nutrientsPercent": {
+      "Mg": 8.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-mn-11",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Mn 11",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 137.5
+    },
+    "nutrientsPercent": {
+      "Mn": 11.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-molibdenio-10-plus",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Molibdênio 10 Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 121.0
+    },
+    "nutrientsPercent": {
+      "Mo": 10.0
+    },
+    "density": 1.21,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-silicio",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Silício",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 131.0,
+      "Si": 131.0
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "Si": 10.0
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-sqb",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol SQB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 50.0,
+      "S": 70.0,
+      "B": 50.0,
+      "Cu": 5.0,
+      "Fe": 1.0,
+      "Mo": 1.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "Mg": 5.0,
+      "S": 7.0,
+      "B": 5.0,
+      "Cu": 0.5,
+      "Fe": 0.1,
+      "Mo": 0.1,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-sqc",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol SQC",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 50.0,
+      "S": 70.0,
+      "B": 30.0,
+      "Mo": 1.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "Mg": 5.0,
+      "S": 7.0,
+      "B": 3.0,
+      "Mo": 0.1,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-sqci",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol SQCI",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 50.0,
+      "S": 70.0,
+      "B": 30.0,
+      "Mn": 20.0,
+      "Mo": 1.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "Mg": 5.0,
+      "S": 7.0,
+      "B": 3.0,
+      "Mn": 2.0,
+      "Mo": 0.1,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-sqg",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol SQG",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 50.0,
+      "S": 120.0,
+      "B": 35.0,
+      "Cu": 1.0,
+      "Fe": 2.0,
+      "Mn": 10.0,
+      "Mo": 1.0,
+      "Zn": 60.0
+    },
+    "nutrientsPercent": {
+      "Mg": 5.0,
+      "S": 12.0,
+      "B": 3.5,
+      "Cu": 0.1,
+      "Fe": 0.2,
+      "Mn": 1.0,
+      "Mo": 0.1,
+      "Zn": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-sql",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol SQL",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 50.0,
+      "S": 70.0,
+      "B": 30.0,
+      "Cu": 10.0,
+      "Fe": 5.0,
+      "Mo": 10.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "Mg": 5.0,
+      "S": 7.0,
+      "B": 3.0,
+      "Cu": 1.0,
+      "Fe": 0.5,
+      "Mo": 1.0,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-sql-super",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol SQL Super",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 50.0,
+      "S": 100.0,
+      "B": 30.0,
+      "Cu": 20.0,
+      "Fe": 5.0,
+      "Mn": 30.0,
+      "Mo": 10.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "Mg": 5.0,
+      "S": 10.0,
+      "B": 3.0,
+      "Cu": 2.0,
+      "Fe": 0.5,
+      "Mn": 3.0,
+      "Mo": 1.0,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-seed-78",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Seed 78",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 787.5
+    },
+    "nutrientsPercent": {
+      "Zn": 45.0
+    },
+    "density": 1.75,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-soja",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Soja",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 12.3,
+      "Mo": 123.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.23,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-soja-como",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Soja CoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.5,
+      "Mo": 202.5
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 15.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-soja-vigor",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Soja Vigor",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 10.64,
+      "Mo": 159.6
+    },
+    "nutrientsPercent": {
+      "Co": 0.8,
+      "Mo": 12.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-zinco",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 40.2,
+      "Zn": 93.8
+    },
+    "nutrientsPercent": {
+      "S": 3.0,
+      "Zn": 7.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-znitro",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol Znitro",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 145.0,
+      "Zn": 217.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Zn": 15.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__niphokan-108",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Niphokan 108",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 135.0,
+      "P2O5": 108.0,
+      "K2O": 108.0,
+      "Ca": 13.5,
+      "Mg": 6.75,
+      "B": 6.75,
+      "Cu": 2.7,
+      "Mn": 6.75,
+      "Zn": 13.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 8.0,
+      "K2O": 8.0,
+      "Ca": 1.0,
+      "Mg": 0.5,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Mn": 0.5,
+      "Zn": 1.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-cafe",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 137.0,
+      "S": 54.8,
+      "B": 6.85,
+      "Fe": 41.1,
+      "Zn": 68.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 4.0,
+      "B": 0.5,
+      "Fe": 3.0,
+      "Zn": 5.0
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-cafe-cerrado",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Café Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 143.0,
+      "S": 78.65,
+      "B": 7.15,
+      "Mn": 57.2,
+      "Zn": 85.8
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 5.5,
+      "B": 0.5,
+      "Mn": 4.0,
+      "Zn": 6.0
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-cerrado",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 13.5,
+      "S": 87.75,
+      "B": 6.75,
+      "Cu": 13.5,
+      "Mn": 81.0,
+      "Mo": 4.05,
+      "Zn": 40.5
+    },
+    "nutrientsPercent": {
+      "Mg": 1.0,
+      "S": 6.5,
+      "B": 0.5,
+      "Cu": 1.0,
+      "Mn": 6.0,
+      "Mo": 0.3,
+      "Zn": 3.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-cerrado-cl",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Cerrado Cl",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 7.62,
+      "S": 12.7,
+      "B": 6.35,
+      "Cu": 6.35,
+      "Mn": 76.2,
+      "Zn": 38.1
+    },
+    "nutrientsPercent": {
+      "Mg": 0.6,
+      "S": 1.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 6.0,
+      "Zn": 3.0
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-citros",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Citros",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 81.6,
+      "Zn": 136.0
+    },
+    "nutrientsPercent": {
+      "Mn": 6.0,
+      "Zn": 10.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-como",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen CoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 1.36,
+      "Mo": 204.0
+    },
+    "nutrientsPercent": {
+      "Co": 0.1,
+      "Mo": 15.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-g",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen G",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 115.0,
+      "B": 5.75,
+      "Mo": 1.15,
+      "Zn": 17.25
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "B": 0.5,
+      "Mo": 0.1,
+      "Zn": 1.5
+    },
+    "density": 1.15,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-gold",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Gold",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 63.0,
+      "P2O5": 100.8,
+      "K2O": 63.0,
+      "Mg": 6.3,
+      "B": 6.3,
+      "Cu": 2.52,
+      "Fe": 2.52,
+      "Mn": 6.3,
+      "Mo": 1.26,
+      "Zn": 12.6
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 8.0,
+      "K2O": 5.0,
+      "Mg": 0.5,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Fe": 0.2,
+      "Mn": 0.5,
+      "Mo": 0.1,
+      "Zn": 1.0
+    },
+    "density": 1.26,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-mn-10",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Mn 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 81.13,
+      "Mn": 133.0
+    },
+    "nutrientsPercent": {
+      "S": 6.1,
+      "Mn": 10.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-mn-14",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Mn 14",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 191.8
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-pasto",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Pasto",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 270.0,
+      "B": 6.75,
+      "Mn": 40.5,
+      "Zn": 40.5
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Zn": 3.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-zn-10",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Zn 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 132.0
+    },
+    "nutrientsPercent": {
+      "Zn": 10.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-zn-21",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen Zn 21",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 306.6
+    },
+    "nutrientsPercent": {
+      "Zn": 21.0
+    },
+    "density": 1.46,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-20n",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen 20N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 247.8
+    },
+    "nutrientsPercent": {
+      "N": 21.0
+    },
+    "density": 1.18,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimiorgen-s",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimiorgen S",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 28.5,
+      "Zn": 28.5
+    },
+    "nutrientsPercent": {
+      "Mo": 2.5,
+      "Zn": 2.5
+    },
+    "density": 1.14,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimfol-30n",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimfol 30N",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 390.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-04-14-08",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol 04-14-08",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 52.0,
+      "P2O5": 182.0,
+      "K2O": 104.0,
+      "Mg": 6.5,
+      "B": 0.26,
+      "Mn": 0.26,
+      "Zn": 1.3
+    },
+    "nutrientsPercent": {
+      "N": 4.0,
+      "P2O5": 14.0,
+      "K2O": 8.0,
+      "Mg": 0.5,
+      "B": 0.02,
+      "Mn": 0.02,
+      "Zn": 0.1
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol-k-30",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol K-30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 14.7,
+      "K2O": 441.0
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "K2O": 30.0
+    },
+    "density": 1.47,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__quimifol",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quimifol",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__raynitro",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "RayNitro",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 11.6,
+      "Mo": 69.6
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 6.0
+    },
+    "density": 1.16,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__raynitro-max",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "RayNitro Max",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 135.0,
+      "P2O5": 108.0,
+      "K2O": 108.0,
+      "Ca": 13.5,
+      "B": 6.75,
+      "Mn": 6.75,
+      "Zn": 13.5
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 8.0,
+      "K2O": 8.0,
+      "Ca": 1.0,
+      "B": 0.5,
+      "Mn": 0.5,
+      "Zn": 1.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__raynitro-mo",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "RayNitro Mo",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 91.7,
+      "P2O5": 209.6,
+      "Mo": 32.75
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "P2O5": 16.0,
+      "Mo": 2.5
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "quimifol__raynitro-zn",
+    "brand": "QUIMIFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "RayNitro Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 91.0,
+      "P2O5": 208.0,
+      "Zn": 52.0
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "P2O5": 16.0,
+      "Zn": 4.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__aminomax-cab",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminomax CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 90.0,
+      "Mg": 5.0,
+      "B": 2.0,
+      "Mo": 0.1,
+      "C_Org": 60.0
+    },
+    "nutrientsPercent": {
+      "Ca": 9.0,
+      "Mg": 0.5,
+      "B": 0.2,
+      "Mo": 0.01,
+      "C_Org": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__aminomax-m",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminomax M",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "P2O5": 30.0,
+      "K2O": 20.0,
+      "Mg": 5.0,
+      "B": 0.2,
+      "Mn": 0.2,
+      "Zn": 1.0,
+      "C_Org": 60.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 3.0,
+      "K2O": 2.0,
+      "Mg": 0.5,
+      "B": 0.02,
+      "Mn": 0.02,
+      "Zn": 0.1,
+      "C_Org": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__aminomax-supra",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aminomax Supra",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "P2O5": 100.0,
+      "K2O": 60.0,
+      "Ca": 20.0,
+      "B": 5.0,
+      "Cu": 2.0,
+      "Fe": 1.0,
+      "Mo": 1.0,
+      "Zn": 11.0,
+      "C_Org": 60.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 10.0,
+      "K2O": 6.0,
+      "Ca": 2.0,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Fe": 0.1,
+      "Mo": 0.1,
+      "Zn": 1.1,
+      "C_Org": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__bio-power",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Bio Power",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 34.5,
+      "Fe": 5.0,
+      "Zn": 45.0,
+      "C_Org": 60.0
+    },
+    "nutrientsPercent": {
+      "S": 3.45,
+      "Fe": 0.5,
+      "Zn": 4.5,
+      "C_Org": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__citrofolha-samarita",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Citrofolha Samaritá",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "Mg": 10.0,
+      "S": 30.0,
+      "B": 5.0,
+      "Mn": 20.0,
+      "Mo": 1.0,
+      "Zn": 30.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 1.0,
+      "S": 3.0,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Mo": 0.1,
+      "Zn": 3.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-b",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha B",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 100.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-cab-0-5",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha CaB 0,5",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 80.0,
+      "B": 5.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 0.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-cab-1-0",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha CaB 1,0",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 100.0,
+      "B": 10.0
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 1.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-cab-2-0",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha CaB 2,0",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 80.0,
+      "B": 20.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-cab-10",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha CaB 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 100.0,
+      "B": 5.0
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 0.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-citrus",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha Citrus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "S": 45.0,
+      "B": 5.0,
+      "Mn": 20.0,
+      "Zn": 40.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 4.5,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Zn": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-mg",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 40.0,
+      "S": 20.0
+    },
+    "nutrientsPercent": {
+      "Mg": 4.0,
+      "S": 2.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-mn",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 30.0,
+      "Mn": 70.0
+    },
+    "nutrientsPercent": {
+      "S": 3.0,
+      "Mn": 7.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-nitrato-de-mg",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha Nitrato de Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 60.0
+    },
+    "nutrientsPercent": {
+      "Mg": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-p-30",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha P 30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "P2O5": 300.0,
+      "Mg": 25.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 30.0,
+      "Mg": 2.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__nutrifolha-zn",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutrifolha Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 30.0,
+      "Zn": 70.0
+    },
+    "nutrientsPercent": {
+      "S": 3.0,
+      "Zn": 7.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__n-phosphorus-k-00-30-20",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "N Phosphorus-K 00-30-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 300.0,
+      "K2O": 200.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__n-phosphorus-k-00-28-26",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "N Phosphorus-K 00-28-26",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 280.0,
+      "K2O": 260.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 28.0,
+      "K2O": 26.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__n-phosphorus-k-ca-b",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "N Phosphorus-K Ca-B",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 110.0,
+      "Ca": 39.0,
+      "B": 5.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 11.0,
+      "Ca": 3.9,
+      "B": 0.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "samarita__n-phosphorus-k-zn-mn",
+    "brand": "SAMARITÁ",
+    "category": "Nutrição e Fisiologia",
+    "name": "N Phosphorus-K Zn-Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 140.0,
+      "Mn": 30.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 14.0,
+      "Mn": 3.0,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-plus-cab",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex plus CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 70.0,
+      "Ca": 90.0,
+      "B": 10.0
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "Ca": 9.0,
+      "B": 1.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-plus-cab-ii",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex plus CaB II",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "Ca": 80.0,
+      "B": 20.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-plus-calcio",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex plus Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 102.75,
+      "Ca": 137.0
+    },
+    "nutrientsPercent": {
+      "N": 7.5,
+      "Ca": 10.0
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-plus-magnesio",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex plus Magnésio",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 89.6,
+      "Mg": 76.8
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "Mg": 6.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-plus-manganes",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex plus Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 98.7,
+      "Mn": 197.4
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "Mn": 14.0
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-plus-zinco",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex plus Zinco",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 65.5,
+      "Zn": 157.2
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Zn": 12.0
+    },
+    "density": 1.31,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-plus-cafe",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex plus CAFÉ",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 129.0,
+      "Mg": 25.8,
+      "B": 6.45,
+      "Mn": 25.8,
+      "Zn": 51.6
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 2.0,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Zn": 4.0
+    },
+    "density": 1.29,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-plus-citrus",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex plus CITRUS",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 129.0,
+      "Mg": 25.8,
+      "B": 6.45,
+      "Mn": 25.8,
+      "Zn": 51.6
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Mg": 2.0,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Zn": 4.0
+    },
+    "density": 1.29,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-axcell",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex Axcell",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 53.2,
+      "B": 6.65,
+      "Cu": 6.65,
+      "Mn": 39.9,
+      "Zn": 66.5
+    },
+    "nutrientsPercent": {
+      "S": 4.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 3.0,
+      "Zn": 5.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-boro",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex Boro",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 130.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-caqz",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex CaQz",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 67.8
+    },
+    "nutrientsPercent": {
+      "Ca": 6.0
+    },
+    "density": 1.13,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-como",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex CoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 6.5,
+      "Mo": 130.0
+    },
+    "nutrientsPercent": {
+      "Co": 0.5,
+      "Mo": 10.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-como-ii",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex CoMo II",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.0,
+      "Mo": 65.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-p30",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex P30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 70.5,
+      "P2O5": 423.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 30.0
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-00-20-20",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex 00-20-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 244.0,
+      "K2O": 244.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 20.0,
+      "K2O": 20.0
+    },
+    "density": 1.22,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-00-30-20",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex 00-30-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 405.0,
+      "K2O": 270.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "sipcam-nichino__nutex-10-10-10",
+    "brand": "SIPCAM-NICHINO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nutex 10-10-10",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 125.0,
+      "P2O5": 125.0,
+      "K2O": 125.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 10.0,
+      "K2O": 10.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__citrolino",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Citrolino",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 68.0,
+      "Mg": 6.8,
+      "S": 62.56,
+      "Mn": 40.8,
+      "Zn": 81.6
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Mg": 0.5,
+      "S": 4.6,
+      "Mn": 3.0,
+      "Zn": 6.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__hold",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Hold",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 33.28,
+      "P2O5": 64.0,
+      "S": 12.8,
+      "Co": 25.6,
+      "Mo": 38.4
+    },
+    "nutrientsPercent": {
+      "N": 2.6,
+      "P2O5": 5.0,
+      "S": 1.0,
+      "Co": 2.0,
+      "Mo": 3.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__stoller-boro",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Stoller BORO",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 67.0,
+      "B": 134.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "B": 10.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__stoller-cobre",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Stoller COBRE",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "S": 34.8,
+      "Cu": 60.0,
+      "Mn": 12.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "S": 2.9,
+      "Cu": 5.0,
+      "Mn": 1.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__stoller-ferro",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Stoller FERRO",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 58.0,
+      "S": 23.2,
+      "Fe": 46.4
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "S": 2.0,
+      "Fe": 4.0
+    },
+    "density": 1.16,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__stoller-magnesio",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Stoller MAGNÉSIO",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 66.5,
+      "Mg": 106.4
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Mg": 8.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__stoller-manganes",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Stoller MANGANÊS",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 68.0,
+      "S": 58.48,
+      "Mn": 95.2
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "S": 4.3,
+      "Mn": 7.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__stoller-zinco",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Stoller ZINCO",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 61.5,
+      "S": 38.745,
+      "Zn": 86.1
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "S": 3.15,
+      "Zn": 7.0
+    },
+    "density": 1.23,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__dacafe",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Dacafé",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "S": 31.2,
+      "B": 13.0,
+      "Mo": 0.65,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 2.4,
+      "B": 1.0,
+      "Mo": 0.05,
+      "Zn": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__dacafe-cerrado",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Dacafé Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 144.0,
+      "S": 72.0,
+      "B": 7.2,
+      "Mn": 57.6,
+      "Zn": 86.4
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 5.0,
+      "B": 0.5,
+      "Mn": 4.0,
+      "Zn": 6.0
+    },
+    "density": 1.44,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__starter",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Starter",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 67.0,
+      "S": 62.98,
+      "B": 4.02,
+      "Cu": 4.02,
+      "Mn": 40.2,
+      "Zn": 67.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "S": 4.7,
+      "B": 0.3,
+      "Cu": 0.3,
+      "Mn": 3.0,
+      "Zn": 5.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__starter-manganes-platinum",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Starter Manganês Platinum",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 67.5,
+      "S": 60.75,
+      "B": 4.05,
+      "Cu": 4.05,
+      "Mn": 67.5,
+      "Zn": 40.5
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "S": 4.5,
+      "B": 0.3,
+      "Cu": 0.3,
+      "Mn": 5.0,
+      "Zn": 3.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__cellerate",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cellerate",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 180.12,
+      "S": 36.34,
+      "Mo": 158.0,
+      "Zn": 79.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 11.4,
+      "S": 2.3,
+      "Mo": 10.0,
+      "Zn": 5.0
+    },
+    "density": 1.58,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__como-p-10",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "CoMo P 10",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 132.0,
+      "Co": 10.56,
+      "Mo": 105.6
+    },
+    "nutrientsPercent": {
+      "P2O5": 10.0,
+      "Co": 0.8,
+      "Mo": 8.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__como-platinum",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "CoMo Platinum",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 45.08,
+      "Co": 24.15,
+      "Mo": 241.5
+    },
+    "nutrientsPercent": {
+      "P2O5": 2.8,
+      "Co": 1.5,
+      "Mo": 15.0
+    },
+    "density": 1.61,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__cab",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 67.0,
+      "Ca": 107.2,
+      "B": 6.7
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Ca": 8.0,
+      "B": 0.5
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__sett",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Sett",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 72.5,
+      "Ca": 145.0,
+      "B": 29.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Ca": 10.0,
+      "B": 2.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__p-51",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "P-51",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 16.3,
+      "P2O5": 831.3
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "P2O5": 51.0
+    },
+    "density": 1.63,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__mastermins-3-15-8",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Mastermins (3-15-8)",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 41.4,
+      "P2O5": 207.0,
+      "K2O": 110.4,
+      "Mg": 13.8,
+      "B": 2.76,
+      "Cu": 4.14,
+      "Mn": 13.8,
+      "Mo": 0.69,
+      "Zn": 27.6
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 15.0,
+      "K2O": 8.0,
+      "Mg": 1.0,
+      "B": 0.2,
+      "Cu": 0.3,
+      "Mn": 1.0,
+      "Mo": 0.05,
+      "Zn": 2.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__mastermins-manganes",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Mastermins MANGANÊS",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 189.0,
+      "P2O5": 81.0,
+      "K2O": 54.0,
+      "B": 1.35,
+      "Mn": 54.0,
+      "Mo": 0.675,
+      "Zn": 27.0
+    },
+    "nutrientsPercent": {
+      "N": 14.0,
+      "P2O5": 6.0,
+      "K2O": 4.0,
+      "B": 0.1,
+      "Mn": 4.0,
+      "Mo": 0.05,
+      "Zn": 2.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__mastermins-zinco",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Mastermins ZINCO",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 184.8,
+      "P2O5": 79.2,
+      "K2O": 52.8,
+      "B": 1.32,
+      "Mn": 13.2,
+      "Mo": 0.66,
+      "Zn": 66.0
+    },
+    "nutrientsPercent": {
+      "N": 14.0,
+      "P2O5": 6.0,
+      "K2O": 4.0,
+      "B": 0.1,
+      "Mn": 1.0,
+      "Mo": 0.05,
+      "Zn": 5.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__phytogard-magnesio",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Phytogard MAGNÉSIO",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 405.0,
+      "Mg": 54.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "Mg": 4.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__phytogard-manganes",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Phytogard MANGANÊS",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 435.0,
+      "Mn": 130.5
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "Mn": 9.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__phytogard-potassio",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Phytogard POTÁSSIO",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 596.0,
+      "K2O": 298.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 40.0,
+      "K2O": 20.0
+    },
+    "density": 1.49,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__phytogard-zinco",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "Phytogard ZINCO",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 596.0,
+      "Zn": 149.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 40.0,
+      "Zn": 10.0
+    },
+    "density": 1.49,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__mover",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "MOVER",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 63.0,
+      "B": 50.4,
+      "Cu": 2.142,
+      "Mo": 0.189,
+      "Zn": 37.8
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "B": 4.0,
+      "Cu": 0.17,
+      "Mo": 0.015,
+      "Zn": 3.0
+    },
+    "density": 1.26,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "stoller__stimulate",
+    "brand": "STOLLER",
+    "category": "Nutrição e Fisiologia",
+    "name": "STIMULATE",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__quelatec-az",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Quelatec AZ",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 4.0,
+      "Cu": 2.8,
+      "Fe": 75.0,
+      "Mn": 35.0,
+      "Mo": 3.0,
+      "Zn": 7.0
+    },
+    "nutrientsPercent": {
+      "B": 0.4,
+      "Cu": 0.28,
+      "Fe": 7.5,
+      "Mn": 3.5,
+      "Mo": 0.3,
+      "Zn": 0.7
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradebor",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradebor",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 149.6
+    },
+    "nutrientsPercent": {
+      "B": 11.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradecorp-az-jaguar",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradecorp AZ Jaguar",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 90.0
+    },
+    "nutrientsPercent": {
+      "Fe": 9.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradecorp-az-ii",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradecorp AZ II",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 6.4,
+      "Cu": 10.0,
+      "Fe": 50.0,
+      "Mn": 35.0,
+      "Mo": 3.0,
+      "Zn": 24.0
+    },
+    "nutrientsPercent": {
+      "B": 0.64,
+      "Cu": 1.0,
+      "Fe": 5.0,
+      "Mn": 3.5,
+      "Mo": 0.3,
+      "Zn": 2.4
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradecorp-az-plus",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradecorp AZ Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 5.0,
+      "Co": 0.2,
+      "Cu": 6.0,
+      "Fe": 60.0,
+      "Mn": 25.0,
+      "Mo": 4.5,
+      "Zn": 12.0
+    },
+    "nutrientsPercent": {
+      "B": 0.5,
+      "Co": 0.02,
+      "Cu": 0.6,
+      "Fe": 6.0,
+      "Mn": 2.5,
+      "Mo": 0.45,
+      "Zn": 1.2
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradecorp-ca",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradecorp Ca",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 98.0
+    },
+    "nutrientsPercent": {
+      "Ca": 9.8
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradecorp-cu",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradecorp Cu",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 145.0
+    },
+    "nutrientsPercent": {
+      "Cu": 14.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradecorp-mg",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradecorp Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 60.0
+    },
+    "nutrientsPercent": {
+      "Mg": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradecorp-mn",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradecorp Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 130.0
+    },
+    "nutrientsPercent": {
+      "Mn": 13.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradecorp-zn",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradecorp Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 140.0
+    },
+    "nutrientsPercent": {
+      "Zn": 14.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradecorp-zn-mn",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Tradecorp Zn + Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 60.0,
+      "Zn": 80.0
+    },
+    "nutrientsPercent": {
+      "Mn": 6.0,
+      "Zn": 8.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__utraderro",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Utraderro",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 60.0
+    },
+    "nutrientsPercent": {
+      "Fe": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__aton-mo",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aton Mo",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 143.0,
+      "Mo": 78.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 11.0,
+      "Mo": 6.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__aton-az-plus",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aton AZ Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "B": 1.3,
+      "Fe": 2.6,
+      "Mn": 32.5,
+      "Zn": 65.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "B": 0.1,
+      "Fe": 0.2,
+      "Mn": 2.5,
+      "Zn": 5.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__aton-zn",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Aton Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 23.2,
+      "Zn": 52.2
+    },
+    "nutrientsPercent": {
+      "S": 2.0,
+      "Zn": 4.5
+    },
+    "density": 1.16,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__amifol-k",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Amifol K",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 465.0
+    },
+    "nutrientsPercent": {
+      "K2O": 31.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__boramim-ca",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Boramim Ca",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 71.5,
+      "B": 2.6
+    },
+    "nutrientsPercent": {
+      "Ca": 5.5,
+      "B": 0.2
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__ruter-aa",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ruter AA",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 60.0,
+      "K2O": 36.0,
+      "Mn": 0.6,
+      "Mo": 1.2,
+      "Zn": 0.84,
+      "C_Org": 108.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 5.0,
+      "K2O": 3.0,
+      "Mn": 0.05,
+      "Mo": 0.1,
+      "Zn": 0.07,
+      "C_Org": 9.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__humitec",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Humitec",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 89.6,
+      "K2O": 44.8,
+      "C_Org": 112.0
+    },
+    "nutrientsPercent": {
+      "N": 8.0,
+      "K2O": 4.0,
+      "C_Org": 10.0
+    },
+    "density": 1.12,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__humitec-wg",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Humitec WG",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 170.0,
+      "C_Org": 370.0
+    },
+    "nutrientsPercent": {
+      "K2O": 17.0,
+      "C_Org": 37.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__nitrostarter-plus",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "NitroStarter Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 20.0,
+      "K2O": 10.0,
+      "Co": 5.0,
+      "Mo": 100.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 2.0,
+      "K2O": 1.0,
+      "Co": 0.5,
+      "Mo": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__tradeseed",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "TradeSeed",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 30.0,
+      "P2O5": 26.0,
+      "K2O": 30.0,
+      "Mn": 10.0,
+      "Zn": 25.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 2.6,
+      "K2O": 3.0,
+      "Mn": 1.0,
+      "Zn": 2.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__trafos-blue-plus",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Trafos Blue Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 615.0,
+      "Mg": 95.0,
+      "Cu": 5.0,
+      "Mn": 10.0,
+      "Mo": 0.4,
+      "Zn": 8.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 61.5,
+      "Mg": 9.5,
+      "Cu": 0.5,
+      "Mn": 1.0,
+      "Mo": 0.04,
+      "Zn": 0.8
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__trafos-green-plus",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Trafos Green Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 450.0,
+      "Ca": 125.0,
+      "B": 26.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 45.0,
+      "Ca": 12.5,
+      "B": 2.6
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__trafos-k",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Trafos K",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 300.0,
+      "K2O": 200.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__trafos-yellow-plus",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Trafos Yellow Plus",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 420.0,
+      "Ca": 217.0,
+      "Mn": 14.0,
+      "Zn": 11.2
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "Ca": 15.5,
+      "Mn": 1.0,
+      "Zn": 0.8
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__fainal-k",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Fainal K",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 44.7,
+      "K2O": 461.9
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "K2O": 31.0
+    },
+    "density": 1.49,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__folur-s",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Folur S",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 302.0,
+      "S": 86.07
+    },
+    "nutrientsPercent": {
+      "N": 20.0,
+      "S": 5.7
+    },
+    "density": 1.51,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__lower-7",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Lower 7",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 226.5,
+      "S": 241.6
+    },
+    "nutrientsPercent": {
+      "N": 15.0,
+      "S": 16.0
+    },
+    "density": 1.51,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__phorce-5",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "pHorce 5",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 181.2,
+      "S": 196.3
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "S": 13.0
+    },
+    "density": 1.51,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__nutricomplex-azul",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "NutriComplex Azul",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "P2O5": 400.0,
+      "K2O": 100.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "P2O5": 40.0,
+      "K2O": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__nutricomplex-branco",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "NutriComplex Branco",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 200.0,
+      "B": 20.0
+    },
+    "nutrientsPercent": {
+      "Ca": 20.0,
+      "B": 2.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__nutricomplex-micromix",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "NutriComplex MicroMix",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 60.0,
+      "B": 10.0,
+      "Cu": 5.8,
+      "Fe": 13.0,
+      "Mn": 20.0,
+      "Zn": 25.0
+    },
+    "nutrientsPercent": {
+      "Mg": 6.0,
+      "B": 1.0,
+      "Cu": 0.58,
+      "Fe": 1.3,
+      "Mn": 2.0,
+      "Zn": 2.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__nutricomplex-naranja",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "NutriComplex Naranja",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 100.0,
+      "K2O": 400.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "P2O5": 10.0,
+      "K2O": 40.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__nutricomplex-rojo",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "NutriComplex Rojo",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 110.0,
+      "P2O5": 50.0,
+      "K2O": 340.0
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "P2O5": 5.0,
+      "K2O": 34.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__nutricomplex-triple",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "NutriComplex Triple",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 170.0,
+      "P2O5": 170.0,
+      "K2O": 170.0
+    },
+    "nutrientsPercent": {
+      "N": 17.0,
+      "P2O5": 17.0,
+      "K2O": 17.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__nutricomplex-verde",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "NutriComplex Verde",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 240.0,
+      "P2O5": 60.0,
+      "K2O": 60.0
+    },
+    "nutrientsPercent": {
+      "N": 24.0,
+      "P2O5": 6.0,
+      "K2O": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__pumma",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Pumma",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 270.0,
+      "Mg": 17.0,
+      "S": 70.0,
+      "B": 5.0,
+      "Mn": 30.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "P2O5": 27.0,
+      "Mg": 1.7,
+      "S": 7.0,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "tradecorp__pumma-gr",
+    "brand": "TRADECORP",
+    "category": "Nutrição e Fisiologia",
+    "name": "Pumma GR",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 70.0,
+      "P2O5": 180.0,
+      "K2O": 40.0,
+      "S": 57.0,
+      "B": 30.0,
+      "Mn": 50.0,
+      "Mo": 3.0,
+      "Zn": 50.0
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "P2O5": 18.0,
+      "K2O": 4.0,
+      "S": 5.7,
+      "B": 3.0,
+      "Mn": 5.0,
+      "Mo": 0.3,
+      "Zn": 5.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__potamol",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "POTAMOL",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__potamol-plus",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "POTAMOL PLUS",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "K2O": 40.0,
+      "Mo": 20.0,
+      "C_Org": 115.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "K2O": 4.0,
+      "Mo": 2.0,
+      "C_Org": 11.5
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ubyfol-ml-71",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ubyfol ML-71",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ms-soja-rr",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "MS-Soja RR",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ms-mn15-rr",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "MS-Mn15 RR",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ms-mn20-rr",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "MS-Mn20 RR",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ms-mn25-rr",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "MS-Mn25 RR",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 185.0,
+      "B": 5.0,
+      "Cu": 10.0,
+      "Mn": 250.0,
+      "Zn": 40.0
+    },
+    "nutrientsPercent": {
+      "S": 18.5,
+      "B": 0.5,
+      "Cu": 1.0,
+      "Mn": 25.0,
+      "Zn": 4.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ms-cana",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "MS-Cana",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ms-2",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ms-2",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ubyfol-n-32",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ubyfol N-32",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ms-florada",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "MS-Florada",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 130.0,
+      "B": 80.0
+    },
+    "nutrientsPercent": {
+      "Ca": 13.0,
+      "B": 8.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ubyfol-l-cab",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ubyfol L-Cab",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__kymonplus",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "KYMONplus",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__0-0-50-s",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "0-0-50 + S",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 500.0,
+      "S": 160.0
+    },
+    "nutrientsPercent": {
+      "K2O": 50.0,
+      "S": 16.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__l-15-revitalizador",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "L-15 Revitalizador",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__l-s",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "L-S",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__acordex-ct",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Acordex CT",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__ubyphos-k",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "UBYphos + K",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__reduphol-plus",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Reduphol Plus",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "ubyfol__redupholmax",
+    "brand": "UBYFOL",
+    "category": "Nutrição e Fisiologia",
+    "name": "RedupholMax",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": null,
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__04-20-00",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "04-20-00",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 52.0,
+      "P2O5": 260.0,
+      "K2O": 0.0
+    },
+    "nutrientsPercent": {
+      "N": 4.0,
+      "P2O5": 20.0,
+      "K2O": 0.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__14-04-07-micros",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "14-04-07 + micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 182.0,
+      "P2O5": 52.0,
+      "K2O": 91.0,
+      "B": 0.39,
+      "Co": 0.065,
+      "Cu": 0.65,
+      "Mn": 0.65,
+      "Mo": 0.065,
+      "Zn": 1.3
+    },
+    "nutrientsPercent": {
+      "N": 14.0,
+      "P2O5": 4.0,
+      "K2O": 7.0,
+      "B": 0.03,
+      "Co": 0.005,
+      "Cu": 0.05,
+      "Mn": 0.05,
+      "Mo": 0.005,
+      "Zn": 0.1
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__07-14-07-micros",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "07-14-07 + micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 91.0,
+      "P2O5": 182.0,
+      "K2O": 91.0,
+      "B": 0.39,
+      "Co": 0.065,
+      "Cu": 0.65,
+      "Mn": 0.65,
+      "Mo": 0.065,
+      "Zn": 1.3
+    },
+    "nutrientsPercent": {
+      "N": 7.0,
+      "P2O5": 14.0,
+      "K2O": 7.0,
+      "B": 0.03,
+      "Co": 0.005,
+      "Cu": 0.05,
+      "Mn": 0.05,
+      "Mo": 0.005,
+      "Zn": 0.1
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__boro-10",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Boro 10%",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 134.0
+    },
+    "nutrientsPercent": {
+      "B": 10.0
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__cab",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "CaB",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 130.0,
+      "B": 6.5
+    },
+    "nutrientsPercent": {
+      "Ca": 10.0,
+      "B": 0.5
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__cab-2",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "CaB 2",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 110.4,
+      "B": 27.6
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__calcio",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 191.8
+    },
+    "nutrientsPercent": {
+      "Ca": 14.0
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__citromano",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Citromano",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 160.8,
+      "Mg": 16.08,
+      "S": 53.6,
+      "B": 6.7,
+      "Mn": 26.8,
+      "Mo": 1.34,
+      "Zn": 46.9
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "Mg": 1.2,
+      "S": 4.0,
+      "B": 0.5,
+      "Mn": 2.0,
+      "Mo": 0.1,
+      "Zn": 3.5
+    },
+    "density": 1.34,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__citromax",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Citromax",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 168.0,
+      "P2O5": 70.0,
+      "Mg": 16.8,
+      "S": 21.0,
+      "B": 7.0,
+      "Mn": 42.0,
+      "Mo": 0.07,
+      "Zn": 63.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "P2O5": 5.0,
+      "Mg": 1.2,
+      "S": 1.5,
+      "B": 0.5,
+      "Mn": 3.0,
+      "Mo": 0.005,
+      "Zn": 4.5
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__cobre-7",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Cobre 7%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Cu": 82.6
+    },
+    "nutrientsPercent": {
+      "Cu": 7.0
+    },
+    "density": 1.18,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__como-1-10",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "CoMo 1-10",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 13.8,
+      "Mo": 138.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__como-1-6",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "CoMo 1-6",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 12.5,
+      "Mo": 75.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 6.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__ferro-7",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ferro 7%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 82.6
+    },
+    "nutrientsPercent": {
+      "Fe": 7.0
+    },
+    "density": 1.18,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__granado",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Granado",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 13.8,
+      "S": 55.2,
+      "B": 6.9,
+      "Cu": 6.9,
+      "Mn": 69.0,
+      "Mo": 0.069,
+      "Zn": 41.4
+    },
+    "nutrientsPercent": {
+      "Mg": 1.0,
+      "S": 4.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Mn": 5.0,
+      "Mo": 0.005,
+      "Zn": 3.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__granado-3",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Granado 3",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 13.3,
+      "S": 53.2,
+      "B": 6.65,
+      "Cu": 6.65,
+      "Fe": 1.33,
+      "Mn": 13.3,
+      "Mo": 1.33,
+      "Zn": 66.5
+    },
+    "nutrientsPercent": {
+      "Mg": 1.0,
+      "S": 4.0,
+      "B": 0.5,
+      "Cu": 0.5,
+      "Fe": 0.1,
+      "Mn": 1.0,
+      "Mo": 0.1,
+      "Zn": 5.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__granado-4-s",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Granado 4 S",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 27.4,
+      "Co": 0.137,
+      "Mn": 41.1,
+      "Mo": 0.685,
+      "Zn": 82.2
+    },
+    "nutrientsPercent": {
+      "Mg": 2.0,
+      "Co": 0.01,
+      "Mn": 3.0,
+      "Mo": 0.05,
+      "Zn": 6.0
+    },
+    "density": 1.37,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__granado-m",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Granado-M",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 20.25,
+      "S": 54.0,
+      "B": 13.5,
+      "Cu": 6.75,
+      "Mn": 40.5,
+      "Mo": 1.35,
+      "Zn": 67.5
+    },
+    "nutrientsPercent": {
+      "Mg": 1.5,
+      "S": 4.0,
+      "B": 1.0,
+      "Cu": 0.5,
+      "Mn": 3.0,
+      "Mo": 0.1,
+      "Zn": 5.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__granado-s",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Granado-S",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 21.0,
+      "S": 56.0,
+      "B": 14.0,
+      "Cu": 21.0,
+      "Mn": 70.0,
+      "Mo": 1.4,
+      "Zn": 42.0
+    },
+    "nutrientsPercent": {
+      "Mg": 1.5,
+      "S": 4.0,
+      "B": 1.0,
+      "Cu": 1.5,
+      "Mn": 5.0,
+      "Mo": 0.1,
+      "Zn": 3.0
+    },
+    "density": 1.4,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__macro-universal",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Macro Universal",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 36.0,
+      "K2O": 144.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 3.0,
+      "K2O": 12.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__magnesio-4",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Magnésio 4%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 47.2,
+      "S": 59.0
+    },
+    "nutrientsPercent": {
+      "Mg": 4.0,
+      "S": 5.0
+    },
+    "density": 1.18,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__magnesio-9",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Magnésio 9%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 118.8
+    },
+    "nutrientsPercent": {
+      "Mg": 9.0
+    },
+    "density": 1.32,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__manganes-10",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Manganês 10%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 135.0
+    },
+    "nutrientsPercent": {
+      "Mn": 10.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__manganes-14",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Manganês 14%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 190.4
+    },
+    "nutrientsPercent": {
+      "Mn": 14.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__maxi-como",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Maxi-Como",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 173.0,
+      "Co": 25.95,
+      "Mo": 242.2
+    },
+    "nutrientsPercent": {
+      "P2O5": 10.0,
+      "Co": 1.5,
+      "Mo": 14.0
+    },
+    "density": 1.73,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__molibdenio-10",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Molibdênio 10%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 110.0
+    },
+    "nutrientsPercent": {
+      "Mo": 10.0
+    },
+    "density": 1.1,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__molibdenio-15",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Molibdênio 15%",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 67.5,
+      "Mo": 202.5
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "Mo": 15.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__nitro-30",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Nitro 30%",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 375.0
+    },
+    "nutrientsPercent": {
+      "N": 30.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__sulfa-quelatizada",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Sulfa Quelatizada",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 76.8,
+      "S": 230.4
+    },
+    "nutrientsPercent": {
+      "Ca": 6.0,
+      "S": 18.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__unifort-k",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Unifort-K",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 262.2,
+      "K2O": 303.6
+    },
+    "nutrientsPercent": {
+      "P2O5": 19.0,
+      "K2O": 22.0
+    },
+    "density": 1.38,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__unifosfito",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Unifosfito",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 384.0,
+      "K2O": 256.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 30.0,
+      "K2O": 20.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__unip-30",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Unip-30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 78.0,
+      "P2O5": 390.0
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "P2O5": 30.0
+    },
+    "density": 1.3,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__unisol-s-800",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Unisol S 800",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 783.0
+    },
+    "nutrientsPercent": {
+      "S": 54.0
+    },
+    "density": 1.45,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__zinco-21",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Zinco 21%",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 315.0
+    },
+    "nutrientsPercent": {
+      "Zn": 21.0
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__zinco-7",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Zinco 7%",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 62.5,
+      "Zn": 87.5
+    },
+    "nutrientsPercent": {
+      "S": 5.0,
+      "Zn": 7.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__cafe",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 159.6,
+      "Mg": 26.6,
+      "S": 66.5,
+      "B": 6.65,
+      "Zn": 66.5
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "Mg": 2.0,
+      "S": 5.0,
+      "B": 0.5,
+      "Zn": 5.0
+    },
+    "density": 1.33,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "unisolo__cafe-cerrado",
+    "brand": "UNISOLO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Café Cerrado",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 135.0,
+      "S": 81.0,
+      "B": 13.5,
+      "Mn": 67.5,
+      "Zn": 81.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 6.0,
+      "B": 1.0,
+      "Mn": 5.0,
+      "Zn": 6.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__agetec",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Agetec",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 144.0
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 12.0
+    },
+    "density": 1.2,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-asocofol",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Asocofol",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 31.75,
+      "S": 10.16,
+      "B": 38.1,
+      "Mn": 10.16,
+      "Zn": 6.35
+    },
+    "nutrientsPercent": {
+      "N": 2.5,
+      "S": 0.8,
+      "B": 3.0,
+      "Mn": 0.8,
+      "Zn": 0.5
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-calcio",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Cálcio",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 160.0,
+      "Ca": 171.2,
+      "Mg": 19.2,
+      "B": 0.8,
+      "Cu": 0.8,
+      "Fe": 1.6,
+      "Mn": 1.6
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Ca": 10.7,
+      "Mg": 1.2,
+      "B": 0.05,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.1
+    },
+    "density": 1.6,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-extra-como",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Extra CoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 12.5,
+      "Mo": 125.0
+    },
+    "nutrientsPercent": {
+      "Co": 1.0,
+      "Mo": 10.0
+    },
+    "density": 1.25,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-florada",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Florada",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 144.0,
+      "Ca": 160.0,
+      "Mg": 9.6,
+      "B": 32.0,
+      "Cu": 0.8,
+      "Fe": 1.6,
+      "Mn": 1.6,
+      "Zn": 4.8
+    },
+    "nutrientsPercent": {
+      "N": 9.0,
+      "Ca": 10.0,
+      "Mg": 0.6,
+      "B": 2.0,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.1,
+      "Zn": 0.3
+    },
+    "density": 1.6,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-manganes",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Manganês",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 68.0,
+      "Mn": 81.6
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "Mn": 6.0
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-micros",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Micros",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 160.74,
+      "P2O5": 160.74,
+      "K2O": 121.26,
+      "B": 10.011,
+      "Mn": 0.3666,
+      "Zn": 10.011
+    },
+    "nutrientsPercent": {
+      "N": 11.4,
+      "P2O5": 11.4,
+      "K2O": 8.6,
+      "B": 0.71,
+      "Mn": 0.026,
+      "Zn": 0.71
+    },
+    "density": 1.41,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-plus-s-mg",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Plus S-Mg",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 199.8,
+      "K2O": 150.96,
+      "Mg": 25.16,
+      "S": 68.08,
+      "B": 10.064,
+      "Mn": 0.3848,
+      "Zn": 10.064
+    },
+    "nutrientsPercent": {
+      "N": 13.5,
+      "K2O": 10.2,
+      "Mg": 1.7,
+      "S": 4.6,
+      "B": 0.68,
+      "Mn": 0.026,
+      "Zn": 0.68
+    },
+    "density": 1.48,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-polimicro",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Polimicro",
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 14.3,
+      "B": 23.595,
+      "Mn": 23.595,
+      "Mo": 23.595,
+      "Zn": 46.475
+    },
+    "nutrientsPercent": {
+      "S": 1.0,
+      "B": 1.65,
+      "Mn": 1.65,
+      "Mo": 1.65,
+      "Zn": 3.25
+    },
+    "density": 1.43,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-semillion",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Semillion",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 150.0,
+      "S": 39.0,
+      "B": 15.0,
+      "Cu": 7.5,
+      "Mn": 15.0,
+      "Mo": 22.5,
+      "Zn": 22.5
+    },
+    "nutrientsPercent": {
+      "K2O": 10.0,
+      "S": 2.6,
+      "B": 1.0,
+      "Cu": 0.5,
+      "Mn": 1.0,
+      "Mo": 1.5,
+      "Zn": 1.5
+    },
+    "density": 1.5,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "upl__wuxal-super-k-400",
+    "brand": "UPL",
+    "category": "Nutrição e Fisiologia",
+    "name": "Wuxal Super K 400",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.1,
+      "K2O": 417.5,
+      "Mg": 20.04,
+      "S": 133.6,
+      "B": 0.334,
+      "Cu": 0.835,
+      "Fe": 1.67,
+      "Mn": 0.835
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "K2O": 25.0,
+      "Mg": 1.2,
+      "S": 8.0,
+      "B": 0.02,
+      "Cu": 0.05,
+      "Fe": 0.1,
+      "Mn": 0.05
+    },
+    "density": 1.67,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__boroplus",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Boroplus",
+    "hasNutrients": true,
+    "nutrients": {
+      "B": 139.7
+    },
+    "nutrientsPercent": {
+      "B": 11.0
+    },
+    "density": 1.27,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__brexil-mn",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Brexil Mn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 100.0
+    },
+    "nutrientsPercent": {
+      "Mn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__brexil-top",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Brexil Top",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mg": 15.0,
+      "S": 100.0,
+      "B": 20.0,
+      "Mn": 50.0,
+      "Mo": 5.0,
+      "Zn": 60.0
+    },
+    "nutrientsPercent": {
+      "Mg": 1.5,
+      "S": 10.0,
+      "B": 2.0,
+      "Mn": 5.0,
+      "Mo": 0.5,
+      "Zn": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__brexil-zn",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Brexil Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__cab-2",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "CaB 2",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 80.0,
+      "B": 20.0
+    },
+    "nutrientsPercent": {
+      "Ca": 8.0,
+      "B": 2.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__calbit-c",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Calbit C",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 107.0
+    },
+    "nutrientsPercent": {
+      "Ca": 10.7
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__control-dmp",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Control DMP",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 30.0,
+      "P2O5": 170.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "P2O5": 17.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__ferrilene-6",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Ferrilene 6",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 60.0
+    },
+    "nutrientsPercent": {
+      "Fe": 6.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__megafol",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Megafol",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 140.8,
+      "P2O5": 12.8,
+      "SubsHumicas": 320.0
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "P2O5": 1.0,
+      "SubsHumicas": 25.0
+    },
+    "density": 1.28,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__meloxina",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Meloxina",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "Ca": 71.5,
+      "Mg": 30.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "Ca": 7.15,
+      "Mg": 3.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__molibion",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Molibion",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mo": 80.0
+    },
+    "nutrientsPercent": {
+      "Mo": 8.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__plantafol-10-55-10",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Plantafol 10-55-10",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "P2O5": 550.0,
+      "K2O": 100.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "P2O5": 55.0,
+      "K2O": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__plantafol-5-15-45",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Plantafol 5-15-45",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 50.0,
+      "P2O5": 150.0,
+      "K2O": 450.0,
+      "B": 0.04
+    },
+    "nutrientsPercent": {
+      "N": 5.0,
+      "P2O5": 15.0,
+      "K2O": 45.0,
+      "B": 0.004
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__potassio-20",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Potássio 20",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 40.5,
+      "K2O": 243.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "K2O": 18.0
+    },
+    "density": 1.35,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__sweet",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Sweet",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 71.0,
+      "Mg": 6.0
+    },
+    "nutrientsPercent": {
+      "Ca": 7.1,
+      "Mg": 0.6
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__trinador-mz",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Trinador Mz",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 150.0,
+      "K2O": 50.0,
+      "B": 1.0,
+      "Cu": 1.0,
+      "Fe": 2.0,
+      "Mn": 91.0,
+      "Zn": 70.0
+    },
+    "nutrientsPercent": {
+      "N": 15.0,
+      "K2O": 5.0,
+      "B": 0.1,
+      "Cu": 0.1,
+      "Fe": 0.2,
+      "Mn": 9.1,
+      "Zn": 7.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__trinador-z",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Trinador Z",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 100.0,
+      "S": 60.0,
+      "B": 30.0,
+      "Mn": 10.0,
+      "Mo": 5.0,
+      "Zn": 100.0
+    },
+    "nutrientsPercent": {
+      "N": 10.0,
+      "S": 6.0,
+      "B": 3.0,
+      "Mn": 1.0,
+      "Mo": 0.5,
+      "Zn": 10.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "valagro__viva",
+    "brand": "VALAGRO",
+    "category": "Nutrição e Fisiologia",
+    "name": "Viva",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 30.0,
+      "K2O": 90.0,
+      "SubsHumicas": 250.0
+    },
+    "nutrientsPercent": {
+      "N": 3.0,
+      "K2O": 9.0,
+      "SubsHumicas": 25.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaraliva-calcinit",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraLiva Calcinit",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 155.0,
+      "Ca": 190.0
+    },
+    "nutrientsPercent": {
+      "N": 15.5,
+      "Ca": 19.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaraliva-nitrabor",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraLiva Nitrabor",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 155.0,
+      "Ca": 190.0,
+      "B": 3.0
+    },
+    "nutrientsPercent": {
+      "N": 15.5,
+      "Ca": 19.0,
+      "B": 0.3
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-zintrac",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Zintrac",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 17.34,
+      "Zn": 693.6
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Zn": 40.0
+    },
+    "density": 1.734,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-mantrac",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Mantrac",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 69.426,
+      "Mn": 500.598
+    },
+    "nutrientsPercent": {
+      "N": 3.8,
+      "Mn": 27.4
+    },
+    "density": 1.827,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-coptrac",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Coptrac",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 68.535,
+      "Cu": 499.544
+    },
+    "nutrientsPercent": {
+      "N": 4.5,
+      "Cu": 32.8
+    },
+    "density": 1.523,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-mancozin",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Mancozin",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 61.215,
+      "Cu": 110.187,
+      "Mn": 330.561,
+      "Zn": 83.952
+    },
+    "nutrientsPercent": {
+      "N": 3.5,
+      "Cu": 6.3,
+      "Mn": 18.9,
+      "Zn": 4.8
+    },
+    "density": 1.749,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-amazinc",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Amazinc",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 33.763,
+      "Mn": 248.78,
+      "Zn": 346.515
+    },
+    "nutrientsPercent": {
+      "N": 1.9,
+      "Mn": 14.0,
+      "Zn": 19.5
+    },
+    "density": 1.777,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-cabtrac-solucao",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita CaBtrac Solução",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 122.4,
+      "B": 20.4,
+      "Mn": 1.36
+    },
+    "nutrientsPercent": {
+      "Ca": 9.0,
+      "B": 1.5,
+      "Mn": 0.1
+    },
+    "density": 1.36,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-bortrac",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Bortrac",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 64.484,
+      "B": 149.548
+    },
+    "nutrientsPercent": {
+      "N": 4.7,
+      "B": 10.9
+    },
+    "density": 1.372,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-stopit",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Stopit",
+    "hasNutrients": true,
+    "nutrients": {
+      "Ca": 160.567
+    },
+    "nutrientsPercent": {
+      "Ca": 12.1
+    },
+    "density": 1.327,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-agripotash",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Agripotash",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 79.305,
+      "K2O": 500.71
+    },
+    "nutrientsPercent": {
+      "P2O5": 5.1,
+      "K2O": 32.2
+    },
+    "density": 1.555,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-safe-k",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Safe K",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 495.38
+    },
+    "nutrientsPercent": {
+      "K2O": 34.0
+    },
+    "density": 1.457,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-thiotrac",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Thiotrac",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 148.176,
+      "S": 340.011
+    },
+    "nutrientsPercent": {
+      "N": 11.2,
+      "S": 25.7
+    },
+    "density": 1.323,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-molytrac",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Molytrac",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 249.55,
+      "Mo": 249.55
+    },
+    "nutrientsPercent": {
+      "P2O5": 15.5,
+      "Mo": 15.5
+    },
+    "density": 1.61,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-phosamco",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Phosamco",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 99.62,
+      "P2O5": 39.848,
+      "K2O": 70.32,
+      "B": 0.1992,
+      "Cu": 0.9376,
+      "Mn": 1.2892
+    },
+    "nutrientsPercent": {
+      "N": 8.5,
+      "P2O5": 3.4,
+      "K2O": 6.0,
+      "B": 0.017,
+      "Cu": 0.08,
+      "Mn": 0.11
+    },
+    "density": 1.172,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-teprosyn-zn",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Teprosyn Zn",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 16.7,
+      "Zn": 601.2
+    },
+    "nutrientsPercent": {
+      "N": 1.0,
+      "Zn": 36.0
+    },
+    "density": 1.67,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-teprosyn-como",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Teprosyn CoMo",
+    "hasNutrients": true,
+    "nutrients": {
+      "Co": 22.515,
+      "Mo": 225.15
+    },
+    "nutrientsPercent": {
+      "Co": 1.425,
+      "Mo": 14.25
+    },
+    "density": 1.58,
+    "unit": "L/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-reloxin-q48",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Reloxin Q48",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 108.0
+    },
+    "nutrientsPercent": {
+      "Fe": 10.8
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-reloxin-m48",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Reloxin M48",
+    "hasNutrients": true,
+    "nutrients": {
+      "Fe": 113.0
+    },
+    "nutrientsPercent": {
+      "Fe": 11.3
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__yaravita-reloxin-bra",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "YaraVita Reloxin BRA",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 116.0,
+      "Mg": 8.6,
+      "S": 12.8,
+      "B": 21.0,
+      "Cu": 3.6,
+      "Fe": 26.6,
+      "Mn": 24.8,
+      "Mo": 0.36,
+      "Zn": 33.8
+    },
+    "nutrientsPercent": {
+      "K2O": 11.6,
+      "Mg": 0.86,
+      "S": 1.28,
+      "B": 2.1,
+      "Cu": 0.36,
+      "Fe": 2.66,
+      "Mn": 2.48,
+      "Mo": 0.036,
+      "Zn": 3.38
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__krista-k",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Krista K",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 120.0,
+      "K2O": 450.0,
+      "S": 12.0
+    },
+    "nutrientsPercent": {
+      "N": 12.0,
+      "K2O": 45.0,
+      "S": 1.2
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__krista-sop",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Krista SOP",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 500.0,
+      "S": 170.0
+    },
+    "nutrientsPercent": {
+      "K2O": 50.0,
+      "S": 17.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__krista-map",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Krista MAP",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 110.0,
+      "P2O5": 600.0
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "P2O5": 60.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__krista-mkp",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Krista MKP",
+    "hasNutrients": true,
+    "nutrients": {
+      "P2O5": 520.0,
+      "K2O": 340.0
+    },
+    "nutrientsPercent": {
+      "P2O5": 52.0,
+      "K2O": 34.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__krista-mag",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Krista MAG",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 110.0,
+      "Mg": 93.0
+    },
+    "nutrientsPercent": {
+      "N": 11.0,
+      "Mg": 9.3
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__krista-up",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Krista UP",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 175.0,
+      "P2O5": 440.0
+    },
+    "nutrientsPercent": {
+      "N": 17.5,
+      "P2O5": 44.0
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__kristalon-06-12-36",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Kristalon 06-12-36",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 60.0,
+      "P2O5": 120.0,
+      "K2O": 360.0,
+      "Mg": 18.0,
+      "S": 80.0,
+      "B": 0.25,
+      "Cu": 0.1,
+      "Fe": 0.7,
+      "Mn": 0.4,
+      "Mo": 0.04,
+      "Zn": 0.25
+    },
+    "nutrientsPercent": {
+      "N": 6.0,
+      "P2O5": 12.0,
+      "K2O": 36.0,
+      "Mg": 1.8,
+      "S": 8.0,
+      "B": 0.025,
+      "Cu": 0.01,
+      "Fe": 0.07,
+      "Mn": 0.04,
+      "Mo": 0.004,
+      "Zn": 0.025
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__kristalon-13-40-13",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Kristalon 13-40-13",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 130.0,
+      "P2O5": 400.0,
+      "K2O": 130.0,
+      "B": 0.25,
+      "Cu": 0.1,
+      "Fe": 0.7,
+      "Mn": 0.4,
+      "Mo": 0.04,
+      "Zn": 0.25
+    },
+    "nutrientsPercent": {
+      "N": 13.0,
+      "P2O5": 40.0,
+      "K2O": 13.0,
+      "B": 0.025,
+      "Cu": 0.01,
+      "Fe": 0.07,
+      "Mn": 0.04,
+      "Mo": 0.004,
+      "Zn": 0.025
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__kristalon-15-05-30",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Kristalon 15-05-30",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 150.0,
+      "P2O5": 50.0,
+      "K2O": 300.0,
+      "Mg": 18.0,
+      "S": 20.0,
+      "B": 0.25,
+      "Cu": 0.1,
+      "Fe": 0.7,
+      "Mn": 0.4,
+      "Mo": 0.04,
+      "Zn": 0.25
+    },
+    "nutrientsPercent": {
+      "N": 15.0,
+      "P2O5": 5.0,
+      "K2O": 30.0,
+      "Mg": 1.8,
+      "S": 2.0,
+      "B": 0.025,
+      "Cu": 0.01,
+      "Fe": 0.07,
+      "Mn": 0.04,
+      "Mo": 0.004,
+      "Zn": 0.025
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__kristalon-18-18-18",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Kristalon 18-18-18",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 180.0,
+      "P2O5": 180.0,
+      "K2O": 180.0,
+      "B": 0.5,
+      "Cu": 0.2,
+      "Fe": 1.4,
+      "Mn": 0.8,
+      "Mo": 0.08,
+      "Zn": 0.5
+    },
+    "nutrientsPercent": {
+      "N": 18.0,
+      "P2O5": 18.0,
+      "K2O": 18.0,
+      "B": 0.05,
+      "Cu": 0.02,
+      "Fe": 0.14,
+      "Mn": 0.08,
+      "Mo": 0.008,
+      "Zn": 0.05
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
+  },
+  {
+    "id": "yara__kristalon-19-06-20",
+    "brand": "YARA",
+    "category": "Nutrição e Fisiologia",
+    "name": "Kristalon 19-06-20",
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 190.0,
+      "P2O5": 60.0,
+      "K2O": 200.0,
+      "Mg": 18.0,
+      "S": 30.0,
+      "B": 0.25,
+      "Cu": 0.1,
+      "Fe": 0.7,
+      "Mn": 0.4,
+      "Mo": 0.04,
+      "Zn": 0.25
+    },
+    "nutrientsPercent": {
+      "N": 19.0,
+      "P2O5": 6.0,
+      "K2O": 20.0,
+      "Mg": 1.8,
+      "S": 3.0,
+      "B": 0.025,
+      "Cu": 0.01,
+      "Fe": 0.07,
+      "Mn": 0.04,
+      "Mo": 0.004,
+      "Zn": 0.025
+    },
+    "density": null,
+    "unit": "kg/ha",
+    "defaultDose": null,
+    "doseRaw": null,
+    "composition": null,
+    "source": null,
+    "description": null,
+    "observations": null,
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Planilha \"Produtos Nutricionais\" enviada pelo usuário (ago/2026) — %m/m e densidade; sem dose informada na planilha de origem, cadastre e trave a dose pelo painel \"Cadastro de doses\" do app."
   }
 ];

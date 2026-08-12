@@ -18,6 +18,8 @@ import {
   Moon,
   Gauge,
   ArrowRightLeft,
+  ClipboardList,
+  Lock,
 } from "lucide-react";
 import { PRODUCTS } from "./data/products.js";
 import { EQUIVALENCES, EQUIVALENCE_FOOTNOTES } from "./data/equivalences.js";
@@ -31,6 +33,7 @@ import ManagementPresetsPanel from "./dashboard/ManagementPresetsPanel.jsx";
 import SuggestionPanel from "./dashboard/SuggestionPanel.jsx";
 import { suggestAgroceteProducts, uncoveredKeys } from "./dashboard/suggestAgrocete.js";
 import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar, nutrientBadge, NutrientBadge } from "./dashboard/CostEfficiency.jsx";
+import DoseRegistryPanel, { effectiveDose, hasRegisteredDose } from "./dashboard/DoseRegistryPanel.jsx";
 
 const NUTRIENT_META = {
   N: { label: "Nitrogênio", group: "macro" },
@@ -47,7 +50,10 @@ const NUTRIENT_META = {
   Mo: { label: "Molibdênio", group: "micro" },
   Ni: { label: "Níquel", group: "micro" },
   Co: { label: "Cobalto", group: "micro" },
+  Si: { label: "Silício", group: "micro" },
   C_Org: { label: "Carbono Orgânico", group: "outro" },
+  AminoAcidos: { label: "Aminoácidos", group: "outro" },
+  SubsHumicas: { label: "Substâncias Húmicas", group: "outro" },
 };
 const GROUP_ORDER = { macro: 0, secundario: 1, micro: 2, outro: 3 };
 
@@ -108,7 +114,8 @@ export default function Dashboard() {
   const [selected, setSelected] = useState(() => loadPersistedState()?.selected ?? {}); // id -> { dose, price }
   const [customProducts, setCustomProducts] = useState(() => loadPersistedState()?.customProducts ?? []);
   const [templates, setTemplates] = useState(() => loadPersistedState()?.templates ?? []);
-  const [mode, setMode] = useState("categoria"); // 'categoria' | 'marca'
+  const [doseRegistry, setDoseRegistry] = useState(() => loadPersistedState()?.doseRegistry ?? {}); // id -> { dose, unit, locked }
+  const [mode, setMode] = useState("categoria"); // 'categoria' | 'marca' | 'doses'
   const [search, setSearch] = useState("");
   const [openEquivCategory, setOpenEquivCategory] = useState(null);
   const [openBrand, setOpenBrand] = useState(AGROCETE);
@@ -125,11 +132,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, customProducts, templates }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, customProducts, templates, doseRegistry }));
     } catch {
       // localStorage indisponível — ignora, estado só não persiste
     }
-  }, [selected, customProducts, templates]);
+  }, [selected, customProducts, templates, doseRegistry]);
 
   const allProducts = useMemo(() => [...PRODUCTS, ...customProducts], [customProducts]);
   const productsById = useMemo(() => new Map(allProducts.map((p) => [p.id, p])), [allProducts]);
@@ -141,7 +148,7 @@ export default function Dashboard() {
       if (next[product.id]) {
         delete next[product.id];
       } else {
-        next[product.id] = { dose: product.defaultDose ?? 0, price: product.defaultPrice ?? 0 };
+        next[product.id] = { dose: effectiveDose(product, doseRegistry), price: product.defaultPrice ?? 0 };
       }
       return next;
     });
@@ -149,6 +156,37 @@ export default function Dashboard() {
 
   function updateSelected(id, field, value) {
     setSelected((prev) => ({ ...prev, [id]: { ...prev[id], [field]: value } }));
+  }
+
+  function updateDoseRegistry(id, patch) {
+    setDoseRegistry((prev) => ({ ...prev, [id]: { ...prev[id], ...patch } }));
+  }
+
+  function toggleDoseLock(id) {
+    const product = productsById.get(id);
+    setDoseRegistry((prev) => {
+      const current = prev[id] || {};
+      const nextLocked = !current.locked;
+      // trava só é permitida com uma dose numérica > 0 já digitada
+      if (nextLocked) {
+        const n = parseFloat(current.dose ?? product?.defaultDose ?? "");
+        if (isNaN(n) || n <= 0) return prev;
+      }
+      return {
+        ...prev,
+        [id]: {
+          dose: current.dose ?? (product?.defaultDose != null ? String(product.defaultDose) : ""),
+          unit: current.unit ?? product?.unit ?? "L/ha",
+          locked: nextLocked,
+        },
+      };
+    });
+    vibrate(12);
+  }
+
+  function importDoseRegistry(data) {
+    setDoseRegistry((prev) => ({ ...prev, ...data }));
+    vibrate(15);
   }
 
   function addCustomProduct() {
@@ -605,44 +643,49 @@ export default function Dashboard() {
           <KpiCard color="#F43F5E" label="Linhas de equivalência" value={kpis.equivCount} />
         </div>
 
-        {/* SEARCH */}
-        <div style={{ position: "relative", marginBottom: 10 }}>
-          <Search size={15} color="#8CA0AF" style={{ position: "absolute", left: 12, top: 11 }} />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="Buscar produto, composição, categoria ou nutriente (ex: Zinco)..."
-            style={{
-              width: "100%",
-              padding: "10px 12px 10px 34px",
-              borderRadius: 10,
-              border: "1px solid #24313D",
-              background: "#17212B",
-              color: "#E8EDF1",
-              fontSize: 13,
-              boxSizing: "border-box",
-              fontFamily: "inherit",
-            }}
-          />
-        </div>
+        {mode !== "doses" && (
+          <>
+            {/* SEARCH */}
+            <div style={{ position: "relative", marginBottom: 10 }}>
+              <Search size={15} color="#8CA0AF" style={{ position: "absolute", left: 12, top: 11 }} />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                placeholder="Buscar produto, composição, categoria ou nutriente (ex: Zinco)..."
+                style={{
+                  width: "100%",
+                  padding: "10px 12px 10px 34px",
+                  borderRadius: 10,
+                  border: "1px solid #24313D",
+                  background: "#17212B",
+                  color: "#E8EDF1",
+                  fontSize: 13,
+                  boxSizing: "border-box",
+                  fontFamily: "inherit",
+                }}
+              />
+            </div>
 
-        {/* FILTER CHIPS */}
-        <div className="filter-chip-row" style={{ marginBottom: 14 }}>
-          <FilterChip label="Todos" active={activeChip === "all"} onClick={selectAllChip} />
-          <FilterChip label="Somente Agrocete" active={activeChip === "agrocete"} onClick={selectAgroceteChip} color={AGROCETE_COLOR} />
-          {NUTRIENT_CHIP_KEYS.map((key) => (
-            <FilterChip key={key} label={NUTRIENT_META[key]?.label ?? key} active={activeChip === `nutrient:${key}`} onClick={() => selectNutrientChip(key)} />
-          ))}
-          {CATEGORY_CHIPS.map((cat) => (
-            <FilterChip key={cat} label={cat} active={activeChip === `category:${cat}`} onClick={() => selectCategoryChip(cat)} />
-          ))}
-        </div>
+            {/* FILTER CHIPS */}
+            <div className="filter-chip-row" style={{ marginBottom: 14 }}>
+              <FilterChip label="Todos" active={activeChip === "all"} onClick={selectAllChip} />
+              <FilterChip label="Somente Agrocete" active={activeChip === "agrocete"} onClick={selectAgroceteChip} color={AGROCETE_COLOR} />
+              {NUTRIENT_CHIP_KEYS.map((key) => (
+                <FilterChip key={key} label={NUTRIENT_META[key]?.label ?? key} active={activeChip === `nutrient:${key}`} onClick={() => selectNutrientChip(key)} />
+              ))}
+              {CATEGORY_CHIPS.map((cat) => (
+                <FilterChip key={cat} label={cat} active={activeChip === `category:${cat}`} onClick={() => selectCategoryChip(cat)} />
+              ))}
+            </div>
+          </>
+        )}
 
         {/* MODE TABS */}
-        <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
           <ModeTab active={mode === "categoria"} onClick={() => setMode("categoria")} icon={<Layers size={14} />} label="Por categoria" />
           <ModeTab active={mode === "marca"} onClick={() => setMode("marca")} icon={<Building2 size={14} />} label="Por marca" />
+          <ModeTab active={mode === "doses"} onClick={() => setMode("doses")} icon={<ClipboardList size={14} />} label="Cadastro de doses" />
         </div>
 
         {mode === "categoria" && (
@@ -747,6 +790,7 @@ export default function Dashboard() {
                             product={product}
                             color={color}
                             isSelected={!!selected[product.id]}
+                            doseLocked={!!doseRegistry[product.id]?.locked}
                             onToggle={() => toggleProduct(product)}
                             doseValue={selected[product.id]?.dose}
                             priceValue={selected[product.id]?.price}
@@ -772,6 +816,18 @@ export default function Dashboard() {
               })}
             </div>
           </section>
+        )}
+
+        {mode === "doses" && (
+          <DoseRegistryPanel
+            allProducts={allProducts}
+            doseRegistry={doseRegistry}
+            onChangeDose={updateDoseRegistry}
+            onToggleLock={toggleDoseLock}
+            onImportRegistry={importDoseRegistry}
+            nutrientMeta={NUTRIENT_META}
+            brandColor={brandColor}
+          />
         )}
 
       </div>
@@ -1127,7 +1183,7 @@ function CostCard({ label, value, color }) {
 // +), quando selecionado ganha só uma segunda linha com dose rápida (+/-) e
 // preço — a edição completa (slider, passo fino) mora no QuickEditDrawer,
 // pra não empilhar formulário dentro da rolagem do catálogo.
-function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue, priceValue, onRemove, onOpenEditor }) {
+function ProductCard({ product, color, isSelected, doseLocked, onToggle, onUpdate, doseValue, priceValue, onRemove, onOpenEditor }) {
   const [dx, setDx] = useState(0);
   const [dragging, setDragging] = useState(false);
   const startX = React.useRef(0);
@@ -1197,6 +1253,14 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
             <div style={{ minWidth: 0 }}>
               <div style={{ fontWeight: 600, fontSize: 14 }}>
                 {product.name}{" "}
+                {doseLocked && (
+                  <Lock
+                    size={10}
+                    color={isSelected ? "#0B1319" : "#1FBF8F"}
+                    style={{ display: "inline", verticalAlign: "middle" }}
+                    aria-label="Dose travada no Cadastro de doses"
+                  />
+                )}{" "}
                 {product.category && (
                   <span style={{ fontSize: 10, color: isSelected ? "#0B131999" : "#8298A6", fontWeight: 400 }}> · {product.category}</span>
                 )}

@@ -1,9 +1,10 @@
 # Painel Agrocete — Comparador de Portfólio x Mercado
 
 Dashboard para agilizar cotações: navegue pelo portfólio completo da
-Agrocete e de 11 marcas concorrentes, monte um comparativo de nutrientes
-(g/ha) e custo, e veja o posicionamento técnico calculado automaticamente
-a partir dos dados reais das planilhas internas.
+Agrocete e de 57 marcas concorrentes, monte um comparativo de nutrientes
+(g/ha) e custo, cadastre e trave a dose de cada produto pra já ver a
+concentração de nutrientes calculada, e veja o posicionamento técnico
+calculado automaticamente a partir dos dados reais das planilhas internas.
 
 ## Rodar localmente
 
@@ -38,13 +39,19 @@ senha" abaixo para trocar).
   entregue, insights automáticos, a barra de comparação compacta
   (`CompareBar`, cor fixa por identidade: verde = Agrocete, cinza =
   concorrente) e o selo `NutrientBadge` ("▲ +23%" / "só Agrocete").
+- `src/dashboard/DoseRegistryPanel.jsx` — aba "Cadastro de doses":
+  lista os produtos sem dose (com busca, filtro por marca e os toggles
+  "só sem dose" / "só com nutrientes"), deixa digitar e travar a dose
+  de cada um, mostra a concentração de cada nutriente calculada na hora
+  (dose × concentração por unidade) e exporta/importa o cadastro em
+  JSON. Ver seção "Cadastro de doses" abaixo.
 - `src/dashboard.css` — micro-interações que inline styles não
   expressam: escala ao tocar, accordion com altura suave, pulso do
   bottom sheet, estilo do slider.
 - `src/PasswordGate.jsx` — tela de senha antes de carregar o dashboard.
 - `src/main.jsx` — ponto de entrada React.
-- `src/data/products.js` — catálogo de 308 produtos (Agrocete + 11
-  marcas concorrentes), gerado a partir de planilha interna.
+- `src/data/products.js` — catálogo de 1521 produtos (Agrocete + 57
+  marcas concorrentes), gerado a partir de planilhas internas.
 - `src/data/equivalences.js` — matriz de 35 linhas de produto,
   mapeando o produto Agrocete e o equivalente de cada marca
   concorrente (quando existe).
@@ -108,25 +115,108 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
   duplo exatamente como constava na planilha de equivalência). Preencha
   as concentrações desses produtos abrindo o card e editando, ou peça
   pro Claude Code cadastrar a partir de uma ficha técnica/planilha.
+- **969 produtos de 33 marcas, vindos da planilha "Produtos
+  Nutricionais"** enviada pelo usuário (ago/2026) — 996 linhas no
+  total, uma aba só com nome do produto, %m/m por nutriente e
+  densidade (sem nenhuma coluna de dose). 32 marcas são novas no
+  catálogo (Agrária, Agrichem, Agrolatina, Agroplanta, Ajinomoto,
+  Alltech, Altagro, Aminoagro, Biolchim, Biosoja, BMS, Brasilquímica,
+  Compass Minerals, Compo, Defensive, Fertilizantes Heringer, Intercuf,
+  Kimberlit, Microfol, Microquímica, Multitécnica, Nutriplant,
+  Oxiquímica, Quimifol, Samaritá, Sipcam-Nichino, Stoller, Tradecorp,
+  Unisolo, UPL, Valagro, Yara); o restante entrou em marcas já
+  existentes (Giro Agro, Ubyfol e a própria Agrocete). Essa planilha
+  também trouxe 3 nutrientes/atributos novos ao `NUTRIENT_META`: Si
+  (Silício), Aminoácidos e Substâncias Húmicas. Como não há dose
+  nenhuma informada, todo produto novo entrou com `defaultDose: null`
+  — use a aba **Cadastro de doses** (ver seção abaixo) pra preencher e
+  travar aos poucos. Onde essa planilha batia com produto já
+  cadastrado, cada caso foi resolvido puxando o outro lado do
+  comparativo pra decidir (não sobrescrito automaticamente):
+  - 6 produtos "só nome" da Giro Agro/Viva Bio (Clean, Evo K, Strong,
+    Evo MoP, Evo Mag, New) e 1 da Ubyfol (Kymon) ganharam a
+    concentração de nutrientes que ainda não tinham.
+  - 16 produtos Agrocete já cadastrados tiveram a densidade atualizada
+    (diferenças pequenas, de arredondamento — ex: 1,32→1,30 g/cm³),
+    mantendo o %m/m já cadastrado. Só o **GRAP 140 FLUID** teve uma
+    diferença real sugerida pela planilha nova (Enxofre 7%→8%,
+    Manganês 12%→14%), mas a própria observação já cadastrada nesse
+    produto diz que 12%/7% é a formulação atual (com mais
+    complexante) e 14%/8% era a anterior — o %m/m desse produto **não**
+    foi alterado (só a densidade), e o campo `fonte` dele documenta a
+    divergência encontrada pra alguém confirmar com a ficha técnica.
+  - **GRAP CAFÉ** e **GRAP FRUTAS**, removidos do catálogo numa versão
+    anterior por não estarem na planilha interna da época (ver
+    limitação abaixo), voltaram com os dados desta planilha nova.
+  - Nomes duplicados dentro da mesma marca na planilha nova (ex: 4
+    variações de "CobalMoly" com Mo/densidade diferentes) ganharam um
+    sufixo entre parênteses com o nutriente que os diferencia; um caso
+    de duplicata exata (mesmo nome, mesmo %m/m) foi descartado.
 
 **Limitações conhecidas dos dados** (herdadas das planilhas-fonte, não
 "corrigidas" para não inventar informação):
 - Doses (`defaultDose`) são estimadas a partir do primeiro número
   encontrado no texto de dose da planilha — ponto de partida, não
-  recomendação agronômica. Ajuste sempre conforme a bula.
+  recomendação agronômica. Ajuste sempre conforme a bula. Os produtos
+  vindos da planilha "Produtos Nutricionais" não têm `defaultDose`
+  nenhum (a planilha de origem não tem coluna de dose) — cadastre pelo
+  painel "Cadastro de doses".
 - Das ~272 referências de produtos concorrentes na matriz de
   equivalência, ~50 têm dados nutricionais reais cadastrados (das
   planilhas de nutrientes, Biochim e Ubyfol); as outras ~218 estão no
   catálogo com nome, marca e categoria, mas sem concentração — ver
   "218 produtos 'só nome'" acima.
-- Três produtos que apareciam no folheto GRAP em PDF usado numa versão
-  anterior do app (GRAP CAFÉ, GRAP FRUTAS, GRAP PHIL K) não estão na
-  planilha interna mais recente e por isso não aparecem mais no
-  catálogo — se ainda forem vendidos, cadastre-os manualmente.
+- Dois produtos que apareciam no folheto GRAP em PDF usado numa versão
+  anterior do app (GRAP CAFÉ, GRAP FRUTAS) voltaram ao catálogo com os
+  dados da planilha "Produtos Nutricionais". Um terceiro, GRAP PHIL K,
+  continua fora por não aparecer em nenhuma das planilhas — se ainda
+  for vendido, cadastre manualmente.
 
 Produtos que não estejam no catálogo podem ser cadastrados à mão pelo
 botão "Adicionar produto Agrocete manualmente", dentro do painel da
 marca AGROCETE (aba "Por marca").
+
+## Cadastro de doses
+
+Terceira aba do catálogo (ao lado de "Por categoria" e "Por marca"),
+pensada especificamente pra ir preenchendo os 954 produtos que têm
+garantia de nutrientes cadastrada (`hasNutrients: true`) mas ainda não
+têm dose nenhuma — principalmente os que vieram da planilha "Produtos
+Nutricionais" (ver seção "Dados dos produtos" acima), que não tinha
+coluna de dose.
+
+- **Barra de progresso** no topo mostra quantos produtos do catálogo
+  inteiro já têm dose cadastrada (seja a `defaultDose` original da
+  planilha, seja uma dose travada aqui) e quantos com nutrientes ainda
+  estão esperando.
+- **Busca + filtro por marca + toggles** ("Só sem dose", ligado por
+  padrão, e "Só com nutrientes", também ligado por padrão) — pra não
+  precisar rolar os 1521 produtos do catálogo pra achar o que falta.
+  A lista carrega 50 produtos por vez ("Carregar mais") pra não pesar
+  a página mesmo em filtros mais largos.
+- **Digitar a dose já mostra a concentração calculada** de cada
+  nutriente (dose × concentração por unidade do produto, o mesmo
+  cálculo usado no comparativo principal) antes mesmo de travar — dá
+  pra testar o número antes de confirmar.
+- **Travar** (ícone de cadeado) salva a dose como a dose oficial
+  daquele produto: o campo e a unidade ficam bloqueados pra edição
+  (evita mudar sem querer), o produto sai da lista "Só sem dose" e
+  passa a contar na barra de progresso. **Destravar** reabre pra
+  edição. Só é possível travar com uma dose numérica maior que zero.
+- Quando o produto já tem unidade conhecida (`L/ha` ou `kg/ha`, vinda
+  da densidade cadastrada), ela aparece fixa; quando não tem (produto
+  sem densidade informada), um seletor deixa escolher antes de travar.
+- Produtos com dose travada aqui ganham um ícone de cadeado ao lado do
+  nome no catálogo normal (abas "Por categoria"/"Por marca"), e essa
+  dose passa a ser o valor inicial ao selecionar o produto pra
+  comparação (em vez de cair em 0 ou na `defaultDose` original).
+- **Exportar doses (JSON)** baixa o cadastro inteiro (travado ou não)
+  pra levar entre dispositivos ou mandar de volta pra consolidar no
+  catálogo de verdade; **Importar** lê esse mesmo arquivo de volta,
+  mesclando com o que já existir.
+- Persistido em `localStorage` junto com o resto do estado do app (ver
+  "Persistência" abaixo) — por navegador/dispositivo, não sincroniza
+  sozinho entre aparelhos; use exportar/importar pra isso.
 
 ## Posicionamento técnico
 
@@ -154,7 +244,7 @@ entram também na exportação em PDF.
 ## Manejo concorrente multi-marca + sugestão automática de manejo Agrocete
 
 Você pode montar um manejo só com produtos concorrentes escolhendo
-livremente entre as 11 marcas mapeadas (ex: um produto da Vittia + um
+livremente entre as 57 marcas mapeadas (ex: um produto da Vittia + um
 da Bioma) — todo produto que não for da Agrocete entra automaticamente
 no mesmo lado "concorrentes" do comparativo, então já dá pra montar
 esse manejo hoje sem nenhuma mudança adicional.
@@ -296,11 +386,13 @@ preenche a busca automaticamente.
 
 ## Persistência
 
-A seleção de produtos (doses e preços) e os manejos salvos são
-gravados automaticamente no `localStorage` do navegador a cada
-alteração, sob a chave `agro-dashboard-state-v1`. Ao recarregar a
-página o estado é restaurado. É armazenamento local por
-navegador/dispositivo — não sincroniza entre aparelhos.
+A seleção de produtos (doses e preços), os manejos salvos e o
+cadastro de doses travadas (aba "Cadastro de doses") são gravados
+automaticamente no `localStorage` do navegador a cada alteração, sob a
+chave `agro-dashboard-state-v1`. Ao recarregar a página o estado é
+restaurado. É armazenamento local por navegador/dispositivo — não
+sincroniza entre aparelhos (use exportar/importar JSON no Cadastro de
+doses pra levar entre dispositivos).
 
 ## Tela de senha
 
@@ -392,15 +484,27 @@ depender de múltiplos arquivos.
 
 ## Próximos passos sugeridos (para pedir ao Claude Code)
 
+- Preencher e travar as doses pendentes na aba "Cadastro de doses"
+  (954 produtos com nutrientes cadastrados ainda sem dose, a maioria
+  vinda da planilha "Produtos Nutricionais") — e, depois de travadas,
+  pedir pro Claude Code consolidar o JSON exportado direto em
+  `products.js` como `defaultDose`/`doseRaw` permanentes, em vez de
+  ficar só no `localStorage` de um dispositivo.
+- Confirmar com a equipe técnica a divergência sinalizada no GRAP 140
+  FLUID (ver `fonte` desse produto em `products.js`) — planilha nova
+  sugere Enxofre 8%/Manganês 14%, mas a observação já cadastrada indica
+  12%/7% como a formulação atual.
 - Melhorar o casamento de nomes na matriz de equivalência (hoje só
   ~18% das referências de concorrentes batem com um produto
   catalogado) para aumentar a cobertura do comparativo automático.
 - Adicionar abas de nutrientes para as marcas que só têm nome de
-  produto na matriz de equivalência (Ballagro, Lallemand, Genica,
-  Koppert, Union Agro, Ubyfol, Nitro, Gran7, Dimicron, Syngenta
-  Biológicals), se houver dados/fichas técnicas disponíveis.
+  produto na matriz de equivalência e ainda não têm dados reais
+  (Ballagro, Lallemand, Genica, Koppert, Union Agro, Nitro, Gran7,
+  Dimicron, Syngenta Biológicals), se houver dados/fichas técnicas
+  disponíveis.
 - Permitir exportar/importar a seleção como JSON, para compartilhar
-  entre dispositivos sem depender só do `localStorage`.
+  entre dispositivos sem depender só do `localStorage` (o Cadastro de
+  doses já tem isso; falta pro resto da seleção/manejos).
 - Modo "versus" com dois manejos nomeados de forma independente lado a
   lado (hoje o app já separa Agrocete x concorrente automaticamente
   pelos produtos selecionados, mas não permite nomear/salvar cada lado
