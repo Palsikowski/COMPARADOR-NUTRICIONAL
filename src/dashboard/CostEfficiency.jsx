@@ -156,3 +156,58 @@ export function NutrientBadge({ badge }) {
     </span>
   );
 }
+
+// Variação (Δ) sempre visível, ao contrário do `nutrientBadge`, que só aparece
+// quando a diferença passa de 20%. Aqui o consultor vê o número exato de
+// quanto a Agrocete está acima/abaixo naquele nutriente, inclusive quando a
+// diferença é pequena (Δ 0% = empate técnico).
+export function nutrientDelta(agroVal, compVal) {
+  const a = Number(agroVal) || 0;
+  const c = Number(compVal) || 0;
+  if (a === 0 && c === 0) return null;
+  if (c === 0) return { kind: "only-agro", text: "só Agrocete", positive: true };
+  if (a === 0) return { kind: "only-comp", text: "falta na Agrocete", positive: false };
+  const diffPct = ((a - c) / c) * 100;
+  return {
+    kind: "delta",
+    diffPct,
+    text: `${diffPct > 0 ? "+" : ""}${fmtNum(diffPct)}%`,
+    positive: diffPct >= 0,
+  };
+}
+
+export function NutrientDelta({ delta }) {
+  if (!delta) return null;
+  const isDelta = delta.kind === "delta";
+  const neutral = isDelta && Math.abs(delta.diffPct) < 5;
+  const color = neutral ? "#8CA0AF" : delta.positive ? "#1FBF8F" : "#F5A524";
+  // Δ e seta só fazem sentido quando existe percentual dos dois lados; nos
+  // casos "só um lado tem" o texto já diz tudo.
+  const prefix = isDelta ? `Δ ${neutral ? "≈" : delta.positive ? "▲" : "▼"} ` : "";
+  return (
+    <span
+      title={
+        delta.kind === "only-agro"
+          ? "Só o manejo Agrocete entrega esse nutriente"
+          : delta.kind === "only-comp"
+          ? "Nutriente presente só no manejo concorrente — o lado Agrocete não cobre"
+          : `Agrocete ${delta.positive ? "acima" : "abaixo"} do concorrente nesse nutriente`
+      }
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        fontSize: 10,
+        fontWeight: 700,
+        padding: "1px 7px",
+        borderRadius: 999,
+        background: `${color}1F`,
+        color,
+        border: `1px solid ${color}55`,
+        whiteSpace: "nowrap",
+      }}
+    >
+      {prefix}
+      {delta.text}
+    </span>
+  );
+}

@@ -8,7 +8,6 @@ import {
   Pencil,
   X,
   Download,
-  Search,
   Layers,
   Building2,
   Lightbulb,
@@ -18,6 +17,10 @@ import {
   Moon,
   Gauge,
   ArrowRightLeft,
+  Lock,
+  Wifi,
+  WifiOff,
+  User,
 } from "lucide-react";
 import { PRODUCTS } from "./data/products.js";
 import { EQUIVALENCES, EQUIVALENCE_FOOTNOTES } from "./data/equivalences.js";
@@ -30,7 +33,11 @@ import QuickEditDrawer from "./dashboard/QuickEditDrawer.jsx";
 import ManagementPresetsPanel from "./dashboard/ManagementPresetsPanel.jsx";
 import SuggestionPanel from "./dashboard/SuggestionPanel.jsx";
 import { suggestAgroceteProducts, uncoveredKeys } from "./dashboard/suggestAgrocete.js";
-import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar, nutrientBadge, NutrientBadge } from "./dashboard/CostEfficiency.jsx";
+import { computeCostEfficiency, computeInsights, CostEfficiencyPanel, CompareBar, nutrientDelta, NutrientDelta } from "./dashboard/CostEfficiency.jsx";
+import SearchAutocomplete from "./dashboard/SearchAutocomplete.jsx";
+import { NutrientPillRow } from "./dashboard/NutrientPill.jsx";
+import { nutrientColor } from "./dashboard/nutrientColors.js";
+import { buildCategoryGroups, categoryGroupId } from "./dashboard/categoryGroups.js";
 
 const NUTRIENT_META = {
   N: { label: "Nitrogênio", group: "macro" },
@@ -60,18 +67,12 @@ function brandColor(brand) {
   return BRAND_PALETTE[idx >= 0 ? idx % BRAND_PALETTE.length : 0];
 }
 
-// Chips de filtro rápido: nutrientes mais buscados e as categorias com mais produtos.
+// Chips de filtro rápido por nutriente mais buscado (preenchem a busca).
 const NUTRIENT_CHIP_KEYS = ["N", "P2O5", "K2O", "Ca", "Mg", "S", "B", "Zn", "Cu", "Mn"];
-const CATEGORY_CHIPS = (() => {
-  const counts = {};
-  PRODUCTS.forEach((p) => {
-    if (p.category) counts[p.category] = (counts[p.category] || 0) + 1;
-  });
-  return Object.entries(counts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 6)
-    .map(([cat]) => cat);
-})();
+
+// Chips de categoria funcional (filtram de verdade pelo campo `category`,
+// juntando as várias grafias que a planilha usa pra mesma coisa).
+const CATEGORY_GROUPS = buildCategoryGroups(PRODUCTS);
 
 const STORAGE_KEY = "agro-dashboard-state-v1";
 
@@ -123,14 +124,36 @@ export default function Dashboard() {
   const [editingProductId, setEditingProductId] = useState(null); // produto aberto no drawer de dose/preço
   const [presetInfo, setPresetInfo] = useState(null); // { label, notes } do último manejo pronto carregado
   const [transformInfo, setTransformInfo] = useState(null); // { count, uncovered } do último "Transformar em manejo Agrocete"
+  const [brandFilter, setBrandFilter] = useState(""); // "" = todas as marcas
+  const [categoryFilter, setCategoryFilter] = useState(null); // id de grupo em categoryGroups.js
+  const [clientName, setClientName] = useState(() => loadPersistedState()?.clientName ?? ""); // fazenda/cliente que vai no PDF
+  const [isOnline, setIsOnline] = useState(() => (typeof navigator === "undefined" ? true : navigator.onLine));
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, customProducts, templates, doseOverrides }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, customProducts, templates, doseOverrides, clientName }));
     } catch {
       // localStorage indisponível — ignora, estado só não persiste
     }
-  }, [selected, customProducts, templates, doseOverrides]);
+  }, [selected, customProducts, templates, doseOverrides, clientName]);
+
+  // Status de conexão: o app roda 100% offline (todo o catálogo é local), mas
+  // o consultor no campo precisa VER isso pra confiar — sem o indicador, uma
+  // tela sem sinal parece app quebrado.
+  useEffect(() => {
+    function goOnline() {
+      setIsOnline(true);
+    }
+    function goOffline() {
+      setIsOnline(false);
+    }
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
 
   const allProducts = useMemo(() => [...PRODUCTS, ...customProducts], [customProducts]);
   const productsById = useMemo(() => new Map(allProducts.map((p) => [p.id, p])), [allProducts]);
@@ -357,6 +380,15 @@ export default function Dashboard() {
 
   // --- produtos por marca, filtrados por busca (nome, composição, categoria ou nutriente) ---
   const searchNorm = search.trim().toLowerCase();
+
+  // Filtro combinado: busca textual E marca E grupo de categoria — os três
+  // são cumulativos (ex: "Zinco" + marca YARA + Nutrição).
+  function matchesFilters(p) {
+    if (brandFilter && p.brand !== brandFilter) return false;
+    if (categoryFilter && categoryGroupId(p.category) !== categoryFilter) return false;
+    return matchesSearch(p);
+  }
+
   function matchesSearch(p) {
     if (!searchNorm) return true;
     if (p.name.toLowerCase().includes(searchNorm)) return true;
@@ -380,37 +412,57 @@ export default function Dashboard() {
     return groups;
   }, [allProducts]);
 
-  const allBrands = quickBrandOnly ? [AGROCETE] : [AGROCETE, ...COMPETITOR_BRANDS];
+  const allBrands = quickBrandOnly ? [AGROCETE] : brandFilter ? [brandFilter] : [AGROCETE, ...COMPETITOR_BRANDS];
   const selectedCount = Object.keys(selected).length;
+  const lockedCount = useMemo(() => Object.values(doseOverrides).filter((d) => d?.locked).length, [doseOverrides]);
+  const anyFilterActive = !!(searchNorm || brandFilter || categoryFilter || quickBrandOnly);
 
   // --- chips de filtro rápido ---
   function selectAllChip() {
     setActiveChip("all");
     setSearch("");
     setQuickBrandOnly(false);
+    setBrandFilter("");
+    setCategoryFilter(null);
   }
   function selectAgroceteChip() {
     setActiveChip("agrocete");
     setSearch("");
     setQuickBrandOnly(true);
+    setBrandFilter("");
+    setCategoryFilter(null);
     setMode("marca");
     setOpenBrand(AGROCETE);
   }
   function selectNutrientChip(key) {
     setActiveChip(`nutrient:${key}`);
     setQuickBrandOnly(false);
+    setCategoryFilter(null);
     setSearch(NUTRIENT_META[key]?.label ?? key);
     setMode("marca");
   }
-  function selectCategoryChip(cat) {
-    setActiveChip(`category:${cat}`);
+  // Filtro por grupo de categoria (Nutrição, Solo, Trat. de sementes,
+  // Biológicos, Adjuvantes) — diferente do chip de nutriente, esse não mexe na
+  // busca: filtra de verdade pelo campo `category`, então dá pra combinar com
+  // uma busca textual por cima.
+  function selectCategoryGroupChip(groupId) {
+    const next = categoryFilter === groupId ? null : groupId;
+    setCategoryFilter(next);
+    setActiveChip(next ? `catgroup:${next}` : "all");
     setQuickBrandOnly(false);
-    setSearch(cat);
     setMode("marca");
   }
   function handleSearchChange(value) {
     setSearch(value);
     setActiveChip(null);
+  }
+  function handleBrandFilterChange(brand) {
+    setBrandFilter(brand);
+    setQuickBrandOnly(false);
+    if (brand) {
+      setMode("marca");
+      setOpenBrand(brand);
+    }
   }
 
   const editingProduct = editingProductId ? productsById.get(editingProductId) : null;
@@ -423,6 +475,12 @@ export default function Dashboard() {
     doc.setFontSize(16);
     doc.text("Comparativo de Portfólio — Agrocete x Mercado", 14, y);
     y += 7;
+    const client = clientName.trim();
+    if (client) {
+      doc.setFontSize(12);
+      doc.text(doc.splitTextToSize(client, 180), 14, y);
+      y += 6;
+    }
     doc.setFontSize(10);
     doc.setTextColor(110);
     doc.text(`Gerado em ${new Date().toLocaleDateString("pt-BR")}`, 14, y);
@@ -547,7 +605,16 @@ export default function Dashboard() {
       });
     }
 
-    doc.save("comparativo-portfolio-agrocete.pdf");
+    // Nome do arquivo com o cliente (sem acento/símbolo, pra não quebrar em
+    // Windows/Android) — assim várias propostas não viram "(1)", "(2)".
+    const slug = client
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .toLowerCase()
+      .slice(0, 40);
+    doc.save(slug ? `comparativo-agrocete-${slug}.pdf` : "comparativo-portfolio-agrocete.pdf");
   }
 
   const hasBothSides = totals.agro.count > 0 && totals.comp.count > 0;
@@ -584,10 +651,43 @@ export default function Dashboard() {
             <div className="muted" style={{ fontSize: 11 }}>Comparador de Portfólio x Mercado</div>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div className="muted" style={{ fontSize: 12 }}>
-            {PRODUCTS.length} produtos catalogados · {COMPETITOR_BRANDS.length} marcas concorrentes
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <StatusPill label="Produtos" value={fmtNum(PRODUCTS.length)} />
+          <StatusPill label="Marcas" value={COMPETITOR_BRANDS.length} />
+          <StatusPill
+            label={lockedCount === 1 ? "Dose travada" : "Doses travadas"}
+            value={lockedCount}
+            color={lockedCount > 0 ? "#F5A524" : undefined}
+            icon={lockedCount > 0 ? <Lock size={11} /> : null}
+            title={
+              lockedCount > 0
+                ? `${lockedCount} dose${lockedCount > 1 ? "s" : ""} fixada${lockedCount > 1 ? "s" : ""} como padrão neste aparelho`
+                : "Nenhuma dose travada ainda"
+            }
+          />
+          <span
+            title={
+              isOnline
+                ? "Com internet — o app funciona igual sem sinal, todo o catálogo está no aparelho"
+                : "Sem internet — o app continua funcionando normalmente, o catálogo inteiro está salvo no aparelho"
+            }
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 5,
+              fontSize: 11,
+              fontWeight: 700,
+              padding: "4px 9px",
+              borderRadius: 999,
+              background: isOnline ? "#1FBF8F14" : "#F5A52422",
+              border: `1px solid ${isOnline ? "#1FBF8F44" : "#F5A52466"}`,
+              color: isOnline ? "#1FBF8F" : "#F5A524",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {isOnline ? <Wifi size={11} /> : <WifiOff size={11} />}
+            {isOnline ? "Online" : "Offline — funciona normal"}
+          </span>
           <button
             onClick={() => setHighContrast(!highContrast)}
             className="tap-scale"
@@ -622,37 +722,101 @@ export default function Dashboard() {
           <KpiCard color="#F43F5E" label="Linhas de equivalência" value={kpis.equivCount} />
         </div>
 
-        {/* SEARCH */}
-        <div style={{ position: "relative", marginBottom: 10 }}>
-          <Search size={15} color="#8CA0AF" style={{ position: "absolute", left: 12, top: 11 }} />
-          <input
-            type="text"
+        {/* PASSO 1 — ACHAR O PRODUTO */}
+        <StepLabel n={1} title="Ache o produto concorrente" />
+
+        <div style={{ marginBottom: 10 }}>
+          <SearchAutocomplete
             value={search}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="Buscar produto, composição, categoria ou nutriente (ex: Zinco)..."
-            style={{
-              width: "100%",
-              padding: "10px 12px 10px 34px",
-              borderRadius: 10,
-              border: "1px solid #24313D",
-              background: "#17212B",
-              color: "#E8EDF1",
-              fontSize: 13,
-              boxSizing: "border-box",
-              fontFamily: "inherit",
-            }}
+            onChange={handleSearchChange}
+            products={allProducts}
+            selected={selected}
+            onPick={toggleProduct}
+            brandColor={brandColor}
+            agroceteBrand={AGROCETE}
+            placeholder="Buscar produto, marca, composição ou nutriente..."
           />
         </div>
 
-        {/* FILTER CHIPS */}
+        {/* FILTRO POR MARCA */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
+          <select
+            value={brandFilter}
+            onChange={(e) => handleBrandFilterChange(e.target.value)}
+            aria-label="Filtrar por marca"
+            style={{
+              flex: 1,
+              minWidth: 0,
+              minHeight: 44,
+              padding: "10px 12px",
+              borderRadius: 10,
+              border: `1px solid ${brandFilter ? `${brandColor(brandFilter)}88` : "#24313D"}`,
+              background: "#17212B",
+              color: brandFilter ? brandColor(brandFilter) : "#8CA0AF",
+              fontSize: 13,
+              fontWeight: brandFilter ? 700 : 400,
+              fontFamily: "inherit",
+              cursor: "pointer",
+              boxSizing: "border-box",
+            }}
+          >
+            <option value="">Todas as marcas ({COMPETITOR_BRANDS.length + 1})</option>
+            <option value={AGROCETE}>AGROCETE (nossos produtos)</option>
+            {COMPETITOR_BRANDS.map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+          </select>
+          {anyFilterActive && (
+            <button
+              onClick={selectAllChip}
+              className="tap-scale"
+              title="Limpar busca, marca e categoria"
+              style={{
+                minHeight: 44,
+                padding: "0 14px",
+                borderRadius: 10,
+                border: "1px solid #24313D",
+                background: "#17212B",
+                color: "#8CA0AF",
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+              }}
+            >
+              Limpar
+            </button>
+          )}
+        </div>
+
+        {/* CHIPS DE CATEGORIA (filtro de verdade pelo campo category) */}
+        <div className="filter-chip-row" style={{ marginBottom: 8 }}>
+          {CATEGORY_GROUPS.map((g) => (
+            <FilterChip
+              key={g.id}
+              label={`${g.label} (${g.count})`}
+              active={categoryFilter === g.id}
+              onClick={() => selectCategoryGroupChip(g.id)}
+              color="#38BDF8"
+            />
+          ))}
+        </div>
+
+        {/* CHIPS DE NUTRIENTE / ATALHOS */}
         <div className="filter-chip-row" style={{ marginBottom: 14 }}>
           <FilterChip label="Todos" active={activeChip === "all"} onClick={selectAllChip} />
           <FilterChip label="Somente Agrocete" active={activeChip === "agrocete"} onClick={selectAgroceteChip} color={AGROCETE_COLOR} />
           {NUTRIENT_CHIP_KEYS.map((key) => (
-            <FilterChip key={key} label={NUTRIENT_META[key]?.label ?? key} active={activeChip === `nutrient:${key}`} onClick={() => selectNutrientChip(key)} />
-          ))}
-          {CATEGORY_CHIPS.map((cat) => (
-            <FilterChip key={cat} label={cat} active={activeChip === `category:${cat}`} onClick={() => selectCategoryChip(cat)} />
+            <FilterChip
+              key={key}
+              label={NUTRIENT_META[key]?.label ?? key}
+              active={activeChip === `nutrient:${key}`}
+              onClick={() => selectNutrientChip(key)}
+              color={nutrientColor(key)}
+            />
           ))}
         </div>
 
@@ -720,9 +884,11 @@ export default function Dashboard() {
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {allBrands.map((brand) => {
                 const isOpen = openBrand === brand;
-                const products = (productsByBrand[brand] || []).filter(matchesSearch);
+                const products = (productsByBrand[brand] || []).filter(matchesFilters);
                 const brandSelectedCount = (productsByBrand[brand] || []).filter((p) => selected[p.id]).length;
-                if (searchNorm && products.length === 0) return null;
+                // Com qualquer filtro ativo, marca sem resultado some da lista
+                // (senão vira uma parede de acordeões vazios em 57 marcas).
+                if (anyFilterActive && products.length === 0) return null;
                 const color = brandColor(brand);
                 return (
                   <div key={brand} style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden" }}>
@@ -745,7 +911,11 @@ export default function Dashboard() {
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ width: 10, height: 10, borderRadius: "50%", background: color, display: "inline-block" }} />
                         <span style={{ fontWeight: 600, fontSize: 15 }}>{brand === AGROCETE ? "AGROCETE (nossos produtos)" : brand}</span>
-                        <span className="muted-soft" style={{ fontSize: 11 }}>{(productsByBrand[brand] || []).length} produtos</span>
+                        <span className="muted-soft" style={{ fontSize: 11 }}>
+                          {anyFilterActive
+                            ? `${products.length} de ${(productsByBrand[brand] || []).length}`
+                            : `${(productsByBrand[brand] || []).length} produtos`}
+                        </span>
                         {brandSelectedCount > 0 && (
                           <span style={{ fontSize: 11, background: "#233241", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>
                             {brandSelectedCount} ativo{brandSelectedCount > 1 ? "s" : ""}
@@ -770,6 +940,7 @@ export default function Dashboard() {
                             onUpdate={(field, value) => updateSelected(product.id, field, value)}
                             onRemove={product.custom ? () => removeCustomProduct(product.id) : undefined}
                             onOpenEditor={() => setEditingProductId(product.id)}
+                            doseLocked={!!doseOverrides[product.id]?.locked}
                           />
                         ))}
                         {products.length === 0 && <p className="muted-soft" style={{ fontSize: 12 }}>Nenhum produto encontrado para essa busca.</p>}
@@ -819,6 +990,7 @@ export default function Dashboard() {
           </div>
         )}
 
+        <StepLabel n={2} title="Ajuste a dose e trave se quiser" />
         <CurrentManagement selected={selected} productsById={productsById} brandColor={brandColor} onToggle={toggleProduct} onEdit={(p) => setEditingProductId(p.id)} />
 
         {totals.comp.count > 0 && (
@@ -886,6 +1058,7 @@ export default function Dashboard() {
         {/* COMPARATIVO */}
         {allNutrientKeys.length > 0 && (
           <section id="comparativo" style={{ scrollMarginTop: 16 }}>
+            <StepLabel n={3} title="Compare com a Agrocete" />
             <SectionHeading icon={<TrendingUp size={16} />} title="Comparativo de nutrientes (g/ha)" />
             <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 12 }}>
               <div style={{ display: "flex", gap: 14, fontSize: 11, marginBottom: 12 }}>
@@ -896,13 +1069,14 @@ export default function Dashboard() {
                 {allNutrientKeys.map((key) => {
                   const compVal = totals.comp.nutrients[key] || 0;
                   const agroVal = totals.agro.nutrients[key] || 0;
-                  const badge = nutrientBadge(agroVal, compVal);
+                  const delta = nutrientDelta(agroVal, compVal);
                   return (
                     <div key={key}>
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, marginBottom: 4, gap: 8 }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, marginBottom: 4, gap: 8, flexWrap: "wrap" }}>
                         <span style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 600 }}>
+                          <span style={{ width: 9, height: 9, borderRadius: 3, background: nutrientColor(key), display: "inline-block", flexShrink: 0 }} />
                           {NUTRIENT_META[key]?.label ?? key}
-                          <NutrientBadge badge={badge} />
+                          <NutrientDelta delta={delta} />
                         </span>
                         <span className="muted">
                           {fmtNum(compVal)} g vs {fmtNum(agroVal)} g
@@ -992,19 +1166,45 @@ export default function Dashboard() {
               </div>
             )}
 
+            {/* CLIENTE / FAZENDA — vai no cabeçalho do PDF e no nome do arquivo */}
+            <label style={{ display: "block", marginTop: 16 }}>
+              <span className="muted" style={{ fontSize: 11, display: "flex", alignItems: "center", gap: 5, marginBottom: 5 }}>
+                <User size={12} /> Cliente / fazenda (aparece no PDF)
+              </span>
+              <input
+                type="text"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                placeholder="Ex: Fazenda Santa Helena — João Pereira"
+                style={{
+                  width: "100%",
+                  minHeight: 44,
+                  padding: "10px 12px",
+                  borderRadius: 10,
+                  border: "1px solid #24313D",
+                  background: "#17212B",
+                  color: "#E8EDF1",
+                  fontSize: 13,
+                  boxSizing: "border-box",
+                  fontFamily: "inherit",
+                }}
+              />
+            </label>
+
             <button
               onClick={exportPDF}
               className="tap-scale"
               style={{
-                marginTop: 16,
+                marginTop: 10,
                 width: "100%",
-                padding: "11px",
+                padding: "14px",
+                minHeight: 48,
                 borderRadius: 10,
                 border: "none",
                 background: AGROCETE_COLOR,
                 color: "#0B1319",
                 fontWeight: 700,
-                fontSize: 13,
+                fontSize: 14,
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -1012,7 +1212,7 @@ export default function Dashboard() {
                 gap: 7,
               }}
             >
-              <Download size={15} /> Exportar comparativo em PDF
+              <Download size={16} /> Exportar comparativo em PDF
             </button>
           </section>
         )}
@@ -1051,6 +1251,59 @@ export default function Dashboard() {
           onToggleLock={(currentDose) => toggleDoseLock(editingProduct.id, currentDose)}
         />
       )}
+    </div>
+  );
+}
+
+// Estatística compacta da barra superior (produtos, marcas, doses travadas).
+function StatusPill({ label, value, color, icon, title }) {
+  return (
+    <span
+      title={title}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 5,
+        fontSize: 11,
+        padding: "4px 9px",
+        borderRadius: 999,
+        background: color ? `${color}1A` : "#17212B",
+        border: `1px solid ${color ? `${color}55` : "#24313D"}`,
+        color: color || "#96A8B5",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {icon}
+      <strong style={{ fontWeight: 700, color: color || "#E8EDF1" }}>{value}</strong>
+      {label}
+    </span>
+  );
+}
+
+// Numerador do fluxo em 3 passos (achar produto → dose/trava → comparativo),
+// pra deixar explícito o caminho que o consultor percorre.
+function StepLabel({ n, title }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+      <span
+        style={{
+          width: 20,
+          height: 20,
+          borderRadius: "50%",
+          background: "#1FBF8F22",
+          border: "1px solid #1FBF8F66",
+          color: "#1FBF8F",
+          fontSize: 11,
+          fontWeight: 700,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+        }}
+      >
+        {n}
+      </span>
+      <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "#9AACB8" }}>{title}</span>
     </div>
   );
 }
@@ -1146,7 +1399,7 @@ function CostCard({ label, value, color }) {
 // +), quando selecionado ganha só uma segunda linha com dose rápida (+/-) e
 // preço — a edição completa (slider, passo fino) mora no QuickEditDrawer,
 // pra não empilhar formulário dentro da rolagem do catálogo.
-function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue, priceValue, onRemove, onOpenEditor }) {
+function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue, priceValue, onRemove, onOpenEditor, doseLocked }) {
   const [dx, setDx] = useState(0);
   const [dragging, setDragging] = useState(false);
   const startX = React.useRef(0);
@@ -1220,30 +1473,40 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
                   <span style={{ fontSize: 10, color: isSelected ? "#0B131999" : "#8298A6", fontWeight: 400 }}> · {product.category}</span>
                 )}
               </div>
-              <div
-                style={{
-                  fontSize: 12,
-                  color: isSelected ? "#0B1319CC" : "#9AACB8",
-                  marginTop: 2,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {product.hasNutrients
-                  ? Object.entries(product.nutrients)
-                      .map(([el, v]) => `${NUTRIENT_META[el]?.label ?? el} ${fmtNum(v)}${nutrientUnitSuffix(product)}`)
-                      .join(" · ")
-                  : product.composition || product.description || "Sem dados nutricionais cadastrados"}
-              </div>
+              {/* Pills coloridas por nutriente: cor fixa por elemento, então dá
+                  pra bater o olho e ver "tem N, tem Zn" sem ler. Quando o
+                  produto não tem dado nutricional, cai no texto de composição. */}
+              {product.hasNutrients ? (
+                <NutrientPillRow
+                  nutrients={product.nutrients}
+                  unit={nutrientUnitSuffix(product)}
+                  meta={NUTRIENT_META}
+                  max={5}
+                  compact
+                  onBrandBg={isSelected}
+                />
+              ) : (
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: isSelected ? "#0B1319CC" : "#9AACB8",
+                    marginTop: 2,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {product.composition || product.description || "Sem dados nutricionais cadastrados"}
+                </div>
+              )}
             </div>
             <span
               style={{
                 flexShrink: 0,
                 marginLeft: 10,
-                width: 26,
-                height: 26,
-                borderRadius: 8,
+                width: 40,
+                height: 40,
+                borderRadius: 10,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -1251,7 +1514,7 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
                 color: isSelected ? color : "#9AACB8",
               }}
             >
-              {isSelected ? <X size={15} /> : <Plus size={15} />}
+              {isSelected ? <X size={17} /> : <Plus size={17} />}
             </span>
           </button>
           {onRemove && (
@@ -1269,26 +1532,34 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
               <button type="button" onClick={() => quickBump(-1)} className="tap-scale" style={quickStepBtnStyle} aria-label="Diminuir dose">
-                <Minus size={12} />
+                <Minus size={15} />
               </button>
-              <span style={{ fontSize: 12, fontWeight: 700, color: "#0B1319", minWidth: 42, textAlign: "center" }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#0B1319", minWidth: 46, textAlign: "center" }}>
                 {doseValue}
                 {product.unit ? product.unit.split("/")[0] : ""}
               </span>
               <button type="button" onClick={() => quickBump(1)} className="tap-scale" style={quickStepBtnStyle} aria-label="Aumentar dose">
-                <Plus size={12} />
+                <Plus size={15} />
               </button>
             </div>
+            {doseLocked && (
+              <span
+                title="Dose travada como padrão desse produto neste aparelho"
+                style={{ display: "inline-flex", alignItems: "center", gap: 3, background: "#0B1319", color: "#F5A524", borderRadius: 999, padding: "3px 7px", fontSize: 10, fontWeight: 700, flexShrink: 0 }}
+              >
+                <Lock size={10} /> travada
+              </span>
+            )}
             <span style={{ fontSize: 11, color: "#0B1319CC" }}>R$ {fmtNum(parseFloat(priceValue) || 0)}</span>
             <button
               type="button"
               onClick={onOpenEditor}
               className="tap-scale"
-              style={{ marginLeft: "auto", background: "#0B1319", border: "none", borderRadius: 7, width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", color, cursor: "pointer", flexShrink: 0 }}
+              style={{ marginLeft: "auto", background: "#0B1319", border: "none", borderRadius: 9, width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center", color, cursor: "pointer", flexShrink: 0 }}
               aria-label="Editar dose e preço"
-              title="Editar dose, preço e passo fino"
+              title="Editar dose, preço e travar dose"
             >
-              <Pencil size={12} />
+              <Pencil size={15} />
             </button>
           </div>
         )}
@@ -1297,10 +1568,12 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
   );
 }
 
+// Alvo de toque grande o bastante pra usar de luva/no trator (~40px, dentro da
+// recomendação de 48px contando o espaçamento em volta).
 const quickStepBtnStyle = {
-  width: 22,
-  height: 22,
-  borderRadius: 6,
+  width: 38,
+  height: 38,
+  borderRadius: 9,
   border: "1px solid #0B131944",
   background: "#0B131922",
   color: "#0B1319",

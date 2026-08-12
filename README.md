@@ -58,6 +58,15 @@ senha" abaixo para trocar).
   baseados no material oficial "Manejo Atualizado 2024" da Agrocete.
 - `src/dashboard/ManagementPresetsPanel.jsx` — painel na barra lateral
   pra escolher cultura + nível e carregar o manejo pronto de um toque.
+- `src/dashboard/SearchAutocomplete.jsx` — busca com dropdown de
+  autocompletar, ranking por relevância e navegação por teclado; deixa
+  adicionar produto ao manejo direto do resultado.
+- `src/dashboard/nutrientColors.js` — cor e abreviação fixas de cada
+  nutriente, usadas no app inteiro.
+- `src/dashboard/NutrientPill.jsx` — pill colorida de nutriente e a
+  fileira de pills que aparece nos cards do catálogo.
+- `src/dashboard/categoryGroups.js` — agrupa as várias grafias de
+  categoria das planilhas em 5 filtros funcionais.
 - `src/dashboard/suggestAgrocete.js` — heurística que sugere produtos
   Agrocete pra cobrir o déficit de nutrientes de um manejo concorrente
   (qualquer combinação de marcas).
@@ -319,6 +328,81 @@ preenche a busca automaticamente.
 - **Vibração tátil leve** (quando o navegador/aparelho suporta) ao
   selecionar ou remover um produto.
 
+## Fluxo em 3 passos
+
+A tela é numerada pra deixar explícito o caminho que o consultor percorre:
+
+1. **Ache o produto concorrente** — busca com autocompletar (mostra os
+   produtos enquanto digita, com marca e categoria, e deixa adicionar ao
+   manejo direto pelo dropdown, sem abrir a marca na lista), mais filtro
+   por marca e chips de categoria.
+2. **Ajuste a dose e trave se quiser** — o "Manejo atual" lista o que já
+   está selecionado; tocar num item abre o editor de dose/preço com o
+   botão de travar (ver "Travar dose" abaixo).
+3. **Compare com a Agrocete** — comparativo de nutrientes com a variação
+   (Δ) de cada um, sugestão automática de manejo equivalente,
+   custo-benefício e exportação em PDF.
+
+## Barra de status
+
+O cabeçalho mostra, sempre visível: total de produtos catalogados, marcas
+concorrentes, quantas doses estão travadas neste aparelho, e um indicador
+de **conexão**. O indicador existe pra dar segurança em campo: o app
+funciona 100% sem sinal (todo o catálogo está embutido), então quando cai
+a internet ele mostra "Offline — funciona normal" em vez de deixar o
+consultor achando que o app quebrou.
+
+## Filtros do catálogo
+
+Três filtros que se combinam (busca **e** marca **e** categoria):
+
+- **Busca com autocompletar** — por nome, marca, composição, categoria ou
+  nutriente. O ranking coloca quem começa com o termo na frente, e produto
+  Agrocete desempata pra cima. Navega por ↑/↓/Enter no teclado.
+- **Filtro por marca** — seletor com as 58 marcas; escolher uma isola só
+  o portfólio dela.
+- **Chips de categoria** — Nutrição, Solo, Trat. de sementes, Biológicos
+  e Adjuvantes/Tec. aplicação. Esses chips filtram de verdade pelo campo
+  `category` (não preenchem a busca), e cada grupo junta todas as grafias
+  que as planilhas usam pra mesma coisa ("Nutrição e Fisiologia" e
+  "NUTRIÇÃO E FISIOLOGIA", "Biocontrole" e "BIOCONTROLE", etc.) — sem
+  isso, filtrar pela string crua deixaria metade dos produtos de fora.
+  Ver `src/dashboard/categoryGroups.js`.
+
+Não existe um grupo "Foliar" de propósito: a categoria dominante das
+planilhas é "Nutrição e Fisiologia", que mistura foliar e solo sem
+distinguir — separar isso seria inventar uma classificação agronômica que
+o dado de origem não tem. Dois produtos ("Acaricida e Fungicida" da
+Vittia) ficam fora de todos os grupos por não serem nutrição; continuam
+acessíveis pela busca e pela visão por marca.
+
+## Cores por nutriente
+
+Cada nutriente tem uma cor fixa em todo o app (`src/dashboard/nutrientColors.js`):
+verde = Nitrogênio, azul = Fósforo, laranja = Potássio, turquesa = Zinco,
+e assim por diante. As garantias de cada produto aparecem como **pills
+coloridas** no card em vez de texto corrido, então dá pra bater o olho e
+ver "tem N, tem Zn" sem ler. Nos cards selecionados (que assumem a cor da
+marca no fundo) as pills ganham fundo escuro sólido, pra cor do nutriente
+continuar legível.
+
+No comparativo, cada nutriente mostra a variação **Δ** entre os dois
+manejos — sempre visível, com o percentual exato (Δ ▲ +23%), "≈" quando
+a diferença é menor que 5% (empate técnico), ou "só Agrocete" / "falta na
+Agrocete" quando só um dos lados entrega aquele nutriente.
+
+## Uso no celular (mobile first)
+
+- **Alvos de toque de 48×48px** nos controles mais usados: stepper de
+  dose (+/−), botão de travar, fechar e concluir do editor. O campo de
+  dose também ficou grande (fonte 20px, `inputMode="decimal"` pra abrir
+  o teclado numérico).
+- **Barra fixa no rodapé** com o resumo do manejo e um botão **PDF**
+  sempre alcançável assim que houver produto selecionado — sem precisar
+  expandir o resumo nem rolar até o fim do comparativo.
+- **Alto contraste** (botão de sol/lua no cabeçalho) pra leitura sob sol
+  forte, reforçando o contraste dos textos secundários.
+
 ## Travar dose
 
 Muitos produtos do catálogo (principalmente os importados de planilhas
@@ -337,11 +421,12 @@ usuários diferentes, e não sobrescreve a dose oficial de nenhuma planilha.
 
 ## Persistência
 
-A seleção de produtos (doses e preços) e os manejos salvos são
-gravados automaticamente no `localStorage` do navegador a cada
-alteração, sob a chave `agro-dashboard-state-v1`. Ao recarregar a
-página o estado é restaurado. É armazenamento local por
-navegador/dispositivo — não sincroniza entre aparelhos.
+A seleção de produtos (doses e preços), os manejos salvos, as doses
+travadas e o nome do cliente/fazenda são gravados automaticamente no
+`localStorage` do navegador a cada alteração, sob a chave
+`agro-dashboard-state-v1`. Ao recarregar a página o estado é restaurado.
+É armazenamento local por navegador/dispositivo — não sincroniza entre
+aparelhos nem entre membros da equipe.
 
 ## Tela de senha
 
@@ -377,6 +462,13 @@ produtos selecionados (dose e preço), a tabela de nutrientes (g/ha) por
 lado, o resumo de custo e as notas de posicionamento técnico. A
 biblioteca `jspdf` é carregada sob demanda (import dinâmico) só quando
 o botão é clicado, para não pesar o bundle inicial do app.
+
+Logo acima do botão há um campo **Cliente / fazenda**: o que for digitado
+ali entra no cabeçalho do PDF, abaixo do título, e também vira o nome do
+arquivo (`comparativo-agrocete-fazenda-boa-vista.pdf`), pra várias
+propostas não virarem "(1)", "(2)" na pasta de downloads. O nome fica
+salvo junto com o resto do estado, então continua preenchido na próxima
+visita.
 
 ## Deploy na Vercel
 
