@@ -30,6 +30,8 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
 
   const costDiff = totals.comp.cost - totals.agro.cost;
   const hasCost = totals.comp.cost > 0 || totals.agro.cost > 0;
+  const selectedTotal = totals.comp.count + totals.agro.count;
+  const hasAnySelection = selectedTotal > 0;
 
   return (
     <div
@@ -74,13 +76,51 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
               ) : (
                 <span style={{ color: "#F5A524" }}>Agrocete R$ {Math.abs(costDiff).toFixed(2)} mais caro</span>
               )
+            ) : hasAnySelection ? (
+              // Já tem produto, só falta preço — dizer "selecione produtos"
+              // aqui confundiria, então mostra o que de fato falta.
+              <span>
+                {selectedTotal} produto{selectedTotal > 1 ? "s" : ""} no manejo{" "}
+                <span className="muted" style={{ fontWeight: 400 }}>· informe os preços pra comparar custo</span>
+              </span>
             ) : (
               <span className="muted">Selecione produtos para comparar</span>
             )}
           </span>
         </div>
-        <div style={{ width: 32, height: 32, borderRadius: 8, background: "#17212B", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {expanded ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          {/* Exportar sempre alcançável no mobile, sem precisar expandir o
+              resumo nem rolar até o fim do comparativo. */}
+          {hasAnySelection && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onExportPDF();
+              }}
+              className="tap-scale"
+              aria-label="Exportar comparativo em PDF"
+              title="Exportar comparativo em PDF"
+              style={{
+                minHeight: 44,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "0 14px",
+                borderRadius: 10,
+                border: "none",
+                background: "#1FBF8F",
+                color: "#0B1319",
+                fontWeight: 700,
+                fontSize: 12,
+                cursor: "pointer",
+              }}
+            >
+              <Download size={15} /> PDF
+            </button>
+          )}
+          <div style={{ width: 44, height: 44, borderRadius: 10, background: "#17212B", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {expanded ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
+          </div>
         </div>
       </div>
 

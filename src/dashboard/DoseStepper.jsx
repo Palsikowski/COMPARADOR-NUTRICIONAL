@@ -1,11 +1,13 @@
 import React, { useRef } from "react";
 import { Minus, Plus } from "lucide-react";
 
+// 48x48 = alvo de toque mínimo recomendado pra uso no celular em campo
+// (dedo grosso, luva, tela suja) — o stepper é o controle mais usado do app.
 const stepBtnStyle = {
-  width: 28,
-  height: 28,
-  borderRadius: 7,
-  border: "1px solid #24313D",
+  width: 48,
+  height: 48,
+  borderRadius: 10,
+  border: "1px solid #2E3D4B",
   background: "#17212B",
   color: "#E8EDF1",
   display: "flex",
@@ -67,22 +69,27 @@ export default function DoseStepper({ value, onChange, fineStep, onToggleFineSte
           style={stepBtnStyle}
           aria-label="Diminuir dose"
         >
-          <Minus size={13} />
+          <Minus size={18} />
         </button>
         <input
           type="number"
           step="0.01"
+          inputMode="decimal"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          aria-label="Dose"
           style={{
-            width: 62,
+            flex: 1,
+            minWidth: 0,
+            height: 48,
             textAlign: "center",
             padding: "6px 4px",
-            borderRadius: 6,
-            border: "1px solid #24313D",
+            borderRadius: 10,
+            border: "1px solid #2E3D4B",
             background: "#17212B",
             color: "#E8EDF1",
-            fontSize: 12,
+            fontSize: 20,
+            fontWeight: 700,
             boxSizing: "border-box",
             fontFamily: "inherit",
           }}
@@ -99,9 +106,11 @@ export default function DoseStepper({ value, onChange, fineStep, onToggleFineSte
           style={stepBtnStyle}
           aria-label="Aumentar dose"
         >
-          <Plus size={13} />
+          <Plus size={18} />
         </button>
-        <span style={{ fontSize: 9, color: "#5C6B78" }}>passo {fineStep ? "0,1" : "1,0"}</span>
+      </div>
+      <div style={{ fontSize: 10, color: "#5C6B78", marginTop: 5, textAlign: "center" }}>
+        passo {fineStep ? "0,1" : "1,0"} — toque duas vezes no + ou − pra alternar
       </div>
       <input
         type="range"
