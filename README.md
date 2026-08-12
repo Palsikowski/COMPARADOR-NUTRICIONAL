@@ -1,9 +1,69 @@
-# Painel Agrocete — Comparador de Portfólio x Mercado
+# Painel Agrocete — Inteligência em nutrição foliar
 
-Dashboard para agilizar cotações: navegue pelo portfólio completo da
-Agrocete e de 11 marcas concorrentes, monte um comparativo de nutrientes
-(g/ha) e custo, e veja o posicionamento técnico calculado automaticamente
-a partir dos dados reais das planilhas internas.
+Plataforma para comparar produtos, composições e manejos de nutrição
+foliar por **composição, posicionamento e custo por hectare** — a partir
+dos dados reais das planilhas internas e dos materiais oficiais, nunca de
+dados inventados.
+
+**Compare. Entenda. Decida melhor.**
+
+## Como a plataforma está organizada
+
+Três telas, acessíveis pela navegação do topo:
+
+- **Início** — hero com a busca principal (produto, empresa, nutriente ou
+  cultura), quatro atalhos de ação e os indicadores da plataforma, todos
+  derivados dos dados reais (nenhum número é escrito à mão). A busca leva
+  direto ao catálogo já filtrado.
+- **Comparar** — comparação A vs B de dois produtos: visão geral,
+  composição com a diferença calculada, economia (custo/ha, custo por kg
+  de nutriente) e posicionamento por cultura/estádio.
+- **Catálogo e manejo** — o dashboard completo que já existia, intacto:
+  catálogo por categoria/marca, manejo atual lado a lado, manejos prontos
+  por cultura, sugestão automática de manejo Agrocete equivalente,
+  manejos salvos, trava de dose e exportação em PDF.
+
+### O que os dados sustentam (e o que não sustentam)
+
+Esta é a parte mais importante da plataforma: **cada número exibido tem
+origem rastreável, e cada lacuna é sinalizada em vez de preenchida.**
+Situação atual do catálogo (medida, não estimada):
+
+| Dado | Cobertura |
+| --- | --- |
+| Nome, marca, categoria | 1518 / 1518 |
+| Origem do dado (`fonte`) | 1518 / 1518 |
+| Composição nutricional | 1084 / 1518 |
+| Dose de referência | **248 / 1518** |
+| Densidade | 737 / 1518 |
+| Posicionamento por cultura/estádio | **16 / 1518** (só produtos Agrocete dos manejos oficiais de Soja, Milho e Algodão) |
+| Preço | **0** — preço não está no catálogo, é sempre informado pelo usuário |
+
+Consequências práticas, que a interface deixa explícitas:
+
+- **Custo/ha depende de dose e preço.** Como só 16% dos produtos têm dose
+  cadastrada e nenhum tem preço, o custo aparece como "informe dose e
+  preço para calcular" em vez de "R$ 0,00" — um zero pareceria resultado.
+- **Posicionamento por cultura/estádio existe para 16 produtos.** Nos
+  demais a plataforma diz "sem posicionamento cadastrado", em vez de
+  inferir cultura a partir da categoria.
+- **Não existem campos de tecnologia, ensaio ou preço histórico** no
+  catálogo — por isso não há filtro por tecnologia nem índice com
+  evidência experimental (ver "O que ainda não existe").
+
+### Confiabilidade dos dados
+
+Todo produto carrega um selo derivado do campo `fonte`, clicável para ver
+a origem registrada (`src/lib/provenance.js`):
+
+- **✓ Planilha oficial** (308 produtos) — planilha interna Agrocete.
+- **✓ Dado informado** (993) — planilhas enviadas pela equipe, sem
+  conferência contra ficha técnica do fabricante.
+- **⚠ Não verificado** (217) — produtos que entraram só como nome na
+  matriz de equivalência, sem composição conferida.
+
+Nenhum texto de fonte novo é promovido a "oficial" automaticamente: o que
+não casa com uma origem conhecida cai em "informado".
 
 ## Rodar localmente
 
@@ -15,7 +75,54 @@ npm run dev
 Abre em `http://localhost:5173`. Senha padrão: `12345678` (veja "Tela de
 senha" abaixo para trocar).
 
+## O que ainda não existe (e por quê)
+
+Estas funcionalidades foram pedidas mas **não foram implementadas porque o
+dado que as sustenta não existe no catálogo** — implementá-las hoje
+significaria inventar informação agronômica:
+
+- **Filtro por tecnologia** (quelato, complexado, aminoácidos, fosfitos,
+  carboxílicos): não há campo de tecnologia. Uma varredura no texto livre
+  de composição/observações encontra menção a alguma dessas tecnologias em
+  ~66 produtos (4% do catálogo) — insuficiente e não confiável para virar
+  filtro. Precisa de um campo `technology` na planilha-fonte.
+- **Filtro por cultura e por estádio de aplicação**: existe só para 16
+  produtos (1%). Um filtro de cultura hoje esconderia 99% do catálogo.
+- **Índice NCI (Nutrição & Custo Index)**: um dos critérios pedidos é
+  "evidência experimental", e não há **nenhum** dado de ensaio cadastrado.
+  Um índice que pondera um critério inexistente é um número com aparência
+  de rigor e sem lastro.
+- **Página de empresa com logo e descrição**: o catálogo tem só o nome da
+  marca. O perfil por marca (nº de produtos, categorias, nutrientes) já
+  está calculado em `src/lib/catalog.js` (`brandProfile`) e pode virar
+  página assim que houver conteúdo institucional.
+- **Preço por região/data/condição comercial**: a camada de cálculo já
+  isola preço como entrada do usuário, mas não há histórico nem cadastro
+  de preço para versionar.
+
+Para destravar qualquer um desses itens, o caminho é o mesmo dos dados que
+já entraram: uma planilha com as colunas correspondentes.
+
 ## Estrutura
+
+### Plataforma (camadas novas)
+
+- `src/App.jsx` — shell: navegação, tema (claro/escuro) e status de conexão.
+- `src/theme.css` — design tokens (cores, raios, sombras, botões). Tema
+  claro por padrão; o escuro continua no botão do cabeçalho porque é o que
+  funciona sob sol forte em campo.
+- `src/pages/Home.jsx` — hero, busca principal, atalhos e indicadores.
+- `src/pages/Compare.jsx` — comparador A vs B.
+- `src/lib/economics.js` — custo/ha, custo total por área, custo por kg de
+  nutriente e diferenças. Documenta a regra de unidades (g/L para líquido,
+  g/kg para sólido) e devolve `null` — não zero — quando falta entrada.
+- `src/lib/provenance.js` — níveis de confiabilidade a partir do `fonte`.
+- `src/lib/catalog.js` — índices derivados, estatísticas da plataforma,
+  posicionamento por cultura/estádio e busca unificada.
+- `src/components/` — `ProductSelector`, `DataBadge`, `CostPerHectare`,
+  `CompareBars`.
+
+### Catálogo e manejo (preservado)
 
 - `src/Dashboard.jsx` — componente principal: navegação por categoria
   (equivalência) ou por marca, seleção de produtos, comparativo de

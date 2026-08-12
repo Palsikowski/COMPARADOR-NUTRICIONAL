@@ -24,7 +24,7 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
   }
 
   return (
-    <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden", marginBottom: 16 }}>
+    <div style={{ background: "var(--surface)", borderRadius: 12, border: "1px solid var(--border)", overflow: "hidden", marginBottom: 16 }}>
       <button
         onClick={() => setOpen(!open)}
         className="tap-scale"
@@ -38,14 +38,14 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
           border: "none",
           cursor: "pointer",
           textAlign: "left",
-          color: "#E8EDF1",
+          color: "var(--text)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Bookmark size={15} color="#1FBF8F" />
+          <Bookmark size={15} color="var(--brand)" />
           <span style={{ fontWeight: 600, fontSize: 13 }}>Manejos salvos</span>
           {templates.length > 0 && (
-            <span style={{ fontSize: 11, background: "#233241", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>{templates.length}</span>
+            <span style={{ fontSize: 11, background: "var(--surface-3)", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>{templates.length}</span>
           )}
         </div>
         {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -64,9 +64,9 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
                   flex: 1,
                   padding: "8px 10px",
                   borderRadius: 8,
-                  border: "1px solid #24313D",
-                  background: "#0F1720",
-                  color: "#E8EDF1",
+                  border: "1px solid var(--border)",
+                  background: "var(--bg)",
+                  color: "var(--text)",
                   fontSize: 12,
                   boxSizing: "border-box",
                   fontFamily: "inherit",
@@ -83,8 +83,8 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
                   padding: "8px 12px",
                   borderRadius: 8,
                   border: "none",
-                  background: selectedCount === 0 ? "#233241" : "#1FBF8F",
-                  color: selectedCount === 0 ? "#5C6B78" : "#0B1319",
+                  background: selectedCount === 0 ? "var(--surface-3)" : "var(--brand)",
+                  color: selectedCount === 0 ? "var(--text-3)" : "var(--brand-contrast)",
                   fontWeight: 700,
                   fontSize: 12,
                   cursor: selectedCount === 0 ? "default" : "pointer",
@@ -104,8 +104,8 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
-                  background: "#0F1720",
-                  border: "1px solid #24313D",
+                  background: "var(--bg)",
+                  border: "1px solid var(--border)",
                   borderRadius: 8,
                   padding: "8px 10px",
                 }}
@@ -121,19 +121,19 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
                         flex: 1,
                         padding: "5px 8px",
                         borderRadius: 6,
-                        border: "1px solid #1FBF8F",
-                        background: "#17212B",
-                        color: "#E8EDF1",
+                        border: "1px solid var(--brand)",
+                        background: "var(--surface)",
+                        color: "var(--text)",
                         fontSize: 12,
                         boxSizing: "border-box",
                         fontFamily: "inherit",
                       }}
                     />
                     <button onClick={confirmRename} className="tap-scale" style={iconBtnStyle} aria-label="Confirmar">
-                      <Check size={14} color="#1FBF8F" />
+                      <Check size={14} color="var(--brand)" />
                     </button>
                     <button onClick={() => setRenamingId(null)} className="tap-scale" style={iconBtnStyle} aria-label="Cancelar">
-                      <X size={14} color="#8CA0AF" />
+                      <X size={14} color="var(--text-3)" />
                     </button>
                   </>
                 ) : (
@@ -143,13 +143,13 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
                       <div className="muted-soft" style={{ fontSize: 10 }}>{Object.keys(t.selected).length} produto(s)</div>
                     </div>
                     <button onClick={() => onLoad(t)} className="tap-scale" style={iconBtnStyle} aria-label={`Carregar ${t.name}`} title="Carregar">
-                      <FolderOpen size={14} color="#1FBF8F" />
+                      <FolderOpen size={14} color="var(--brand)" />
                     </button>
                     <button onClick={() => startRename(t)} className="tap-scale" style={iconBtnStyle} aria-label={`Renomear ${t.name}`} title="Renomear">
-                      <Pencil size={14} color="#8CA0AF" />
+                      <Pencil size={14} color="var(--text-3)" />
                     </button>
                     <button onClick={() => onDelete(t.id)} className="tap-scale" style={iconBtnStyle} aria-label={`Excluir ${t.name}`} title="Excluir">
-                      <Trash2 size={14} color="#F87171" />
+                      <Trash2 size={14} color="var(--danger)" />
                     </button>
                   </>
                 )}
@@ -164,7 +164,7 @@ export default function TemplatesPanel({ templates, selectedCount, onSave, onLoa
 
 const iconBtnStyle = {
   background: "transparent",
-  border: "1px solid #24313D",
+  border: "1px solid var(--border)",
   borderRadius: 6,
   width: 28,
   height: 28,

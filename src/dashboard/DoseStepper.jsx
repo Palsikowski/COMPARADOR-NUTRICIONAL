@@ -7,9 +7,9 @@ const stepBtnStyle = {
   width: 48,
   height: 48,
   borderRadius: 10,
-  border: "1px solid #2E3D4B",
-  background: "#17212B",
-  color: "#E8EDF1",
+  border: "1px solid var(--border-strong)",
+  background: "var(--surface)",
+  color: "var(--text)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -85,9 +85,9 @@ export default function DoseStepper({ value, onChange, fineStep, onToggleFineSte
             textAlign: "center",
             padding: "6px 4px",
             borderRadius: 10,
-            border: "1px solid #2E3D4B",
-            background: "#17212B",
-            color: "#E8EDF1",
+            border: "1px solid var(--border-strong)",
+            background: "var(--surface)",
+            color: "var(--text)",
             fontSize: 20,
             fontWeight: 700,
             boxSizing: "border-box",
@@ -109,7 +109,7 @@ export default function DoseStepper({ value, onChange, fineStep, onToggleFineSte
           <Plus size={18} />
         </button>
       </div>
-      <div style={{ fontSize: 10, color: "#5C6B78", marginTop: 5, textAlign: "center" }}>
+      <div style={{ fontSize: 10, color: "var(--text-3)", marginTop: 5, textAlign: "center" }}>
         passo {fineStep ? "0,1" : "1,0"} — toque duas vezes no + ou − pra alternar
       </div>
       <input

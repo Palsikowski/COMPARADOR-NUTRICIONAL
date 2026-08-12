@@ -47,7 +47,7 @@ export function CostEfficiencyPanel({ costEfficiency, insights, nutrientMeta }) 
   const rows = costEfficiency.filter((c) => c.agroCostPerKg != null || c.compCostPerKg != null);
   if (rows.length === 0) return null;
   return (
-    <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 12 }}>
+    <div style={{ background: "var(--surface)", borderRadius: 12, border: "1px solid var(--border)", padding: 14, marginBottom: 12 }}>
       <div className="muted" style={{ fontSize: 11, marginBottom: 10 }}>
         R$ por kg de nutriente entregue — quanto menor, mais eficiente o manejo naquele nutriente.
       </div>
@@ -59,11 +59,11 @@ export function CostEfficiencyPanel({ costEfficiency, insights, nutrientMeta }) 
           return (
             <div key={c.key} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
               <span style={{ width: 100, flexShrink: 0, fontWeight: 600 }}>{label}</span>
-              <span style={{ flex: 1, color: compWins ? "#22C55E" : "#C7D2D9", fontWeight: compWins ? 700 : 400 }}>
+              <span style={{ flex: 1, color: compWins ? "var(--ok)" : "var(--text-2)", fontWeight: compWins ? 700 : 400 }}>
                 {c.compCostPerKg != null ? `R$ ${fmtNum(c.compCostPerKg)}/kg` : "—"}
               </span>
-              <ArrowRight size={12} color="#4A5866" />
-              <span style={{ flex: 1, color: agroWins ? "#22C55E" : "#C7D2D9", fontWeight: agroWins ? 700 : 400 }}>
+              <ArrowRight size={12} color="var(--text-3)" />
+              <span style={{ flex: 1, color: agroWins ? "var(--ok)" : "var(--text-2)", fontWeight: agroWins ? 700 : 400 }}>
                 {c.agroCostPerKg != null ? `R$ ${fmtNum(c.agroCostPerKg)}/kg` : "—"}
               </span>
             </div>
@@ -81,14 +81,14 @@ export function CostEfficiencyPanel({ costEfficiency, insights, nutrientMeta }) 
                 gap: 7,
                 alignItems: "flex-start",
                 fontSize: 12,
-                background: ins.positive ? "#1FBF8F14" : "#F5A52414",
-                border: `1px solid ${ins.positive ? "#1FBF8F44" : "#F5A52444"}`,
+                background: ins.positive ? "color-mix(in srgb, var(--brand) 8%, transparent)" : "color-mix(in srgb, var(--warn) 8%, transparent)",
+                border: `1px solid ${ins.positive ? "color-mix(in srgb, var(--brand) 27%, transparent)" : "color-mix(in srgb, var(--warn) 27%, transparent)"}`,
                 borderRadius: 8,
                 padding: "8px 10px",
               }}
             >
-              <Sparkles size={13} color={ins.positive ? "#1FBF8F" : "#F5A524"} style={{ flexShrink: 0, marginTop: 1 }} />
-              <span style={{ color: "#E8EDF1" }}>{ins.text}</span>
+              <Sparkles size={13} color={ins.positive ? "var(--brand)" : "var(--warn)"} style={{ flexShrink: 0, marginTop: 1 }} />
+              <span style={{ color: "var(--text)" }}>{ins.text}</span>
             </div>
           ))}
         </div>
@@ -106,20 +106,20 @@ export function CompareBar({ agroVal, compVal, height = 9 }) {
   const agroAhead = agroVal > compVal;
   const compAhead = compVal > agroVal;
   return (
-    <div style={{ display: "flex", height, borderRadius: height / 2, overflow: "hidden", background: "#0F1720" }}>
+    <div style={{ display: "flex", height, borderRadius: height / 2, overflow: "hidden", background: "var(--bg)" }}>
       <div
         style={{
           width: `${agroPct}%`,
-          background: "#1FBF8F",
-          boxShadow: agroAhead ? "inset 0 0 0 1px #FFFFFF55" : "none",
+          background: "var(--brand)",
+          boxShadow: agroAhead ? "inset 0 0 0 1px color-mix(in srgb, #FFFFFF 33%, transparent)" : "none",
           transition: "width 0.3s",
         }}
       />
       <div
         style={{
           width: `${100 - agroPct}%`,
-          background: "#6B7A88",
-          boxShadow: compAhead ? "inset 0 0 0 1px #FFFFFF55" : "none",
+          background: "var(--neutral)",
+          boxShadow: compAhead ? "inset 0 0 0 1px color-mix(in srgb, #FFFFFF 33%, transparent)" : "none",
           transition: "width 0.3s",
         }}
       />
@@ -147,9 +147,9 @@ export function NutrientBadge({ badge }) {
         fontWeight: 700,
         padding: "1px 7px",
         borderRadius: 999,
-        background: badge.positive ? "#1FBF8F22" : "#F5A52422",
-        color: badge.positive ? "#1FBF8F" : "#F5A524",
-        border: `1px solid ${badge.positive ? "#1FBF8F55" : "#F5A52455"}`,
+        background: badge.positive ? "color-mix(in srgb, var(--brand) 13%, transparent)" : "color-mix(in srgb, var(--warn) 13%, transparent)",
+        color: badge.positive ? "var(--brand)" : "var(--warn)",
+        border: `1px solid ${badge.positive ? "color-mix(in srgb, var(--brand) 33%, transparent)" : "color-mix(in srgb, var(--warn) 33%, transparent)"}`,
       }}
     >
       {badge.positive ? "▲" : "▼"} {badge.text}
@@ -180,7 +180,7 @@ export function NutrientDelta({ delta }) {
   if (!delta) return null;
   const isDelta = delta.kind === "delta";
   const neutral = isDelta && Math.abs(delta.diffPct) < 5;
-  const color = neutral ? "#8CA0AF" : delta.positive ? "#1FBF8F" : "#F5A524";
+  const color = neutral ? "var(--text-3)" : delta.positive ? "var(--brand)" : "var(--warn)";
   // Δ e seta só fazem sentido quando existe percentual dos dois lados; nos
   // casos "só um lado tem" o texto já diz tudo.
   const prefix = isDelta ? `Δ ${neutral ? "≈" : delta.positive ? "▲" : "▼"} ` : "";

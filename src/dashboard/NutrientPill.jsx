@@ -20,8 +20,8 @@ export default function NutrientPill({ nutrientKey, value, unit, label, compact 
         display: "inline-flex",
         alignItems: "center",
         gap: 4,
-        background: onBrandBg ? "#0B1319" : `${color}1F`,
-        border: `1px solid ${onBrandBg ? "#0B131900" : `${color}55`}`,
+        background: onBrandBg ? "var(--brand-contrast)" : `${color}1F`,
+        border: `1px solid ${onBrandBg ? "transparent" : `${color}55`}`,
         color,
         borderRadius: 999,
         padding: compact ? "1px 6px" : "2px 8px",
@@ -60,7 +60,7 @@ export function NutrientPillRow({ nutrients, unit, meta, max = 6, compact = fals
       {rest > 0 && (
         <span
           className={onBrandBg ? undefined : "muted-soft"}
-          style={{ fontSize: compact ? 10 : 11, alignSelf: "center", fontWeight: 700, color: onBrandBg ? "#0B131999" : undefined }}
+          style={{ fontSize: compact ? 10 : 11, alignSelf: "center", fontWeight: 700, color: onBrandBg ? "color-mix(in srgb, var(--brand-contrast) 60%, transparent)" : undefined }}
         >
           +{rest}
         </span>
