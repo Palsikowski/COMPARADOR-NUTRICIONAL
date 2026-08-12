@@ -33,7 +33,9 @@ senha" abaixo para trocar).
   equivalente fica na barra lateral fixa.
 - `src/dashboard/QuickEditDrawer.jsx` — drawer que abre por cima do
   conteúdo para editar dose (stepper + slider + passo fino) e preço de
-  um produto, sem precisar expandir o card na lista.
+  um produto, sem precisar expandir o card na lista. Tem também o botão
+  de cadeado ("Travar") pra fixar a dose atual como padrão do produto
+  nesse aparelho — ver "Travar dose" abaixo.
 - `src/dashboard/CostEfficiency.jsx` — cálculo de R$/kg por nutriente
   entregue, insights automáticos, a barra de comparação compacta
   (`CompareBar`, cor fixa por identidade: verde = Agrocete, cinza =
@@ -43,8 +45,9 @@ senha" abaixo para trocar).
   bottom sheet, estilo do slider.
 - `src/PasswordGate.jsx` — tela de senha antes de carregar o dashboard.
 - `src/main.jsx` — ponto de entrada React.
-- `src/data/products.js` — catálogo de 308 produtos (Agrocete + 11
-  marcas concorrentes), gerado a partir de planilha interna.
+- `src/data/products.js` — catálogo de 1518 produtos (Agrocete + 57
+  marcas concorrentes), gerado a partir das planilhas internas e das
+  planilhas/PDFs enviados pelo usuário ao longo do projeto.
 - `src/data/equivalences.js` — matriz de 35 linhas de produto,
   mapeando o produto Agrocete e o equivalente de cada marca
   concorrente (quando existe).
@@ -108,6 +111,28 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
   duplo exatamente como constava na planilha de equivalência). Preencha
   as concentrações desses produtos abrindo o card e editando, ou peça
   pro Claude Code cadastrar a partir de uma ficha técnica/planilha.
+
+- **PLANILHA_DE_PRODUTOS_NUTRICIONAIS_1.xlsx** — planilha com 996 linhas
+  (coluna EMPRESA + Produto + garantias %m/m + densidade) enviada pelo
+  usuário, adicionou 966 produtos novos e 32 marcas novas ao catálogo
+  (AGRICHEM, AGROLATINA, AGROPLANTA, AGRÁRIA, AJINOMOTO, ALLTECH,
+  ALTAGRO, AMINOAGRO, BIOLCHIM, BIOSOJA, BMS, BRASILQUÍMICA, COMPASS
+  MINERALS, COMPO, DEFENSIVE, FERTILIZANTES HERINGER, INTERCUF,
+  KIMBERLIT, MICROFOL, MICROQUÍMICA, MULTITÉCNICA, NUTRIPLANT,
+  OXIQUÍMICA, QUIMIFOL, SAMARITÁ, SIPCAM-NICHINO, STOLLER, TRADECORP,
+  UNISOLO, UPL, VALAGRO, YARA), usando a mesma conversão %m/m → g/L
+  (líquidos, com densidade) ou ×10 → g/kg (sólidos) das planilhas
+  anteriores. A seção "GRAP AGROCETE" da planilha (produtos da própria
+  Agrocete, disfarçados como se fossem de outra empresa) foi tratada à
+  parte: 19 nomes que já batiam exatamente com um produto Agrocete
+  existente foram ignorados (evitar duplicata) e só os genuinamente
+  novos entraram. Um produto já cadastrado sem dados nutricionais
+  (Ubyfol KYMON) teve a garantia real encontrada nessa planilha e foi
+  atualizado em vez de duplicado.
+- **Aminoácidos, substâncias húmicas e silício**, quando presentes na
+  planilha acima, não entraram em `nutrients` (não são macro/micronutriente
+  no mesmo sentido dos demais) — ficaram registrados como texto em
+  `observations` de cada produto, pra não perder a informação.
 
 **Limitações conhecidas dos dados** (herdadas das planilhas-fonte, não
 "corrigidas" para não inventar informação):
@@ -293,6 +318,22 @@ preenche a busca automaticamente.
   pensado pra leitura sob sol forte.
 - **Vibração tátil leve** (quando o navegador/aparelho suporta) ao
   selecionar ou remover um produto.
+
+## Travar dose
+
+Muitos produtos do catálogo (principalmente os importados de planilhas
+de concorrentes) não vêm com uma dose de referência cadastrada — o
+comparativo abre com dose `0` pra eles. No drawer de edição (ícone de
+lápis no card selecionado) tem um botão de cadeado **"Travar"** ao lado
+do campo de dose: ele fixa a dose que está no campo naquele momento
+como o novo padrão daquele produto **nesse aparelho**. Da próxima vez
+que o produto for selecionado (mesmo depois de remover e adicionar de
+novo, ou de recarregar a página), ele já entra com a dose travada em
+vez de `0`. O cadeado destrava a qualquer momento pra voltar a editar
+livremente. Assim como o resto da persistência do app, é um valor local
+por navegador/dispositivo (`localStorage`, chave `doseOverrides` dentro
+de `agro-dashboard-state-v1`) — não é compartilhado entre aparelhos ou
+usuários diferentes, e não sobrescreve a dose oficial de nenhuma planilha.
 
 ## Persistência
 

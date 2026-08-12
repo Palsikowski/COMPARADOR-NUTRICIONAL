@@ -108,6 +108,7 @@ export default function Dashboard() {
   const [selected, setSelected] = useState(() => loadPersistedState()?.selected ?? {}); // id -> { dose, price }
   const [customProducts, setCustomProducts] = useState(() => loadPersistedState()?.customProducts ?? []);
   const [templates, setTemplates] = useState(() => loadPersistedState()?.templates ?? []);
+  const [doseOverrides, setDoseOverrides] = useState(() => loadPersistedState()?.doseOverrides ?? {}); // id -> { dose, locked }
   const [mode, setMode] = useState("categoria"); // 'categoria' | 'marca'
   const [search, setSearch] = useState("");
   const [openEquivCategory, setOpenEquivCategory] = useState(null);
@@ -125,11 +126,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, customProducts, templates }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, customProducts, templates, doseOverrides }));
     } catch {
       // localStorage indisponível — ignora, estado só não persiste
     }
-  }, [selected, customProducts, templates]);
+  }, [selected, customProducts, templates, doseOverrides]);
 
   const allProducts = useMemo(() => [...PRODUCTS, ...customProducts], [customProducts]);
   const productsById = useMemo(() => new Map(allProducts.map((p) => [p.id, p])), [allProducts]);
@@ -141,10 +142,26 @@ export default function Dashboard() {
       if (next[product.id]) {
         delete next[product.id];
       } else {
-        next[product.id] = { dose: product.defaultDose ?? 0, price: product.defaultPrice ?? 0 };
+        const overrideDose = doseOverrides[product.id]?.dose;
+        next[product.id] = { dose: overrideDose ?? product.defaultDose ?? 0, price: product.defaultPrice ?? 0 };
       }
       return next;
     });
+  }
+
+  // Trava/destrava a dose atual de um produto como padrão persistido neste
+  // aparelho (localStorage) — útil sobretudo pros produtos sem dose de
+  // referência cadastrada, pra não ter que redigitar toda vez que for
+  // selecionado de novo.
+  function toggleDoseLock(productId, currentDose) {
+    setDoseOverrides((prev) => {
+      const cur = prev[productId];
+      if (cur?.locked) {
+        return { ...prev, [productId]: { ...cur, locked: false } };
+      }
+      return { ...prev, [productId]: { dose: parseFloat(currentDose) || 0, locked: true } };
+    });
+    vibrate(15);
   }
 
   function updateSelected(id, field, value) {
@@ -1030,6 +1047,8 @@ export default function Dashboard() {
           onClose={() => setEditingProductId(null)}
           fineStep={fineStep}
           onToggleFineStep={() => setFineStep((v) => !v)}
+          locked={!!doseOverrides[editingProduct.id]?.locked}
+          onToggleLock={(currentDose) => toggleDoseLock(editingProduct.id, currentDose)}
         />
       )}
     </div>
