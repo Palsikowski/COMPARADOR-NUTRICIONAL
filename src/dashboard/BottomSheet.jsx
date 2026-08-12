@@ -41,8 +41,8 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
         right: 0,
         bottom: 0,
         zIndex: 40,
-        background: "#0B1319",
-        borderTop: "1px solid #24313D",
+        background: "var(--brand-contrast)",
+        borderTop: "1px solid var(--border)",
         borderRadius: "16px 16px 0 0",
         boxShadow: "0 -6px 24px rgba(0,0,0,0.4)",
         maxHeight: expanded ? "78vh" : 92,
@@ -72,9 +72,9 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
           <span style={{ fontSize: 13, fontWeight: 700 }}>
             {hasCost ? (
               costDiff >= 0 ? (
-                <span style={{ color: "#22C55E" }}>Agrocete R$ {Math.abs(costDiff).toFixed(2)} mais barato</span>
+                <span style={{ color: "var(--ok)" }}>Agrocete R$ {Math.abs(costDiff).toFixed(2)} mais barato</span>
               ) : (
-                <span style={{ color: "#F5A524" }}>Agrocete R$ {Math.abs(costDiff).toFixed(2)} mais caro</span>
+                <span style={{ color: "var(--warn)" }}>Agrocete R$ {Math.abs(costDiff).toFixed(2)} mais caro</span>
               )
             ) : hasAnySelection ? (
               // Já tem produto, só falta preço — dizer "selecione produtos"
@@ -108,8 +108,8 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
                 padding: "0 14px",
                 borderRadius: 10,
                 border: "none",
-                background: "#1FBF8F",
-                color: "#0B1319",
+                background: "var(--brand)",
+                color: "var(--brand-contrast)",
                 fontWeight: 700,
                 fontSize: 12,
                 cursor: "pointer",
@@ -118,7 +118,7 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
               <Download size={15} /> PDF
             </button>
           )}
-          <div style={{ width: 44, height: 44, borderRadius: 10, background: "#17212B", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 44, height: 44, borderRadius: 10, background: "var(--surface)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {expanded ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
           </div>
         </div>
@@ -127,20 +127,20 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
       {expanded && (
         <div style={{ padding: "0 16px 24px" }}>
           <div style={{ display: "flex", gap: 14, fontSize: 11, marginBottom: 12 }}>
-            <LegendDot color="#6B7A88" label="Concorrentes" />
-            <LegendDot color="#1FBF8F" label="Agrocete" />
+            <LegendDot color="var(--neutral)" label="Concorrentes" />
+            <LegendDot color="var(--brand)" label="Agrocete" />
           </div>
           {KEY_MACROS.filter((k) => (totals.agro.nutrients[k] || 0) > 0 || (totals.comp.nutrients[k] || 0) > 0).map((k) => (
             <MiniRow key={k} label={nutrientMeta[k]?.label ?? k} agroVal={totals.agro.nutrients[k] || 0} compVal={totals.comp.nutrients[k] || 0} />
           ))}
           <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-            <div style={{ flex: 1, background: "#17212B", border: "1.5px solid #6B7A8844", borderRadius: 10, padding: 10 }}>
+            <div style={{ flex: 1, background: "var(--surface)", border: "1.5px solid color-mix(in srgb, var(--neutral) 27%, transparent)", borderRadius: 10, padding: 10 }}>
               <div className="muted" style={{ fontSize: 10 }}>Custo concorrentes</div>
               <div style={{ fontSize: 16, fontWeight: 700 }}>R$ {totals.comp.cost.toFixed(2)}</div>
             </div>
-            <div style={{ flex: 1, background: "#17212B", border: "1.5px solid #1FBF8F44", borderRadius: 10, padding: 10 }}>
+            <div style={{ flex: 1, background: "var(--surface)", border: "1.5px solid color-mix(in srgb, var(--brand) 27%, transparent)", borderRadius: 10, padding: 10 }}>
               <div className="muted" style={{ fontSize: 10 }}>Custo Agrocete</div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: "#1FBF8F" }}>R$ {totals.agro.cost.toFixed(2)}</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "var(--brand)" }}>R$ {totals.agro.cost.toFixed(2)}</div>
             </div>
           </div>
           <button
@@ -152,8 +152,8 @@ export default function BottomSheet({ totals, nutrientMeta, expanded, setExpande
               padding: "11px",
               borderRadius: 10,
               border: "none",
-              background: "#1FBF8F",
-              color: "#0B1319",
+              background: "var(--brand)",
+              color: "var(--brand-contrast)",
               fontWeight: 700,
               fontSize: 13,
               cursor: "pointer",
@@ -199,9 +199,9 @@ function MiniRow({ label, agroVal, compVal }) {
           {fmtNum(compVal)} g vs {fmtNum(agroVal)} g
         </span>
       </div>
-      <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden", background: "#0F1720" }}>
-        <div style={{ width: `${agroPct}%`, background: "#1FBF8F", transition: "width 0.3s" }} />
-        <div style={{ width: `${100 - agroPct}%`, background: "#6B7A88", transition: "width 0.3s" }} />
+      <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden", background: "var(--bg)" }}>
+        <div style={{ width: `${agroPct}%`, background: "var(--brand)", transition: "width 0.3s" }} />
+        <div style={{ width: `${100 - agroPct}%`, background: "var(--neutral)", transition: "width 0.3s" }} />
       </div>
     </div>
   );

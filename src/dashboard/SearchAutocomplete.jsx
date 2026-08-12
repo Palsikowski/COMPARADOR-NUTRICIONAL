@@ -101,7 +101,7 @@ export default function SearchAutocomplete({
 
   return (
     <div ref={boxRef} style={{ position: "relative" }}>
-      <Search size={15} color="#8CA0AF" style={{ position: "absolute", left: 12, top: 13, pointerEvents: "none" }} />
+      <Search size={15} color="var(--text-3)" style={{ position: "absolute", left: 12, top: 13, pointerEvents: "none" }} />
       <input
         type="text"
         value={value}
@@ -117,9 +117,9 @@ export default function SearchAutocomplete({
           padding: "12px 38px 12px 34px",
           minHeight: 48,
           borderRadius: 10,
-          border: `1px solid ${showList ? "#1FBF8F66" : "#24313D"}`,
-          background: "#17212B",
-          color: "#E8EDF1",
+          border: `1px solid ${showList ? "color-mix(in srgb, var(--brand) 40%, transparent)" : "var(--border)"}`,
+          background: "var(--surface)",
+          color: "var(--text)",
           fontSize: 14,
           boxSizing: "border-box",
           fontFamily: "inherit",
@@ -142,7 +142,7 @@ export default function SearchAutocomplete({
             borderRadius: 8,
             border: "none",
             background: "transparent",
-            color: "#8CA0AF",
+            color: "var(--text-3)",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
@@ -161,8 +161,8 @@ export default function SearchAutocomplete({
             left: 0,
             right: 0,
             zIndex: 50,
-            background: "#101A22",
-            border: "1px solid #24313D",
+            background: "var(--surface-2)",
+            border: "1px solid var(--border)",
             borderRadius: 10,
             boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
             overflow: "hidden",
@@ -189,12 +189,12 @@ export default function SearchAutocomplete({
                   gap: 9,
                   padding: "10px 12px",
                   minHeight: 48,
-                  background: i === cursor ? "#17212B" : "transparent",
+                  background: i === cursor ? "var(--surface)" : "transparent",
                   border: "none",
-                  borderBottom: "1px solid #1A2530",
+                  borderBottom: "1px solid var(--border)",
                   cursor: "pointer",
                   textAlign: "left",
-                  color: "#E8EDF1",
+                  color: "var(--text)",
                 }}
               >
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0 }} />
@@ -214,9 +214,9 @@ export default function SearchAutocomplete({
                     width: 26,
                     height: 26,
                     borderRadius: 7,
-                    background: isSel ? `${color}22` : "#17212B",
-                    border: `1px solid ${isSel ? color : "#24313D"}`,
-                    color: isSel ? color : "#8CA0AF",
+                    background: isSel ? `${color}22` : "var(--surface)",
+                    border: `1px solid ${isSel ? color : "var(--border)"}`,
+                    color: isSel ? color : "var(--text-3)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -227,7 +227,7 @@ export default function SearchAutocomplete({
               </button>
             );
           })}
-          <div className="muted-soft" style={{ fontSize: 10, padding: "7px 12px", background: "#0D151C" }}>
+          <div className="muted-soft" style={{ fontSize: 10, padding: "7px 12px", background: "var(--surface-2)" }}>
             Toque num produto pra adicionar/remover do manejo · ↑ ↓ e Enter no teclado
           </div>
         </div>

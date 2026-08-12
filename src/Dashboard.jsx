@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
 import {
-  Leaf,
   ChevronDown,
   ChevronUp,
   Plus,
@@ -13,13 +12,9 @@ import {
   Lightbulb,
   AlertTriangle,
   TrendingUp,
-  Sun,
-  Moon,
   Gauge,
   ArrowRightLeft,
   Lock,
-  Wifi,
-  WifiOff,
   User,
 } from "lucide-react";
 import { PRODUCTS } from "./data/products.js";
@@ -59,8 +54,8 @@ const NUTRIENT_META = {
 const GROUP_ORDER = { macro: 0, secundario: 1, micro: 2, outro: 3 };
 
 const AGROCETE = "AGROCETE";
-const AGROCETE_COLOR = "#1FBF8F";
-const BRAND_PALETTE = ["#F5A524", "#6366F1", "#F43F5E", "#38BDF8", "#A78BFA", "#FB923C", "#4ADE80", "#F472B6", "#60A5FA", "#FACC15", "#FB7185"];
+const AGROCETE_COLOR = "var(--brand)";
+const BRAND_PALETTE = ["var(--warn)", "#6366F1", "#F43F5E", "#38BDF8", "#A78BFA", "#FB923C", "#4ADE80", "#F472B6", "#60A5FA", "#FACC15", "#FB7185"];
 function brandColor(brand) {
   if (brand === AGROCETE) return AGROCETE_COLOR;
   const idx = COMPETITOR_BRANDS.indexOf(brand);
@@ -105,20 +100,19 @@ function fmtNum(n) {
   return Number(n).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
 }
 
-export default function Dashboard() {
+export default function Dashboard({ initialSearch = "" }) {
   const [selected, setSelected] = useState(() => loadPersistedState()?.selected ?? {}); // id -> { dose, price }
   const [customProducts, setCustomProducts] = useState(() => loadPersistedState()?.customProducts ?? []);
   const [templates, setTemplates] = useState(() => loadPersistedState()?.templates ?? []);
   const [doseOverrides, setDoseOverrides] = useState(() => loadPersistedState()?.doseOverrides ?? {}); // id -> { dose, locked }
-  const [mode, setMode] = useState("categoria"); // 'categoria' | 'marca'
-  const [search, setSearch] = useState("");
+  const [mode, setMode] = useState(initialSearch ? "marca" : "categoria"); // 'categoria' | 'marca'
+  const [search, setSearch] = useState(initialSearch);
   const [openEquivCategory, setOpenEquivCategory] = useState(null);
   const [openBrand, setOpenBrand] = useState(AGROCETE);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProd, setNewProd] = useState({ name: "", unit: "L/ha", dose: 1, price: 0, nutrients: {} });
   const [fineStep, setFineStep] = useState(false); // passo 0,1 (fino) vs 1,0 (grosso) nos steppers de dose
   const [sheetExpanded, setSheetExpanded] = useState(false);
-  const [highContrast, setHighContrast] = useState(false);
   const [quickBrandOnly, setQuickBrandOnly] = useState(false); // chip "Somente Agrocete"
   const [activeChip, setActiveChip] = useState("all");
   const [editingProductId, setEditingProductId] = useState(null); // produto aberto no drawer de dose/preço
@@ -127,7 +121,6 @@ export default function Dashboard() {
   const [brandFilter, setBrandFilter] = useState(""); // "" = todas as marcas
   const [categoryFilter, setCategoryFilter] = useState(null); // id de grupo em categoryGroups.js
   const [clientName, setClientName] = useState(() => loadPersistedState()?.clientName ?? ""); // fazenda/cliente que vai no PDF
-  const [isOnline, setIsOnline] = useState(() => (typeof navigator === "undefined" ? true : navigator.onLine));
 
   useEffect(() => {
     try {
@@ -137,23 +130,6 @@ export default function Dashboard() {
     }
   }, [selected, customProducts, templates, doseOverrides, clientName]);
 
-  // Status de conexão: o app roda 100% offline (todo o catálogo é local), mas
-  // o consultor no campo precisa VER isso pra confiar — sem o indicador, uma
-  // tela sem sinal parece app quebrado.
-  useEffect(() => {
-    function goOnline() {
-      setIsOnline(true);
-    }
-    function goOffline() {
-      setIsOnline(false);
-    }
-    window.addEventListener("online", goOnline);
-    window.addEventListener("offline", goOffline);
-    return () => {
-      window.removeEventListener("online", goOnline);
-      window.removeEventListener("offline", goOffline);
-    };
-  }, []);
 
   const allProducts = useMemo(() => [...PRODUCTS, ...customProducts], [customProducts]);
   const productsById = useMemo(() => new Map(allProducts.map((p) => [p.id, p])), [allProducts]);
@@ -608,98 +584,22 @@ export default function Dashboard() {
   const hasBothSides = totals.agro.count > 0 && totals.comp.count > 0;
 
   return (
-    <div
-      className={highContrast ? "high-contrast" : undefined}
-      style={{
-        minHeight: "100vh",
-        background: highContrast ? "#000000" : "#0F1720",
-        fontFamily: "'Inter', system-ui, sans-serif",
-        color: "#FFFFFF",
-      }}
-    >
-      {/* NAVBAR */}
-      <header
-        style={{
-          background: "#0B1319",
-          borderBottom: "1px solid #1E2A35",
-          padding: "14px 20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 10,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 9, background: AGROCETE_COLOR, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Leaf size={18} color="#0B1319" />
-          </div>
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 700, lineHeight: 1.1 }}>Painel Agrocete</div>
-            <div className="muted" style={{ fontSize: 11 }}>Comparador de Portfólio x Mercado</div>
-          </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          <StatusPill label="Produtos" value={fmtNum(PRODUCTS.length)} />
-          <StatusPill label="Marcas" value={COMPETITOR_BRANDS.length} />
+    <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
+      {/* O cabeçalho da plataforma (logo, navegação, tema, status de conexão)
+          fica no App — aqui sobra só o contador de doses travadas, que é
+          específico desta tela. */}
+      <main style={{ maxWidth: 1360, margin: "0 auto", padding: "18px 16px 140px" }}>
+      {lockedCount > 0 && (
+        <div style={{ marginBottom: 12 }}>
           <StatusPill
-            label={lockedCount === 1 ? "Dose travada" : "Doses travadas"}
+            label={lockedCount === 1 ? "dose travada neste aparelho" : "doses travadas neste aparelho"}
             value={lockedCount}
-            color={lockedCount > 0 ? "#F5A524" : undefined}
-            icon={lockedCount > 0 ? <Lock size={11} /> : null}
-            title={
-              lockedCount > 0
-                ? `${lockedCount} dose${lockedCount > 1 ? "s" : ""} fixada${lockedCount > 1 ? "s" : ""} como padrão neste aparelho`
-                : "Nenhuma dose travada ainda"
-            }
+            color="var(--warn)"
+            icon={<Lock size={11} />}
+            title="Doses fixadas como padrão dos produtos neste aparelho"
           />
-          <span
-            title={
-              isOnline
-                ? "Com internet — o app funciona igual sem sinal, todo o catálogo está no aparelho"
-                : "Sem internet — o app continua funcionando normalmente, o catálogo inteiro está salvo no aparelho"
-            }
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 5,
-              fontSize: 11,
-              fontWeight: 700,
-              padding: "4px 9px",
-              borderRadius: 999,
-              background: isOnline ? "#1FBF8F14" : "#F5A52422",
-              border: `1px solid ${isOnline ? "#1FBF8F44" : "#F5A52466"}`,
-              color: isOnline ? "#1FBF8F" : "#F5A524",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {isOnline ? <Wifi size={11} /> : <WifiOff size={11} />}
-            {isOnline ? "Online" : "Offline — funciona normal"}
-          </span>
-          <button
-            onClick={() => setHighContrast(!highContrast)}
-            className="tap-scale"
-            title={highContrast ? "Desativar alto contraste" : "Ativar alto contraste (sol forte)"}
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: 8,
-              border: `1px solid ${highContrast ? AGROCETE_COLOR : "#24313D"}`,
-              background: highContrast ? `${AGROCETE_COLOR}22` : "#17212B",
-              color: highContrast ? AGROCETE_COLOR : "#8CA0AF",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              flexShrink: 0,
-            }}
-          >
-            {highContrast ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
         </div>
-      </header>
-
-      <main style={{ maxWidth: 1360, margin: "0 auto", padding: "20px 16px 140px" }}>
+      )}
       <div className="dash-grid">
       <div>
         {/* PASSO 1 — ACHAR O PRODUTO */}
@@ -730,9 +630,9 @@ export default function Dashboard() {
               minHeight: 44,
               padding: "10px 12px",
               borderRadius: 10,
-              border: `1px solid ${brandFilter ? `${brandColor(brandFilter)}88` : "#24313D"}`,
-              background: "#17212B",
-              color: brandFilter ? brandColor(brandFilter) : "#8CA0AF",
+              border: `1px solid ${brandFilter ? `${brandColor(brandFilter)}88` : "var(--border)"}`,
+              background: "var(--surface)",
+              color: brandFilter ? brandColor(brandFilter) : "var(--text-3)",
               fontSize: 13,
               fontWeight: brandFilter ? 700 : 400,
               fontFamily: "inherit",
@@ -757,9 +657,9 @@ export default function Dashboard() {
                 minHeight: 44,
                 padding: "0 14px",
                 borderRadius: 10,
-                border: "1px solid #24313D",
-                background: "#17212B",
-                color: "#8CA0AF",
+                border: "1px solid var(--border)",
+                background: "var(--surface)",
+                color: "var(--text-3)",
                 fontSize: 12,
                 fontWeight: 700,
                 cursor: "pointer",
@@ -780,7 +680,7 @@ export default function Dashboard() {
               label={`${g.label} (${g.count})`}
               active={categoryFilter === g.id}
               onClick={() => selectCategoryGroupChip(g.id)}
-              color="#38BDF8"
+              color="var(--info)"
             />
           ))}
         </div>
@@ -819,7 +719,7 @@ export default function Dashboard() {
               );
               if (searchNorm && filteredRows.length === 0) return null;
               return (
-                <div key={cat} style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden", marginBottom: 10 }}>
+                <div key={cat} style={{ background: "var(--surface)", borderRadius: 12, border: "1px solid var(--border)", overflow: "hidden", marginBottom: 10 }}>
                   <button
                     onClick={() => setOpenEquivCategory(isOpen ? null : cat)}
                     className="tap-scale"
@@ -833,7 +733,7 @@ export default function Dashboard() {
                       border: "none",
                       cursor: "pointer",
                       textAlign: "left",
-                      color: "#E8EDF1",
+                      color: "var(--text)",
                     }}
                   >
                     <span style={{ fontWeight: 700, fontSize: 13, letterSpacing: "0.03em", textTransform: "uppercase" }}>{cat}</span>
@@ -871,7 +771,7 @@ export default function Dashboard() {
                 if (anyFilterActive && products.length === 0) return null;
                 const color = brandColor(brand);
                 return (
-                  <div key={brand} style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden" }}>
+                  <div key={brand} style={{ background: "var(--surface)", borderRadius: 12, border: "1px solid var(--border)", overflow: "hidden" }}>
                     <button
                       onClick={() => setOpenBrand(isOpen ? null : brand)}
                       className="tap-scale"
@@ -885,7 +785,7 @@ export default function Dashboard() {
                         border: "none",
                         cursor: "pointer",
                         textAlign: "left",
-                        color: "#E8EDF1",
+                        color: "var(--text)",
                       }}
                     >
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -897,7 +797,7 @@ export default function Dashboard() {
                             : `${(productsByBrand[brand] || []).length} produtos`}
                         </span>
                         {brandSelectedCount > 0 && (
-                          <span style={{ fontSize: 11, background: "#233241", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>
+                          <span style={{ fontSize: 11, background: "var(--surface-3)", padding: "2px 7px", borderRadius: 999, fontWeight: 600 }}>
                             {brandSelectedCount} ativo{brandSelectedCount > 1 ? "s" : ""}
                           </span>
                         )}
@@ -948,10 +848,10 @@ export default function Dashboard() {
         <ManagementPresetsPanel onLoad={loadPreset} />
 
         {presetInfo && (
-          <div style={{ background: "#F5A52414", border: "1px solid #F5A52444", borderRadius: 10, padding: 12, marginBottom: 16, fontSize: 11 }}>
+          <div style={{ background: "color-mix(in srgb, var(--warn) 8%, transparent)", border: "1px solid color-mix(in srgb, var(--warn) 27%, transparent)", borderRadius: 10, padding: 12, marginBottom: 16, fontSize: 11 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: presetInfo.notes.length > 0 ? 8 : 0 }}>
               <strong style={{ fontSize: 12 }}>{presetInfo.label} carregado</strong>
-              <button onClick={() => setPresetInfo(null)} className="tap-scale" style={{ background: "transparent", border: "none", color: "#F5A524", cursor: "pointer", padding: 2 }} aria-label="Dispensar">
+              <button onClick={() => setPresetInfo(null)} className="tap-scale" style={{ background: "transparent", border: "none", color: "var(--warn)", cursor: "pointer", padding: 2 }} aria-label="Dispensar">
                 <X size={13} />
               </button>
             </div>
@@ -961,7 +861,7 @@ export default function Dashboard() {
                   const prod = productsById.get(n.productId);
                   return (
                     <div key={i} className="muted-soft">
-                      <strong style={{ color: "#C7D2D9" }}>{prod?.name ?? n.productId}</strong> ({n.stage}): {n.note}
+                      <strong style={{ color: "var(--text-2)" }}>{prod?.name ?? n.productId}</strong> ({n.stage}): {n.note}
                     </div>
                   );
                 })}
@@ -1002,8 +902,8 @@ export default function Dashboard() {
         {transformInfo && (
           <div
             style={{
-              background: transformInfo.count > 0 ? "#1FBF8F14" : "#F5A52414",
-              border: `1px solid ${transformInfo.count > 0 ? "#1FBF8F44" : "#F5A52444"}`,
+              background: transformInfo.count > 0 ? "color-mix(in srgb, var(--brand) 8%, transparent)" : "color-mix(in srgb, var(--warn) 8%, transparent)",
+              border: `1px solid ${transformInfo.count > 0 ? "color-mix(in srgb, var(--brand) 27%, transparent)" : "color-mix(in srgb, var(--warn) 27%, transparent)"}`,
               borderRadius: 10,
               padding: 12,
               marginBottom: 16,
@@ -1011,16 +911,16 @@ export default function Dashboard() {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: transformInfo.uncovered.length > 0 ? 6 : 0 }}>
-              <strong style={{ fontSize: 12, color: transformInfo.count > 0 ? AGROCETE_COLOR : "#F5A524" }}>
+              <strong style={{ fontSize: 12, color: transformInfo.count > 0 ? AGROCETE_COLOR : "var(--warn)" }}>
                 {transformInfo.count > 0 ? `${transformInfo.count} produto${transformInfo.count > 1 ? "s" : ""} Agrocete adicionado${transformInfo.count > 1 ? "s" : ""}` : "Nenhum produto Agrocete encontrado"}
               </strong>
-              <button onClick={() => setTransformInfo(null)} className="tap-scale" style={{ background: "transparent", border: "none", color: "#8CA0AF", cursor: "pointer", padding: 2 }} aria-label="Dispensar">
+              <button onClick={() => setTransformInfo(null)} className="tap-scale" style={{ background: "transparent", border: "none", color: "var(--text-3)", cursor: "pointer", padding: 2 }} aria-label="Dispensar">
                 <X size={13} />
               </button>
             </div>
             {transformInfo.uncovered.length > 0 && (
               <p className="muted-soft" style={{ margin: 0 }}>
-                Cobertura ainda incompleta para: <strong style={{ color: "#C7D2D9" }}>{transformInfo.uncovered.join(", ")}</strong> — pode ser que nenhum produto do catálogo concentre o suficiente, ou que valha a pena complementar manualmente.
+                Cobertura ainda incompleta para: <strong style={{ color: "var(--text-2)" }}>{transformInfo.uncovered.join(", ")}</strong> — pode ser que nenhum produto do catálogo concentre o suficiente, ou que valha a pena complementar manualmente.
               </p>
             )}
           </div>
@@ -1040,9 +940,9 @@ export default function Dashboard() {
           <section id="comparativo" style={{ scrollMarginTop: 16 }}>
             <StepLabel n={3} title="Compare com a Agrocete" />
             <SectionHeading icon={<TrendingUp size={16} />} title="Comparativo de nutrientes (g/ha)" />
-            <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", padding: 14, marginBottom: 12 }}>
+            <div style={{ background: "var(--surface)", borderRadius: 12, border: "1px solid var(--border)", padding: 14, marginBottom: 12 }}>
               <div style={{ display: "flex", gap: 14, fontSize: 11, marginBottom: 12 }}>
-                <LegendDot color="#6B7A88" label="Concorrentes" />
+                <LegendDot color="var(--neutral)" label="Concorrentes" />
                 <LegendDot color={AGROCETE_COLOR} label="Agrocete" />
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -1084,18 +984,18 @@ export default function Dashboard() {
             <CostEfficiencyPanel costEfficiency={costEfficiency} insights={insights} nutrientMeta={NUTRIENT_META} />
 
             <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-              <CostCard label="Custo concorrentes" value={totals.comp.cost} color="#6B7A88" />
+              <CostCard label="Custo concorrentes" value={totals.comp.cost} color="var(--neutral)" />
               <CostCard label="Custo Agrocete" value={totals.agro.cost} color={AGROCETE_COLOR} />
             </div>
             {totals.comp.cost > 0 && totals.agro.cost > 0 && (
-              <div style={{ marginTop: 10, fontSize: 13, background: "#17212B", border: "1px solid #24313D", borderRadius: 10, padding: 12 }}>
+              <div style={{ marginTop: 10, fontSize: 13, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: 12 }}>
                 {totals.agro.cost <= totals.comp.cost ? (
                   <span>
                     Manejo Agrocete é <strong style={{ color: AGROCETE_COLOR }}>R$ {(totals.comp.cost - totals.agro.cost).toFixed(2)} mais barato</strong> que o manejo concorrente selecionado.
                   </span>
                 ) : (
                   <span>
-                    Manejo Agrocete é <strong style={{ color: "#F5A524" }}>R$ {(totals.agro.cost - totals.comp.cost).toFixed(2)} mais caro</strong> — avalie se a diferença de nutrientes abaixo justifica o custo.
+                    Manejo Agrocete é <strong style={{ color: "var(--warn)" }}>R$ {(totals.agro.cost - totals.comp.cost).toFixed(2)} mais caro</strong> — avalie se a diferença de nutrientes abaixo justifica o custo.
                   </span>
                 )}
               </div>
@@ -1106,17 +1006,17 @@ export default function Dashboard() {
               <div style={{ marginTop: 16 }}>
                 <SectionHeading icon={<Lightbulb size={16} />} title="Posicionamento técnico" />
                 {headToHead && (
-                  <div style={{ background: "#17212B", border: `1px solid ${AGROCETE_COLOR}44`, borderRadius: 10, padding: 12, marginBottom: 10 }}>
+                  <div style={{ background: "var(--surface)", border: `1px solid ${AGROCETE_COLOR}44`, borderRadius: 10, padding: 12, marginBottom: 10 }}>
                     <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
                       {headToHead.agroP.name} <span className="muted">vs</span> {headToHead.compP.name} ({headToHead.compP.brand})
                     </div>
                     {headToHead.rows.map((r) => (
-                      <div key={r.key} style={{ fontSize: 12, color: "#C7D2D9", marginBottom: 4 }}>
+                      <div key={r.key} style={{ fontSize: 12, color: "var(--text-2)", marginBottom: 4 }}>
                         {NUTRIENT_META[r.key]?.label ?? r.key}: Agrocete entrega{" "}
                         <strong style={{ color: AGROCETE_COLOR }}>{fmtNum(r.a)} {nutrientUnitSuffix(headToHead.agroP)}</strong> contra{" "}
                         {fmtNum(r.c)} {nutrientUnitSuffix(headToHead.compP)} do concorrente
                         {r.diffPct != null && (
-                          <strong style={{ color: r.diffPct >= 0 ? AGROCETE_COLOR : "#F87171" }}>
+                          <strong style={{ color: r.diffPct >= 0 ? AGROCETE_COLOR : "var(--danger)" }}>
                             {" "}
                             ({r.diffPct >= 0 ? "+" : ""}
                             {fmtNum(r.diffPct)}%)
@@ -1127,16 +1027,16 @@ export default function Dashboard() {
                   </div>
                 )}
                 {selectedAgroWithNotes.map((p) => (
-                  <div key={p.id} style={{ background: "#17212B", border: "1px solid #24313D", borderRadius: 10, padding: 12, marginBottom: 8 }}>
+                  <div key={p.id} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: 12, marginBottom: 8 }}>
                     <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{p.name}</div>
                     {p.observations && (
-                      <div style={{ fontSize: 12, color: "#C7D2D9", display: "flex", gap: 6, marginBottom: p.warning ? 6 : 0 }}>
+                      <div style={{ fontSize: 12, color: "var(--text-2)", display: "flex", gap: 6, marginBottom: p.warning ? 6 : 0 }}>
                         <Lightbulb size={13} color={AGROCETE_COLOR} style={{ flexShrink: 0, marginTop: 1 }} />
                         <span style={{ whiteSpace: "pre-line" }}>{p.observations}</span>
                       </div>
                     )}
                     {p.warning && (
-                      <div style={{ fontSize: 12, color: "#F5A524", display: "flex", gap: 6 }}>
+                      <div style={{ fontSize: 12, color: "var(--warn)", display: "flex", gap: 6 }}>
                         <AlertTriangle size={13} style={{ flexShrink: 0, marginTop: 1 }} />
                         <span style={{ whiteSpace: "pre-line" }}>{p.warning}</span>
                       </div>
@@ -1161,9 +1061,9 @@ export default function Dashboard() {
                   minHeight: 44,
                   padding: "10px 12px",
                   borderRadius: 10,
-                  border: "1px solid #24313D",
-                  background: "#17212B",
-                  color: "#E8EDF1",
+                  border: "1px solid var(--border)",
+                  background: "var(--surface)",
+                  color: "var(--text)",
                   fontSize: 13,
                   boxSizing: "border-box",
                   fontFamily: "inherit",
@@ -1182,7 +1082,7 @@ export default function Dashboard() {
                 borderRadius: 10,
                 border: "none",
                 background: AGROCETE_COLOR,
-                color: "#0B1319",
+                color: "var(--brand-contrast)",
                 fontWeight: 700,
                 fontSize: 14,
                 cursor: "pointer",
@@ -1247,14 +1147,14 @@ function StatusPill({ label, value, color, icon, title }) {
         fontSize: 11,
         padding: "4px 9px",
         borderRadius: 999,
-        background: color ? `${color}1A` : "#17212B",
-        border: `1px solid ${color ? `${color}55` : "#24313D"}`,
-        color: color || "#96A8B5",
+        background: color ? `${color}1A` : "var(--surface)",
+        border: `1px solid ${color ? `${color}55` : "var(--border)"}`,
+        color: color || "var(--text-2)",
         whiteSpace: "nowrap",
       }}
     >
       {icon}
-      <strong style={{ fontWeight: 700, color: color || "#E8EDF1" }}>{value}</strong>
+      <strong style={{ fontWeight: 700, color: color || "var(--text)" }}>{value}</strong>
       {label}
     </span>
   );
@@ -1270,9 +1170,9 @@ function StepLabel({ n, title }) {
           width: 20,
           height: 20,
           borderRadius: "50%",
-          background: "#1FBF8F22",
-          border: "1px solid #1FBF8F66",
-          color: "#1FBF8F",
+          background: "color-mix(in srgb, var(--brand) 13%, transparent)",
+          border: "1px solid color-mix(in srgb, var(--brand) 40%, transparent)",
+          color: "var(--brand)",
           fontSize: 11,
           fontWeight: 700,
           display: "flex",
@@ -1283,7 +1183,7 @@ function StepLabel({ n, title }) {
       >
         {n}
       </span>
-      <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "#9AACB8" }}>{title}</span>
+      <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-2)" }}>{title}</span>
     </div>
   );
 }
@@ -1299,9 +1199,9 @@ function ModeTab({ active, onClick, icon, label }) {
         gap: 6,
         padding: "8px 14px",
         borderRadius: 8,
-        border: `1px solid ${active ? "#1FBF8F" : "#24313D"}`,
-        background: active ? "#1FBF8F1A" : "transparent",
-        color: active ? "#1FBF8F" : "#8CA0AF",
+        border: `1px solid ${active ? "var(--brand)" : "var(--border)"}`,
+        background: active ? "color-mix(in srgb, var(--brand) 10%, transparent)" : "transparent",
+        color: active ? "var(--brand)" : "var(--text-3)",
         fontSize: 13,
         fontWeight: 600,
         cursor: "pointer",
@@ -1313,7 +1213,7 @@ function ModeTab({ active, onClick, icon, label }) {
   );
 }
 
-function FilterChip({ label, active, onClick, color = "#1FBF8F" }) {
+function FilterChip({ label, active, onClick, color = "var(--brand)" }) {
   return (
     <button
       onClick={onClick}
@@ -1323,9 +1223,9 @@ function FilterChip({ label, active, onClick, color = "#1FBF8F" }) {
         whiteSpace: "nowrap",
         padding: "6px 12px",
         borderRadius: 999,
-        border: `1px solid ${active ? color : "#24313D"}`,
-        background: active ? `${color}22` : "#17212B",
-        color: active ? color : "#9AACB8",
+        border: `1px solid ${active ? color : "var(--border)"}`,
+        background: active ? `${color}22` : "var(--surface)",
+        color: active ? color : "var(--text-2)",
         fontSize: 12,
         fontWeight: active ? 700 : 500,
         cursor: "pointer",
@@ -1339,7 +1239,7 @@ function FilterChip({ label, active, onClick, color = "#1FBF8F" }) {
 function SectionHeading({ icon, title }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
-      <span style={{ color: "#1FBF8F" }}>{icon}</span>
+      <span style={{ color: "var(--brand)" }}>{icon}</span>
       <h2 style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em", margin: 0 }}>{title}</h2>
     </div>
   );
@@ -1356,7 +1256,7 @@ function LegendDot({ color, label }) {
 
 function CostCard({ label, value, color }) {
   return (
-    <div style={{ flex: 1, background: "#17212B", border: `1.5px solid ${color}44`, borderRadius: 10, padding: 12 }}>
+    <div style={{ flex: 1, background: "var(--surface)", border: `1.5px solid ${color}44`, borderRadius: 10, padding: 12 }}>
       <div className="muted" style={{ fontSize: 11 }}>{label}</div>
       <div style={{ fontSize: 20, fontWeight: 700, color, marginTop: 2 }}>R$ {value.toFixed(2)}</div>
     </div>
@@ -1399,7 +1299,7 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
     <div style={{ position: "relative", overflow: !isSelected ? "hidden" : "visible", borderRadius: 10 }}>
       {!isSelected && (
         <div className="swipe-add-hint">
-          <Plus size={16} color="#0B1319" />
+          <Plus size={16} color="var(--brand-contrast)" />
         </div>
       )}
       <div
@@ -1408,10 +1308,10 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
         onTouchEnd={onTouchEnd}
         style={{
           position: "relative",
-          border: `1.5px solid ${isSelected ? color : "#24313D"}`,
+          border: `1.5px solid ${isSelected ? color : "var(--border)"}`,
           borderRadius: 10,
           padding: "9px 10px",
-          background: isSelected ? color : "#0F1720",
+          background: isSelected ? color : "var(--bg)",
           transform: `translateX(${dx}px)`,
           transition: dragging ? "none" : "transform 0.2s ease",
         }}
@@ -1430,7 +1330,7 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
               cursor: "pointer",
               padding: 0,
               textAlign: "left",
-              color: isSelected ? "#0B1319" : "#E8EDF1",
+              color: isSelected ? "var(--brand-contrast)" : "var(--text)",
               minWidth: 0,
             }}
           >
@@ -1438,7 +1338,7 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
               <div style={{ fontWeight: 600, fontSize: 14 }}>
                 {product.name}{" "}
                 {product.category && (
-                  <span style={{ fontSize: 10, color: isSelected ? "#0B131999" : "#8298A6", fontWeight: 400 }}> · {product.category}</span>
+                  <span style={{ fontSize: 10, color: isSelected ? "color-mix(in srgb, var(--brand-contrast) 60%, transparent)" : "var(--text-3)", fontWeight: 400 }}> · {product.category}</span>
                 )}
               </div>
               {/* Pills coloridas por nutriente: cor fixa por elemento, então dá
@@ -1457,7 +1357,7 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
                 <div
                   style={{
                     fontSize: 12,
-                    color: isSelected ? "#0B1319CC" : "#9AACB8",
+                    color: isSelected ? "color-mix(in srgb, var(--brand-contrast) 80%, transparent)" : "var(--text-2)",
                     marginTop: 2,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -1478,8 +1378,8 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: isSelected ? "#0B1319" : "#1B2530",
-                color: isSelected ? color : "#9AACB8",
+                background: isSelected ? "var(--brand-contrast)" : "var(--surface-3)",
+                color: isSelected ? color : "var(--text-2)",
               }}
             >
               {isSelected ? <X size={17} /> : <Plus size={17} />}
@@ -1489,7 +1389,7 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
             <button
               onClick={onRemove}
               className="tap-scale"
-              style={{ background: "transparent", border: "none", cursor: "pointer", color: isSelected ? "#0B1319" : "#F87171", padding: 4, marginLeft: 4 }}
+              style={{ background: "transparent", border: "none", cursor: "pointer", color: isSelected ? "var(--brand-contrast)" : "var(--danger)", padding: 4, marginLeft: 4 }}
             >
               <X size={14} />
             </button>
@@ -1502,7 +1402,7 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
               <button type="button" onClick={() => quickBump(-1)} className="tap-scale" style={quickStepBtnStyle} aria-label="Diminuir dose">
                 <Minus size={15} />
               </button>
-              <span style={{ fontSize: 13, fontWeight: 700, color: "#0B1319", minWidth: 46, textAlign: "center" }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--brand-contrast)", minWidth: 46, textAlign: "center" }}>
                 {doseValue}
                 {product.unit ? product.unit.split("/")[0] : ""}
               </span>
@@ -1513,17 +1413,17 @@ function ProductCard({ product, color, isSelected, onToggle, onUpdate, doseValue
             {doseLocked && (
               <span
                 title="Dose travada como padrão desse produto neste aparelho"
-                style={{ display: "inline-flex", alignItems: "center", gap: 3, background: "#0B1319", color: "#F5A524", borderRadius: 999, padding: "3px 7px", fontSize: 10, fontWeight: 700, flexShrink: 0 }}
+                style={{ display: "inline-flex", alignItems: "center", gap: 3, background: "var(--brand-contrast)", color: "var(--warn)", borderRadius: 999, padding: "3px 7px", fontSize: 10, fontWeight: 700, flexShrink: 0 }}
               >
                 <Lock size={10} /> travada
               </span>
             )}
-            <span style={{ fontSize: 11, color: "#0B1319CC" }}>R$ {fmtNum(parseFloat(priceValue) || 0)}</span>
+            <span style={{ fontSize: 11, color: "color-mix(in srgb, var(--brand-contrast) 80%, transparent)" }}>R$ {fmtNum(parseFloat(priceValue) || 0)}</span>
             <button
               type="button"
               onClick={onOpenEditor}
               className="tap-scale"
-              style={{ marginLeft: "auto", background: "#0B1319", border: "none", borderRadius: 9, width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center", color, cursor: "pointer", flexShrink: 0 }}
+              style={{ marginLeft: "auto", background: "var(--brand-contrast)", border: "none", borderRadius: 9, width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center", color, cursor: "pointer", flexShrink: 0 }}
               aria-label="Editar dose e preço"
               title="Editar dose, preço e travar dose"
             >
@@ -1542,9 +1442,9 @@ const quickStepBtnStyle = {
   width: 38,
   height: 38,
   borderRadius: 9,
-  border: "1px solid #0B131944",
-  background: "#0B131922",
-  color: "#0B1319",
+  border: "1px solid color-mix(in srgb, var(--brand-contrast) 27%, transparent)",
+  background: "color-mix(in srgb, var(--brand-contrast) 13%, transparent)",
+  color: "var(--brand-contrast)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -1564,16 +1464,16 @@ function EquivChip({ label, brandLabel, color, isSelected, onClick, disabled }) 
         gap: 5,
         padding: "5px 10px",
         borderRadius: 999,
-        border: `1px solid ${isSelected ? color : "#24313D"}`,
-        background: isSelected ? color : disabled ? "transparent" : "#0F1720",
-        color: disabled ? "#4A5866" : isSelected ? "#0B1319" : "#C7D2D9",
+        border: `1px solid ${isSelected ? color : "var(--border)"}`,
+        background: isSelected ? color : disabled ? "transparent" : "var(--bg)",
+        color: disabled ? "var(--text-3)" : isSelected ? "var(--brand-contrast)" : "var(--text-2)",
         fontWeight: isSelected ? 700 : 400,
         fontSize: 11,
         cursor: disabled ? "default" : "pointer",
         opacity: disabled ? 0.7 : 1,
       }}
     >
-      <span style={{ width: 6, height: 6, borderRadius: "50%", background: disabled ? "#4A5866" : isSelected ? "#0B1319" : color, display: "inline-block" }} />
+      <span style={{ width: 6, height: 6, borderRadius: "50%", background: disabled ? "var(--text-3)" : isSelected ? "var(--brand-contrast)" : color, display: "inline-block" }} />
       {brandLabel && <span style={{ fontWeight: 700, fontSize: 9, textTransform: "uppercase" }}>{brandLabel}</span>}
       {label}
     </button>
@@ -1583,7 +1483,7 @@ function EquivChip({ label, brandLabel, color, isSelected, onClick, disabled }) 
 function EquivRow({ row, productsById, selected, onToggle }) {
   const agroProduct = row.agroceteProductId ? productsById.get(row.agroceteProductId) : null;
   return (
-    <div style={{ borderTop: "1px solid #1E2A35", paddingTop: 10 }}>
+    <div style={{ borderTop: "1px solid var(--surface-3)", paddingTop: 10 }}>
       <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>{row.composition}</div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
         {agroProduct ? (
@@ -1621,9 +1521,9 @@ function AddCustomProductForm({ show, setShow, newProd, setNewProd, onSave }) {
           width: "100%",
           padding: "10px",
           borderRadius: 10,
-          border: "1.5px dashed #1FBF8F",
+          border: "1.5px dashed var(--brand)",
           background: "transparent",
-          color: "#1FBF8F",
+          color: "var(--brand)",
           fontWeight: 600,
           fontSize: 13,
           cursor: "pointer",
@@ -1638,8 +1538,8 @@ function AddCustomProductForm({ show, setShow, newProd, setNewProd, onSave }) {
     );
   }
   return (
-    <div style={{ marginTop: 4, background: "#0F1720", border: "1.5px solid #1FBF8F", borderRadius: 10, padding: 12 }}>
-      <label style={{ fontSize: 11, color: "#8CA0AF" }}>
+    <div style={{ marginTop: 4, background: "var(--bg)", border: "1.5px solid var(--brand)", borderRadius: 10, padding: 12 }}>
+      <label style={{ fontSize: 11, color: "var(--text-3)" }}>
         Nome do produto
         <input
           type="text"
@@ -1650,27 +1550,27 @@ function AddCustomProductForm({ show, setShow, newProd, setNewProd, onSave }) {
         />
       </label>
       <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-        <label style={{ fontSize: 11, flex: 1, color: "#8CA0AF" }}>
+        <label style={{ fontSize: 11, flex: 1, color: "var(--text-3)" }}>
           Unidade de dose
           <select value={newProd.unit} onChange={(e) => setNewProd({ ...newProd, unit: e.target.value })} style={inputStyle}>
             <option value="L/ha">L/ha</option>
             <option value="kg/ha">kg/ha</option>
           </select>
         </label>
-        <label style={{ fontSize: 11, flex: 1, color: "#8CA0AF" }}>
+        <label style={{ fontSize: 11, flex: 1, color: "var(--text-3)" }}>
           Dose padrão
           <input type="number" step="0.01" value={newProd.dose} onChange={(e) => setNewProd({ ...newProd, dose: e.target.value })} style={inputStyle} />
         </label>
-        <label style={{ fontSize: 11, flex: 1, color: "#8CA0AF" }}>
+        <label style={{ fontSize: 11, flex: 1, color: "var(--text-3)" }}>
           Preço (R$)
           <input type="number" step="0.01" value={newProd.price} onChange={(e) => setNewProd({ ...newProd, price: e.target.value })} style={inputStyle} />
         </label>
       </div>
       <div style={{ marginTop: 10 }}>
-        <div style={{ fontSize: 11, marginBottom: 6, fontWeight: 600, color: "#8CA0AF" }}>Garantias (g por unidade de dose)</div>
+        <div style={{ fontSize: 11, marginBottom: 6, fontWeight: 600, color: "var(--text-3)" }}>Garantias (g por unidade de dose)</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6 }}>
           {Object.entries(NUTRIENT_META).map(([key]) => (
-            <label key={key} style={{ fontSize: 10, color: "#8CA0AF" }}>
+            <label key={key} style={{ fontSize: 10, color: "var(--text-3)" }}>
               {key}
               <input
                 type="number"
@@ -1684,10 +1584,10 @@ function AddCustomProductForm({ show, setShow, newProd, setNewProd, onSave }) {
         </div>
       </div>
       <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-        <button onClick={onSave} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "none", background: "#1FBF8F", color: "#0B1319", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+        <button onClick={onSave} style={{ flex: 1, padding: "9px", borderRadius: 8, border: "none", background: "var(--brand)", color: "var(--brand-contrast)", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
           Salvar produto
         </button>
-        <button onClick={() => setShow(false)} style={{ padding: "9px 14px", borderRadius: 8, border: "1px solid #24313D", background: "transparent", color: "#8CA0AF", fontSize: 13, cursor: "pointer" }}>
+        <button onClick={() => setShow(false)} style={{ padding: "9px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text-3)", fontSize: 13, cursor: "pointer" }}>
           Cancelar
         </button>
       </div>
@@ -1700,9 +1600,9 @@ const inputStyle = {
   marginTop: 3,
   padding: "7px 8px",
   borderRadius: 6,
-  border: "1px solid #24313D",
-  background: "#17212B",
-  color: "#E8EDF1",
+  border: "1px solid var(--border)",
+  background: "var(--surface)",
+  color: "var(--text)",
   fontSize: 12,
   boxSizing: "border-box",
   fontFamily: "inherit",

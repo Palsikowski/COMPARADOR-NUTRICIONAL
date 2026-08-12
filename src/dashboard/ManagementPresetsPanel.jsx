@@ -12,7 +12,7 @@ export default function ManagementPresetsPanel({ onLoad }) {
   const [crop, setCrop] = useState(CROPS[0]);
 
   return (
-    <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden", marginBottom: 16 }}>
+    <div style={{ background: "var(--surface)", borderRadius: 12, border: "1px solid var(--border)", overflow: "hidden", marginBottom: 16 }}>
       <button
         onClick={() => setOpen(!open)}
         className="tap-scale"
@@ -26,11 +26,11 @@ export default function ManagementPresetsPanel({ onLoad }) {
           border: "none",
           cursor: "pointer",
           textAlign: "left",
-          color: "#E8EDF1",
+          color: "var(--text)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Sprout size={15} color="#1FBF8F" />
+          <Sprout size={15} color="var(--brand)" />
           <span style={{ fontWeight: 600, fontSize: 13 }}>Manejos prontos</span>
         </div>
         {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -50,9 +50,9 @@ export default function ManagementPresetsPanel({ onLoad }) {
                   flex: 1,
                   padding: "7px 6px",
                   borderRadius: 8,
-                  border: `1px solid ${crop === c ? "#1FBF8F" : "#24313D"}`,
-                  background: crop === c ? "#1FBF8F1A" : "#0F1720",
-                  color: crop === c ? "#1FBF8F" : "#9AACB8",
+                  border: `1px solid ${crop === c ? "var(--brand)" : "var(--border)"}`,
+                  background: crop === c ? "color-mix(in srgb, var(--brand) 10%, transparent)" : "var(--bg)",
+                  color: crop === c ? "var(--brand)" : "var(--text-2)",
                   fontSize: 12,
                   fontWeight: crop === c ? 700 : 500,
                   cursor: "pointer",
@@ -78,9 +78,9 @@ export default function ManagementPresetsPanel({ onLoad }) {
                   justifyContent: "space-between",
                   padding: "9px 12px",
                   borderRadius: 8,
-                  border: "1px solid #24313D",
-                  background: "#0F1720",
-                  color: "#E8EDF1",
+                  border: "1px solid var(--border)",
+                  background: "var(--bg)",
+                  color: "var(--text)",
                   fontSize: 12,
                   fontWeight: 600,
                   cursor: "pointer",

@@ -30,14 +30,14 @@ function SwipeRow({ children, onRemove }) {
         style={{
           position: "absolute",
           inset: 0,
-          background: "#F87171",
+          background: "var(--danger)",
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
           padding: "0 16px",
         }}
       >
-        <Trash2 size={16} color="#0B1319" />
+        <Trash2 size={16} color="var(--brand-contrast)" />
       </div>
       <div
         onTouchStart={onTouchStart}
@@ -63,8 +63,8 @@ function ManagementRow({ p, sel, color, onToggle, onEdit }) {
           display: "flex",
           alignItems: "center",
           gap: 8,
-          background: "#17212B",
-          border: "1px solid #24313D",
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
           borderRadius: 10,
           padding: "8px 10px",
         }}
@@ -84,7 +84,7 @@ function ManagementRow({ p, sel, color, onToggle, onEdit }) {
             padding: 0,
             cursor: onEdit ? "pointer" : "default",
             textAlign: "left",
-            color: "#E8EDF1",
+            color: "var(--text)",
           }}
           title={onEdit ? "Editar dose e preço" : undefined}
         >
@@ -155,7 +155,7 @@ export default function CurrentManagement({ selected, productsById, brandColor, 
   return (
     <div style={{ marginBottom: 18 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
-        <ListChecks size={15} color="#1FBF8F" />
+        <ListChecks size={15} color="var(--brand)" />
         <h2 style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em", margin: 0 }}>
           Manejo atual ({ids.length})
         </h2>
@@ -163,7 +163,7 @@ export default function CurrentManagement({ selected, productsById, brandColor, 
       <div className="side-by-side">
         <ManagementColumn
           title="Concorrentes"
-          accentColor="#6B7A88"
+          accentColor="var(--neutral)"
           ids={compIds}
           selected={selected}
           productsById={productsById}
@@ -174,7 +174,7 @@ export default function CurrentManagement({ selected, productsById, brandColor, 
         />
         <ManagementColumn
           title="Agrocete"
-          accentColor="#1FBF8F"
+          accentColor="var(--brand)"
           ids={agroIds}
           selected={selected}
           productsById={productsById}

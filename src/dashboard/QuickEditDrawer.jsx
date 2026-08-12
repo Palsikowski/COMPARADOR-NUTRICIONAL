@@ -4,7 +4,7 @@ import DoseStepper from "./DoseStepper.jsx";
 
 // Âmbar (não verde) pro estado travado: verde já é a cor da Agrocete no app
 // inteiro, então usar verde aqui confundiria "travado" com "produto nosso".
-const LOCK_COLOR = "#F5A524";
+const LOCK_COLOR = "var(--warn)";
 
 // Drawer/modal leve para ajustar dose e preço de um produto sem poluir a
 // lista de cards — abre por cima do conteúdo, fecha ao tocar fora ou no X.
@@ -34,7 +34,7 @@ export default function QuickEditDrawer({ product, color, doseValue, priceValue,
         style={{
           width: "100%",
           maxWidth: 460,
-          background: "#101A22",
+          background: "var(--surface-2)",
           border: `1px solid ${color}55`,
           borderBottom: "none",
           borderRadius: "16px 16px 0 0",
@@ -51,7 +51,7 @@ export default function QuickEditDrawer({ product, color, doseValue, priceValue,
             onClick={onClose}
             className="tap-scale"
             aria-label="Fechar"
-            style={{ background: "#17212B", border: "1px solid #24313D", borderRadius: 10, width: 48, height: 48, color: "#E8EDF1", cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
+            style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, width: 48, height: 48, color: "var(--text)", cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
           >
             <X size={18} />
           </button>
@@ -76,11 +76,11 @@ export default function QuickEditDrawer({ product, color, doseValue, priceValue,
             alignItems: "center",
             justifyContent: "center",
             gap: 8,
-            background: locked ? LOCK_COLOR : "#17212B",
-            border: `1.5px solid ${locked ? LOCK_COLOR : "#2E3D4B"}`,
+            background: locked ? LOCK_COLOR : "var(--surface)",
+            border: `1.5px solid ${locked ? LOCK_COLOR : "var(--border-strong)"}`,
             borderRadius: 10,
             padding: "12px 14px",
-            color: locked ? "#0B1319" : "#C7D2D9",
+            color: locked ? "var(--brand-contrast)" : "var(--text-2)",
             fontSize: 13,
             fontWeight: 700,
             cursor: "pointer",
@@ -108,9 +108,9 @@ export default function QuickEditDrawer({ product, color, doseValue, priceValue,
               minHeight: 48,
               padding: "12px",
               borderRadius: 10,
-              border: "1px solid #24313D",
-              background: "#17212B",
-              color: "#E8EDF1",
+              border: "1px solid var(--border)",
+              background: "var(--surface)",
+              color: "var(--text)",
               fontSize: 15,
               boxSizing: "border-box",
               fontFamily: "inherit",
@@ -129,7 +129,7 @@ export default function QuickEditDrawer({ product, color, doseValue, priceValue,
             borderRadius: 10,
             border: "none",
             background: color,
-            color: "#0B1319",
+            color: "var(--brand-contrast)",
             fontWeight: 700,
             fontSize: 14,
             cursor: "pointer",
