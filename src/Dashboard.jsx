@@ -322,18 +322,6 @@ export default function Dashboard() {
   const costEfficiency = useMemo(() => computeCostEfficiency(totals, allNutrientKeys), [totals, allNutrientKeys]);
   const insights = useMemo(() => computeInsights(costEfficiency, NUTRIENT_META), [costEfficiency]);
 
-  // --- KPIs ---
-  const kpis = useMemo(() => {
-    const agroCount = PRODUCTS.filter((p) => p.brand === AGROCETE).length;
-    const nutrientCount = PRODUCTS.filter((p) => p.hasNutrients).length;
-    return {
-      agroCount,
-      brandCount: COMPETITOR_BRANDS.length,
-      nutrientCount,
-      equivCount: EQUIVALENCES.length,
-    };
-  }, []);
-
   // --- posicionamento técnico ---
   const selectedAgroWithNotes = useMemo(
     () =>
@@ -714,14 +702,6 @@ export default function Dashboard() {
       <main style={{ maxWidth: 1360, margin: "0 auto", padding: "20px 16px 140px" }}>
       <div className="dash-grid">
       <div>
-        {/* KPI ROW */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 22 }}>
-          <KpiCard color="#F5A524" label="Produtos Agrocete" value={kpis.agroCount} />
-          <KpiCard color="#14B8A6" label="Marcas mapeadas" value={kpis.brandCount} />
-          <KpiCard color="#6366F1" label="Com dados nutricionais" value={kpis.nutrientCount} />
-          <KpiCard color="#F43F5E" label="Linhas de equivalência" value={kpis.equivCount} />
-        </div>
-
         {/* PASSO 1 — ACHAR O PRODUTO */}
         <StepLabel n={1} title="Ache o produto concorrente" />
 
@@ -1304,18 +1284,6 @@ function StepLabel({ n, title }) {
         {n}
       </span>
       <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "#9AACB8" }}>{title}</span>
-    </div>
-  );
-}
-
-function KpiCard({ color, label, value }) {
-  return (
-    <div style={{ background: "#17212B", borderRadius: 12, border: "1px solid #24313D", overflow: "hidden" }}>
-      <div style={{ height: 3, background: color }} />
-      <div style={{ padding: "12px 14px" }}>
-        <div className="muted" style={{ fontSize: 11, marginBottom: 4 }}>{label}</div>
-        <div style={{ fontSize: 22, fontWeight: 700 }}>{value}</div>
-      </div>
     </div>
   );
 }
