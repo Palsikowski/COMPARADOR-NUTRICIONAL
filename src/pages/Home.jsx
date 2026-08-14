@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Search, ArrowLeftRight, Building2, Calculator, Sprout, ArrowRight } from "lucide-react";
-import { searchAll, platformStats, AGROCETE } from "../lib/catalog.js";
+import { Search, ArrowLeftRight, Building2, Calculator, Sprout, ArrowRight, Scale, Gauge, Layers } from "lucide-react";
+import { searchAll, platformStats, AGROCETE, STAGES } from "../lib/catalog.js";
 import { isComparable } from "../lib/provenance.js";
 import { fmtNum } from "../lib/economics.js";
 
@@ -22,7 +22,7 @@ const NUTRIENT_LABEL = {
   C_Org: "Carbono orgânico",
 };
 
-const EXAMPLES = ["manganês", "soja", "boro", "GRAP", "zinco"];
+const EXAMPLES = ["Manganês", "Soja", "V4", "Boro"];
 
 export default function Home({ onCompare, onCatalog, onSearchTerm }) {
   const [q, setQ] = useState("");
@@ -46,7 +46,8 @@ export default function Home({ onCompare, onCatalog, onSearchTerm }) {
     results.products.length === 0 &&
     results.brands.length === 0 &&
     results.nutrients.length === 0 &&
-    results.cultures.length === 0;
+    results.cultures.length === 0 &&
+    (results.stages || []).length === 0;
 
   return (
     <div>
@@ -120,6 +121,18 @@ export default function Home({ onCompare, onCatalog, onSearchTerm }) {
                       <Group title="Culturas">
                         {results.cultures.map((c) => (
                           <Row key={c} onClick={onCatalog} title={c} sub="Manejo oficial por estádio" />
+                        ))}
+                      </Group>
+                    )}
+                    {(results.stages || []).length > 0 && (
+                      <Group title="Estádios fenológicos">
+                        {results.stages.map((s) => (
+                          <Row
+                            key={`${s.culture}-${s.key}`}
+                            onClick={onCatalog}
+                            title={`${s.culture} · ${s.label}`}
+                            sub={`${s.count} produto${s.count > 1 ? "s" : ""} posicionado${s.count > 1 ? "s" : ""} no manejo oficial`}
+                          />
                         ))}
                       </Group>
                     )}
@@ -201,7 +214,7 @@ export default function Home({ onCompare, onCatalog, onSearchTerm }) {
           <Stat label="Produtos cadastrados" value={fmtNum(stats.products, 0)} />
           <Stat label="Empresas" value={stats.brands} />
           <Stat label="Nutrientes mapeados" value={stats.nutrients} />
-          <Stat label="Culturas com manejo" value={stats.cultures} />
+          <Stat label="Culturas e estádios" value={`${stats.cultures} · ${STAGES.length}`} />
         </div>
         <p className="muted-soft" style={{ fontSize: 12, marginTop: 12, lineHeight: 1.55 }}>
           {fmtNum(stats.withNutrients, 0)} produtos têm composição nutricional cadastrada e{" "}
@@ -209,6 +222,106 @@ export default function Home({ onCompare, onCatalog, onSearchTerm }) {
           informe os dados que faltam — a plataforma sinaliza cada lacuna em vez de preencher sozinha.
         </p>
       </div>
+
+      {/* PREÇO ≠ VALOR */}
+      <section style={{ background: "var(--surface)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+        <div className="shell" style={{ paddingTop: 40, paddingBottom: 40 }}>
+          <span className="chip" style={{ background: "var(--brand-soft)", color: "var(--brand)", borderColor: "transparent" }}>
+            <Scale size={13} /> Diferencial da plataforma
+          </span>
+          <h2 style={{ fontSize: "clamp(22px, 3.4vw, 30px)", fontWeight: 700, letterSpacing: "-0.02em", margin: "14px 0 0" }}>
+            Preço ≠ valor
+          </h2>
+          <p className="muted" style={{ fontSize: 15, lineHeight: 1.6, margin: "10px 0 0", maxWidth: 640 }}>
+            O custo por hectare é uma variável da decisão, não a conclusão. Dois produtos com o mesmo custo/ha podem
+            entregar quantidades muito diferentes de nutriente — e um produto mais caro por hectare pode sair mais
+            barato por quilo de nutriente entregue.
+          </p>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12, marginTop: 22 }}>
+            <ValueCard
+              icon={<Calculator size={17} />}
+              title="Custo por hectare"
+              desc="Dose × preço, com a conta aberta e o total para a área que você informar."
+              example="0,5 L/ha × R$ 85/L = R$ 42,50/ha"
+            />
+            <ValueCard
+              icon={<Gauge size={17} />}
+              title="Custo por nutriente"
+              desc="Quanto custa entregar 1 kg de cada nutriente (N, P, K, Mn…) na dose informada. É o que permite comparar concentrações diferentes."
+              example="R$ 173,01/kg de Zn vs R$ 1.666,67/kg"
+            />
+            <ValueCard
+              icon={<Layers size={17} />}
+              title="NCI · Nutrição & Custo Index"
+              desc="Índice comparativo do par selecionado, com os pesos abertos e a lista do que não entra na conta por falta de dado."
+              example="Índice comparativo — não é nota de qualidade"
+            />
+          </div>
+
+          <div
+            style={{
+              marginTop: 16,
+              padding: "12px 14px",
+              borderRadius: "var(--radius-sm)",
+              background: "var(--surface-2)",
+              border: "1px solid var(--border)",
+              fontSize: 12.5,
+              lineHeight: 1.6,
+            }}
+          >
+            <strong>Sobre o NCI:</strong>{" "}
+            <span className="muted">
+              dois critérios de uma avaliação completa — tecnologia de formulação e evidência experimental — não existem
+              na base de dados e por isso ficam declaradamente fora do cálculo. Quando falta composição, dose ou preço, o
+              índice não é calculado: a plataforma mostra “dados insuficientes” em vez de um número frouxo.
+            </span>
+          </div>
+
+          <button className="btn btn-primary" style={{ marginTop: 18 }} onClick={onCompare}>
+            Iniciar comparação <ArrowRight size={15} />
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function ValueCard({ icon, title, desc, example }) {
+  return (
+    <div className="card" style={{ padding: 16, display: "flex", flexDirection: "column", gap: 7 }}>
+      <span
+        style={{
+          width: 34,
+          height: 34,
+          borderRadius: 9,
+          background: "var(--brand-soft)",
+          color: "var(--brand)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {icon}
+      </span>
+      <span style={{ fontSize: 14.5, fontWeight: 700, marginTop: 2 }}>{title}</span>
+      <span className="muted" style={{ fontSize: 12.5, lineHeight: 1.55, flex: 1 }}>
+        {desc}
+      </span>
+      <span
+        className="tnum"
+        style={{
+          fontSize: 12,
+          fontWeight: 600,
+          color: "var(--brand)",
+          background: "var(--brand-soft)",
+          padding: "7px 10px",
+          borderRadius: 8,
+          marginTop: 4,
+        }}
+      >
+        {example}
+      </span>
     </div>
   );
 }

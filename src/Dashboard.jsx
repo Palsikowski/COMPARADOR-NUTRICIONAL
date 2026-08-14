@@ -100,12 +100,12 @@ function fmtNum(n) {
   return Number(n).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
 }
 
-export default function Dashboard({ initialSearch = "" }) {
+export default function Dashboard({ initialSearch = "", initialMode = null, focusPresets = false }) {
   const [selected, setSelected] = useState(() => loadPersistedState()?.selected ?? {}); // id -> { dose, price }
   const [customProducts, setCustomProducts] = useState(() => loadPersistedState()?.customProducts ?? []);
   const [templates, setTemplates] = useState(() => loadPersistedState()?.templates ?? []);
   const [doseOverrides, setDoseOverrides] = useState(() => loadPersistedState()?.doseOverrides ?? {}); // id -> { dose, locked }
-  const [mode, setMode] = useState(initialSearch ? "marca" : "categoria"); // 'categoria' | 'marca'
+  const [mode, setMode] = useState(initialMode || (initialSearch ? "marca" : "categoria")); // 'categoria' | 'marca'
   const [search, setSearch] = useState(initialSearch);
   const [openEquivCategory, setOpenEquivCategory] = useState(null);
   const [openBrand, setOpenBrand] = useState(AGROCETE);
@@ -845,7 +845,7 @@ export default function Dashboard({ initialSearch = "" }) {
       </div>
 
       <aside className="dash-sidebar">
-        <ManagementPresetsPanel onLoad={loadPreset} />
+        <ManagementPresetsPanel onLoad={loadPreset} defaultOpen={focusPresets} />
 
         {presetInfo && (
           <div style={{ background: "color-mix(in srgb, var(--warn) 8%, transparent)", border: "1px solid color-mix(in srgb, var(--warn) 27%, transparent)", borderRadius: 10, padding: 12, marginBottom: 16, fontSize: 11 }}>

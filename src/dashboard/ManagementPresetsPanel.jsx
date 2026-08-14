@@ -7,8 +7,8 @@ const CROPS = Object.keys(MANAGEMENT_PRESETS);
 // Manejos prontos por cultura (Soja/Milho/Algodão) x nível de investimento
 // (Básico/Médio/Completo), baseados no material oficial "Manejo Atualizado
 // 2024" da Agrocete — ver managementPresets.js pra fonte e ressalvas.
-export default function ManagementPresetsPanel({ onLoad }) {
-  const [open, setOpen] = useState(false);
+export default function ManagementPresetsPanel({ onLoad, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
   const [crop, setCrop] = useState(CROPS[0]);
 
   return (

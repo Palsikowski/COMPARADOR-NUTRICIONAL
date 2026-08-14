@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Leaf, Sun, Moon, Home as HomeIcon, ArrowLeftRight, Layers, Wifi, WifiOff } from "lucide-react";
+import { Leaf, Sun, Moon, Wifi, WifiOff, Menu, X, ArrowLeftRight } from "lucide-react";
 import Home from "./pages/Home.jsx";
 import Compare from "./pages/Compare.jsx";
+import About from "./pages/About.jsx";
 import Dashboard from "./Dashboard.jsx";
 import "./theme.css";
 
 const THEME_KEY = "agro-theme";
+
+// Os menus mapeiam para as telas que existem de verdade. "Produtos",
+// "Empresas" e "Manejos" são três entradas diferentes no mesmo catálogo
+// (lista por categoria, lista por marca e manejos oficiais abertos), porque
+// é assim que o consultor pensa — não porque sejam três telas separadas.
 const NAV = [
-  { id: "home", label: "Início", icon: HomeIcon },
-  { id: "compare", label: "Comparar", icon: ArrowLeftRight },
-  { id: "catalog", label: "Catálogo e manejo", icon: Layers },
+  { id: "produtos", label: "Produtos" },
+  { id: "empresas", label: "Empresas" },
+  { id: "manejos", label: "Manejos" },
+  { id: "custo", label: "Calculadora Custo/ha" },
+  { id: "sobre", label: "Sobre" },
 ];
 
-// Shell da plataforma. O Dashboard original continua inteiro na aba "Catálogo
-// e manejo" — nada do que já funcionava (manejos prontos, sugestão Agrocete,
-// templates, trava de dose, exportação em PDF) foi removido; ele ganhou um
-// nível de navegação por cima.
 export default function App() {
   const [page, setPage] = useState("home");
   const [catalogSearch, setCatalogSearch] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(() => {
     try {
       return localStorage.getItem(THEME_KEY) === "dark";
@@ -33,7 +38,7 @@ export default function App() {
     try {
       localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
     } catch {
-      // sem localStorage: tema só não persiste
+      // sem localStorage: o tema só não persiste
     }
   }, [dark]);
 
@@ -48,12 +53,17 @@ export default function App() {
     };
   }, []);
 
-  // Busca vinda da home abre o catálogo já filtrado — a busca da home é a
-  // porta de entrada, não um beco sem saída.
+  function go(id) {
+    setPage(id);
+    setMenuOpen(false);
+  }
+
   function goCatalogWith(term) {
     setCatalogSearch(term);
-    setPage("catalog");
+    go("produtos");
   }
+
+  const isCatalog = page === "produtos" || page === "empresas" || page === "manejos";
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -66,19 +76,17 @@ export default function App() {
           zIndex: 30,
         }}
       >
-        <div
-          className="shell"
-          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, height: 62 }}
-        >
+        <div className="shell" style={{ display: "flex", alignItems: "center", gap: 12, height: 64 }}>
           <button
-            onClick={() => setPage("home")}
-            style={{ display: "flex", alignItems: "center", gap: 10, background: "none", border: "none", cursor: "pointer", padding: 0, color: "var(--text)", font: "inherit" }}
+            onClick={() => go("home")}
+            aria-label="Comparador Nutricional — início"
+            style={{ display: "flex", alignItems: "center", gap: 10, background: "none", border: "none", cursor: "pointer", padding: 0, color: "var(--text)", font: "inherit", flexShrink: 0 }}
           >
             <span
               style={{
-                width: 32,
-                height: 32,
-                borderRadius: 9,
+                width: 34,
+                height: 34,
+                borderRadius: 10,
                 background: "var(--brand)",
                 display: "flex",
                 alignItems: "center",
@@ -86,37 +94,45 @@ export default function App() {
                 flexShrink: 0,
               }}
             >
-              <Leaf size={17} color="var(--brand-contrast)" />
+              <Leaf size={18} color="var(--brand-contrast)" />
             </span>
             <span style={{ textAlign: "left", lineHeight: 1.15, whiteSpace: "nowrap" }}>
-              <span style={{ display: "block", fontSize: 14.5, fontWeight: 700, letterSpacing: "-0.01em" }}>Painel Agrocete</span>
-              <span className="muted-soft brand-tagline" style={{ display: "block", fontSize: 10.5 }}>
-                Inteligência em nutrição foliar
+              <span style={{ display: "block", fontSize: 15, fontWeight: 700, letterSpacing: "-0.015em" }}>
+                Comparador Nutricional
+              </span>
+              <span
+                className="brand-tagline"
+                style={{
+                  display: "inline-block",
+                  marginTop: 2,
+                  fontSize: 9.5,
+                  fontWeight: 700,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  color: "var(--brand)",
+                  background: "var(--brand-soft)",
+                  padding: "1px 6px",
+                  borderRadius: "var(--radius-pill)",
+                }}
+              >
+                Inteligência Foliar
               </span>
             </span>
           </button>
 
-          <nav className="main-nav" style={{ display: "flex", gap: 4, marginLeft: "auto" }}>
+          <nav className="main-nav" style={{ display: "flex", gap: 2, marginLeft: "auto" }}>
             {NAV.map((n) => {
-              const Icon = n.icon;
               const active = page === n.id;
               return (
                 <button
                   key={n.id}
-                  onClick={() => setPage(n.id)}
-                  // O rótulo some no mobile (só ícone), então o nome acessível
-                  // precisa vir do aria-label — senão vira um botão sem nome.
-                  aria-label={n.label}
+                  onClick={() => go(n.id)}
                   aria-current={active ? "page" : undefined}
-                  title={n.label}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 7,
-                    height: 40,
-                    padding: "0 13px",
+                    height: 38,
+                    padding: "0 12px",
                     borderRadius: 9,
-                    border: "1px solid transparent",
+                    border: "none",
                     background: active ? "var(--brand-soft)" : "transparent",
                     color: active ? "var(--brand)" : "var(--text-2)",
                     fontWeight: active ? 700 : 500,
@@ -125,23 +141,23 @@ export default function App() {
                     font: "inherit",
                     fontFamily: "inherit",
                     whiteSpace: "nowrap",
+                    transition: "background var(--speed) ease, color var(--speed) ease",
                   }}
                 >
-                  <Icon size={15} />
-                  <span className="nav-label">{n.label}</span>
+                  {n.label}
                 </button>
               );
             })}
           </nav>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: "auto", flexShrink: 0 }}>
             <span
               title={
                 online
                   ? "Com internet. O catálogo inteiro fica no aparelho — a plataforma funciona igual sem sinal."
                   : "Sem internet. A plataforma continua funcionando: todo o catálogo está salvo no aparelho."
               }
-              className="chip"
+              className="chip conn-chip"
               style={{
                 background: online ? "transparent" : "var(--warn-soft)",
                 color: online ? "var(--text-3)" : "var(--warn)",
@@ -149,8 +165,9 @@ export default function App() {
               }}
             >
               {online ? <Wifi size={12} /> : <WifiOff size={12} />}
-              <span className="nav-label">{online ? "Online" : "Offline — funciona normal"}</span>
+              {online ? "Online" : "Offline — funciona normal"}
             </span>
+
             <button
               onClick={() => setDark((v) => !v)}
               title={dark ? "Usar tema claro" : "Usar tema escuro (leitura sob sol forte)"}
@@ -171,16 +188,84 @@ export default function App() {
             >
               {dark ? <Sun size={16} /> : <Moon size={16} />}
             </button>
+
+            <button className="btn btn-primary cta-btn" style={{ minHeight: 40, fontSize: 13.5 }} onClick={() => go("custo")}>
+              <ArrowLeftRight size={15} /> Iniciar comparação
+            </button>
+
+            <button
+              className="menu-btn"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+              aria-expanded={menuOpen}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 9,
+                border: "1px solid var(--border)",
+                background: "var(--surface)",
+                color: "var(--text-2)",
+                cursor: "pointer",
+                display: "none",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              {menuOpen ? <X size={17} /> : <Menu size={17} />}
+            </button>
           </div>
         </div>
+
+        {/* Menu do celular: os mesmos itens, empilhados. */}
+        {menuOpen && (
+          <div className="mobile-menu" style={{ borderTop: "1px solid var(--border)", background: "var(--surface)" }}>
+            <div className="shell" style={{ paddingTop: 8, paddingBottom: 12, display: "flex", flexDirection: "column", gap: 2 }}>
+              {NAV.map((n) => (
+                <button
+                  key={n.id}
+                  onClick={() => go(n.id)}
+                  aria-current={page === n.id ? "page" : undefined}
+                  style={{
+                    minHeight: 48,
+                    padding: "0 12px",
+                    borderRadius: 9,
+                    border: "none",
+                    background: page === n.id ? "var(--brand-soft)" : "transparent",
+                    color: page === n.id ? "var(--brand)" : "var(--text)",
+                    fontWeight: page === n.id ? 700 : 500,
+                    fontSize: 15,
+                    textAlign: "left",
+                    cursor: "pointer",
+                    font: "inherit",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  {n.label}
+                </button>
+              ))}
+              <button className="btn btn-primary" style={{ marginTop: 8 }} onClick={() => go("custo")}>
+                <ArrowLeftRight size={15} /> Iniciar comparação
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       <main>
         {page === "home" && (
-          <Home onCompare={() => setPage("compare")} onCatalog={() => setPage("catalog")} onSearchTerm={goCatalogWith} />
+          <Home onCompare={() => go("custo")} onCatalog={() => go("produtos")} onSearchTerm={goCatalogWith} />
         )}
-        {page === "compare" && <Compare onOpenCatalog={() => setPage("catalog")} />}
-        {page === "catalog" && <Dashboard initialSearch={catalogSearch} />}
+        {page === "custo" && <Compare onOpenCatalog={() => go("produtos")} />}
+        {page === "sobre" && <About />}
+        {isCatalog && (
+          <Dashboard
+            key={page}
+            initialSearch={page === "produtos" ? catalogSearch : ""}
+            initialMode={page === "empresas" ? "marca" : page === "produtos" ? null : "categoria"}
+            focusPresets={page === "manejos"}
+          />
+        )}
       </main>
     </div>
   );

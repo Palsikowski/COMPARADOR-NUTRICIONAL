@@ -7,6 +7,8 @@ import DataBadge from "../components/DataBadge.jsx";
 import { economicsFor, diff, fmtBRL, fmtNum, concentrationUnit, doseUnit } from "../lib/economics.js";
 import { isComparable } from "../lib/provenance.js";
 import { positioningFor } from "../lib/catalog.js";
+import { computeNCI } from "../lib/nci.js";
+import NciPanel from "../components/NciPanel.jsx";
 import { nutrientColor } from "../dashboard/nutrientColors.js";
 
 const NUTRIENT_LABEL = {
@@ -198,9 +200,22 @@ export default function Compare({ onOpenCatalog }) {
             <CostPerNutrient a={A} b={B} econA={econA} econB={econB} keys={nutrientKeys} />
           </section>
 
+          {/* NCI */}
+          <section className="card" style={{ marginTop: 14, padding: 16 }}>
+            <SectionTitle n="5" title="Índice comparativo (NCI)" />
+            <NciPanel
+              nci={computeNCI(
+                { product: A.product, dose: A.dose, price: A.price },
+                { product: B.product, dose: B.dose, price: B.price }
+              )}
+              nameA={A.product.name}
+              nameB={B.product.name}
+            />
+          </section>
+
           {/* POSICIONAMENTO */}
           <section className="card" style={{ marginTop: 14, padding: 16 }}>
-            <SectionTitle n="5" title="Posicionamento" hint="Cultura e estádio em que cada produto está posicionado." />
+            <SectionTitle n="6" title="Posicionamento" hint="Cultura e estádio em que cada produto está posicionado." />
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="cmp-inputs">
               <Positioning product={A.product} accent="var(--side-a)" />
               <Positioning product={B.product} accent="var(--side-b)" />
@@ -445,7 +460,9 @@ function CompositionTable({ a, b, keys }) {
           </span>
         </div>
       )}
-      <div style={{ overflowX: "auto" }}>
+      {/* Desktop: tabela. Mobile: um card por nutriente (tabela de 4 colunas
+          fica ilegível em 390px). */}
+      <div className="only-wide" style={{ overflowX: "auto" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 460 }}>
           <thead>
             <tr>
@@ -483,7 +500,44 @@ function CompositionTable({ a, b, keys }) {
           </tbody>
         </table>
       </div>
+
+      <div className="only-narrow">
+        {keys.map((k) => {
+          const va = a.nutrients?.[k];
+          const vb = b.nutrients?.[k];
+          const d = diff(va, vb);
+          return (
+            <div key={k} style={{ padding: "11px 12px", background: "var(--surface-2)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 7 }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontWeight: 600, fontSize: 13 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: 2, background: nutrientColor(k), flexShrink: 0 }} />
+                  {NUTRIENT_LABEL[k] || k}
+                </span>
+                <span className="tnum" style={{ fontSize: 12 }}>
+                  <DiffCell d={d} mixed={mixed} />
+                </span>
+              </div>
+              <MobileRow color="var(--side-a)" name={a.name} value={va != null ? `${fmtNum(va)} ${unitA}` : "—"} />
+              <MobileRow color="var(--side-b)" name={b.name} value={vb != null ? `${fmtNum(vb)} ${unitB}` : "—"} />
+            </div>
+          );
+        })}
+      </div>
     </>
+  );
+}
+
+function MobileRow({ color, name, value }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, fontSize: 12.5, padding: "3px 0" }}>
+      <span className="muted" style={{ display: "inline-flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+        <span style={{ width: 7, height: 7, borderRadius: "50%", background: color, flexShrink: 0 }} />
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</span>
+      </span>
+      <span className="tnum" style={{ fontWeight: 600, flexShrink: 0 }}>
+        {value}
+      </span>
+    </div>
   );
 }
 
@@ -554,7 +608,7 @@ function CostPerNutrient({ a, b, econA, econB, keys }) {
         Quanto custa entregar 1 kg de cada nutriente, considerando a dose informada. Índice por produto — para um manejo
         inteiro, use o comparativo do catálogo.
       </p>
-      <div style={{ overflowX: "auto" }}>
+      <div className="only-wide" style={{ overflowX: "auto" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 460 }}>
           <thead>
             <tr>
@@ -578,6 +632,27 @@ function CostPerNutrient({ a, b, econA, econB, keys }) {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="only-narrow">
+        {rows.map((r) => (
+          <div key={r.key} style={{ padding: "11px 12px", background: "var(--surface-2)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 7, fontWeight: 600, fontSize: 13, marginBottom: 7 }}>
+              <span style={{ width: 8, height: 8, borderRadius: 2, background: nutrientColor(r.key), flexShrink: 0 }} />
+              {NUTRIENT_LABEL[r.key] || r.key}
+            </div>
+            <MobileRow
+              color="var(--side-a)"
+              name={a.product.name}
+              value={r.a?.costPerKg != null ? `${fmtBRL(r.a.costPerKg)}/kg` : "—"}
+            />
+            <MobileRow
+              color="var(--side-b)"
+              name={b.product.name}
+              value={r.b?.costPerKg != null ? `${fmtBRL(r.b.costPerKg)}/kg` : "—"}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
