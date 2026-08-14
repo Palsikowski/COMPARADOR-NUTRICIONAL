@@ -49,6 +49,49 @@ export function positioningFor(productId) {
 
 export const CULTURES = Object.keys(MANAGEMENT_PRESETS);
 
+// Estádios fenológicos cadastrados, por cultura. Buscar "V4" precisa achar o
+// estádio "V3–V5" da Soja, então o casamento é por faixa: quebra o rótulo em
+// tokens (V3, V5, V6...) e confere se o termo cai dentro do intervalo.
+export const STAGES = (() => {
+  const out = [];
+  Object.entries(MANAGEMENT_PRESETS).forEach(([culture, data]) => {
+    data.stages.forEach((s) => out.push({ culture, key: s.key, label: s.label, count: s.items.length }));
+  });
+  return out;
+})();
+
+// Extrai as faixas numéricas de um rótulo de estádio ("V3–V5/V6" -> V:[3,6]).
+function stageRanges(label) {
+  const ranges = {};
+  const re = /([A-Za-z]+)\s*(\d+)/g;
+  let m;
+  while ((m = re.exec(label)) !== null) {
+    const letter = m[1].toUpperCase();
+    const num = Number(m[2]);
+    if (!ranges[letter]) ranges[letter] = [num, num];
+    else {
+      ranges[letter][0] = Math.min(ranges[letter][0], num);
+      ranges[letter][1] = Math.max(ranges[letter][1], num);
+    }
+  }
+  return ranges;
+}
+
+export function stagesMatching(term) {
+  const t = (term || "").trim().toUpperCase();
+  const m = /^([A-Z]+)\s*(\d+)$/.exec(t);
+  if (!m) {
+    // texto solto: casa pelo rótulo mesmo
+    return STAGES.filter((s) => s.label.toUpperCase().includes(t) && t.length >= 2);
+  }
+  const [, letter, numStr] = m;
+  const num = Number(numStr);
+  return STAGES.filter((s) => {
+    const r = stageRanges(s.label)[letter];
+    return r && num >= r[0] && num <= r[1];
+  });
+}
+
 // Nutrientes distintos efetivamente presentes no catálogo (não a lista
 // teórica de nutrientes possíveis).
 export const NUTRIENTS_IN_CATALOG = (() => {
@@ -139,6 +182,7 @@ export function searchAll(query, { nutrientMeta = {}, limit = 8 } = {}) {
   }).slice(0, 5);
 
   const cultures = CULTURES.filter((c) => norm(c).includes(q));
+  const stages = stagesMatching(query).slice(0, 5);
 
-  return { products: products.slice(0, limit).map((x) => x.p), brands, nutrients, cultures };
+  return { products: products.slice(0, limit).map((x) => x.p), brands, nutrients, cultures, stages };
 }

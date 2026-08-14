@@ -10,24 +10,24 @@
 
 :root {
   /* superfícies */
-  --bg: #F7F8F9;
+  --bg: #F9FAFB;
   --surface: #FFFFFF;
-  --surface-2: #F1F3F5;
-  --surface-3: #E9ECEF;
+  --surface-2: #F3F4F6;
+  --surface-3: #E5E7EB;
 
-  /* texto */
-  --text: #14181C;
-  --text-2: #4B5560;
-  --text-3: #79848F;
+  /* texto — grafite */
+  --text: #1F2937;
+  --text-2: #4B5563;
+  --text-3: #6B7280;
 
   /* traços */
   --border: #E5E7EB;
-  --border-strong: #D3D8DE;
+  --border-strong: #D1D5DB;
 
-  /* identidade */
-  --brand: #0F7A5A;
-  --brand-strong: #0B5C44;
-  --brand-soft: #E6F3EE;
+  /* identidade — verde escuro/tecnológico */
+  --brand: #059669;
+  --brand-strong: #047857;
+  --brand-soft: #ECFDF5;
   --brand-contrast: #FFFFFF;
 
   /* semânticos — nunca só cor: sempre acompanhados de rótulo/ícone */
@@ -46,13 +46,13 @@
   --side-a: #1F5C9E;
   --side-b: #0F7A5A;
 
-  --radius: 14px;
+  --radius: 12px;
   --radius-sm: 10px;
   --radius-pill: 999px;
-  --shadow-sm: 0 1px 2px rgba(16, 24, 32, 0.04);
-  --shadow: 0 2px 8px rgba(16, 24, 32, 0.06);
-  --shadow-lg: 0 12px 32px rgba(16, 24, 32, 0.12);
-  --speed: 180ms;
+  --shadow-sm: 0 1px 2px rgba(31, 41, 55, 0.04);
+  --shadow: 0 2px 8px rgba(31, 41, 55, 0.06);
+  --shadow-lg: 0 12px 32px rgba(31, 41, 55, 0.12);
+  --speed: 200ms;
 }
 
 [data-theme="dark"] {
@@ -234,18 +234,49 @@ body {
   }
 }
 
-/* Navegação: em telas bem estreitas só os ícones, pra caber tudo. Os botões
-   mantêm o nome acessível via aria-label, então esconder o texto não deixa
-   ninguém sem saber o que é. */
+/* Navegação responsiva: abaixo de 1080px os menus viram o botão de sanduíche,
+   e o CTA/indicador de conexão saem do cabeçalho pra caber o essencial. */
+@media (max-width: 1079px) {
+  .main-nav {
+    display: none !important;
+  }
+  .menu-btn {
+    display: flex !important;
+  }
+  .cta-btn {
+    display: none !important;
+  }
+}
+@media (max-width: 720px) {
+  .conn-chip {
+    display: none !important;
+  }
+}
 @media (max-width: 640px) {
   .nav-label {
     display: none;
   }
   .brand-tagline {
-    display: none;
+    display: none !important;
   }
   .shell {
     padding: 0 14px;
+  }
+}
+
+/* Tabelas densas viram cards empilhados no celular. O display fica só aqui —
+   um `display` inline no elemento venceria a classe e mostraria os dois. */
+.only-narrow {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+@media (max-width: 720px) {
+  .only-wide {
+    display: none !important;
+  }
+  .only-narrow {
+    display: flex;
   }
 }
 

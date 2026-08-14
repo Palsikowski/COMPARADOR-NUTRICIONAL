@@ -9,19 +9,60 @@ dados inventados.
 
 ## Como a plataforma está organizada
 
-Três telas, acessíveis pela navegação do topo:
+A navegação do topo tem cinco entradas, além da home:
 
-- **Início** — hero com a busca principal (produto, empresa, nutriente ou
-  cultura), quatro atalhos de ação e os indicadores da plataforma, todos
-  derivados dos dados reais (nenhum número é escrito à mão). A busca leva
-  direto ao catálogo já filtrado.
-- **Comparar** — comparação A vs B de dois produtos: visão geral,
-  composição com a diferença calculada, economia (custo/ha, custo por kg
-  de nutriente) e posicionamento por cultura/estádio.
-- **Catálogo e manejo** — o dashboard completo que já existia, intacto:
-  catálogo por categoria/marca, manejo atual lado a lado, manejos prontos
-  por cultura, sugestão automática de manejo Agrocete equivalente,
-  manejos salvos, trava de dose e exportação em PDF.
+- **Início** — hero com a busca principal (produto, empresa, nutriente,
+  cultura ou estádio fenológico), quatro atalhos de ação, os indicadores
+  da base e o módulo **Preço ≠ valor**. Todos os números são derivados dos
+  dados reais; nenhum é escrito à mão.
+- **Produtos** — catálogo completo por categoria. É também para onde a
+  busca da home leva, já filtrada.
+- **Empresas** — o mesmo catálogo aberto por marca, para percorrer o
+  portfólio de cada uma das 58 empresas.
+- **Manejos** — catálogo com os manejos oficiais por cultura e estádio já
+  abertos.
+- **Calculadora Custo/ha** — comparação A vs B: visão geral, composição
+  com diferença calculada, economia (custo/ha por área, custo por kg de
+  nutriente), índice NCI e posicionamento.
+- **Sobre** — metodologia aberta: cobertura medida dos dados, níveis de
+  confiabilidade, as fórmulas usadas, os pesos do NCI e os limites
+  conhecidos.
+
+Produtos, Empresas e Manejos são três entradas para o mesmo dashboard que
+já existia — ele continua intacto, com manejo atual lado a lado, manejos
+prontos, sugestão automática de manejo Agrocete, manejos salvos, trava de
+dose e exportação em PDF.
+
+### Busca por estádio fenológico
+
+Buscar `V4` encontra os estádios cujo intervalo contém V4 (Soja `V3–V5` e
+Milho `V3–V5/V6`), porque o casamento é por faixa e não por texto: o
+rótulo é quebrado em tokens (`V3`, `V5`, `V6`) e o termo é testado dentro
+do intervalo. Ver `stagesMatching` em `src/lib/catalog.js`.
+
+### NCI — Nutrição & Custo Index
+
+Índice **comparativo do par selecionado**: cada critério é normalizado
+contra o outro produto (o melhor do par recebe 100). O mesmo produto tem
+NCI diferente conforme com quem é comparado — fora de um par, o número não
+significa nada. Não é nota de qualidade nem indicação de compra.
+
+Critérios e pesos (`src/lib/nci.js`): custo por kg de nutriente (30%),
+custo/ha (25%), nutriente entregue por hectare (25%), amplitude de
+nutrientes (10%), posicionamento cadastrado (10%).
+
+**O que fica fora, por falta de dado** — declarado na interface e no modal
+"Como calculamos?":
+
+- *Tecnologia de formulação* — não existe campo; só ~4% dos produtos citam
+  algo em texto livre.
+- *Evidência experimental* — não há nenhum ensaio cadastrado.
+
+Critério sem dado nos dois produtos é excluído e os pesos restantes são
+renormalizados; a tela informa quanto do peso total foi efetivamente
+aplicado. Sem composição, dose ou preço dos dois lados, o índice não é
+calculado: aparece **"Dados insuficientes para avaliação completa"** com
+o motivo de cada lacuna.
 
 ### O que os dados sustentam (e o que não sustentam)
 
@@ -88,10 +129,6 @@ significaria inventar informação agronômica:
   filtro. Precisa de um campo `technology` na planilha-fonte.
 - **Filtro por cultura e por estádio de aplicação**: existe só para 16
   produtos (1%). Um filtro de cultura hoje esconderia 99% do catálogo.
-- **Índice NCI (Nutrição & Custo Index)**: um dos critérios pedidos é
-  "evidência experimental", e não há **nenhum** dado de ensaio cadastrado.
-  Um índice que pondera um critério inexistente é um número com aparência
-  de rigor e sem lastro.
 - **Página de empresa com logo e descrição**: o catálogo tem só o nome da
   marca. O perfil por marca (nº de produtos, categorias, nutrientes) já
   está calculado em `src/lib/catalog.js` (`brandProfile`) e pode virar
@@ -111,8 +148,13 @@ já entraram: uma planilha com as colunas correspondentes.
 - `src/theme.css` — design tokens (cores, raios, sombras, botões). Tema
   claro por padrão; o escuro continua no botão do cabeçalho porque é o que
   funciona sob sol forte em campo.
-- `src/pages/Home.jsx` — hero, busca principal, atalhos e indicadores.
+- `src/pages/Home.jsx` — hero, busca principal, atalhos, indicadores e o
+  módulo Preço ≠ valor.
 - `src/pages/Compare.jsx` — comparador A vs B.
+- `src/pages/About.jsx` — metodologia, cobertura dos dados e limites.
+- `src/lib/nci.js` — cálculo do NCI, com os critérios ausentes declarados
+  em `MISSING_CRITERIA`.
+- `src/components/NciPanel.jsx` — NCI na tela e o modal "Como calculamos?".
 - `src/lib/economics.js` — custo/ha, custo total por área, custo por kg de
   nutriente e diferenças. Documenta a regra de unidades (g/L para líquido,
   g/kg para sólido) e devolve `null` — não zero — quando falta entrada.
