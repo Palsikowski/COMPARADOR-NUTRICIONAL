@@ -234,22 +234,33 @@ body {
   }
 }
 
-/* Navegação responsiva: abaixo de 1080px os menus viram o botão de sanduíche,
-   e o CTA/indicador de conexão saem do cabeçalho pra caber o essencial. */
-@media (max-width: 1079px) {
+/* Navegação responsiva.
+
+   Os pontos de quebra vêm da largura medida de cada parte do cabeçalho, não de
+   número redondo: logo 241px + menu 936px + bloco da direita 347px + respiros
+   = 1588px. Com o cabeçalho preso em 1180px (a largura do conteúdo) ele
+   estourava em QUALQUER tela de desktop e empurrava a página inteira pro lado.
+   Por isso o cabeçalho tem largura própria, maior que a do conteúdo, e as
+   partes secundárias saem antes do menu virar sanduíche:
+
+   - >= 1601px: tudo (precisa de 1588px)
+   - 1330-1600px: menu + tema; CTA e indicador de conexão saem (precisa 1281px)
+   - <= 1329px: sanduíche */
+.shell-header {
+  max-width: 1600px;
+}
+@media (max-width: 1600px) {
+  .cta-btn,
+  .conn-chip {
+    display: none !important;
+  }
+}
+@media (max-width: 1329px) {
   .main-nav {
     display: none !important;
   }
   .menu-btn {
     display: flex !important;
-  }
-  .cta-btn {
-    display: none !important;
-  }
-}
-@media (max-width: 720px) {
-  .conn-chip {
-    display: none !important;
   }
 }
 @media (max-width: 640px) {
@@ -346,4 +357,72 @@ body {
     border-radius: var(--radius) !important;
     margin-bottom: 5vh;
   }
+}
+
+/* ---- Bandeiras das empresas (vitrine + cabeçalho da página da empresa) ----
+   O catálogo não tem logotipo de nenhuma empresa: as planilhas trazem só o
+   nome. A bandeira é um bloco de cor com a inicial, derivado do próprio nome —
+   marcador consistente, não identidade visual de terceiro. */
+.brand-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 620px) {
+  .brand-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 980px) {
+  .brand-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1320px) {
+  .brand-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.brand-flag {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: var(--text);
+  transition: border-color var(--speed) ease, box-shadow var(--speed) ease, transform var(--speed) ease;
+}
+.brand-flag:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+.brand-flag:active {
+  transform: scale(0.995);
+}
+.brand-flag:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.brand-flag-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  background: var(--flag-bg);
+  color: var(--flag-fg);
+}
+[data-theme="dark"] .brand-flag-badge {
+  background: var(--flag-bg-dark);
+  color: var(--flag-fg-dark);
 }

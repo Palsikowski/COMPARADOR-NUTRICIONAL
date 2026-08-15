@@ -5,16 +5,18 @@ import Compare from "./pages/Compare.jsx";
 import About from "./pages/About.jsx";
 import Managements from "./pages/Managements.jsx";
 import Catalog from "./pages/Catalog.jsx";
+import Brands from "./pages/Brands.jsx";
+import BrandPage from "./pages/BrandPage.jsx";
 import PhotoId from "./pages/PhotoId.jsx";
 import Dashboard from "./Dashboard.jsx";
 import "./theme.css";
 
 const THEME_KEY = "agro-theme";
 
-// Os menus mapeiam para as telas que existem de verdade. "Produtos",
-// "Empresas" e "Manejos" são três entradas diferentes no mesmo catálogo
-// (lista por categoria, lista por marca e manejos oficiais abertos), porque
-// é assim que o consultor pensa — não porque sejam três telas separadas.
+// Os menus mapeiam para as telas que existem de verdade. "Produtos" e
+// "Manejos" são duas entradas no mesmo catálogo (lista por categoria e manejos
+// oficiais abertos). "Empresas" deixou de ser uma terceira: virou a vitrine de
+// bandeiras, com página própria por empresa e comparativo em gráfico.
 const NAV = [
   { id: "produtos", label: "Produtos" },
   { id: "empresas", label: "Empresas" },
@@ -30,6 +32,7 @@ export default function App() {
   const [catalogSearch, setCatalogSearch] = useState("");
   const [pendingSelection, setPendingSelection] = useState(null);
   const [catalogNonce, setCatalogNonce] = useState(0);
+  const [openBrand, setOpenBrand] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(() => {
     try {
@@ -63,6 +66,16 @@ export default function App() {
   function go(id) {
     setPage(id);
     setMenuOpen(false);
+    // Sair de "Empresas" fecha a empresa aberta: voltar pela navegação e cair
+    // na página de uma marca que não se escolheu agora é desorientador.
+    if (id !== "empresas") setOpenBrand(null);
+  }
+
+  function goBrand(brand) {
+    setOpenBrand(brand);
+    setPage("empresas");
+    setMenuOpen(false);
+    window.scrollTo({ top: 0 });
   }
 
   function goCatalogWith(term) {
@@ -80,7 +93,9 @@ export default function App() {
     go("manejo");
   }
 
-  const isCatalog = page === "produtos" || page === "empresas";
+  // "Empresas" agora tem tela própria (vitrine de bandeiras), então só
+  // "Produtos" abre a grade do catálogo.
+  const isCatalog = page === "produtos";
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -93,7 +108,7 @@ export default function App() {
           zIndex: 30,
         }}
       >
-        <div className="shell" style={{ display: "flex", alignItems: "center", gap: 12, height: 64 }}>
+        <div className="shell shell-header" style={{ display: "flex", alignItems: "center", gap: 12, height: 64 }}>
           <button
             onClick={() => go("home")}
             aria-label="Comparador Nutricional — início"
@@ -275,13 +290,19 @@ export default function App() {
         )}
         {page === "custo" && <Compare onOpenCatalog={() => go("produtos")} />}
         {page === "manejos" && <Managements onLoadIntoCatalog={loadSelectionIntoCatalog} />}
-        {page === "foto" && <PhotoId onOpenProduct={(p) => goCatalogWith(p.name)} />}
+        {page === "foto" && <PhotoId onOpenProduct={(p) => goCatalogWith(p.name)} onOpenBrand={goBrand} />}
+        {page === "empresas" &&
+          (openBrand ? (
+            <BrandPage key={openBrand} brand={openBrand} dark={dark} onBack={() => setOpenBrand(null)} />
+          ) : (
+            <Brands onOpenBrand={goBrand} />
+          ))}
         {page === "sobre" && <About />}
         {isCatalog && (
           <Catalog
             key={`${page}-${catalogNonce}`}
-            initialSearch={page === "produtos" ? catalogSearch : ""}
-            initialGroupBy={page === "empresas" ? "marca" : "categoria"}
+            initialSearch={catalogSearch}
+            initialGroupBy="categoria"
             onOpenPhoto={() => go("foto")}
             onOpenManejo={() => go("manejo")}
           />
