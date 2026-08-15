@@ -130,11 +130,14 @@ export function matchProductsFromText(rawText, { limit = 6, minScore = 0.45 } = 
     // Cobertura do nome do produto pelo que foi lido na foto.
     let score = sum / prodTokens.length;
 
-    // Nome de uma palavra curta ("CaB") casa por acaso com facilidade — sem a
-    // marca confirmando, não pode chegar perto do topo.
+    // Nome de uma palavra só ("Cálcio", "CaB", "Boro") casa por acaso com
+    // facilidade: é justamente o nome genérico que dezenas de marcas usam. Sem
+    // a marca confirmando na foto, não pode empatar com um nome composto que
+    // bateu inteiro — senão o "Cálcio" de qualquer empresa passa na frente do
+    // "Grap Cálcio" que a foto realmente mostra.
     const brandToks = tokens(p.brand);
     const brandHit = brandToks.length > 0 && brandToks.every((bt) => ocrTokens.some((ot) => tokenMatches(ot, bt) === 1));
-    if (prodTokens.length === 1 && longestExact <= 4 && !brandHit) score *= 0.55;
+    if (prodTokens.length === 1 && !brandHit) score *= longestExact <= 4 ? 0.55 : 0.72;
 
     if (exactPhrase) score = Math.max(score, 0.9);
     if (brandHit) score += 0.12;
@@ -143,13 +146,48 @@ export function matchProductsFromText(rawText, { limit = 6, minScore = 0.45 } = 
     results.push({ product: p, score: Math.min(score, 1), matched, brandHit, exactPhrase });
   }
 
+  // Empate no score é comum (vários produtos batem o nome inteiro). A marca
+  // lida na mesma foto é o desempate mais forte que existe, depois o nome
+  // completo, depois o nome mais específico — nunca a ordem alfabética.
   results.sort(
     (a, b) =>
       b.score - a.score ||
+      Number(b.brandHit) - Number(a.brandHit) ||
       Number(b.exactPhrase) - Number(a.exactPhrase) ||
+      b.matched.length - a.matched.length ||
       a.product.name.localeCompare(b.product.name)
   );
   return results.filter((r) => r.score >= minScore).slice(0, limit);
+}
+
+/**
+ * Marcas do catálogo cujo nome aparece inteiro no texto lido.
+ *
+ * Serve para o caso mais comum de falha: o OCR lê a marca (logo grande, fonte
+ * limpa) mas erra o nome do produto (fonte estilizada, curva da embalagem).
+ * Antes disso a tela dizia só "nenhum produto reconhecido" e a pessoa
+ * recomeçava do zero, mesmo com meia identificação na mão. Devolver a marca
+ * permite oferecer o portfólio dela para escolha — sem fingir que o produto
+ * foi identificado.
+ */
+export function brandsFromText(rawText, { limit = 3 } = {}) {
+  const ocrTokens = new Set(tokens(rawText));
+  if (ocrTokens.size === 0) return [];
+
+  const counts = new Map();
+  for (const p of PRODUCTS) counts.set(p.brand, (counts.get(p.brand) || 0) + 1);
+
+  const hits = [];
+  for (const brand of counts.keys()) {
+    const bt = tokens(brand);
+    // Marca de um token só com 3 letras ou menos ("ICL" vira "ICL", ok; mas
+    // siglas curtas casam por acaso) exige token idêntico, que é o que
+    // ocrTokens.has já faz. Marcas compostas exigem todos os tokens.
+    if (bt.length === 0 || !bt.every((t) => ocrTokens.has(t))) continue;
+    hits.push({ brand, count: counts.get(brand), weight: bt.join("").length });
+  }
+  hits.sort((a, b) => b.weight - a.weight || b.count - a.count);
+  return hits.slice(0, limit);
 }
 
 // Rótulo de confiança pra tela — nunca "identificado", sempre "provável".

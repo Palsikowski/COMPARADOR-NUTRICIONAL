@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Camera, Upload, Loader2, AlertTriangle, Info, Search, ArrowRight } from "lucide-react";
-import { matchProductsFromText, confidenceLabel } from "../lib/photoMatch.js";
+import { matchProductsFromText, brandsFromText, confidenceLabel } from "../lib/photoMatch.js";
 import { PRODUCTS } from "../data/products.js";
 import { NutrientPillRow } from "../dashboard/NutrientPill.jsx";
 import DataBadge from "../components/DataBadge.jsx";
@@ -20,12 +20,42 @@ const NUTRIENT_META = {
 // embalagem: não existe nenhuma foto de produto cadastrada, então não há como
 // treinar isso. O resultado é sempre uma lista de candidatos pra pessoa
 // confirmar — o app não decide sozinho qual produto é.
-export default function PhotoId({ onOpenProduct }) {
+// Foto de celular vem com 3000-4000px de largura. O Tesseract não ganha nada
+// com isso (ele trabalha em ~300 DPI de texto) e perde muito tempo — a leitura
+// passa de dezenas de segundos no aparelho, que é onde ela roda. Reduzir para
+// 1600px no lado maior mantém o nome do rótulo bem legível e corta o tempo.
+const OCR_MAX_SIDE = 1600;
+
+async function shrinkForOcr(file) {
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, OCR_MAX_SIDE / Math.max(bitmap.width, bitmap.height));
+    if (scale === 1) {
+      bitmap.close?.();
+      return file;
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close?.();
+    return canvas;
+  } catch {
+    // Navegador sem createImageBitmap: segue com o arquivo original, que
+    // funciona igual — só mais devagar.
+    return file;
+  }
+}
+
+export default function PhotoId({ onOpenProduct, onOpenBrand }) {
   const [preview, setPreview] = useState(null);
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
   const [progress, setProgress] = useState("");
   const [text, setText] = useState("");
   const [matches, setMatches] = useState([]);
+  const [brandGuess, setBrandGuess] = useState([]);
   const [error, setError] = useState(null);
   const fileRef = useRef(null);
   const cameraRef = useRef(null);
@@ -34,13 +64,14 @@ export default function PhotoId({ onOpenProduct }) {
     if (!file) return;
     setError(null);
     setMatches([]);
+    setBrandGuess([]);
     setText("");
     setPreview(URL.createObjectURL(file));
     setStatus("loading");
     setProgress("Carregando o leitor de texto...");
 
     try {
-      const { createWorker } = await import("tesseract.js");
+      const { createWorker, PSM } = await import("tesseract.js");
       // Worker, núcleo e modelo servidos pelo próprio app (public/ocr) em vez
       // do CDN padrão do tesseract.js — sem isso a leitura só funcionaria com
       // internet, justamente o oposto do que o app precisa em campo.
@@ -55,13 +86,38 @@ export default function PhotoId({ onOpenProduct }) {
           else if (m.status) setProgress("Preparando o leitor...");
         },
       });
-      const { data } = await worker.recognize(file);
+
+      const image = await shrinkForOcr(file);
+
+      // O padrão do Tesseract é PSM 6 ("um bloco uniforme de texto"), que num
+      // rótulo joga fora justamente o nome do produto: ele é grande, isolado e
+      // em faixa própria, então não pertence ao bloco de texto corrido. Com
+      // AUTO o layout é analisado de verdade e o nome aparece.
+      await worker.setParameters({ tessedit_pageseg_mode: PSM.AUTO });
+      let raw = ((await worker.recognize(image)).data.text || "").trim();
+      let found = matchProductsFromText(raw);
+
+      // Segunda tentativa só quando a primeira não achou nada: SPARSE_TEXT não
+      // assume nenhuma estrutura de página e pega texto espalhado que a análise
+      // de layout descartou. Fica fora do caminho comum porque dobra o tempo.
+      if (found.length === 0) {
+        setProgress("Tentando de novo com outra leitura...");
+        await worker.setParameters({ tessedit_pageseg_mode: PSM.SPARSE_TEXT });
+        const alt = ((await worker.recognize(image)).data.text || "").trim();
+        const altFound = matchProductsFromText(alt);
+        if (altFound.length > 0) {
+          found = altFound;
+          raw = alt;
+        } else if (alt.length > raw.length) {
+          raw = alt;
+        }
+      }
+
       await worker.terminate();
 
-      const raw = (data.text || "").trim();
       setText(raw);
-      const found = matchProductsFromText(raw);
       setMatches(found);
+      setBrandGuess(found.length === 0 ? brandsFromText(raw) : []);
       setStatus("done");
     } catch (e) {
       setError(
@@ -169,11 +225,23 @@ export default function PhotoId({ onOpenProduct }) {
           {matches.length === 0 ? (
             <div className="card" style={{ padding: "24px 18px", textAlign: "center" }}>
               <Search size={24} style={{ color: "var(--text-3)" }} />
-              <div style={{ fontWeight: 600, marginTop: 9, fontSize: 15 }}>Nenhum produto reconhecido</div>
+              <div style={{ fontWeight: 600, marginTop: 9, fontSize: 15 }}>
+                {brandGuess.length > 0 ? "Reconheci a marca, mas não o produto" : "Nenhum produto reconhecido"}
+              </div>
               <p className="muted" style={{ fontSize: 13, marginTop: 6, lineHeight: 1.55, maxWidth: 460, marginInline: "auto" }}>
-                O texto lido não bateu com nenhum produto do catálogo. Tente uma foto mais próxima do nome, com o
-                rótulo plano e sem reflexo — ou procure pelo nome na busca do catálogo.
+                {brandGuess.length > 0
+                  ? "O nome do produto não bateu com nada do catálogo — é a parte do rótulo que mais engana a leitura, por causa da fonte estilizada e da curva da embalagem. Abra o portfólio da marca e escolha na lista:"
+                  : "O texto lido não bateu com nenhum produto do catálogo. Tente uma foto mais próxima do nome, com o rótulo plano e sem reflexo — ou procure pelo nome na busca do catálogo."}
               </p>
+              {brandGuess.length > 0 && (
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginTop: 13 }}>
+                  {brandGuess.map((b) => (
+                    <button key={b.brand} className="btn btn-primary" onClick={() => onOpenBrand(b.brand)}>
+                      {b.brand} · {b.count} {b.count === 1 ? "produto" : "produtos"} <ArrowRight size={15} />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             <>

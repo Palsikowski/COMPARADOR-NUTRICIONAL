@@ -17,8 +17,9 @@ A navegação do topo tem cinco entradas, além da home:
   dados reais; nenhum é escrito à mão.
 - **Produtos** — catálogo completo por categoria. É também para onde a
   busca da home leva, já filtrada.
-- **Empresas** — o mesmo catálogo aberto por marca, para percorrer o
-  portfólio de cada uma das 61 empresas.
+- **Empresas** — vitrine com uma **bandeira por empresa** (61). Abrir uma
+  bandeira leva ao portfólio dela, onde dá para marcar produtos, ver o
+  **gráfico comparativo** e baixar o **PDF** para discutir com a equipe.
 - **Manejos** — catálogo com os manejos oficiais por cultura e estádio já
   abertos.
 - **Calculadora Custo/ha** — comparação A vs B: visão geral, composição
@@ -28,12 +29,12 @@ A navegação do topo tem cinco entradas, além da home:
   confiabilidade, as fórmulas usadas, os pesos do NCI e os limites
   conhecidos.
 
-Produtos, Empresas e Manejos são três entradas para o mesmo dashboard que
-já existia — ele continua intacto, com manejo atual lado a lado, manejos
-prontos, sugestão automática de manejo Agrocete, manejos salvos, trava de
-dose e exportação em PDF.
+Produtos e Manejos são duas entradas para o mesmo dashboard que já existia —
+ele continua intacto, com manejo atual lado a lado, manejos prontos, sugestão
+automática de manejo Agrocete, manejos salvos, trava de dose e exportação em
+PDF. Empresas deixou de ser uma terceira entrada nele e ganhou tela própria.
 
-## Catálogo em grade (Produtos / Empresas)
+## Catálogo em grade (Produtos)
 
 A navegação do catálogo é uma **grade virtualizada** sobre os 1.595 produtos,
 com barra de filtros fixa no topo.
@@ -146,6 +147,65 @@ aparece dizendo isso, em vez de receber um texto comercial genérico. Quando há
 preços informados, o caderno traz o custo/ha e avisa quantos produtos ficaram
 de fora da conta por não terem preço.
 
+## Empresas: bandeiras, gráfico e PDF
+
+A entrada **Empresas** era o mesmo catálogo agrupado por marca: para chegar a
+uma empresa específica era preciso rolar os 1.595 produtos. Agora é uma vitrine
+de bandeiras — 61 blocos, um por empresa, com o tamanho do portfólio e quanto
+dele tem composição cadastrada. Buscar por nome filtra a vitrine.
+
+**A bandeira não é o logotipo da empresa.** O catálogo não tem logotipo de
+ninguém: as planilhas trazem só o nome. Desenhar algo parecido com a marca de
+terceiros seria inventar identidade visual, então a bandeira é um bloco com a
+inicial e uma cor derivada do próprio nome — determinística, para a mesma
+empresa ter sempre a mesma cor, e com saturação fixa, para nenhuma empresa
+ganhar destaque por acaso.
+
+### Dentro da empresa
+
+O portfólio abre com os produtos que têm composição primeiro (são os que viram
+gráfico). Marcando de 2 a 4 produtos, o comparativo aparece na hora.
+
+**O teto de 4 não é técnico:** acima de quatro cores as barras deixam de ser
+distinguíveis com segurança por quem tem daltonismo. Gerar uma quinta cor
+resolveria na tela e quebraria a leitura, então a seleção trava em quatro.
+
+A seleção **não** mexe no "Meu manejo": aqui a pessoa está estudando o
+portfólio de um concorrente para discutir com a equipe, não montando um manejo
+para cotar. Misturar os dois faria a seleção de estudo virar recomendação sem
+ninguém pedir.
+
+### O gráfico
+
+Barra horizontal agrupada: um bloco por nutriente, uma barra por produto. A
+série é o produto (identidade), então a paleta é categórica — quatro matizes
+validadas para daltonismo contra o fundo claro **e** contra o escuro, com o
+`validate_palette` do próprio método, não no olho.
+
+Três decisões que mudam o que o gráfico diz:
+
+- **Nutriente não declarado sai como traço (—), nunca como zero.** Barra zerada
+  leria como "não entrega"; o certo é "não sabemos".
+- **Produto sem composição não entra no gráfico** — sai listado abaixo dele,
+  com o nome, para a ausência ficar à vista em vez de sumir.
+- **g/L e g/kg não dividem eixo.** Um é por litro, o outro por quilo. Quando a
+  seleção mistura líquido e sólido saem **dois gráficos**, cada um com sua
+  escala, e um aviso de que comparar as alturas entre eles não significa nada.
+
+Todo valor é rotulado direto na barra e existe **visão de tabela** no mesmo
+lugar: dois dos quatro tons ficam abaixo de 3:1 de contraste sobre o fundo
+claro, o que obriga a leitura a não depender só da cor.
+
+### O PDF
+
+O botão **Baixar PDF** gera capa com o nome da empresa, a observação que a
+equipe escreveu, o gráfico, a tabela com os mesmos números e a lista do que
+ficou de fora por falta de composição. O gráfico é **redesenhado vetorialmente**
+no PDF em vez de virar print da tela: assim não borra ao ampliar nem ao
+imprimir, e sai sempre na paleta clara — papel é sempre claro, independente do
+tema que estava aberto. O cabeçalho da tabela se repete quando ela vira a
+página.
+
 ## Identificar por foto
 
 Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
@@ -165,9 +225,33 @@ Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
 - **O casamento é tolerante a erro de leitura, mas não a ponto de chutar**
   (`src/lib/photoMatch.js`): exige uma âncora — um token exato de 4+ letras ou
   o nome inteiro no texto lido. Sem isso não devolve nada, em vez de sugerir
-  um produto errado com ar de certeza. Rótulos muito danificados pela leitura
-  (letras trocadas por números, brilho) podem não retornar candidato: nesse
-  caso a busca por nome no catálogo continua sendo o caminho.
+  um produto errado com ar de certeza.
+- **Quando a marca é lida e o nome não, a tela oferece o portfólio da marca.**
+  É o caso de falha mais comum: o logo da empresa tem fonte limpa e o nome do
+  produto é estilizado e curvo. Antes disso a resposta era só "nenhum produto
+  reconhecido", e a pessoa recomeçava do zero com meia identificação na mão.
+- **Empate no percentual é desempatado pela marca lida na mesma foto**, depois
+  pelo nome completo. Sem isso o "Cálcio" genérico de qualquer empresa
+  empatava em 100% com o "Grap Cálcio" que a foto realmente mostrava, e a
+  ordem alfabética decidia.
+
+### Segmentação de página: o que fazia a leitura falhar
+
+O Tesseract usa por padrão o modo **PSM 6 ("um bloco uniforme de texto")**, que
+num rótulo descarta justamente o nome do produto: ele é grande, isolado e fica
+em faixa própria, então não pertence ao bloco de texto corrido. O resultado era
+o app ler "AGROCETE / FERTILIZANTE MINERAL MISTO / CONTEÚDO LÍQUIDO: 20 L" e
+**não** ler "GRAP CÁLCIO" — texto lido, produto não encontrado.
+
+O app agora força **PSM AUTO** (análise de layout de verdade) e, só quando a
+primeira leitura não casa com nada, repete em **SPARSE_TEXT**, que não assume
+estrutura de página nenhuma e pega texto espalhado. A segunda passada fica fora
+do caminho comum porque dobra o tempo.
+
+Antes da leitura a foto é **reduzida para 1600px no lado maior**. Foto de
+celular vem com 3000–4000px, o que o Tesseract não aproveita (ele trabalha na
+faixa de 300 DPI de texto) e custa dezenas de segundos justamente no aparelho,
+que é onde isso roda.
 
 **Limitação conhecida:** no arquivo único offline (`build:standalone`) essa
 função não opera, porque os arquivos do leitor não podem ser embutidos no
@@ -337,6 +421,16 @@ já entraram: uma planilha com as colunas correspondentes.
   bottom sheet, estilo do slider.
 - `src/PasswordGate.jsx` — tela de senha antes de carregar o dashboard.
 - `src/main.jsx` — ponto de entrada React.
+- `src/pages/Brands.jsx` — vitrine de bandeiras das 61 empresas.
+- `src/pages/BrandPage.jsx` — portfólio de uma empresa, seleção de até 4
+  produtos, comparativo e exportação.
+- `src/components/ComparisonChart.jsx` — o gráfico (SVG) com visão de tabela.
+- `src/lib/brandTiles.js` — dados das bandeiras e preparo do comparativo
+  (separação por unidade, produtos sem composição).
+- `src/lib/comparisonPdf.js` — PDF do comparativo, com o gráfico redesenhado
+  em vetor.
+- `src/lib/nutrientLabels.js` — nome por extenso de cada nutriente, num lugar
+  só (estava repetido em quatro telas, com divergências entre elas).
 - `src/data/products.js` — catálogo de 1595 produtos (Agrocete + 60
   marcas concorrentes), gerado a partir das planilhas internas e das
   planilhas/PDFs enviados pelo usuário ao longo do projeto.

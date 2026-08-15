@@ -8,12 +8,7 @@ import DataBadge from "./DataBadge.jsx";
 import { Seals } from "./ProductCard.jsx";
 import CompositionEditor from "./CompositionEditor.jsx";
 import { isEdited } from "../lib/overrides.js";
-
-const NUTRIENT_LABEL = {
-  N: "Nitrogênio", P2O5: "Fósforo (P₂O₅)", K2O: "Potássio (K₂O)", Ca: "Cálcio", Mg: "Magnésio",
-  S: "Enxofre", B: "Boro", Cu: "Cobre", Mn: "Manganês", Zn: "Zinco", Fe: "Ferro", Mo: "Molibdênio",
-  Ni: "Níquel", Co: "Cobalto", Cl: "Cloro", C_Org: "Carbono orgânico",
-};
+import { NUTRIENT_LABEL } from "../lib/nutrientLabels.js";
 
 // Ficha técnica: tudo que o cadastro tem sobre o produto, com a origem do
 // dado à vista. Campo sem informação aparece como "não informado" em vez de
