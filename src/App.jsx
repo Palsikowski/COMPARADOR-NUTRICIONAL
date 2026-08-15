@@ -4,6 +4,7 @@ import Home from "./pages/Home.jsx";
 import Compare from "./pages/Compare.jsx";
 import About from "./pages/About.jsx";
 import Managements from "./pages/Managements.jsx";
+import Catalog from "./pages/Catalog.jsx";
 import PhotoId from "./pages/PhotoId.jsx";
 import Dashboard from "./Dashboard.jsx";
 import "./theme.css";
@@ -17,6 +18,7 @@ const THEME_KEY = "agro-theme";
 const NAV = [
   { id: "produtos", label: "Produtos" },
   { id: "empresas", label: "Empresas" },
+  { id: "manejo", label: "Meu manejo" },
   { id: "manejos", label: "Manejos Agrocete" },
   { id: "custo", label: "Calculadora Custo/ha" },
   { id: "foto", label: "Identificar por foto" },
@@ -75,7 +77,7 @@ export default function App() {
     setPendingSelection(selection);
     setCatalogSearch("");
     setCatalogNonce((n) => n + 1);
-    go("produtos");
+    go("manejo");
   }
 
   const isCatalog = page === "produtos" || page === "empresas";
@@ -276,12 +278,16 @@ export default function App() {
         {page === "foto" && <PhotoId onOpenProduct={(p) => goCatalogWith(p.name)} />}
         {page === "sobre" && <About />}
         {isCatalog && (
-          <Dashboard
+          <Catalog
             key={`${page}-${catalogNonce}`}
             initialSearch={page === "produtos" ? catalogSearch : ""}
-            initialMode={page === "empresas" ? "marca" : null}
-            initialSelection={pendingSelection}
+            initialGroupBy={page === "empresas" ? "marca" : "categoria"}
+            onOpenPhoto={() => go("foto")}
+            onOpenManejo={() => go("manejo")}
           />
+        )}
+        {page === "manejo" && (
+          <Dashboard key={`manejo-${catalogNonce}`} initialSelection={pendingSelection} />
         )}
       </main>
     </div>
