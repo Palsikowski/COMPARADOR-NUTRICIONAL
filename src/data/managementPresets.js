@@ -37,6 +37,9 @@ const P = {
   dLim: "agrocete__grap-d-lim",
   extranod: "agrocete__grap-extranod",
   k30: "agrocete__grap-30k",
+  al: "agrocete__grap-al", // GRAP Al + ("NOD AL+" nos materiais de Sorgo/Milho)
+  nitro: "agrocete__grap-nitro",
+  fluid104: "agrocete__grap-104-fluid",
 };
 
 export const MANAGEMENT_PRESETS = {
@@ -210,6 +213,137 @@ export const MANAGEMENT_PRESETS = {
       { level: "Básico", stageKeys: ["ts", "b1"] },
       { level: "Médio", stageKeys: ["ts", "b1", "f2", "c1"] },
       { level: "Completo", stageKeys: ["ts", "b1", "b6", "f2", "f6", "c1"] },
+    ],
+  },
+
+  // SORGO — do material oficial "POSICIONAMENTO SORGO" (PDF enviado pelo
+  // usuário, página 1). Cultura nova no app.
+  Sorgo: {
+    source: "POSICIONAMENTO SORGO — material oficial Agrocete (PDF enviado pelo usuário).",
+    stages: [
+      {
+        key: "plantio",
+        label: "Plantio (TS/Sulco)",
+        items: [
+          { productId: P.stPro, dose: 0.4, note: "Sulco: 400 mL/ha. TS: 4 mL/kg de semente." },
+          { productId: P.al, dose: 2, note: "NOD AL+ — Sulco: 2 a 4 doses. TS: 1 a 2 dose." },
+          { productId: P.nodPhos, dose: 0.2, note: "Sulco: 200 mL/ha. TS: 2 mL/kg de semente." },
+          { productId: P.extranod, dose: 0.033, note: "1 dose por dose de inoculante utilizada." },
+        ],
+      },
+      {
+        key: "v3-v4",
+        label: "V3–V4",
+        items: [
+          { productId: P.amyno15, dose: 1.0 },
+          { productId: P.superGun, dose: 0.037, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+          { productId: P.dLim, dose: 0.1, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+        ],
+      },
+      {
+        key: "emborrachamento",
+        label: "Emborrachamento (VT)",
+        items: [
+          { productId: P.organoTop, dose: 2.0 },
+          { productId: P.superGun, dose: 0.037, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+          { productId: P.dLim, dose: 0.1, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+        ],
+      },
+      {
+        key: "florescimento",
+        label: "Florescimento (R1)",
+        items: [
+          { productId: P.k30, dose: 2.0 },
+          { productId: P.nitro, dose: 2.0 },
+          { productId: P.superGun, dose: 0.037, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+          { productId: P.dLim, dose: 0.1, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+        ],
+      },
+      {
+        key: "enchimento",
+        label: "Enchimento (grão leitoso)",
+        items: [
+          { productId: P.k30, dose: 2.0 },
+          { productId: P.nitro, dose: 2.0 },
+          { productId: P.superGun, dose: 0.037, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+          { productId: P.dLim, dose: 0.1, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+        ],
+      },
+      {
+        key: "evic-inseticida",
+        label: "Junto com inseticidas",
+        items: [{ productId: P.evicS, dose: 1.0, note: "EVIC-S + inseticidas: 1 L/ha." }],
+      },
+    ],
+    tiers: [
+      { level: "Básico", stageKeys: ["plantio", "v3-v4"] },
+      { level: "Médio", stageKeys: ["plantio", "v3-v4", "emborrachamento", "florescimento"] },
+      { level: "Completo", stageKeys: ["plantio", "v3-v4", "emborrachamento", "florescimento", "enchimento", "evic-inseticida"] },
+    ],
+  },
+
+  // MILHO (posicionamento 2024) — página 2 do mesmo PDF "POSICIONAMENTO
+  // SORGO". Difere do manejo "Milho" já cadastrado (que veio do material
+  // MILHO Manejo Atualizado 2024): este posiciona Nitro + Grap 104 Fluid em
+  // V3–V4 e V7–V10. Os dois foram mantidos, cada um com sua fonte, para a
+  // equipe decidir qual usar — não dá pra saber qual é o mais recente só
+  // pelos arquivos.
+  "Milho (posicionamento 2024)": {
+    source: "POSICIONAMENTO SORGO, página 2 (MILHO) — material oficial Agrocete (PDF enviado pelo usuário).",
+    stages: [
+      {
+        key: "plantio",
+        label: "Plantio (TS/Sulco)",
+        items: [
+          { productId: P.stPro, dose: 0.2, note: "Sulco: 200 mL/ha. TS: 4 mL/kg de semente." },
+          { productId: P.al, dose: 2, note: "NOD AL+ — Sulco: 2 a 4 doses. TS: 1 a 2 dose." },
+          { productId: P.nodPhos, dose: 0.2, note: "Sulco: 200 mL/ha. TS: 2 mL/kg de semente." },
+          { productId: P.extranod, dose: 0.033, note: "1 dose por dose de inoculante utilizada." },
+        ],
+      },
+      {
+        key: "v3-v4",
+        label: "V3–V4",
+        items: [
+          { productId: P.nitro, dose: 2.0 },
+          { productId: P.amyno15, dose: 1.0 },
+          { productId: P.fluid104, dose: 0.3 },
+          { productId: P.superGun, dose: 0.037, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+          { productId: P.dLim, dose: 0.1, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+        ],
+      },
+      {
+        key: "v7-v10",
+        label: "V7–V10",
+        items: [
+          { productId: P.k30, dose: 2.0 },
+          { productId: P.nitro, dose: 2.0 },
+          { productId: P.amyno15, dose: 1.0 },
+          { productId: P.fluid104, dose: 0.3 },
+          { productId: P.superGun, dose: 0.037, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+          { productId: P.dLim, dose: 0.1, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+        ],
+      },
+      {
+        key: "vt",
+        label: "VT",
+        items: [
+          { productId: P.organoTop, dose: 2.0 },
+          { productId: P.k30, dose: 2.0 },
+          { productId: P.superGun, dose: 0.037, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+          { productId: P.dLim, dose: 0.1, note: "Adjuvante — em todas as aplicações foliares (50 mL/100 L de água)." },
+        ],
+      },
+      {
+        key: "evic-inseticida",
+        label: "Junto com inseticidas",
+        items: [{ productId: P.evicS, dose: 1.0, note: "EVIC-S + inseticidas: 1 L/ha." }],
+      },
+    ],
+    tiers: [
+      { level: "Básico", stageKeys: ["plantio", "v3-v4"] },
+      { level: "Médio", stageKeys: ["plantio", "v3-v4", "v7-v10"] },
+      { level: "Completo", stageKeys: ["plantio", "v3-v4", "v7-v10", "vt", "evic-inseticida"] },
     ],
   },
 };
