@@ -54,6 +54,34 @@ com barra de filtros fixa no topo.
   seleção da aba **Meu manejo** (mesmo `localStorage`), então dá pra montar o
   manejo navegando e ir direto ao comparativo pela barra inferior.
 
+### Editar a composição manualmente
+
+Na ficha técnica, a seção **Composição declarada** tem o botão **Editar**:
+apresentação (líquido/sólido), densidade, uma linha por nutriente
+(adicionar/remover) e um campo de motivo. A concentração é digitada na mesma
+unidade que o app usa nas contas (g/L ou g/kg) — pedir %m/m obrigaria a
+converter de cabeça, que é onde o erro entra; o %m/m é recalculado sozinho
+quando há densidade.
+
+Três garantias:
+
+- **O catálogo publicado nunca é sobrescrito.** A edição é uma camada por cima,
+  guardada no aparelho, e o produto passa a exibir "editado por você". O botão
+  **Voltar ao original do catálogo** restaura os valores publicados a qualquer
+  momento, e a tela de edição mostra os valores originais para conferência.
+- **A edição vale no app inteiro**, não só na ficha: grade, comparativo, custo
+  por nutriente, NCI, caderno e sugestão de manejo passam a usar o valor novo.
+  Se valesse só na ficha, o comparativo continuaria com o número velho — que é
+  exatamente o erro que essa função existe para evitar.
+- **É por aparelho** (`localStorage`), como o resto das preferências — não
+  sincroniza entre pessoas.
+
+Implementação em `src/lib/overrides.js`. Para garantir que todo consumidor
+enxergue o mesmo valor sem depender de lembrar de passar o override em cada
+tela, os overrides são aplicados ao objeto do produto uma única vez, antes do
+primeiro render (`main.jsx`), com o estado original preservado em memória para
+o desfazer.
+
 ### Virtualização
 
 Renderizar 1.518 cards de uma vez trava celular, então só as linhas visíveis

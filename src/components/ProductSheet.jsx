@@ -1,11 +1,13 @@
-import React from "react";
-import { X, Plus, Check, AlertTriangle, Lightbulb, Leaf } from "lucide-react";
+import React, { useState } from "react";
+import { X, Plus, Check, AlertTriangle, Lightbulb, Leaf, Pencil } from "lucide-react";
 import { nutrientColor } from "../dashboard/nutrientColors.js";
 import { concentrationUnit, doseUnit, fmtNum } from "../lib/economics.js";
 import { provenanceOf } from "../lib/provenance.js";
 import { positioningFor } from "../lib/catalog.js";
 import DataBadge from "./DataBadge.jsx";
 import { Seals } from "./ProductCard.jsx";
+import CompositionEditor from "./CompositionEditor.jsx";
+import { isEdited } from "../lib/overrides.js";
 
 const NUTRIENT_LABEL = {
   N: "Nitrogênio", P2O5: "Fósforo (P₂O₅)", K2O: "Potássio (K₂O)", Ca: "Cálcio", Mg: "Magnésio",
@@ -16,7 +18,8 @@ const NUTRIENT_LABEL = {
 // Ficha técnica: tudo que o cadastro tem sobre o produto, com a origem do
 // dado à vista. Campo sem informação aparece como "não informado" em vez de
 // sumir — a ausência também é informação na hora de cotar.
-export default function ProductSheet({ product, selected, onToggle, onClose }) {
+export default function ProductSheet({ product, selected, onToggle, onClose, onEdited }) {
+  const [editing, setEditing] = useState(false);
   if (!product) return null;
   const nutrients = Object.entries(product.nutrients || {})
     .filter(([, v]) => Number(v) > 0)
@@ -72,11 +75,42 @@ export default function ProductSheet({ product, selected, onToggle, onClose }) {
 
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 10 }}>
           <DataBadge product={product} compact />
+          {isEdited(product) && (
+            <span
+              className="chip"
+              style={{ background: "var(--warn-soft)", color: "var(--warn)", borderColor: "transparent", fontSize: 10.5 }}
+              title={product.editedNote ? `Motivo: ${product.editedNote}` : "Composição editada manualmente neste aparelho"}
+            >
+              <Pencil size={11} /> editado por você
+            </span>
+          )}
           <Seals product={product} />
         </div>
 
-        <Section title="Composição declarada">
-          {nutrients.length === 0 ? (
+        <Section
+          title="Composição declarada"
+          action={
+            !editing && (
+              <button
+                className="btn btn-ghost"
+                style={{ minHeight: 36, padding: "0 11px", fontSize: 12 }}
+                onClick={() => setEditing(true)}
+              >
+                <Pencil size={13} /> {isEdited(product) ? "Editar de novo" : "Editar"}
+              </button>
+            )
+          }
+        >
+          {editing ? (
+            <CompositionEditor
+              product={product}
+              onDone={() => {
+                setEditing(false);
+                if (onEdited) onEdited();
+              }}
+              onCancel={() => setEditing(false)}
+            />
+          ) : nutrients.length === 0 ? (
             <p className="muted" style={{ fontSize: 13, margin: 0, lineHeight: 1.55 }}>
               {product.composition || "Sem composição nutricional cadastrada para este produto."}
             </p>
@@ -215,12 +249,15 @@ export default function ProductSheet({ product, selected, onToggle, onClose }) {
   );
 }
 
-function Section({ title, children }) {
+function Section({ title, children, action }) {
   return (
     <section style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--border)" }}>
-      <h3 className="muted-soft" style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", margin: "0 0 8px" }}>
-        {title}
-      </h3>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, margin: "0 0 8px" }}>
+        <h3 className="muted-soft" style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", margin: 0 }}>
+          {title}
+        </h3>
+        {action}
+      </div>
       {children}
     </section>
   );
