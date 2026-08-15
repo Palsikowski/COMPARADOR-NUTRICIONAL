@@ -8,7 +8,7 @@ const NUTRIENTS = [
   ["N", "Nitrogênio"], ["P2O5", "Fósforo (P₂O₅)"], ["K2O", "Potássio (K₂O)"], ["Ca", "Cálcio"],
   ["Mg", "Magnésio"], ["S", "Enxofre"], ["B", "Boro"], ["Cu", "Cobre"], ["Mn", "Manganês"],
   ["Zn", "Zinco"], ["Fe", "Ferro"], ["Mo", "Molibdênio"], ["Ni", "Níquel"], ["Co", "Cobalto"],
-  ["C_Org", "Carbono orgânico"],
+  ["Cl", "Cloro"], ["C_Org", "Carbono orgânico"],
 ];
 const LABEL = Object.fromEntries(NUTRIENTS);
 

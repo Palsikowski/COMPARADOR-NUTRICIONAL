@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Camera, Upload, Loader2, AlertTriangle, Info, Search, ArrowRight } from "lucide-react";
 import { matchProductsFromText, confidenceLabel } from "../lib/photoMatch.js";
+import { PRODUCTS } from "../data/products.js";
 import { NutrientPillRow } from "../dashboard/NutrientPill.jsx";
 import DataBadge from "../components/DataBadge.jsx";
 import { concentrationUnit } from "../lib/economics.js";
@@ -9,7 +10,7 @@ const NUTRIENT_META = {
   N: { label: "Nitrogênio" }, P2O5: { label: "Fósforo (P2O5)" }, K2O: { label: "Potássio (K2O)" },
   Ca: { label: "Cálcio" }, Mg: { label: "Magnésio" }, S: { label: "Enxofre" }, B: { label: "Boro" },
   Cu: { label: "Cobre" }, Mn: { label: "Manganês" }, Zn: { label: "Zinco" }, Fe: { label: "Ferro" },
-  Mo: { label: "Molibdênio" }, Ni: { label: "Níquel" }, Co: { label: "Cobalto" }, C_Org: { label: "Carbono orgânico" },
+  Mo: { label: "Molibdênio" }, Ni: { label: "Níquel" }, Co: { label: "Cobalto" }, Cl: { label: "Cloro" }, C_Org: { label: "Carbono orgânico" },
 };
 
 // Identificação por foto do rótulo.
@@ -77,8 +78,8 @@ export default function PhotoId({ onOpenProduct }) {
       <header style={{ marginBottom: 18 }}>
         <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0, letterSpacing: "-0.02em" }}>Identificar por foto</h1>
         <p className="muted" style={{ fontSize: 14.5, margin: "6px 0 0", lineHeight: 1.55 }}>
-          Fotografe o rótulo do produto. O app lê o nome impresso na embalagem, no próprio aparelho, e procura no
-          catálogo de 1.518 produtos.
+          Fotografe o rótulo do produto. O app lê o nome impresso na embalagem, no próprio aparelho, e procura nos{" "}
+          {PRODUCTS.length.toLocaleString("pt-BR")} produtos do catálogo.
         </p>
       </header>
 

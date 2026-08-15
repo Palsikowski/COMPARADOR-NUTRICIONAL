@@ -20,7 +20,7 @@ function norm(s) {
 }
 
 // Virtualização simples por janela: renderiza só as linhas visíveis (mais uma
-// margem acima/abaixo). Sem biblioteca — o catálogo tem 1.518 itens e uma
+// margem acima/abaixo). Sem biblioteca — o catálogo tem ~1.600 itens e uma
 // grade completa no DOM trava celular.
 function useWindowed({ total, perRow, rowHeight, overscan = 4 }) {
   const [range, setRange] = useState({ start: 0, end: 30 });

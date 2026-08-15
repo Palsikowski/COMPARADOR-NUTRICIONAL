@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Plus, Check, AlertTriangle, Lightbulb, Leaf, Pencil } from "lucide-react";
+import { X, Plus, Check, AlertTriangle, Lightbulb, Leaf, Pencil, Beaker, Droplets, Sparkles, FlaskConical, ArrowLeftRight } from "lucide-react";
 import { nutrientColor } from "../dashboard/nutrientColors.js";
 import { concentrationUnit, doseUnit, fmtNum } from "../lib/economics.js";
 import { provenanceOf } from "../lib/provenance.js";
@@ -12,7 +12,7 @@ import { isEdited } from "../lib/overrides.js";
 const NUTRIENT_LABEL = {
   N: "Nitrogênio", P2O5: "Fósforo (P₂O₅)", K2O: "Potássio (K₂O)", Ca: "Cálcio", Mg: "Magnésio",
   S: "Enxofre", B: "Boro", Cu: "Cobre", Mn: "Manganês", Zn: "Zinco", Fe: "Ferro", Mo: "Molibdênio",
-  Ni: "Níquel", Co: "Cobalto", C_Org: "Carbono orgânico",
+  Ni: "Níquel", Co: "Cobalto", Cl: "Cloro", C_Org: "Carbono orgânico",
 };
 
 // Ficha técnica: tudo que o cadastro tem sobre o produto, com a origem do
@@ -25,6 +25,9 @@ export default function ProductSheet({ product, selected, onToggle, onClose, onE
     .filter(([, v]) => Number(v) > 0)
     .sort((a, b) => b[1] - a[1]);
   const unit = concentrationUnit(product);
+  const percentOnly = Object.entries(product.nutrientsPercent || {})
+    .filter(([, v]) => Number(v) > 0)
+    .sort((a, b) => b[1] - a[1]);
   const pos = positioningFor(product.id);
 
   return (
@@ -110,6 +113,35 @@ export default function ProductSheet({ product, selected, onToggle, onClose, onE
               }}
               onCancel={() => setEditing(false)}
             />
+          ) : nutrients.length === 0 && percentOnly.length > 0 ? (
+            /* Produto cuja fonte só traz %m/m e sem densidade (líquido) — dá
+               pra mostrar a garantia declarada, mas não converter pra g/L. */
+            <>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {percentOnly.map(([k, v]) => (
+                  <div key={k} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13 }}>
+                    <span style={{ width: 9, height: 9, borderRadius: 2, background: nutrientColor(k), flexShrink: 0 }} />
+                    <span style={{ flex: 1 }}>{NUTRIENT_LABEL[k] || k}</span>
+                    <span className="tnum" style={{ fontWeight: 700 }}>{fmtNum(v)}% m/m</span>
+                  </div>
+                ))}
+              </div>
+              <div
+                style={{
+                  marginTop: 10,
+                  padding: "10px 12px",
+                  borderRadius: "var(--radius-sm)",
+                  background: "var(--warn-soft)",
+                  border: "1px solid color-mix(in srgb, var(--warn) 22%, transparent)",
+                  fontSize: 12,
+                  lineHeight: 1.55,
+                }}
+              >
+                O material traz só o percentual e não informa a densidade (nem se o produto é sólido), então não dá pra
+                calcular g/L ou g/kg — por isso este produto ainda não entra nas contas de custo por nutriente. Use
+                <strong> Editar</strong> acima para informar a apresentação e a densidade.
+              </div>
+            </>
           ) : nutrients.length === 0 ? (
             <p className="muted" style={{ fontSize: 13, margin: 0, lineHeight: 1.55 }}>
               {product.composition || "Sem composição nutricional cadastrada para este produto."}
@@ -219,6 +251,81 @@ export default function ProductSheet({ product, selected, onToggle, onClose, onE
           </Section>
         )}
 
+        {(product.technology || product.chelate || product.line || product.formulation) && (
+          <Section title="Tecnologia e formulação">
+            <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+              {product.technology && <Fact icon={<Beaker size={14} />} label="Tecnologia" value={product.technology} />}
+              {product.chelate && <Fact icon={<FlaskConical size={14} />} label="Quelatizante" value={product.chelate} />}
+              {product.formulation && <Fact icon={<Droplets size={14} />} label="Formulação" value={product.formulation} />}
+              {product.line && <Fact label="Linha" value={product.line} />}
+            </div>
+          </Section>
+        )}
+
+        {(product.applicationPhase || product.mixOrder || product.compatibility) && (
+          <Section title="Aplicação">
+            <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+              {product.applicationPhase && <Fact icon={<Leaf size={14} />} label="Fase / modo" value={product.applicationPhase} />}
+              {product.mixOrder && <Fact label="Ordem de mistura" value={product.mixOrder} />}
+              {product.compatibility && <Fact label="Compatibilidade" value={product.compatibility} />}
+            </div>
+          </Section>
+        )}
+
+        {(product.ph || product.salineIndex) && (
+          <Section title="Propriedades físico-químicas">
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {product.ph && <Stat label="pH" value={product.ph} />}
+              {product.salineIndex && <Stat label="Índice salino" value={`${product.salineIndex}%`} />}
+              {product.density && <Stat label="Densidade" value={`${product.density} kg/L`} />}
+            </div>
+          </Section>
+        )}
+
+        {product.benefits && (
+          <Section title="Benefícios declarados pelo fabricante">
+            <div style={{ display: "flex", gap: 8, fontSize: 12.5, lineHeight: 1.55 }}>
+              <Sparkles size={15} style={{ color: "var(--info)", flexShrink: 0, marginTop: 1 }} />
+              <span className="muted" style={{ whiteSpace: "pre-line" }}>{product.benefits}</span>
+            </div>
+            <p className="muted-soft" style={{ fontSize: 10.5, margin: "7px 0 0", lineHeight: 1.5 }}>
+              Texto do material comercial do fabricante — não é avaliação nossa.
+            </p>
+          </Section>
+        )}
+
+        {product.evidence && (
+          <Section title="Resultado citado pelo fabricante">
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                fontSize: 12.5,
+                lineHeight: 1.55,
+                background: "var(--info-soft)",
+                border: "1px solid color-mix(in srgb, var(--info) 15%, transparent)",
+                borderRadius: "var(--radius-sm)",
+                padding: "10px 12px",
+              }}
+            >
+              <FlaskConical size={15} style={{ color: "var(--info)", flexShrink: 0, marginTop: 1 }} />
+              <span style={{ whiteSpace: "pre-line" }}>{product.evidence}</span>
+            </div>
+            <p className="muted-soft" style={{ fontSize: 10.5, margin: "7px 0 0", lineHeight: 1.5 }}>
+              Resultado citado no material do fabricante, sem ensaio independente verificado por nós.
+            </p>
+          </Section>
+        )}
+
+        {product.agroceteEquivalent && (
+          <Section title="Correlato Agrocete indicado no material">
+            <div style={{ display: "flex", gap: 8, fontSize: 13, alignItems: "center" }}>
+              <ArrowLeftRight size={15} style={{ color: "var(--brand)", flexShrink: 0 }} />
+              <strong>{product.agroceteEquivalent}</strong>
+            </div>
+          </Section>
+        )}
+
         <Section title="Origem do dado">
           <p className="muted" style={{ fontSize: 12, margin: 0, lineHeight: 1.55 }}>
             {product.fonte || "Fonte não informada."}
@@ -245,6 +352,27 @@ export default function ProductSheet({ product, selected, onToggle, onClose, onE
           {selected ? "Selecionado — remover do manejo" : "Adicionar ao manejo"}
         </button>
       </div>
+    </div>
+  );
+}
+
+function Fact({ icon, label, value }) {
+  return (
+    <div style={{ display: "flex", gap: 8, fontSize: 12.5, lineHeight: 1.5 }}>
+      {icon && <span style={{ color: "var(--text-3)", flexShrink: 0, marginTop: 1 }}>{icon}</span>}
+      <span style={{ minWidth: 0 }}>
+        <span className="muted-soft" style={{ fontWeight: 700 }}>{label}: </span>
+        <span className="muted">{value}</span>
+      </span>
+    </div>
+  );
+}
+
+function Stat({ label, value }) {
+  return (
+    <div style={{ padding: "8px 11px", background: "var(--surface-2)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)" }}>
+      <div className="muted-soft" style={{ fontSize: 10.5 }}>{label}</div>
+      <div className="tnum" style={{ fontSize: 14, fontWeight: 700, marginTop: 1 }}>{value}</div>
     </div>
   );
 }
