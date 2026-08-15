@@ -60,6 +60,7 @@ export default function Catalog({ initialSearch = "", initialGroupBy = "categori
   const [view, setView] = useState(() => (typeof window !== "undefined" && window.innerWidth < 720 ? "list" : "grid"));
   const [selected, setSelected] = useState(() => loadSelection());
   const [sheetProduct, setSheetProduct] = useState(null);
+  const [editNonce, setEditNonce] = useState(0); // força redesenho após editar composição
   const doseOverrides = useMemo(() => loadDoseOverrides(), []);
 
   useEffect(() => saveSelection(selected), [selected]);
@@ -94,7 +95,7 @@ export default function Catalog({ initialSearch = "", initialGroupBy = "categori
       if (ka !== kb) return ka.localeCompare(kb);
       return a.name.localeCompare(b.name);
     });
-  }, [q, brand, categoryFilter, nutrientFilter, groupBy]);
+  }, [q, brand, categoryFilter, nutrientFilter, groupBy, editNonce]);
 
   // useColumns tem que ser chamado sempre (regra dos hooks) — o modo lista só
   // ignora o resultado e usa 1 por linha.
@@ -321,6 +322,7 @@ export default function Catalog({ initialSearch = "", initialGroupBy = "categori
           selected={!!selected[sheetProduct.id]}
           onToggle={() => toggle(sheetProduct)}
           onClose={() => setSheetProduct(null)}
+          onEdited={() => setEditNonce((n) => n + 1)}
         />
       )}
     </div>
