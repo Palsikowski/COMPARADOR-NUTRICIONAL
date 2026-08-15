@@ -25,6 +25,7 @@ const NUTRIENT_LABEL = {
   Mo: "Molibdênio",
   Ni: "Níquel",
   Co: "Cobalto",
+  Cl: "Cloro",
   C_Org: "Carbono orgânico",
 };
 

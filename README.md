@@ -18,7 +18,7 @@ A navegação do topo tem cinco entradas, além da home:
 - **Produtos** — catálogo completo por categoria. É também para onde a
   busca da home leva, já filtrada.
 - **Empresas** — o mesmo catálogo aberto por marca, para percorrer o
-  portfólio de cada uma das 58 empresas.
+  portfólio de cada uma das 61 empresas.
 - **Manejos** — catálogo com os manejos oficiais por cultura e estádio já
   abertos.
 - **Calculadora Custo/ha** — comparação A vs B: visão geral, composição
@@ -35,7 +35,7 @@ dose e exportação em PDF.
 
 ## Catálogo em grade (Produtos / Empresas)
 
-A navegação do catálogo é uma **grade virtualizada** sobre os 1.518 produtos,
+A navegação do catálogo é uma **grade virtualizada** sobre os 1.595 produtos,
 com barra de filtros fixa no topo.
 
 - **Colunas:** 4 (≥1240px), 3 (≥940px), 2 (≥640px), 1 no celular.
@@ -84,7 +84,7 @@ o desfazer.
 
 ### Virtualização
 
-Renderizar 1.518 cards de uma vez trava celular, então só as linhas visíveis
+Renderizar 1.595 cards de uma vez trava celular, então só as linhas visíveis
 (mais uma margem) vão ao DOM — medido: **52 cards no DOM**, constante ao
 rolar. Não foi usada biblioteca: a janela é calculada a partir do scroll
 (`useWindowed` em `src/pages/Catalog.jsx`).
@@ -153,7 +153,7 @@ Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
 - **É leitura de texto (OCR), não reconhecimento visual da embalagem.** Não
   existe nenhuma foto de produto cadastrada na base, então não há como treinar
   reconhecimento por aparência. O que dá para ler com segurança é o nome
-  impresso, e casá-lo com os 1.518 nomes do catálogo.
+  impresso, e casá-lo com os 1.595 nomes do catálogo.
 - **Roda no aparelho.** O leitor (worker, núcleo WebAssembly e modelo de
   idioma, ~14 MB em `public/ocr/`) é servido pelo próprio app, não por CDN —
   sem isso a função só funcionaria com internet, o oposto do que o campo
@@ -212,12 +212,12 @@ Situação atual do catálogo (medida, não estimada):
 
 | Dado | Cobertura |
 | --- | --- |
-| Nome, marca, categoria | 1518 / 1518 |
-| Origem do dado (`fonte`) | 1518 / 1518 |
-| Composição nutricional | 1084 / 1518 |
-| Dose de referência | **248 / 1518** |
-| Densidade | 737 / 1518 |
-| Posicionamento por cultura/estádio | **16 / 1518** (só produtos Agrocete dos manejos oficiais de Soja, Milho e Algodão) |
+| Nome, marca, categoria | 1595 / 1595 |
+| Origem do dado (`fonte`) | 1595 / 1595 |
+| Composição nutricional | 1123 / 1595 |
+| Dose de referência | **248 / 1595** |
+| Densidade | 761 / 1595 |
+| Posicionamento por cultura/estádio | **16 / 1595** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
 | Preço | **0** — preço não está no catálogo, é sempre informado pelo usuário |
 
 Consequências práticas, que a interface deixa explícitas:
@@ -228,9 +228,11 @@ Consequências práticas, que a interface deixa explícitas:
 - **Posicionamento por cultura/estádio existe para 16 produtos.** Nos
   demais a plataforma diz "sem posicionamento cadastrado", em vez de
   inferir cultura a partir da categoria.
-- **Não existem campos de tecnologia, ensaio ou preço histórico** no
-  catálogo — por isso não há filtro por tecnologia nem índice com
-  evidência experimental (ver "O que ainda não existe").
+- **Tecnologia, ensaio e preço histórico ainda não cobrem o catálogo.**
+  As planilhas BRANDT/Bience/Microxisto/ICL trouxeram `technology` para 30
+  produtos e `evidence` para 10 — o suficiente para exibir na ficha técnica,
+  longe do suficiente para virar filtro ou entrar no índice (ver "O que ainda
+  não existe").
 
 ### Confiabilidade dos dados
 
@@ -238,7 +240,7 @@ Todo produto carrega um selo derivado do campo `fonte`, clicável para ver
 a origem registrada (`src/lib/provenance.js`):
 
 - **✓ Planilha oficial** (308 produtos) — planilha interna Agrocete.
-- **✓ Dado informado** (993) — planilhas enviadas pela equipe, sem
+- **✓ Dado informado** (1070) — planilhas enviadas pela equipe, sem
   conferência contra ficha técnica do fabricante.
 - **⚠ Não verificado** (217) — produtos que entraram só como nome na
   matriz de equivalência, sem composição conferida.
@@ -263,10 +265,11 @@ dado que as sustenta não existe no catálogo** — implementá-las hoje
 significaria inventar informação agronômica:
 
 - **Filtro por tecnologia** (quelato, complexado, aminoácidos, fosfitos,
-  carboxílicos): não há campo de tecnologia. Uma varredura no texto livre
-  de composição/observações encontra menção a alguma dessas tecnologias em
-  ~66 produtos (4% do catálogo) — insuficiente e não confiável para virar
-  filtro. Precisa de um campo `technology` na planilha-fonte.
+  carboxílicos): o campo `technology` agora existe, mas está preenchido em
+  **30 de 1595 produtos** (2%), vindo só das quatro planilhas mais recentes.
+  Um filtro por tecnologia hoje esconderia 98% do catálogo, então ele
+  aparece apenas na ficha técnica de quem tem o dado. Vira filtro quando a
+  coluna existir nas planilhas-fonte das demais marcas.
 - **Filtro por cultura e por estádio de aplicação**: existe só para 16
   produtos (1%). Um filtro de cultura hoje esconderia 99% do catálogo.
 - **Página de empresa com logo e descrição**: o catálogo tem só o nome da
@@ -334,7 +337,7 @@ já entraram: uma planilha com as colunas correspondentes.
   bottom sheet, estilo do slider.
 - `src/PasswordGate.jsx` — tela de senha antes de carregar o dashboard.
 - `src/main.jsx` — ponto de entrada React.
-- `src/data/products.js` — catálogo de 1518 produtos (Agrocete + 57
+- `src/data/products.js` — catálogo de 1595 produtos (Agrocete + 60
   marcas concorrentes), gerado a partir das planilhas internas e das
   planilhas/PDFs enviados pelo usuário ao longo do projeto.
 - `src/data/equivalences.js` — matriz de 35 linhas de produto,
@@ -431,6 +434,73 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
   planilha acima, não entraram em `nutrients` (não são macro/micronutriente
   no mesmo sentido dos demais) — ficaram registrados como texto em
   `observations` de cada produto, pra não perder a informação.
+
+- **BRANDT, Bience, Microxisto e ICL 2023** — quatro planilhas enviadas
+  pelo usuário, que trouxeram **77 produtos novos**, **3 marcas novas**
+  (BRANDT, BIENCE, MICROXISTO) e **14 enriquecimentos** de produtos ICL que
+  já estavam no catálogo:
+
+  | Planilha | Produtos | Com concentração |
+  | --- | --- | --- |
+  | Portfólio comercial BRANDT | 27 | 15 |
+  | Catálogo Bience Digital | 23 | 3 |
+  | Operação X (Microxisto) | 11 | 9 |
+  | Portfólio de Produtos ICL 2023 | 16 novos + 14 enriquecidos | 34 (marca toda) |
+
+  Regras seguidas na importação, todas iguais às das planilhas anteriores:
+
+  - **Conversão de garantia** — a mesma de sempre: `%m/m × densidade × 10`
+    → g/L (líquido) ou `%m/m × 10` → g/kg (sólido). Quando a planilha trazia
+    **os dois** valores (`% (g/L)`), a densidade foi *derivada* do par e só
+    aceita se todas as leituras do produto concordassem entre si (tolerância
+    de 0,05); discordando, a densidade fica em branco em vez de ser chutada.
+  - **Produto sem densidade e sem g/L** (9 casos, ex.: BRANDT MaxEdge DC)
+    entra com a composição **em % apenas**, exibida como percentual na ficha
+    com um aviso explícito de que não dá para calcular custo por kg de
+    nutriente sem a densidade. Não foi assumida densidade 1,0.
+  - **Garantias combinadas** ("B/Cu 0,1", "Mn+Cu 1,5%", "Co, Mo, Ni, Zn, S,
+    Mg") não foram divididas entre os nutrientes — iriam virar número
+    inventado. Ficaram como texto em `observations`.
+  - **Enriquecimento, não sobrescrita** — os 14 produtos ICL que já existiam
+    receberam apenas os **campos novos**; nenhuma garantia numérica já
+    conferida foi trocada. Onde as duas fontes divergem (PROFOL
+    Produtividade: Cu 5 na base × 3 no material novo; B 15 × 18), **manteve-se
+    o valor da base interna** e a divergência está escrita nas observações do
+    produto, visível na ficha técnica.
+  - **Cloro (`Cl`)** virou nutriente de primeira classe (cor e rótulo
+    próprios) porque aparece declarado nessas planilhas — antes seria
+    descartado.
+  - **"P" e "K" nos materiais ICL** foram interpretados como **P2O5/K2O**
+    (convenção de rótulo no Brasil). Isso está anotado nas observações dos
+    produtos afetados para conferência contra a ficha técnica do fabricante.
+
+### Campos novos da ficha técnica
+
+Essas planilhas traziam informação que não cabia em nenhum campo existente e
+que seria perdida se fosse jogada em `observations`. Em vez disso, o produto
+ganhou campos próprios, e a ficha técnica (`src/components/ProductSheet.jsx`)
+ganhou seções que **só aparecem quando o campo existe** — produto sem o dado
+não mostra seção vazia nem texto genérico:
+
+| Campo | Seção na ficha | Produtos |
+| --- | --- | --- |
+| `line` | linha/família comercial no cabeçalho | 90 |
+| `technology` | Tecnologia e formulação | 30 |
+| `formulation` | Tecnologia e formulação | 23 |
+| `chelate` | Tecnologia e formulação (quelatizante) | 5 |
+| `applicationPhase` | Aplicação (fase/modo) | 41 |
+| `mixOrder` | Aplicação (ordem de mistura na calda) | 4 |
+| `compatibility` | Aplicação (compatibilidade declarada) | 10 |
+| `ph` | Propriedades físico-químicas | 8 |
+| `salineIndex` | Propriedades físico-químicas | 3 |
+| `benefits` | Benefícios declarados | 79 |
+| `evidence` | Resultado citado | 10 |
+| `agroceteEquivalent` | Correlato Agrocete | 2 |
+
+Os textos de `benefits` e `evidence` são **transcrição do material do
+fabricante**, não avaliação da plataforma — a ficha diz isso na própria
+seção ("declarados", "resultado citado"), e nada disso entra no NCI nem em
+qualquer cálculo.
 
 **Limitações conhecidas dos dados** (herdadas das planilhas-fonte, não
 "corrigidas" para não inventar informação):

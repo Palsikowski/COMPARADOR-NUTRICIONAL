@@ -3,7 +3,7 @@
 // O reconhecimento é por **texto do rótulo** (OCR), não por aparência da
 // embalagem: não existe nenhuma foto de produto cadastrada na base, então não
 // há como treinar reconhecimento visual. O nome impresso no rótulo é o dado
-// que dá pra ler e casar com os 1518 nomes do catálogo.
+// que dá pra ler e casar com os nomes do catálogo.
 //
 // Como o OCR erra letras (rótulo curvo, brilho, ângulo), o casamento é
 // tolerante: normaliza, compara por tokens e usa distância de edição. O

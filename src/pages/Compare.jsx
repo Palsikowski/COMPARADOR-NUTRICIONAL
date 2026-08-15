@@ -26,10 +26,11 @@ const NUTRIENT_LABEL = {
   Mo: "Molibdênio",
   Ni: "Níquel",
   Co: "Cobalto",
+  Cl: "Cloro",
   C_Org: "Carbono orgânico",
 };
 
-const ORDER = ["N", "P2O5", "K2O", "Ca", "Mg", "S", "B", "Cu", "Mn", "Zn", "Fe", "Mo", "Ni", "Co", "C_Org"];
+const ORDER = ["N", "P2O5", "K2O", "Ca", "Mg", "S", "B", "Cu", "Mn", "Zn", "Fe", "Mo", "Ni", "Co", "Cl", "C_Org"];
 
 // Estado por produto na comparação: dose e preço são entradas do usuário.
 // A dose começa na dose de referência do catálogo quando existe (só 16% dos

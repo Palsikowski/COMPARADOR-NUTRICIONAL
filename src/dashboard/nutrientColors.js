@@ -20,6 +20,7 @@ export const NUTRIENT_COLORS = {
   Mo: "#818CF8", // índigo
   Ni: "#94A3B8", // cinza-azulado
   Co: "#C084FC", // lilás
+  Cl: "#7DD3FC", // azul gelo (cloro)
   C_Org: "#D6A45C", // marrom claro (matéria orgânica)
 };
 
@@ -45,6 +46,7 @@ export const NUTRIENT_SHORT = {
   Mo: "Mo",
   Ni: "Ni",
   Co: "Co",
+  Cl: "Cl",
   C_Org: "C.Org",
 };
 
