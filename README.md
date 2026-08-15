@@ -33,6 +33,77 @@ já existia — ele continua intacto, com manejo atual lado a lado, manejos
 prontos, sugestão automática de manejo Agrocete, manejos salvos, trava de
 dose e exportação em PDF.
 
+## Manejos Agrocete
+
+Aba própria com o posicionamento por cultura e estádio, direto dos materiais
+oficiais. Hoje são **5 manejos**:
+
+| Manejo | Etapas | Fonte |
+| --- | --- | --- |
+| Soja | 4 | SOJA — Manejo Atualizado 2024 |
+| Milho | 3 | MILHO — Manejo Atualizado 2024 |
+| Algodão | 6 | ALGODÃO — Manejo Atualizado 2024 |
+| **Sorgo** | 6 | POSICIONAMENTO SORGO (pág. 1) |
+| **Milho (posicionamento 2024)** | 5 | POSICIONAMENTO SORGO (pág. 2) |
+
+Os dois últimos entraram a partir dos PDFs oficiais enviados pelo usuário. O
+**Sorgo** é cultura nova no app. O **Milho (posicionamento 2024)** difere do
+manejo "Milho" já cadastrado (posiciona Nitro + Grap 104 Fluid em V3–V4 e
+V7–V10, onde o outro usa Organo TOP + EVIC-S) — os dois foram mantidos, cada
+um com sua fonte, porque não dá pra saber pelos arquivos qual é o mais
+recente. A equipe decide qual usar e pode excluir o outro.
+
+As doses e os estádios foram lidos das páginas renderizadas dos PDFs (são
+infográficos: a extração de texto embaralha as colunas, então a leitura foi
+visual, página a página).
+
+### Editar manejos
+
+Os manejos oficiais são **somente leitura** — são a referência publicada pela
+Agrocete. "Editar" cria uma **cópia sua**, guardada no aparelho; o oficial
+continua intacto. Nas cópias dá para renomear, adicionar/remover/reordenar
+etapas, adicionar produtos do catálogo, mudar dose e escrever a observação que
+sai no caderno. Também dá para criar um manejo do zero.
+
+### Caderno de manejo (PDF)
+
+De qualquer manejo sai um **caderno para apresentar ao cliente**: capa com o
+nome do manejo, cliente/fazenda e a fonte; uma seção por etapa; e, para cada
+produto, a garantia nutricional, a observação de dose, as observações do
+cadastro e os alertas. Fecha com o total por produto na safra.
+
+O texto de cada produto vem do catálogo — produto sem descrição cadastrada
+aparece dizendo isso, em vez de receber um texto comercial genérico. Quando há
+preços informados, o caderno traz o custo/ha e avisa quantos produtos ficaram
+de fora da conta por não terem preço.
+
+## Identificar por foto
+
+Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
+
+- **É leitura de texto (OCR), não reconhecimento visual da embalagem.** Não
+  existe nenhuma foto de produto cadastrada na base, então não há como treinar
+  reconhecimento por aparência. O que dá para ler com segurança é o nome
+  impresso, e casá-lo com os 1.518 nomes do catálogo.
+- **Roda no aparelho.** O leitor (worker, núcleo WebAssembly e modelo de
+  idioma, ~14 MB em `public/ocr/`) é servido pelo próprio app, não por CDN —
+  sem isso a função só funcionaria com internet, o oposto do que o campo
+  exige. É baixado uma vez e fica no cache do navegador. **A foto não é
+  enviada para lugar nenhum.**
+- **O app nunca decide sozinho.** O resultado é uma lista de candidatos com
+  percentual e rótulo de confiança ("correspondência forte/provável/fraca");
+  quem confirma é a pessoa.
+- **O casamento é tolerante a erro de leitura, mas não a ponto de chutar**
+  (`src/lib/photoMatch.js`): exige uma âncora — um token exato de 4+ letras ou
+  o nome inteiro no texto lido. Sem isso não devolve nada, em vez de sugerir
+  um produto errado com ar de certeza. Rótulos muito danificados pela leitura
+  (letras trocadas por números, brilho) podem não retornar candidato: nesse
+  caso a busca por nome no catálogo continua sendo o caminho.
+
+**Limitação conhecida:** no arquivo único offline (`build:standalone`) essa
+função não opera, porque os arquivos do leitor não podem ser embutidos no
+HTML. Na versão publicada ela funciona normalmente, inclusive depois offline.
+
 ### Busca por estádio fenológico
 
 Buscar `V4` encontra os estádios cujo intervalo contém V4 (Soja `V3–V5` e

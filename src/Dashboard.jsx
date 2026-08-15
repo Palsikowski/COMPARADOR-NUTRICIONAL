@@ -100,8 +100,11 @@ function fmtNum(n) {
   return Number(n).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
 }
 
-export default function Dashboard({ initialSearch = "", initialMode = null, focusPresets = false }) {
-  const [selected, setSelected] = useState(() => loadPersistedState()?.selected ?? {}); // id -> { dose, price }
+export default function Dashboard({ initialSearch = "", initialMode = null, focusPresets = false, initialSelection = null }) {
+  // `initialSelection` vem de um manejo carregado na tela Manejos Agrocete —
+  // substitui a seleção atual em vez de somar, porque a intenção é "abrir
+  // este manejo", não "acrescentar ao que já estava".
+  const [selected, setSelected] = useState(() => initialSelection || loadPersistedState()?.selected || {}); // id -> { dose, price }
   const [customProducts, setCustomProducts] = useState(() => loadPersistedState()?.customProducts ?? []);
   const [templates, setTemplates] = useState(() => loadPersistedState()?.templates ?? []);
   const [doseOverrides, setDoseOverrides] = useState(() => loadPersistedState()?.doseOverrides ?? {}); // id -> { dose, locked }

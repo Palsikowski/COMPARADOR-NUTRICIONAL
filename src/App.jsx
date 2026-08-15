@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Leaf, Sun, Moon, Wifi, WifiOff, Menu, X, ArrowLeftRight } from "lucide-react";
+import { Leaf, Sun, Moon, Wifi, WifiOff, Menu, X, ArrowLeftRight, Camera } from "lucide-react";
 import Home from "./pages/Home.jsx";
 import Compare from "./pages/Compare.jsx";
 import About from "./pages/About.jsx";
+import Managements from "./pages/Managements.jsx";
+import PhotoId from "./pages/PhotoId.jsx";
 import Dashboard from "./Dashboard.jsx";
 import "./theme.css";
 
@@ -15,14 +17,17 @@ const THEME_KEY = "agro-theme";
 const NAV = [
   { id: "produtos", label: "Produtos" },
   { id: "empresas", label: "Empresas" },
-  { id: "manejos", label: "Manejos" },
+  { id: "manejos", label: "Manejos Agrocete" },
   { id: "custo", label: "Calculadora Custo/ha" },
+  { id: "foto", label: "Identificar por foto" },
   { id: "sobre", label: "Sobre" },
 ];
 
 export default function App() {
   const [page, setPage] = useState("home");
   const [catalogSearch, setCatalogSearch] = useState("");
+  const [pendingSelection, setPendingSelection] = useState(null);
+  const [catalogNonce, setCatalogNonce] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(() => {
     try {
@@ -60,10 +65,20 @@ export default function App() {
 
   function goCatalogWith(term) {
     setCatalogSearch(term);
+    setPendingSelection(null);
+    setCatalogNonce((n) => n + 1);
     go("produtos");
   }
 
-  const isCatalog = page === "produtos" || page === "empresas" || page === "manejos";
+  // Carrega um manejo inteiro no catálogo (produtos + doses já preenchidos).
+  function loadSelectionIntoCatalog(selection) {
+    setPendingSelection(selection);
+    setCatalogSearch("");
+    setCatalogNonce((n) => n + 1);
+    go("produtos");
+  }
+
+  const isCatalog = page === "produtos" || page === "empresas";
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -257,13 +272,15 @@ export default function App() {
           <Home onCompare={() => go("custo")} onCatalog={() => go("produtos")} onSearchTerm={goCatalogWith} />
         )}
         {page === "custo" && <Compare onOpenCatalog={() => go("produtos")} />}
+        {page === "manejos" && <Managements onLoadIntoCatalog={loadSelectionIntoCatalog} />}
+        {page === "foto" && <PhotoId onOpenProduct={(p) => goCatalogWith(p.name)} />}
         {page === "sobre" && <About />}
         {isCatalog && (
           <Dashboard
-            key={page}
+            key={`${page}-${catalogNonce}`}
             initialSearch={page === "produtos" ? catalogSearch : ""}
-            initialMode={page === "empresas" ? "marca" : page === "produtos" ? null : "categoria"}
-            focusPresets={page === "manejos"}
+            initialMode={page === "empresas" ? "marca" : null}
+            initialSelection={pendingSelection}
           />
         )}
       </main>
