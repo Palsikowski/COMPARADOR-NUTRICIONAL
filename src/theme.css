@@ -297,3 +297,53 @@ body {
 .spin {
   animation: spin 1s linear infinite;
 }
+
+/* Grade de produtos: 1 → 2 → 3 → 4 colunas. Os mesmos pontos de corte estão
+   em colsFor() no Catalog.jsx, porque a virtualização precisa saber quantos
+   cards cabem por linha pra calcular a altura total da lista. */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  /* Altura de linha FIXA: a virtualização calcula o espaçador pelo passo
+     220 + 12 de gap = 232px (rowHeight no Catalog.jsx). Linha elástica faria
+     o cálculo derivar e a rolagem "pular". */
+  grid-auto-rows: 220px;
+}
+.product-card {
+  overflow: hidden;
+}
+.product-list-row {
+  height: 70px;
+}
+@media (min-width: 640px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 940px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1240px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.product-card {
+  transition: border-color var(--speed) ease, box-shadow var(--speed) ease;
+}
+.product-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+
+/* Ficha técnica: drawer de baixo no celular, caixa centrada no desktop. */
+@media (min-width: 720px) {
+  .sheet-panel {
+    border-radius: var(--radius) !important;
+    margin-bottom: 5vh;
+  }
+}

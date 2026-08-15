@@ -33,6 +33,47 @@ já existia — ele continua intacto, com manejo atual lado a lado, manejos
 prontos, sugestão automática de manejo Agrocete, manejos salvos, trava de
 dose e exportação em PDF.
 
+## Catálogo em grade (Produtos / Empresas)
+
+A navegação do catálogo é uma **grade virtualizada** sobre os 1.518 produtos,
+com barra de filtros fixa no topo.
+
+- **Colunas:** 4 (≥1240px), 3 (≥940px), 2 (≥640px), 1 no celular.
+- **Duas visões:** grade (cards) e **lista compacta** para varredura rápida.
+  No celular abre em lista por padrão; o alternador fica na barra de filtros.
+- **Filtros combinados:** busca, empresa (seletor), grupos de categoria e
+  nutriente (chips deslizantes). Ordenação por Categorias ou Marcas.
+- **Card:** empresa (badge), nome, categoria, composição com **unidade
+  explícita** (g/L ou g/kg), selos, botão "Adicionar" (vira "Selecionado") e
+  botão de **ficha técnica**. Na barra também há atalho para escanear rótulo.
+- **Ficha técnica:** composição completa com %m/m ao lado, dose de referência,
+  posicionamento oficial quando existe, observações, alertas e a origem do
+  dado. Campo sem informação aparece como "não informado" — a ausência também
+  é informação na hora de cotar.
+- **Seleção compartilhada:** marcar um produto na grade alimenta a mesma
+  seleção da aba **Meu manejo** (mesmo `localStorage`), então dá pra montar o
+  manejo navegando e ir direto ao comparativo pela barra inferior.
+
+### Virtualização
+
+Renderizar 1.518 cards de uma vez trava celular, então só as linhas visíveis
+(mais uma margem) vão ao DOM — medido: **52 cards no DOM**, constante ao
+rolar. Não foi usada biblioteca: a janela é calculada a partir do scroll
+(`useWindowed` em `src/pages/Catalog.jsx`).
+
+Para a conta fechar, a altura da linha é **fixa** (`grid-auto-rows: 220px` +
+12px de gap = passo de 232px, o mesmo valor no JS). Linha elástica faria o
+espaçador derivar e a rolagem "pular" — verificado que o passo real é
+exatamente 232px e que o último produto renderiza ao fim da lista.
+
+### Sobre Tailwind
+
+O pedido mencionava Tailwind. O projeto **não usa Tailwind** e não foi migrado:
+os tokens em `src/theme.css` já implementam a paleta pedida (`#F9FAFB`,
+`#FFFFFF`, bordas `#E5E7EB` de 1px, raio 12px, verde `#059669`, transições de
+200ms). Trocar a stack traria risco sem ganho visual — a orientação anterior
+do próprio briefing era não migrar de stack só por estética.
+
 ## Manejos Agrocete
 
 Aba própria com o posicionamento por cultura e estádio, direto dos materiais
