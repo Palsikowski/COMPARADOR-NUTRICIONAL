@@ -50,7 +50,10 @@ export const BRAND_TILES = (() => {
       byBrand.set(p.brand, t);
     }
     t.total += 1;
-    if (p.hasNutrients) t.withComposition += 1;
+    // Conta também quem tem só o percentual declarado: dizer "sem composição"
+    // de um produto cuja garantia está cadastrada em %m/m é falso — o que falta
+    // nele é a densidade para converter, não a composição.
+    if (p.hasNutrients || Object.values(p.nutrientsPercent || {}).some((v) => Number(v) > 0)) t.withComposition += 1;
     if (provenanceOf(p) === LEVELS.OFFICIAL) t.official += 1;
     if (p.category) t.categories.set(p.category, (t.categories.get(p.category) || 0) + 1);
     Object.entries(p.nutrients || {}).forEach(([k, v]) => {
@@ -83,6 +86,23 @@ export function tileFor(brand) {
   return BRAND_TILES.find((t) => t.brand === brand) || null;
 }
 
+// Valores usados no gráfico e a unidade em que estão.
+//
+// Produto convertido tem `nutrients` em g/L ou g/kg. Produto que veio só com o
+// percentual (o material não trazia densidade) tem `nutrientsPercent` e nada
+// mais — ele continua tendo composição declarada, e comparar %m/m entre
+// produtos declarados em %m/m é legítimo. O que não dá é misturar as unidades
+// no mesmo eixo, e disso cuida o agrupamento abaixo.
+export function chartValues(product) {
+  const conv = product.nutrients || {};
+  if (product.hasNutrients && Object.values(conv).some((v) => Number(v) > 0)) {
+    return { unit: concentrationUnit(product), values: conv };
+  }
+  const pct = product.nutrientsPercent || {};
+  if (Object.values(pct).some((v) => Number(v) > 0)) return { unit: "% m/m", values: pct };
+  return null;
+}
+
 /**
  * Prepara os dados do gráfico comparativo de uma seleção de produtos.
  *
@@ -91,18 +111,18 @@ export function tileFor(brand) {
  * 1. **Produto sem composição não vira barra.** Ele não tem número; desenhar
  *    zero faria parecer "entrega nada", que é diferente de "não sabemos".
  *    Volta separado em `withoutData` pra tela dizer isso em texto.
- * 2. **g/L e g/kg não dividem o mesmo eixo.** Um é por litro e o outro por
- *    quilo — comparar as alturas seria comparar coisas diferentes. Quando a
- *    seleção mistura os dois, saem dois gráficos, um por unidade, cada um com
- *    a sua escala.
+ * 2. **g/L, g/kg e %m/m não dividem o mesmo eixo.** Um é por litro, o outro por
+ *    quilo e o terceiro é proporção — comparar as alturas seria comparar coisas
+ *    diferentes. Quando a seleção mistura, sai um gráfico por unidade, cada um
+ *    com a sua escala.
  */
 export function comparisonData(products) {
-  const withData = products.filter((p) => p.hasNutrients && Object.values(p.nutrients || {}).some((v) => Number(v) > 0));
-  const withoutData = products.filter((p) => !withData.includes(p));
+  const withData = products.filter((p) => chartValues(p));
+  const withoutData = products.filter((p) => !chartValues(p));
 
   const byUnit = new Map();
   for (const p of withData) {
-    const unit = concentrationUnit(p);
+    const { unit } = chartValues(p);
     if (!byUnit.has(unit)) byUnit.set(unit, []);
     byUnit.get(unit).push(p);
   }
@@ -112,7 +132,7 @@ export function comparisonData(products) {
     // diferencia os produtos fica no topo, onde o olho começa.
     const totals = new Map();
     items.forEach((p) =>
-      Object.entries(p.nutrients || {}).forEach(([k, v]) => {
+      Object.entries(chartValues(p).values).forEach(([k, v]) => {
         if (Number(v) > 0) totals.set(k, Math.max(totals.get(k) || 0, Number(v)));
       })
     );

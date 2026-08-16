@@ -16,7 +16,13 @@ const GROUPS = [
   {
     id: "nutricao",
     label: "Nutrição",
-    match: ["nutricao e fisiologia", "nutricao", "bioestimulantes", "linha profol", "linha kellus", "linha pro", "linha bees", "sais", "compass minerals"],
+    match: [
+      "nutricao e fisiologia", "nutricao", "bioestimulantes", "linha profol", "linha kellus",
+      "linha pro", "linha bees", "sais", "compass minerals",
+      // linhas do portfólio Gran7
+      "nutricao gran7", "tecnologia complex", "fosfitos", "fisiologicos",
+      "tecnologias anti-estresse", "desalojante de lagartas",
+    ],
   },
   {
     id: "solo",
@@ -26,17 +32,17 @@ const GROUPS = [
   {
     id: "sementes",
     label: "Trat. de sementes",
-    match: ["ts", "inoculante", "nodusoja", "noduagri", "dat"],
+    match: ["ts", "inoculante", "inoculantes", "tratamento de sementes", "nodusoja", "noduagri", "dat"],
   },
   {
     id: "biologicos",
     label: "Biológicos",
-    match: ["biologicos", "controle biologico", "biocontrole"],
+    match: ["biologicos", "controle biologico", "biocontrole", "nematicida fitoquimico"],
   },
   {
     id: "adjuvantes",
     label: "Adjuvantes / Tec. aplicação",
-    match: ["tec. aplic.", "tec. de aplicacao", "adjuvantes"],
+    match: ["tec. aplic.", "tec. de aplicacao", "adjuvantes", "oleos e condicionadores"],
   },
 ];
 

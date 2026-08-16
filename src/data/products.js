@@ -123,11 +123,11 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "S": 52.8,
-      "Zn": 132.0
+      "Zn": 132
     },
     "nutrientsPercent": {
-      "S": 4.0,
-      "Zn": 10.0
+      "S": 4,
+      "Zn": 10
     },
     "density": 1.32,
     "unit": "L/ha",
@@ -152,8 +152,8 @@ export const PRODUCTS = [
       "Mn": 171.6
     },
     "nutrientsPercent": {
-      "S": 7.0,
-      "Mn": 12.0
+      "S": 7,
+      "Mn": 12
     },
     "density": 1.43,
     "unit": "L/ha",
@@ -174,12 +174,12 @@ export const PRODUCTS = [
     "name": "GRAP 110 JE",
     "hasNutrients": true,
     "nutrients": {
-      "Co": 14.0,
-      "Mo": 140.0
+      "Co": 14,
+      "Mo": 140
     },
     "nutrientsPercent": {
-      "Co": 1.0,
-      "Mo": 10.0
+      "Co": 1,
+      "Mo": 10
     },
     "density": 1.4,
     "unit": "L/ha",
@@ -205,7 +205,7 @@ export const PRODUCTS = [
     },
     "nutrientsPercent": {
       "Co": 1.5,
-      "Mo": 15.0
+      "Mo": 15
     },
     "density": 1.61,
     "unit": "L/ha",
@@ -231,9 +231,9 @@ export const PRODUCTS = [
       "Mo": 304.2
     },
     "nutrientsPercent": {
-      "S": 1.0,
-      "Co": 2.0,
-      "Mo": 18.0
+      "S": 1,
+      "Co": 2,
+      "Mo": 18
     },
     "density": 1.69,
     "unit": "L/ha",
@@ -257,7 +257,7 @@ export const PRODUCTS = [
       "Mo": 226.5
     },
     "nutrientsPercent": {
-      "Mo": 15.0
+      "Mo": 15
     },
     "density": 1.51,
     "unit": "L/ha",
@@ -278,10 +278,10 @@ export const PRODUCTS = [
     "name": "GRAP 30K",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 435.0
+      "K2O": 435
     },
     "nutrientsPercent": {
-      "K2O": 30.0
+      "K2O": 30
     },
     "density": 1.45,
     "unit": "L/ha",
@@ -302,10 +302,10 @@ export const PRODUCTS = [
     "name": "GRAP BORIC",
     "hasNutrients": true,
     "nutrients": {
-      "B": 130.0
+      "B": 130
     },
     "nutrientsPercent": {
-      "B": 10.0
+      "B": 10
     },
     "density": 1.3,
     "unit": "L/ha",
@@ -355,7 +355,7 @@ export const PRODUCTS = [
       "Mg": 89.6
     },
     "nutrientsPercent": {
-      "Mg": 7.0
+      "Mg": 7
     },
     "density": 1.28,
     "unit": "L/ha",
@@ -380,8 +380,8 @@ export const PRODUCTS = [
       "S": 332.5
     },
     "nutrientsPercent": {
-      "N": 11.0,
-      "S": 25.0
+      "N": 11,
+      "S": 25
     },
     "density": 1.33,
     "unit": "L/ha",
@@ -402,8 +402,8 @@ export const PRODUCTS = [
     "name": "GRAP Ferro",
     "hasNutrients": true,
     "nutrients": {
-      "S": 30.0,
-      "Fe": 54.0
+      "S": 30,
+      "Fe": 54
     },
     "nutrientsPercent": {
       "S": 2.5,
@@ -411,7 +411,7 @@ export const PRODUCTS = [
     },
     "density": 1.2,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Sulfato de Ferro",
     "source": "Quelato EDTA",
@@ -435,7 +435,7 @@ export const PRODUCTS = [
     },
     "density": 1.31,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "500 a 1500",
     "composition": "Cloreto de Mg",
     "source": null,
@@ -452,12 +452,12 @@ export const PRODUCTS = [
     "name": "GRAP Manganês RR Plus",
     "hasNutrients": true,
     "nutrients": {
-      "S": 50.0,
+      "S": 50,
       "Mn": 87.5
     },
     "nutrientsPercent": {
-      "S": 4.0,
-      "Mn": 7.0
+      "S": 4,
+      "Mn": 7
     },
     "density": 1.25,
     "unit": "L/ha",
@@ -481,17 +481,17 @@ export const PRODUCTS = [
       "S": 67.5,
       "B": 6.75,
       "Cu": 6.75,
-      "Mn": 81.0,
+      "Mn": 81,
       "Mo": 1.35,
       "Zn": 40.5
     },
     "nutrientsPercent": {
-      "S": 5.0,
+      "S": 5,
       "B": 0.5,
       "Cu": 0.5,
-      "Mn": 6.0,
+      "Mn": 6,
       "Mo": 0.1,
-      "Zn": 3.0
+      "Zn": 3
     },
     "density": 1.35,
     "unit": "L/ha",
@@ -512,10 +512,10 @@ export const PRODUCTS = [
     "name": "GRAP NITRO",
     "hasNutrients": true,
     "nutrients": {
-      "N": 384.0
+      "N": 384
     },
     "nutrientsPercent": {
-      "N": 30.0
+      "N": 30
     },
     "density": 1.28,
     "unit": "L/ha",
@@ -537,11 +537,11 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "N": 76.8,
-      "P2O5": 384.0
+      "P2O5": 384
     },
     "nutrientsPercent": {
-      "N": 6.0,
-      "P2O5": 30.0
+      "N": 6,
+      "P2O5": 30
     },
     "density": 1.28,
     "unit": "L/ha",
@@ -565,7 +565,7 @@ export const PRODUCTS = [
       "Cu": 38.4
     },
     "nutrientsPercent": {
-      "Cu": 3.0
+      "Cu": 3
     },
     "density": 1.28,
     "unit": "L/ha",
@@ -586,12 +586,12 @@ export const PRODUCTS = [
     "name": "GRAP PHIL FOSFITO",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 420.0,
-      "K2O": 280.0
+      "P2O5": 420,
+      "K2O": 280
     },
     "nutrientsPercent": {
-      "P2O5": 30.0,
-      "K2O": 20.0
+      "P2O5": 30,
+      "K2O": 20
     },
     "density": 1.4,
     "unit": "L/ha",
@@ -612,12 +612,12 @@ export const PRODUCTS = [
     "name": "GRAP PHIL Mn",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 429.0,
+      "P2O5": 429,
       "Mn": 85.8
     },
     "nutrientsPercent": {
-      "P2O5": 30.0,
-      "Mn": 6.0
+      "P2O5": 30,
+      "Mn": 6
     },
     "density": 1.43,
     "unit": "L/ha",
@@ -638,24 +638,24 @@ export const PRODUCTS = [
     "name": "GRAP TOP FLUID Plus",
     "hasNutrients": true,
     "nutrients": {
-      "N": 189.0,
+      "N": 189,
       "P2O5": 94.5,
       "K2O": 67.5,
       "Mg": 20.25,
       "B": 1.35,
       "Mn": 20.25,
       "Mo": 0.68,
-      "Zn": 27.0
+      "Zn": 27
     },
     "nutrientsPercent": {
-      "N": 14.0,
-      "P2O5": 7.0,
-      "K2O": 5.0,
+      "N": 14,
+      "P2O5": 7,
+      "K2O": 5,
       "Mg": 1.5,
       "B": 0.1,
       "Mn": 1.5,
       "Mo": 0.05,
-      "Zn": 2.0
+      "Zn": 2
     },
     "density": 1.35,
     "unit": "L/ha",
@@ -859,17 +859,17 @@ export const PRODUCTS = [
       "S": 67.5,
       "B": 6.75,
       "Cu": 6.75,
-      "Mn": 81.0,
+      "Mn": 81,
       "Mo": 1.35,
       "Zn": 40.5
     },
     "nutrientsPercent": {
-      "S": 5.0,
+      "S": 5,
       "B": 0.5,
       "Cu": 0.5,
-      "Mn": 6.0,
+      "Mn": 6,
       "Mo": 0.1,
-      "Zn": 3.0
+      "Zn": 3
     },
     "density": 1.35,
     "unit": "L/ha",
@@ -890,8 +890,8 @@ export const PRODUCTS = [
     "name": "GRAP Organo TOP",
     "hasNutrients": true,
     "nutrients": {
-      "N": 60.0,
-      "K2O": 48.0,
+      "N": 60,
+      "K2O": 48,
       "B": 2.4,
       "Co": 0.24,
       "Cu": 0.6,
@@ -899,11 +899,11 @@ export const PRODUCTS = [
       "Mn": 0.6,
       "Mo": 2.4,
       "Zn": 1.2,
-      "C_Org": 168.0
+      "C_Org": 168
     },
     "nutrientsPercent": {
-      "N": 5.0,
-      "K2O": 4.0,
+      "N": 5,
+      "K2O": 4,
       "B": 0.2,
       "Co": 0.02,
       "Cu": 0.05,
@@ -911,11 +911,11 @@ export const PRODUCTS = [
       "Mn": 0.05,
       "Mo": 0.2,
       "Zn": 0.1,
-      "C_Org": 14.0
+      "C_Org": 14
     },
     "density": 1.2,
     "unit": "L/ha",
-    "defaultDose": 2.0,
+    "defaultDose": 2,
     "doseRaw": "1000 a 3000",
     "composition": "Sulfatos: Zn, Mn, Fe, Co, Cu, Uréia, ácido borico, Fosfito de K, Molibdato de Na",
     "source": "Quelato / Complexo por MO (Mel Residual)",
@@ -936,8 +936,8 @@ export const PRODUCTS = [
       "Mo": 89.6
     },
     "nutrientsPercent": {
-      "Co": 1.0,
-      "Mo": 7.0
+      "Co": 1,
+      "Mo": 7
     },
     "density": 1.28,
     "unit": "L/ha",
@@ -962,8 +962,8 @@ export const PRODUCTS = [
       "Mo": 24.2
     },
     "nutrientsPercent": {
-      "B": 5.0,
-      "Mo": 2.0
+      "B": 5,
+      "Mo": 2
     },
     "density": 1.21,
     "unit": "L/ha",
@@ -985,11 +985,11 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "Co": 22.95,
-      "Mo": 108.0
+      "Mo": 108
     },
     "nutrientsPercent": {
       "Co": 1.7,
-      "Mo": 8.0
+      "Mo": 8
     },
     "density": 1.35,
     "unit": "L/ha",
@@ -1396,7 +1396,7 @@ export const PRODUCTS = [
     },
     "nutrientsPercent": {
       "Co": 0.3,
-      "Mo": 3.0,
+      "Mo": 3,
       "Ni": 0.3
     },
     "density": 1.18,
@@ -1428,7 +1428,7 @@ export const PRODUCTS = [
       "N": 1.6,
       "S": 1.15,
       "B": 0.6,
-      "Zn": 7.0,
+      "Zn": 7,
       "C_Org": 7.9
     },
     "density": 1.34,
@@ -1451,17 +1451,17 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "Co": 14.1,
-      "Mo": 141.0,
+      "Mo": 141,
       "Ni": 14.1
     },
     "nutrientsPercent": {
-      "Co": 1.0,
-      "Mo": 10.0,
-      "Ni": 1.0
+      "Co": 1,
+      "Mo": 10,
+      "Ni": 1
     },
     "density": 1.41,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,2 L/há",
     "composition": null,
     "source": "Quelato",
@@ -1479,19 +1479,19 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "Mg": 13.6,
-      "S": 68.0,
+      "S": 68,
       "B": 2.72,
       "Cu": 2.72,
-      "Mn": 68.0,
+      "Mn": 68,
       "Zn": 40.8
     },
     "nutrientsPercent": {
-      "Mg": 1.0,
-      "S": 5.0,
+      "Mg": 1,
+      "S": 5,
       "B": 0.2,
       "Cu": 0.2,
-      "Mn": 5.0,
-      "Zn": 3.0
+      "Mn": 5,
+      "Zn": 3
     },
     "density": 1.36,
     "unit": "L/ha",
@@ -1519,11 +1519,11 @@ export const PRODUCTS = [
     "nutrientsPercent": {
       "N": 4.9,
       "Cu": 5.6,
-      "C_Org": 29.0
+      "C_Org": 29
     },
     "density": 1.23,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,25 L/há",
     "composition": null,
     "source": "COT + E.A. + A.A",
@@ -1540,22 +1540,22 @@ export const PRODUCTS = [
     "name": "Supremmo",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 80.0,
-      "Mg": 20.0,
-      "S": 129.0,
-      "B": 15.0,
-      "Cu": 5.0,
-      "Mn": 140.0,
-      "Zn": 45.0,
-      "Ni": 4.0
+      "K2O": 80,
+      "Mg": 20,
+      "S": 129,
+      "B": 15,
+      "Cu": 5,
+      "Mn": 140,
+      "Zn": 45,
+      "Ni": 4
     },
     "nutrientsPercent": {
-      "K2O": 8.0,
-      "Mg": 2.0,
+      "K2O": 8,
+      "Mg": 2,
       "S": 12.9,
       "B": 1.5,
       "Cu": 0.5,
-      "Mn": 14.0,
+      "Mn": 14,
       "Zn": 4.5,
       "Ni": 0.4
     },
@@ -1578,7 +1578,7 @@ export const PRODUCTS = [
     "name": "Primme",
     "hasNutrients": true,
     "nutrients": {
-      "N": 139.0,
+      "N": 139,
       "P2O5": 27.8,
       "K2O": 83.4,
       "Ca": 13.9,
@@ -1592,18 +1592,18 @@ export const PRODUCTS = [
       "C_Org": 194.6
     },
     "nutrientsPercent": {
-      "N": 10.0,
-      "P2O5": 2.0,
-      "K2O": 6.0,
-      "Ca": 1.0,
-      "Mg": 1.0,
+      "N": 10,
+      "P2O5": 2,
+      "K2O": 6,
+      "Ca": 1,
+      "Mg": 1,
       "B": 0.5,
       "Cu": 0.2,
       "Fe": 0.1,
-      "Mn": 1.0,
+      "Mn": 1,
       "Mo": 0.1,
-      "Zn": 1.0,
-      "C_Org": 14.0
+      "Zn": 1,
+      "C_Org": 14
     },
     "density": 1.39,
     "unit": "L/ha",
@@ -1631,15 +1631,15 @@ export const PRODUCTS = [
       "Zn": 6.05
     },
     "nutrientsPercent": {
-      "N": 3.0,
-      "K2O": 7.0,
+      "N": 3,
+      "K2O": 7,
       "B": 0.1,
       "Mn": 0.5,
       "Zn": 0.5
     },
     "density": 1.21,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,25 L/há",
     "composition": null,
     "source": null,
@@ -1658,14 +1658,14 @@ export const PRODUCTS = [
     "nutrients": {
       "N": 70.2,
       "K2O": 29.7,
-      "S": 27.0,
-      "C_Org": 243.0
+      "S": 27,
+      "C_Org": 243
     },
     "nutrientsPercent": {
       "N": 5.2,
       "K2O": 2.2,
-      "S": 2.0,
-      "C_Org": 18.0
+      "S": 2,
+      "C_Org": 18
     },
     "density": 1.35,
     "unit": "L/ha",
@@ -1695,7 +1695,7 @@ export const PRODUCTS = [
     },
     "density": 1.13,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,2 L/há",
     "composition": "Aminoácidos",
     "source": null,
@@ -1732,10 +1732,10 @@ export const PRODUCTS = [
     "name": "Boralg",
     "hasNutrients": true,
     "nutrients": {
-      "B": 134.0
+      "B": 134
     },
     "nutrientsPercent": {
-      "B": 10.0
+      "B": 10
     },
     "density": 1.34,
     "unit": "L/ha",
@@ -1756,14 +1756,14 @@ export const PRODUCTS = [
     "name": "Molibdênio 15%",
     "hasNutrients": true,
     "nutrients": {
-      "Mo": 210.0
+      "Mo": 210
     },
     "nutrientsPercent": {
-      "Mo": 15.0
+      "Mo": 15
     },
     "density": 1.4,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,2 L/há",
     "composition": null,
     "source": null,
@@ -1780,18 +1780,18 @@ export const PRODUCTS = [
     "name": "Cellest",
     "hasNutrients": true,
     "nutrients": {
-      "N": 26.0,
+      "N": 26,
       "S": 46.8,
-      "Cu": 104.0
+      "Cu": 104
     },
     "nutrientsPercent": {
-      "N": 2.0,
+      "N": 2,
       "S": 3.6,
-      "Cu": 8.0
+      "Cu": 8
     },
     "density": 1.3,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,08 L/há",
     "composition": null,
     "source": "Complexado",
@@ -1817,7 +1817,7 @@ export const PRODUCTS = [
     },
     "density": 1.23,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,3 L/há",
     "composition": null,
     "source": "Complexado",
@@ -1834,24 +1834,24 @@ export const PRODUCTS = [
     "name": "Zn Flash",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "Mg": 25.0,
-      "S": 127.0,
-      "B": 30.0,
-      "Fe": 10.0,
-      "Mn": 70.0,
-      "Mo": 2.0,
-      "Zn": 100.0
+      "K2O": 10,
+      "Mg": 25,
+      "S": 127,
+      "B": 30,
+      "Fe": 10,
+      "Mn": 70,
+      "Mo": 2,
+      "Zn": 100
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
+      "K2O": 1,
       "Mg": 2.5,
       "S": 12.7,
-      "B": 3.0,
-      "Fe": 1.0,
-      "Mn": 7.0,
+      "B": 3,
+      "Fe": 1,
+      "Mn": 7,
       "Mo": 0.2,
-      "Zn": 10.0
+      "Zn": 10
     },
     "density": null,
     "unit": "kg/ha",
@@ -1879,7 +1879,7 @@ export const PRODUCTS = [
     },
     "density": 1.08,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,25 L/há",
     "composition": "Glicina Betaina + Prolina",
     "source": null,
@@ -1903,7 +1903,7 @@ export const PRODUCTS = [
     },
     "density": 1.12,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,2 L/há",
     "composition": "Ác. Salicílico +Fosfito + Biguadina + Quaternário",
     "source": null,
@@ -1925,11 +1925,11 @@ export const PRODUCTS = [
     },
     "nutrientsPercent": {
       "N": 5.5,
-      "P2O5": 2.0
+      "P2O5": 2
     },
     "density": 1.23,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,25 L/há",
     "composition": null,
     "source": null,
@@ -1947,7 +1947,7 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "N": 80.4,
-      "Mg": 67.0,
+      "Mg": 67,
       "B": 0.67,
       "Cu": 0.27,
       "Fe": 0.67,
@@ -1955,8 +1955,8 @@ export const PRODUCTS = [
       "Mo": 0.13
     },
     "nutrientsPercent": {
-      "N": 6.0,
-      "Mg": 5.0,
+      "N": 6,
+      "Mg": 5,
       "B": 0.05,
       "Cu": 0.02,
       "Fe": 0.05,
@@ -1982,14 +1982,14 @@ export const PRODUCTS = [
     "name": "Repell",
     "hasNutrients": true,
     "nutrients": {
-      "S": 600.0
+      "S": 600
     },
     "nutrientsPercent": {
-      "S": 60.0
+      "S": 60
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,03 Kg/há",
     "composition": null,
     "source": null,
@@ -2006,18 +2006,18 @@ export const PRODUCTS = [
     "name": "Kayron",
     "hasNutrients": true,
     "nutrients": {
-      "N": 50.0,
-      "K2O": 220.0,
-      "Mg": 40.0,
-      "S": 50.0,
-      "B": 40.0
+      "N": 50,
+      "K2O": 220,
+      "Mg": 40,
+      "S": 50,
+      "B": 40
     },
     "nutrientsPercent": {
-      "N": 5.0,
-      "K2O": 22.0,
-      "Mg": 4.0,
-      "S": 5.0,
-      "B": 4.0
+      "N": 5,
+      "K2O": 22,
+      "Mg": 4,
+      "S": 5,
+      "B": 4
     },
     "density": null,
     "unit": "kg/ha",
@@ -2042,8 +2042,8 @@ export const PRODUCTS = [
       "Mg": 11.9
     },
     "nutrientsPercent": {
-      "K2O": 12.0,
-      "Mg": 1.0
+      "K2O": 12,
+      "Mg": 1
     },
     "density": 1.19,
     "unit": "L/ha",
@@ -2064,18 +2064,18 @@ export const PRODUCTS = [
     "name": "Fisiotec",
     "hasNutrients": true,
     "nutrients": {
-      "N": 27.0,
+      "N": 27,
       "S": 60.75,
       "B": 6.75
     },
     "nutrientsPercent": {
-      "N": 2.0,
+      "N": 2,
       "S": 4.5,
       "B": 0.5
     },
     "density": 1.35,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,2 L/há",
     "composition": null,
     "source": null,
@@ -2092,15 +2092,15 @@ export const PRODUCTS = [
     "name": "Mn Pro",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 48.0,
-      "S": 151.0,
-      "Mn": 280.0,
-      "Mo": 5.0
+      "K2O": 48,
+      "S": 151,
+      "Mn": 280,
+      "Mo": 5
     },
     "nutrientsPercent": {
       "K2O": 4.8,
       "S": 15.1,
-      "Mn": 28.0,
+      "Mn": 28,
       "Mo": 0.5
     },
     "density": null,
@@ -2122,23 +2122,23 @@ export const PRODUCTS = [
     "name": "Supremmo - Macro e Micro",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 50.0,
-      "K2O": 40.0,
-      "Mg": 15.0,
-      "S": 130.0,
-      "B": 15.0,
-      "Mn": 140.0,
-      "Zn": 50.0,
-      "Ni": 4.0
+      "P2O5": 50,
+      "K2O": 40,
+      "Mg": 15,
+      "S": 130,
+      "B": 15,
+      "Mn": 140,
+      "Zn": 50,
+      "Ni": 4
     },
     "nutrientsPercent": {
-      "P2O5": 5.0,
-      "K2O": 4.0,
+      "P2O5": 5,
+      "K2O": 4,
       "Mg": 1.5,
-      "S": 13.0,
+      "S": 13,
       "B": 1.5,
-      "Mn": 14.0,
-      "Zn": 5.0,
+      "Mn": 14,
+      "Zn": 5,
       "Ni": 0.4
     },
     "density": null,
@@ -2160,14 +2160,14 @@ export const PRODUCTS = [
     "name": "NilPhós",
     "hasNutrients": true,
     "nutrients": {
-      "Ni": 56.0
+      "Ni": 56
     },
     "nutrientsPercent": {
-      "Ni": 4.0
+      "Ni": 4
     },
     "density": 1.4,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,25 L/há",
     "composition": null,
     "source": null,
@@ -2184,10 +2184,10 @@ export const PRODUCTS = [
     "name": "N32",
     "hasNutrients": true,
     "nutrients": {
-      "N": 400.0
+      "N": 400
     },
     "nutrientsPercent": {
-      "N": 32.0
+      "N": 32
     },
     "density": 1.25,
     "unit": "L/ha",
@@ -2208,16 +2208,16 @@ export const PRODUCTS = [
     "name": "MAP Purificado",
     "hasNutrients": true,
     "nutrients": {
-      "N": 120.0,
-      "P2O5": 610.0
+      "N": 120,
+      "P2O5": 610
     },
     "nutrientsPercent": {
-      "N": 12.0,
-      "P2O5": 61.0
+      "N": 12,
+      "P2O5": 61
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2234,16 +2234,16 @@ export const PRODUCTS = [
     "name": "Sulfato de Magnésio",
     "hasNutrients": true,
     "nutrients": {
-      "Mg": 90.0,
-      "S": 120.0
+      "Mg": 90,
+      "S": 120
     },
     "nutrientsPercent": {
-      "Mg": 9.0,
-      "S": 12.0
+      "Mg": 9,
+      "S": 12
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2260,16 +2260,16 @@ export const PRODUCTS = [
     "name": "Sulfato de Potássio",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 500.0,
-      "S": 170.0
+      "K2O": 500,
+      "S": 170
     },
     "nutrientsPercent": {
-      "K2O": 50.0,
-      "S": 17.0
+      "K2O": 50,
+      "S": 17
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2286,14 +2286,14 @@ export const PRODUCTS = [
     "name": "Boro 10 - Ulexita (importado)",
     "hasNutrients": true,
     "nutrients": {
-      "B": 100.0
+      "B": 100
     },
     "nutrientsPercent": {
-      "B": 10.0
+      "B": 10
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2310,14 +2310,14 @@ export const PRODUCTS = [
     "name": "Boro 10 - Ulexita (nacional)",
     "hasNutrients": true,
     "nutrients": {
-      "B": 100.0
+      "B": 100
     },
     "nutrientsPercent": {
-      "B": 10.0
+      "B": 10
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2334,14 +2334,14 @@ export const PRODUCTS = [
     "name": "Enxofre - Bentonita",
     "hasNutrients": true,
     "nutrients": {
-      "S": 900.0
+      "S": 900
     },
     "nutrientsPercent": {
-      "S": 90.0
+      "S": 90
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2358,22 +2358,22 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 294",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "Cu": 20.0,
-      "Mn": 90.0,
-      "Zn": 40.0
+      "K2O": 10,
+      "S": 30,
+      "Cu": 20,
+      "Mn": 90,
+      "Zn": 40
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "Cu": 2.0,
-      "Mn": 9.0,
-      "Zn": 4.0
+      "K2O": 1,
+      "S": 3,
+      "Cu": 2,
+      "Mn": 9,
+      "Zn": 4
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2390,22 +2390,22 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 295",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "Cu": 20.0,
-      "Mn": 90.0,
-      "Zn": 50.0
+      "K2O": 10,
+      "S": 30,
+      "Cu": 20,
+      "Mn": 90,
+      "Zn": 50
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "Cu": 2.0,
-      "Mn": 9.0,
-      "Zn": 5.0
+      "K2O": 1,
+      "S": 3,
+      "Cu": 2,
+      "Mn": 9,
+      "Zn": 5
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2422,22 +2422,22 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 394",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "Cu": 30.0,
-      "Mn": 90.0,
-      "Zn": 40.0
+      "K2O": 10,
+      "S": 30,
+      "Cu": 30,
+      "Mn": 90,
+      "Zn": 40
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "Cu": 3.0,
-      "Mn": 9.0,
-      "Zn": 4.0
+      "K2O": 1,
+      "S": 3,
+      "Cu": 3,
+      "Mn": 9,
+      "Zn": 4
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2454,22 +2454,22 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 142",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "Cu": 12.0,
-      "Mn": 45.0,
-      "Zn": 20.0
+      "K2O": 10,
+      "S": 30,
+      "Cu": 12,
+      "Mn": 45,
+      "Zn": 20
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
+      "K2O": 1,
+      "S": 3,
       "Cu": 1.2,
       "Mn": 4.5,
-      "Zn": 2.0
+      "Zn": 2
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2486,24 +2486,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 5294",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 50.0,
-      "Cu": 20.0,
-      "Mn": 90.0,
-      "Zn": 40.0
+      "K2O": 10,
+      "S": 30,
+      "B": 50,
+      "Cu": 20,
+      "Mn": 90,
+      "Zn": 40
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 5.0,
-      "Cu": 2.0,
-      "Mn": 9.0,
-      "Zn": 4.0
+      "K2O": 1,
+      "S": 3,
+      "B": 5,
+      "Cu": 2,
+      "Mn": 9,
+      "Zn": 4
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2520,24 +2520,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 3142",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 30.0,
-      "Cu": 12.0,
-      "Mn": 45.0,
-      "Zn": 20.0
+      "K2O": 10,
+      "S": 30,
+      "B": 30,
+      "Cu": 12,
+      "Mn": 45,
+      "Zn": 20
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 3.0,
+      "K2O": 1,
+      "S": 3,
+      "B": 3,
       "Cu": 1.2,
       "Mn": 4.5,
-      "Zn": 2.0
+      "Zn": 2
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2554,24 +2554,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 6233",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 60.0,
-      "Cu": 20.0,
-      "Mn": 30.0,
-      "Zn": 30.0
+      "K2O": 10,
+      "S": 30,
+      "B": 60,
+      "Cu": 20,
+      "Mn": 30,
+      "Zn": 30
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 6.0,
-      "Cu": 2.0,
-      "Mn": 3.0,
-      "Zn": 3.0
+      "K2O": 1,
+      "S": 3,
+      "B": 6,
+      "Cu": 2,
+      "Mn": 3,
+      "Zn": 3
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2588,24 +2588,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 466",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 0.0,
-      "Cu": 40.0,
-      "Mn": 60.0,
-      "Zn": 60.0
+      "K2O": 10,
+      "S": 30,
+      "B": 0,
+      "Cu": 40,
+      "Mn": 60,
+      "Zn": 60
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 0.0,
-      "Cu": 4.0,
-      "Mn": 6.0,
-      "Zn": 6.0
+      "K2O": 1,
+      "S": 3,
+      "B": 0,
+      "Cu": 4,
+      "Mn": 6,
+      "Zn": 6
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2622,24 +2622,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 6142",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 60.0,
-      "Cu": 12.0,
-      "Mn": 40.0,
-      "Zn": 20.0
+      "K2O": 10,
+      "S": 30,
+      "B": 60,
+      "Cu": 12,
+      "Mn": 40,
+      "Zn": 20
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 6.0,
+      "K2O": 1,
+      "S": 3,
+      "B": 6,
       "Cu": 1.2,
-      "Mn": 4.0,
-      "Zn": 2.0
+      "Mn": 4,
+      "Zn": 2
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2656,24 +2656,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 351010",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 30.0,
-      "Cu": 50.0,
-      "Mn": 100.0,
-      "Zn": 100.0
+      "K2O": 10,
+      "S": 30,
+      "B": 30,
+      "Cu": 50,
+      "Mn": 100,
+      "Zn": 100
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 3.0,
-      "Cu": 5.0,
-      "Mn": 10.0,
-      "Zn": 10.0
+      "K2O": 1,
+      "S": 3,
+      "B": 3,
+      "Cu": 5,
+      "Mn": 10,
+      "Zn": 10
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2690,24 +2690,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 615102",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 60.0,
-      "Cu": 15.0,
-      "Mn": 100.0,
-      "Zn": 20.0
+      "K2O": 10,
+      "S": 30,
+      "B": 60,
+      "Cu": 15,
+      "Mn": 100,
+      "Zn": 20
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 6.0,
+      "K2O": 1,
+      "S": 3,
+      "B": 6,
       "Cu": 1.5,
-      "Mn": 10.0,
-      "Zn": 2.0
+      "Mn": 10,
+      "Zn": 2
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2724,24 +2724,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 61542",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 60.0,
-      "Cu": 15.0,
-      "Mn": 40.0,
-      "Zn": 20.0
+      "K2O": 10,
+      "S": 30,
+      "B": 60,
+      "Cu": 15,
+      "Mn": 40,
+      "Zn": 20
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 6.0,
+      "K2O": 1,
+      "S": 3,
+      "B": 6,
       "Cu": 1.5,
-      "Mn": 4.0,
-      "Zn": 2.0
+      "Mn": 4,
+      "Zn": 2
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2758,24 +2758,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 6163",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 60.0,
-      "Cu": 10.0,
-      "Mn": 60.0,
-      "Zn": 30.0
+      "K2O": 10,
+      "S": 30,
+      "B": 60,
+      "Cu": 10,
+      "Mn": 60,
+      "Zn": 30
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 6.0,
-      "Cu": 1.0,
-      "Mn": 6.0,
-      "Zn": 3.0
+      "K2O": 1,
+      "S": 3,
+      "B": 6,
+      "Cu": 1,
+      "Mn": 6,
+      "Zn": 3
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -2792,24 +2792,24 @@ export const PRODUCTS = [
     "name": "ARGGUS FSA 4466",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "S": 30.0,
-      "B": 40.0,
-      "Cu": 40.0,
-      "Mn": 60.0,
-      "Zn": 60.0
+      "K2O": 10,
+      "S": 30,
+      "B": 40,
+      "Cu": 40,
+      "Mn": 60,
+      "Zn": 60
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
-      "S": 3.0,
-      "B": 4.0,
-      "Cu": 4.0,
-      "Mn": 6.0,
-      "Zn": 6.0
+      "K2O": 1,
+      "S": 3,
+      "B": 4,
+      "Cu": 4,
+      "Mn": 6,
+      "Zn": 6
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -3426,20 +3426,20 @@ export const PRODUCTS = [
     "name": "CANA",
     "hasNutrients": true,
     "nutrients": {
-      "N": 13.0,
+      "N": 13,
       "S": 61.1,
       "B": 6.5,
       "Cu": 6.5,
-      "Mn": 39.0,
-      "Zn": 78.0
+      "Mn": 39,
+      "Zn": 78
     },
     "nutrientsPercent": {
-      "N": 1.0,
+      "N": 1,
       "S": 4.7,
       "B": 0.5,
       "Cu": 0.5,
-      "Mn": 3.0,
-      "Zn": 6.0
+      "Mn": 3,
+      "Zn": 6
     },
     "density": 1.3,
     "unit": "L/ha",
@@ -3464,16 +3464,16 @@ export const PRODUCTS = [
       "S": 53.6,
       "B": 4.02,
       "Cu": 4.02,
-      "Mn": 67.0,
+      "Mn": 67,
       "Zn": 40.2
     },
     "nutrientsPercent": {
-      "N": 1.0,
-      "S": 4.0,
+      "N": 1,
+      "S": 4,
       "B": 0.3,
       "Cu": 0.3,
-      "Mn": 5.0,
-      "Zn": 3.0
+      "Mn": 5,
+      "Zn": 3
     },
     "density": 1.34,
     "unit": "L/ha",
@@ -3495,13 +3495,13 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "N": 12.5,
-      "Mg": 50.0,
+      "Mg": 50,
       "S": 62.5
     },
     "nutrientsPercent": {
-      "N": 1.0,
-      "Mg": 4.0,
-      "S": 5.0
+      "N": 1,
+      "Mg": 4,
+      "S": 5
     },
     "density": 1.25,
     "unit": "L/ha",
@@ -3523,13 +3523,13 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "N": 13.6,
-      "S": 68.0,
-      "Mn": 136.0
+      "S": 68,
+      "Mn": 136
     },
     "nutrientsPercent": {
-      "N": 1.0,
-      "S": 5.0,
-      "Mn": 10.0
+      "N": 1,
+      "S": 5,
+      "Mn": 10
     },
     "density": 1.36,
     "unit": "L/ha",
@@ -3551,17 +3551,17 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "N": 14.6,
-      "S": 146.0,
-      "Cu": 292.0
+      "S": 146,
+      "Cu": 292
     },
     "nutrientsPercent": {
-      "N": 1.0,
-      "S": 10.0,
-      "Cu": 20.0
+      "N": 1,
+      "S": 10,
+      "Cu": 20
     },
     "density": 1.46,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": "0,2 a 0,25 L/há",
     "composition": "Carbonato de Cu, S e Ureia",
     "source": null,
@@ -3598,10 +3598,10 @@ export const PRODUCTS = [
     "name": "PHITOPRESS  K26",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 390.0
+      "K2O": 390
     },
     "nutrientsPercent": {
-      "K2O": 26.0
+      "K2O": 26
     },
     "density": 1.5,
     "unit": "L/ha",
@@ -3627,9 +3627,9 @@ export const PRODUCTS = [
       "Zn": 87.5
     },
     "nutrientsPercent": {
-      "N": 1.0,
+      "N": 1,
       "S": 3.1,
-      "Zn": 7.0
+      "Zn": 7
     },
     "density": 1.25,
     "unit": "L/ha",
@@ -3650,12 +3650,12 @@ export const PRODUCTS = [
     "name": "FERTIUM  Condicionador",
     "hasNutrients": true,
     "nutrients": {
-      "N": 5.0,
-      "C_Org": 170.0
+      "N": 5,
+      "C_Org": 170
     },
     "nutrientsPercent": {
       "N": 0.5,
-      "C_Org": 17.0
+      "C_Org": 17
     },
     "density": null,
     "unit": "kg/ha",
@@ -3676,14 +3676,14 @@ export const PRODUCTS = [
     "name": "FERTIUM Phós",
     "hasNutrients": true,
     "nutrients": {
-      "N": 30.0,
-      "P2O5": 150.0,
-      "C_Org": 110.0
+      "N": 30,
+      "P2O5": 150,
+      "C_Org": 110
     },
     "nutrientsPercent": {
-      "N": 3.0,
-      "P2O5": 15.0,
-      "C_Org": 11.0
+      "N": 3,
+      "P2O5": 15,
+      "C_Org": 11
     },
     "density": null,
     "unit": "kg/ha",
@@ -3704,20 +3704,20 @@ export const PRODUCTS = [
     "name": "FERTIUM Produção",
     "hasNutrients": true,
     "nutrients": {
-      "N": 80.0,
-      "K2O": 100.0,
-      "S": 80.0,
-      "C_Org": 80.0
+      "N": 80,
+      "K2O": 100,
+      "S": 80,
+      "C_Org": 80
     },
     "nutrientsPercent": {
-      "N": 8.0,
-      "K2O": 10.0,
-      "S": 8.0,
-      "C_Org": 8.0
+      "N": 8,
+      "K2O": 10,
+      "S": 8,
+      "C_Org": 8
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Substâncias Húmicas, N, K e S",
     "source": null,
@@ -4294,10 +4294,10 @@ export const PRODUCTS = [
     "name": "AGROTHIO 800",
     "hasNutrients": true,
     "nutrients": {
-      "S": 800.0
+      "S": 800
     },
     "nutrientsPercent": {
-      "S": 80.0
+      "S": 80
     },
     "density": 1,
     "unit": "L/ha",
@@ -4738,8 +4738,8 @@ export const PRODUCTS = [
     "name": "BIO Ativo",
     "hasNutrients": true,
     "nutrients": {
-      "N": 132.0,
-      "P2O5": 66.0,
+      "N": 132,
+      "P2O5": 66,
       "K2O": 105.6,
       "Ca": 13.2,
       "Mg": 7.92,
@@ -4751,10 +4751,10 @@ export const PRODUCTS = [
       "Zn": 9.24
     },
     "nutrientsPercent": {
-      "N": 10.0,
-      "P2O5": 5.0,
-      "K2O": 8.0,
-      "Ca": 1.0,
+      "N": 10,
+      "P2O5": 5,
+      "K2O": 8,
+      "Ca": 1,
       "Mg": 0.6,
       "B": 0.5,
       "Cu": 0.1,
@@ -4765,7 +4765,7 @@ export const PRODUCTS = [
     },
     "density": 1.32,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Macro e Micronutrientes",
     "source": null,
@@ -4783,15 +4783,15 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "Co": 12.8,
-      "Mo": 128.0
+      "Mo": 128
     },
     "nutrientsPercent": {
-      "Co": 1.0,
-      "Mo": 10.0
+      "Co": 1,
+      "Mo": 10
     },
     "density": 1.28,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Co e Mo",
     "source": null,
@@ -4808,14 +4808,14 @@ export const PRODUCTS = [
     "name": "BIO 12",
     "hasNutrients": true,
     "nutrients": {
-      "Mo": 156.0
+      "Mo": 156
     },
     "nutrientsPercent": {
-      "Mo": 12.0
+      "Mo": 12
     },
     "density": 1.3,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Mo",
     "source": null,
@@ -4832,14 +4832,14 @@ export const PRODUCTS = [
     "name": "BIO 15 +Ni",
     "hasNutrients": true,
     "nutrients": {
-      "Mo": 225.0
+      "Mo": 225
     },
     "nutrientsPercent": {
-      "Mo": 15.0
+      "Mo": 15
     },
     "density": 1.5,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Mo, Ni",
     "source": null,
@@ -5216,8 +5216,8 @@ export const PRODUCTS = [
     "name": "STIMUFull",
     "hasNutrients": true,
     "nutrients": {
-      "N": 132.0,
-      "P2O5": 66.0,
+      "N": 132,
+      "P2O5": 66,
       "K2O": 105.6,
       "Ca": 13.2,
       "Mg": 7.92,
@@ -5229,10 +5229,10 @@ export const PRODUCTS = [
       "Zn": 9.24
     },
     "nutrientsPercent": {
-      "N": 10.0,
-      "P2O5": 5.0,
-      "K2O": 8.0,
-      "Ca": 1.0,
+      "N": 10,
+      "P2O5": 5,
+      "K2O": 8,
+      "Ca": 1,
       "Mg": 0.6,
       "B": 0.5,
       "Cu": 0.1,
@@ -5243,7 +5243,7 @@ export const PRODUCTS = [
     },
     "density": 1.32,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Macro e Micronutrientes",
     "source": null,
@@ -5261,15 +5261,15 @@ export const PRODUCTS = [
     "hasNutrients": true,
     "nutrients": {
       "Co": 12.8,
-      "Mo": 128.0
+      "Mo": 128
     },
     "nutrientsPercent": {
-      "Co": 1.0,
-      "Mo": 10.0
+      "Co": 1,
+      "Mo": 10
     },
     "density": 1.28,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Co e Mo",
     "source": null,
@@ -5286,16 +5286,16 @@ export const PRODUCTS = [
     "name": "STIMU Leg 12",
     "hasNutrients": true,
     "nutrients": {
-      "Mo": 156.0,
-      "C_Org": 260.0
+      "Mo": 156,
+      "C_Org": 260
     },
     "nutrientsPercent": {
-      "Mo": 12.0,
-      "C_Org": 20.0
+      "Mo": 12,
+      "C_Org": 20
     },
     "density": 1.3,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Mo",
     "source": null,
@@ -5312,14 +5312,14 @@ export const PRODUCTS = [
     "name": "STIMU Leg 15 +Ni",
     "hasNutrients": true,
     "nutrients": {
-      "Mo": 225.0
+      "Mo": 225
     },
     "nutrientsPercent": {
-      "Mo": 15.0
+      "Mo": 15
     },
     "density": 1.5,
     "unit": "L/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Mo, Ni",
     "source": null,
@@ -5721,14 +5721,14 @@ export const PRODUCTS = [
     "name": "UP! Seeds",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 23.0,
+      "K2O": 23,
       "Co": 4.5,
-      "Mo": 90.0
+      "Mo": 90
     },
     "nutrientsPercent": {
       "K2O": 2.3,
       "Co": 0.45,
-      "Mo": 9.0
+      "Mo": 9
     },
     "density": null,
     "unit": "kg/ha",
@@ -5749,14 +5749,14 @@ export const PRODUCTS = [
     "name": "ICL Nutriflow",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 135.0,
-      "Mn": 25.0,
-      "Zn": 100.0
+      "P2O5": 135,
+      "Mn": 25,
+      "Zn": 100
     },
     "nutrientsPercent": {
       "P2O5": 13.5,
       "Mn": 2.5,
-      "Zn": 10.0
+      "Zn": 10
     },
     "density": null,
     "unit": "kg/ha",
@@ -5817,22 +5817,22 @@ export const PRODUCTS = [
     "name": "BIOZ Tônus",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 60.0,
-      "K2O": 40.0,
-      "Mg": 10.0,
-      "S": 13.0,
-      "Co": 5.0,
-      "Mo": 100.0,
-      "Zn": 60.0
+      "P2O5": 60,
+      "K2O": 40,
+      "Mg": 10,
+      "S": 13,
+      "Co": 5,
+      "Mo": 100,
+      "Zn": 60
     },
     "nutrientsPercent": {
-      "P2O5": 6.0,
-      "K2O": 4.0,
-      "Mg": 1.0,
+      "P2O5": 6,
+      "K2O": 4,
+      "Mg": 1,
       "S": 1.3,
       "Co": 0.5,
-      "Mo": 10.0,
-      "Zn": 6.0
+      "Mo": 10,
+      "Zn": 6
     },
     "density": null,
     "unit": "kg/ha",
@@ -5853,22 +5853,22 @@ export const PRODUCTS = [
     "name": "ICL Tônus",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 60.0,
-      "K2O": 40.0,
-      "Mg": 10.0,
-      "S": 13.0,
-      "Co": 5.0,
-      "Mo": 100.0,
-      "Zn": 60.0
+      "P2O5": 60,
+      "K2O": 40,
+      "Mg": 10,
+      "S": 13,
+      "Co": 5,
+      "Mo": 100,
+      "Zn": 60
     },
     "nutrientsPercent": {
-      "P2O5": 6.0,
-      "K2O": 4.0,
-      "Mg": 1.0,
+      "P2O5": 6,
+      "K2O": 4,
+      "Mg": 1,
       "S": 1.3,
       "Co": 0.5,
-      "Mo": 10.0,
-      "Zn": 6.0
+      "Mo": 10,
+      "Zn": 6
     },
     "density": null,
     "unit": "kg/ha",
@@ -5900,15 +5900,15 @@ export const PRODUCTS = [
       "C_Org": 77.4
     },
     "nutrientsPercent": {
-      "N": 9.0,
-      "P2O5": 2.0,
-      "K2O": 1.0,
+      "N": 9,
+      "P2O5": 2,
+      "K2O": 1,
       "B": 0.04,
       "Cu": 0.1,
       "Mn": 0.1,
       "Mo": 0.1,
       "Zn": 0.1,
-      "C_Org": 6.0
+      "C_Org": 6
     },
     "density": 1.29,
     "unit": "L/ha",
@@ -5929,22 +5929,22 @@ export const PRODUCTS = [
     "name": "ICL Energy",
     "hasNutrients": true,
     "nutrients": {
-      "N": 50.0,
-      "P2O5": 275.0,
-      "Mg": 80.0,
-      "S": 105.0,
-      "B": 25.0
+      "N": 50,
+      "P2O5": 275,
+      "Mg": 80,
+      "S": 105,
+      "B": 25
     },
     "nutrientsPercent": {
-      "N": 5.0,
+      "N": 5,
       "P2O5": 27.5,
-      "Mg": 8.0,
+      "Mg": 8,
       "S": 10.5,
       "B": 2.5
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Fósforo, Magnésio",
     "source": null,
@@ -5981,18 +5981,18 @@ export const PRODUCTS = [
     "name": "ICL Translok",
     "hasNutrients": true,
     "nutrients": {
-      "N": 50.0,
-      "P2O5": 100.0,
-      "K2O": 200.0,
-      "Mg": 90.0,
-      "S": 117.0,
-      "B": 5.0
+      "N": 50,
+      "P2O5": 100,
+      "K2O": 200,
+      "Mg": 90,
+      "S": 117,
+      "B": 5
     },
     "nutrientsPercent": {
-      "N": 5.0,
-      "P2O5": 10.0,
-      "K2O": 20.0,
-      "Mg": 9.0,
+      "N": 5,
+      "P2O5": 10,
+      "K2O": 20,
+      "Mg": 9,
       "S": 11.7,
       "B": 0.5
     },
@@ -6055,14 +6055,14 @@ export const PRODUCTS = [
     "name": "BIOZ Kellus Blindex",
     "hasNutrients": true,
     "nutrients": {
-      "Cu": 5.0,
-      "Mn": 50.0,
-      "Zn": 80.0
+      "Cu": 5,
+      "Mn": 50,
+      "Zn": 80
     },
     "nutrientsPercent": {
       "Cu": 0.5,
-      "Mn": 5.0,
-      "Zn": 8.0
+      "Mn": 5,
+      "Zn": 8
     },
     "density": null,
     "unit": "kg/ha",
@@ -6083,11 +6083,11 @@ export const PRODUCTS = [
     "name": "BIOZ Kellus Copper",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 10.0,
-      "Cu": 145.0
+      "K2O": 10,
+      "Cu": 145
     },
     "nutrientsPercent": {
-      "K2O": 1.0,
+      "K2O": 1,
       "Cu": 14.5
     },
     "density": null,
@@ -6109,14 +6109,14 @@ export const PRODUCTS = [
     "name": "BIOZ Kellus Inox",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 30.0,
-      "Mn": 90.0,
-      "Zn": 30.0
+      "P2O5": 30,
+      "Mn": 90,
+      "Zn": 30
     },
     "nutrientsPercent": {
-      "P2O5": 3.0,
-      "Mn": 9.0,
-      "Zn": 3.0
+      "P2O5": 3,
+      "Mn": 9,
+      "Zn": 3
     },
     "density": null,
     "unit": "kg/ha",
@@ -6142,18 +6142,18 @@ export const PRODUCTS = [
     "name": "KELLUS Imune",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 420.0,
-      "K2O": 277.0,
-      "Mg": 40.0,
-      "S": 52.0,
-      "Cu": 10.0
+      "P2O5": 420,
+      "K2O": 277,
+      "Mg": 40,
+      "S": 52,
+      "Cu": 10
     },
     "nutrientsPercent": {
-      "P2O5": 42.0,
+      "P2O5": 42,
       "K2O": 27.7,
-      "Mg": 4.0,
+      "Mg": 4,
       "S": 5.2,
-      "Cu": 1.0
+      "Cu": 1
     },
     "density": null,
     "unit": "kg/ha",
@@ -6197,7 +6197,7 @@ export const PRODUCTS = [
     "name": "KELLUS Manganese",
     "hasNutrients": true,
     "nutrients": {
-      "Mn": 125.0
+      "Mn": 125
     },
     "nutrientsPercent": {
       "Mn": 12.5
@@ -6226,7 +6226,7 @@ export const PRODUCTS = [
     "name": "KELLUS Zinc",
     "hasNutrients": true,
     "nutrients": {
-      "Zn": 147.0
+      "Zn": 147
     },
     "nutrientsPercent": {
       "Zn": 14.7
@@ -6275,21 +6275,21 @@ export const PRODUCTS = [
     "name": "PROFOL Cotton",
     "hasNutrients": true,
     "nutrients": {
-      "N": 70.0,
-      "P2O5": 130.0,
-      "K2O": 90.0,
+      "N": 70,
+      "P2O5": 130,
+      "K2O": 90,
       "Mg": 6.1,
       "S": 77.6,
-      "B": 36.0,
+      "B": 36,
       "Cu": 7.2,
-      "Mn": 24.0,
+      "Mn": 24,
       "Mo": 7.2,
-      "Zn": 12.0
+      "Zn": 12
     },
     "nutrientsPercent": {
-      "N": 7.0,
-      "P2O5": 13.0,
-      "K2O": 9.0,
+      "N": 7,
+      "P2O5": 13,
+      "K2O": 9,
       "Mg": 0.61,
       "S": 7.76,
       "B": 3.6,
@@ -6321,28 +6321,28 @@ export const PRODUCTS = [
     "name": "PROFOL Exclusive",
     "hasNutrients": true,
     "nutrients": {
-      "N": 120.0,
-      "K2O": 30.0,
-      "Mg": 15.0,
-      "S": 94.0,
-      "B": 20.0,
-      "Cu": 1.0,
-      "Fe": 2.0,
-      "Mn": 65.0,
-      "Mo": 1.0,
-      "Zn": 90.0
+      "N": 120,
+      "K2O": 30,
+      "Mg": 15,
+      "S": 94,
+      "B": 20,
+      "Cu": 1,
+      "Fe": 2,
+      "Mn": 65,
+      "Mo": 1,
+      "Zn": 90
     },
     "nutrientsPercent": {
-      "N": 12.0,
-      "K2O": 3.0,
+      "N": 12,
+      "K2O": 3,
       "Mg": 1.5,
       "S": 9.4,
-      "B": 2.0,
+      "B": 2,
       "Cu": 0.1,
       "Fe": 0.2,
       "Mn": 6.5,
       "Mo": 0.1,
-      "Zn": 9.0
+      "Zn": 9
     },
     "density": null,
     "unit": "kg/ha",
@@ -6369,26 +6369,26 @@ export const PRODUCTS = [
     "name": "PROFOL Produtividade",
     "hasNutrients": true,
     "nutrients": {
-      "K2O": 100.0,
-      "Mg": 20.0,
-      "S": 129.0,
-      "B": 15.0,
-      "Cu": 5.0,
-      "Mn": 140.0,
-      "Zn": 45.0
+      "K2O": 100,
+      "Mg": 20,
+      "S": 129,
+      "B": 15,
+      "Cu": 5,
+      "Mn": 140,
+      "Zn": 45
     },
     "nutrientsPercent": {
-      "K2O": 10.0,
-      "Mg": 2.0,
+      "K2O": 10,
+      "Mg": 2,
       "S": 12.9,
       "B": 1.5,
       "Cu": 0.5,
-      "Mn": 14.0,
+      "Mn": 14,
       "Zn": 4.5
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "source": null,
     "description": null,
     "warning": null,
@@ -6402,14 +6402,14 @@ export const PRODUCTS = [
     "name": "TRIPLUS Anuais",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 20.0,
-      "B": 34.0,
-      "Mo": 10.0
+      "P2O5": 20,
+      "B": 34,
+      "Mo": 10
     },
     "nutrientsPercent": {
-      "P2O5": 2.0,
+      "P2O5": 2,
       "B": 3.4,
-      "Mo": 1.0
+      "Mo": 1
     },
     "density": null,
     "unit": "kg/ha",
@@ -6430,20 +6430,20 @@ export const PRODUCTS = [
     "name": "TRIPLUS Perenes",
     "hasNutrients": true,
     "nutrients": {
-      "P2O5": 20.0,
-      "B": 30.0,
+      "P2O5": 20,
+      "B": 30,
       "Co": 2.5,
       "Mo": 12.5
     },
     "nutrientsPercent": {
-      "P2O5": 2.0,
-      "B": 3.0,
+      "P2O5": 2,
+      "B": 3,
       "Co": 0.25,
       "Mo": 1.25
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": null,
@@ -6576,22 +6576,22 @@ export const PRODUCTS = [
     "name": "ICL Polyblen",
     "hasNutrients": true,
     "nutrients": {
-      "N": 180.0,
-      "P2O5": 80.0,
-      "K2O": 180.0,
-      "S": 8.0,
-      "B": 3.0
+      "N": 180,
+      "P2O5": 80,
+      "K2O": 180,
+      "S": 8,
+      "B": 3
     },
     "nutrientsPercent": {
-      "N": 18.0,
-      "P2O5": 8.0,
-      "K2O": 18.0,
+      "N": 18,
+      "P2O5": 8,
+      "K2O": 18,
       "S": 0.8,
       "B": 0.3
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": null,
     "source": "Granulado",
@@ -6668,21 +6668,21 @@ export const PRODUCTS = [
     "name": "PHUSION Poly",
     "hasNutrients": true,
     "nutrients": {
-      "N": 80.0,
-      "P2O5": 400.0,
-      "K2O": 200.0,
-      "Mg": 50.0,
-      "S": 72.0,
-      "B": 1.0,
-      "Cu": 1.0,
-      "Mn": 3.0,
-      "Zn": 3.0
+      "N": 80,
+      "P2O5": 400,
+      "K2O": 200,
+      "Mg": 50,
+      "S": 72,
+      "B": 1,
+      "Cu": 1,
+      "Mn": 3,
+      "Zn": 3
     },
     "nutrientsPercent": {
-      "N": 8.0,
-      "P2O5": 40.0,
-      "K2O": 20.0,
-      "Mg": 5.0,
+      "N": 8,
+      "P2O5": 40,
+      "K2O": 20,
+      "Mg": 5,
       "S": 7.2,
       "B": 0.1,
       "Cu": 0.1,
@@ -6691,7 +6691,7 @@ export const PRODUCTS = [
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "doseRaw": null,
     "composition": "Polysulphate, (K (Potássio), S (Enxofre), Ca (Cálcio) e Mg (magnésio)), além de boro, cobre, manganês e zinco.",
     "source": "Granulado",
@@ -6713,17 +6713,17 @@ export const PRODUCTS = [
     "name": "PHUSION Super",
     "hasNutrients": true,
     "nutrients": {
-      "N": 90.0,
-      "P2O5": 380.0,
-      "S": 115.0,
-      "B": 1.0,
-      "Cu": 1.0,
-      "Mn": 3.0,
-      "Zn": 3.0
+      "N": 90,
+      "P2O5": 380,
+      "S": 115,
+      "B": 1,
+      "Cu": 1,
+      "Mn": 3,
+      "Zn": 3
     },
     "nutrientsPercent": {
-      "N": 9.0,
-      "P2O5": 38.0,
+      "N": 9,
+      "P2O5": 38,
       "S": 11.5,
       "B": 0.1,
       "Cu": 0.1,
@@ -6732,7 +6732,7 @@ export const PRODUCTS = [
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "composition": "Fósforo e enxofre + mciro",
     "source": "Granulado",
     "description": null,
@@ -6753,16 +6753,16 @@ export const PRODUCTS = [
     "name": "PHUSION Power",
     "hasNutrients": true,
     "nutrients": {
-      "N": 100.0,
-      "P2O5": 500.0,
-      "B": 1.0,
-      "Cu": 1.0,
-      "Mn": 3.0,
-      "Zn": 3.0
+      "N": 100,
+      "P2O5": 500,
+      "B": 1,
+      "Cu": 1,
+      "Mn": 3,
+      "Zn": 3
     },
     "nutrientsPercent": {
-      "N": 10.0,
-      "P2O5": 50.0,
+      "N": 10,
+      "P2O5": 50,
       "B": 0.1,
       "Cu": 0.1,
       "Mn": 0.3,
@@ -6770,7 +6770,7 @@ export const PRODUCTS = [
     },
     "density": null,
     "unit": "kg/ha",
-    "defaultDose": 1.0,
+    "defaultDose": 1,
     "composition": "Fósforo + mciro",
     "source": "Granulado",
     "description": null,
@@ -8406,16 +8406,17 @@ export const PRODUCTS = [
     "nutrients": {},
     "nutrientsPercent": {},
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Azospirillum liquido",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "doseRaw": "100 mL/ha",
+    "composition": "Azozpirillum: 2,0 x 10⁸ UFC por ml",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Inoculante de milho",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Inoculantes"
   },
   {
     "id": "dimicron__dimi-azos",
@@ -8626,16 +8627,17 @@ export const PRODUCTS = [
     "nutrients": {},
     "nutrientsPercent": {},
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Bradyrhizobium liquido",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "doseRaw": "100 mL/ha",
+    "composition": "Bradyrhizobium: 3,0 x 10⁹ UFC por ml",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Inoculante de soja",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Inoculantes"
   },
   {
     "id": "dimicron__dimi-brady",
@@ -8924,18 +8926,23 @@ export const PRODUCTS = [
     "name": "Citrus Prime",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "N": 3,
+      "B": 0.01
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Adjuvante D-limoneno",
+    "unit": "L/ha",
+    "defaultDose": 0.05,
+    "doseRaw": "0,05 a 0,2 L/ha",
+    "composition": "D-Limoneno 6%, N 3%, B 0,01% (Óleo de Laranja)",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Melhor distribuição e aderência da calda de aplicação nas plantas. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Óleos e Condicionadores",
+    "ph": "5,0"
   },
   {
     "id": "simbiose__stimuspray-f",
@@ -9146,16 +9153,18 @@ export const PRODUCTS = [
     "nutrients": {},
     "nutrientsPercent": {},
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Adjuvante utilitário",
+    "unit": "L/ha",
+    "defaultDose": 0.05,
+    "doseRaw": "0,05 a 0,2 L/ha",
+    "composition": "Óleo Mineral Parafínico Hidrotratado (CAS 8012-95-1): 77,60 - 100%",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Melhor distribuição e aderência da calda de aplicação nas plantas.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Óleos e Condicionadores",
+    "ph": "7,0"
   },
   {
     "id": "dimicron__dimi-a20-mais",
@@ -9364,18 +9373,23 @@ export const PRODUCTS = [
     "name": "Dinamus",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "N": 1,
+      "B": 0.2
+    },
     "density": null,
-    "unit": null,
+    "unit": "L/ha",
     "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Limpeza tanque",
+    "doseRaw": "1 mL/L",
+    "composition": "N 1%, B 0,2% (Limpa Tanque)",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Ácido bórico para higienização de tanques de pulverizadores. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Óleos e Condicionadores",
+    "ph": "12 a 14"
   },
   {
     "id": "union-agro__agris",
@@ -9466,16 +9480,17 @@ export const PRODUCTS = [
     "nutrients": {},
     "nutrientsPercent": {},
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Oleo vegetal",
+    "unit": "L/ha",
+    "defaultDose": 0.05,
+    "doseRaw": "0,05 a 0,2 L/ha",
+    "composition": "Óleo Vegetal",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Melhor distribuição e aderência da calda de aplicação nas plantas.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Óleos e Condicionadores"
   },
   {
     "id": "union-agro__s-gold",
@@ -9562,20 +9577,26 @@ export const PRODUCTS = [
     "brand": "GRAN7",
     "category": "NUTRIÇÃO E FISIOLOGIA",
     "name": "Expell",
-    "hasNutrients": false,
-    "nutrients": {},
-    "nutrientsPercent": {},
+    "hasNutrients": true,
+    "nutrients": {
+      "S": 600
+    },
+    "nutrientsPercent": {
+      "S": 60
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Desalojante / Enxofre",
+    "unit": "kg/ha",
+    "defaultDose": 0.03,
+    "doseRaw": "30 a 150 g/ha",
+    "composition": "S 60% Desalojante/Fumigante",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Desalojante para lagartas.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Desalojante de Lagartas",
+    "ph": "5,0 a 6,0"
   },
   {
     "id": "fortgreen-f1rst-agbiotech__awaken-germinate",
@@ -9664,18 +9685,24 @@ export const PRODUCTS = [
     "name": "Max Raiz",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "Co": 0.3,
+      "Mo": 3,
+      "Ni": 0.3
+    },
     "density": null,
-    "unit": null,
+    "unit": "L/ha",
     "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Enraizante + Bioestimulante",
+    "doseRaw": "2 mL/kg de semente",
+    "composition": "Co 0,3%, Mo 3%, Ni 0,3% + 15% Ascophylum nodosum",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Estímulo ao enraizamento, mantém vigor e germinação em situações de estresse, ajuda na uniformidade de estande, maior absorção de água e nutrientes, manutenção da disponibilidade de N. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Tratamento de Sementes",
+    "ph": "6,5"
   },
   {
     "id": "dimicron__tmsp-power",
@@ -9764,18 +9791,24 @@ export const PRODUCTS = [
     "name": "Domain Complex",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "Ca": 10,
+      "B": 0.5
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "B  + Bioestimulante",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "doseRaw": "0,1 a 1 L/ha",
+    "composition": "Ca 10%, B 0,5% + Extrato de Algas",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Bioestimulação vegetal, melhor estruturação de plantas e viabilização de estruturas reprodutivas. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Tecnologia Complex",
+    "ph": "5,05",
+    "technology": "Complexado com aminoácidos (linha Complex)"
   },
   {
     "id": "ballagro__pick-up-arrel",
@@ -10023,7 +10056,7 @@ export const PRODUCTS = [
     "composition": "Macro e micro + Bioestimulante",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "A matriz de equivalência cadastrou Orggam e Ferggum como um par. O portfólio Gran7 mostra que são dois produtos distintos, com composições diferentes - cadastrados à parte, cada um com a sua. Este registro fica sem composição de propósito: atribuir a ele a garantia de um dos dois seria atribuir ao outro também.",
     "warning": null,
     "shelfLife": null,
     "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
@@ -10235,18 +10268,28 @@ export const PRODUCTS = [
     "name": "Microsix Complex",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "Cu": 0.3,
+      "Fe": 0.3,
+      "Mg": 1,
+      "Mn": 1,
+      "Zn": 1.2,
+      "S": 2.7
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Micro + Aminoácidos",
+    "unit": "L/ha",
+    "defaultDose": 1,
+    "doseRaw": "1 a 2 L/ha",
+    "composition": "Mg 1%, S 2,7%, Cu 0,3%, Fe 0,3%, Mn 1%, Zn 1,2% Complexado com Aminoácidos",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Molécula complexada para absorção instantânea de seis nutrientes. Mais eficiência na entrada e translocação dentro das plantas. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Tecnologia Complex",
+    "ph": "2,2 a 3,2",
+    "technology": "Complexado com aminoácidos (linha Complex)"
   },
   {
     "id": "dimicron__dimitonico-full",
@@ -10675,18 +10718,24 @@ export const PRODUCTS = [
     "name": "Polyamine Mn Complex",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "Mn": 5.6,
+      "S": 3
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Manganês p/ Glifosato",
+    "unit": "L/ha",
+    "defaultDose": 0.6,
+    "doseRaw": "0,6 L/ha",
+    "composition": "Mn 5,6%, S 3% Complexado com Aminoácidos",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Molécula complexada para absorção instantânea do manganês. Mistura com qualquer herbicida. Facilita operacional. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Tecnologia Complex",
+    "ph": "1 a 1,5",
+    "technology": "Complexado com aminoácidos (linha Complex)"
   },
   {
     "id": "union-agro__mg-8",
@@ -10815,18 +10864,22 @@ export const PRODUCTS = [
     "name": "MG 8,5",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "Mg": 8.5
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Magnésio",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "doseRaw": "0,5 a 1 L/ha",
+    "composition": "Mg 8,5% (Cloreto)",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Magnésio em forma de cloreto, efeito também sanitizante. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Nutrição Gran7",
+    "ph": "2,5 a 4,0"
   },
   {
     "id": "fortgreen-f1rst-agbiotech__exodus",
@@ -11015,18 +11068,22 @@ export const PRODUCTS = [
     "name": "Boro 10",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "B": 10
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Boro",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "doseRaw": "0,5 a 1 L/ha",
+    "composition": "B 10% com Monoetanolamina",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Viabilização do orgãos reprodutivos, enchimento de grãos e fibras e produção de translocação de açucares. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Nutrição Gran7",
+    "ph": "8,5 a 9,0"
   },
   {
     "id": "icl__kellus-manganes-sais",
@@ -11255,18 +11312,23 @@ export const PRODUCTS = [
     "name": "Zinco 10",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "Zn": 10,
+      "S": 5
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Zinco",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "doseRaw": "0,1 a 1 L/ha",
+    "composition": "Zn 10%, S 5%",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Estímulo enzimático. Cuidar dosagem, produto simples a base de sulfato de zinco. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Nutrição Gran7",
+    "ph": "3,5 a 4,5"
   },
   {
     "id": "dimicron__dimizinco",
@@ -11495,18 +11557,23 @@ export const PRODUCTS = [
     "name": "Mo10%Co1%",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "Co": 1,
+      "Mo": 10
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "CoMo",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "doseRaw": "0,1 a 0,5 L/ha",
+    "composition": "Co 1%, Mo 10%",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Estimulo a FBN. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Nutrição Gran7",
+    "ph": "5,5 a 7,0"
   },
   {
     "id": "ubyfol__k-50",
@@ -11575,18 +11642,22 @@ export const PRODUCTS = [
     "name": "Gran Finnale",
     "hasNutrients": false,
     "nutrients": {},
-    "nutrientsPercent": {},
+    "nutrientsPercent": {
+      "K2O": 30
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Potássio",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "doseRaw": "0,5 a 1 L/ha",
+    "composition": "K2O 30% (Cloreto de Potássio)",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Potássio concentrado em forma de cloreto. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Nutrição Gran7",
+    "ph": "5,5 a 6,0"
   },
   {
     "id": "dimicron__k-400-full",
@@ -11893,20 +11964,40 @@ export const PRODUCTS = [
     "brand": "GRAN7",
     "category": "NUTRIÇÃO E FISIOLOGIA",
     "name": "Brave Max",
-    "hasNutrients": false,
-    "nutrients": {},
-    "nutrientsPercent": {},
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 80,
+      "Cu": 5,
+      "Mg": 20,
+      "Mn": 140,
+      "Ni": 4,
+      "Zn": 45,
+      "S": 129,
+      "B": 15
+    },
+    "nutrientsPercent": {
+      "K2O": 8,
+      "Cu": 0.5,
+      "Mg": 2,
+      "Mn": 14,
+      "Ni": 0.4,
+      "Zn": 4.5,
+      "S": 12.9,
+      "B": 1.5
+    },
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Micronutrientes",
+    "unit": "kg/ha",
+    "defaultDose": 0.5,
+    "doseRaw": "0,5 a 2 Kg/ha",
+    "composition": "K2O 8%, Mn 14%, B 1,5%, Cu 0,5%, Zn 4,5%, S 12,9%, Mg 2%, Ni 0,4%",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Nutrientes balanceados em fórmula concentrada solúvel. Nutrição equilibrada.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Nutrição Gran7",
+    "ph": "3,5 a 5,0"
   },
   {
     "id": "ballagro__acera-helymax-ec",
@@ -12357,16 +12448,17 @@ export const PRODUCTS = [
     "nutrients": {},
     "nutrientsPercent": {},
     "density": null,
-    "unit": null,
-    "defaultDose": null,
-    "doseRaw": null,
-    "composition": "Bionematicida",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "doseRaw": "0,1 a 0,4 L/ha",
+    "composition": "Nematicida fitoquímico. Primeiro e único registrado no Brasil.",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Nematicida fitoquímico concentrado de contato. Mata qualquer nematoide que entrar em contato, ovos, juvenis e adultos. Age somente nos nematoides, não interferindo em fungos, bactérias, insetos e outros organismos vivos. Tecnologia natural com residual de até 75 dias.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Nome extraído da matriz de equivalência interna (COMPARATIVO_PORTFOLIO_MERCADO_AGROCETE.xlsx) — sem dados nutricionais cadastrados ainda."
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Nematicida Fitoquímico"
   },
   {
     "id": "nutriplant__aminonutri",
@@ -41733,5 +41825,632 @@ export const PRODUCTS = [
     "category": "NanoX (Foliar)",
     "name": "Mn-Max",
     "fonte": "Material \"Operação X\" da Microxisto (planilha enviada pelo usuário)."
+  },
+  {
+    "id": "gran7__bio-seeds",
+    "brand": "GRAN7",
+    "category": "Tratamento de Sementes",
+    "name": "Bio Seeds",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tratamento de Sementes",
+    "composition": "N 3%, P2O5 5%, K2O 1%, Ca 1%, Mg 0,5%, B 0,5%, Co 0,2%, Cu 0,5%, Mn 2%, Mo 10%, Ni 0,1%, Zn 1% + 6% COT",
+    "doseRaw": "0,1 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "observations": "Composição de macros e micros nutrientes para melhoria da germinação e desenvolvimento inicial das plantas. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "4,5 a 5,5",
+    "nutrientsPercent": {
+      "P2O5": 5,
+      "K2O": 1,
+      "Ca": 1,
+      "Co": 0.2,
+      "Cu": 0.5,
+      "Mg": 0.5,
+      "Mn": 2,
+      "Mo": 10,
+      "Ni": 0.1,
+      "Zn": 1,
+      "N": 3,
+      "B": 0.5
+    }
+  },
+  {
+    "id": "gran7__v-max",
+    "brand": "GRAN7",
+    "category": "Tratamento de Sementes",
+    "name": "V-Max+",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tratamento de Sementes",
+    "composition": "S 1,6%, B 0,5%, Co 1%, Zn 2%, Mo 10% + 6,5% COT",
+    "doseRaw": "0,1 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "observations": "Melhoria do arranque, desenvolvimento inicial e melhor aproveitamento da água e nutrientes pela plantas gramíneas. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "5,5 a 6,7",
+    "nutrientsPercent": {
+      "Co": 1,
+      "Mo": 10,
+      "Zn": 2,
+      "S": 1.6,
+      "B": 0.5
+    }
+  },
+  {
+    "id": "gran7__verdesian-preside-take-off",
+    "brand": "GRAN7",
+    "category": "Inoculantes",
+    "name": "Verdesian Preside + Take-Off",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Inoculantes",
+    "composition": "Bradyrhizobium: 3,0 x 10⁹ UFC por ml + Protetor",
+    "doseRaw": "100 mL/50 Kg semente",
+    "unit": "L/ha",
+    "observations": "Inoculante de soja com agentes de proteção e crescimento para a bactéria",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário)."
+  },
+  {
+    "id": "gran7__bravero",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "Bravero",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Nutrição Gran7",
+    "composition": "Co 1%, Mo 10%, Ni 1%",
+    "doseRaw": "0,1 a 0,5 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "observations": "Estimulo e potencialização da FBN, maior eficiência na disponibilidade do N, manutenção dos nódulos. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "5,2",
+    "nutrientsPercent": {
+      "Co": 1,
+      "Mo": 10,
+      "Ni": 1
+    }
+  },
+  {
+    "id": "gran7__molibdenio-15",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "Molibdênio 15%",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Nutrição Gran7",
+    "composition": "Mo 15%",
+    "doseRaw": "0,1 a 0,4 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "observations": "Melhor assimilação de N. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "6,5 a 7,0",
+    "nutrientsPercent": {
+      "Mo": 15
+    }
+  },
+  {
+    "id": "gran7__cab-ii",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "CaB II",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Nutrição Gran7",
+    "composition": "Ca 8% B 2%",
+    "doseRaw": "0,5 a 1 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "observations": "Indicado para a fase de estruturação de plantas, ajuda na viabilização de estruturas reprodutivas. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "5,0",
+    "nutrientsPercent": {
+      "Ca": 8,
+      "B": 2
+    }
+  },
+  {
+    "id": "gran7__cobre-7",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "Cobre 7%",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Nutrição Gran7",
+    "composition": "Cu 7%",
+    "doseRaw": "0,1 a 0,5 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "observations": "Lignificação, estruturação, protetor. Cuidar dosagem, produto simples a base de sulfato de cobre. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "8,5 a 9,3",
+    "nutrientsPercent": {
+      "Cu": 7
+    }
+  },
+  {
+    "id": "gran7__manganes-10",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "Manganês 10",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Nutrição Gran7",
+    "composition": "Mn 10%, S 5%, N 1%",
+    "doseRaw": "1 a 2 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 1,
+    "observations": "Fornecimento de manganês simples. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "2,0",
+    "nutrientsPercent": {
+      "Mn": 10,
+      "N": 1,
+      "S": 5
+    }
+  },
+  {
+    "id": "gran7__mgn-6",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "MGN 6",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Nutrição Gran7",
+    "composition": "Mg 6% (Nitrato), N 7%",
+    "doseRaw": "0,5 a 1 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "observations": "Magnésio em forma de nitrato, absorção rápida. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "5,0 a 7,0",
+    "nutrientsPercent": {
+      "Mg": 6,
+      "N": 7
+    }
+  },
+  {
+    "id": "gran7__p-30",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "P-30",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Nutrição Gran7",
+    "composition": "P2O5 30%",
+    "doseRaw": "0,5 a 1 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "observations": "Fonte de fósforo, baixo pH. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "1,0",
+    "nutrientsPercent": {
+      "P2O5": 30
+    }
+  },
+  {
+    "id": "gran7__n-30",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "N-30",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Nutrição Gran7",
+    "composition": "N 30%",
+    "doseRaw": "0,5 a 1 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "observations": "Estímulo na absorção de N. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "6,0 a 7,0",
+    "nutrientsPercent": {
+      "N": 30
+    }
+  },
+  {
+    "id": "gran7__spartan",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "Spartan",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Nutrição Gran7",
+    "composition": "N 5,2%, Mg 1,51%, B 0,4%, Mn 5,2%, Mo 0,04%, Zn 3,26%",
+    "doseRaw": "0,5 a 2 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "observations": "Complexo de macros e micros em forma de nitrato. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "2,0",
+    "nutrientsPercent": {
+      "Mg": 1.51,
+      "Mn": 5.2,
+      "Mo": 0.04,
+      "Zn": 3.26,
+      "N": 5.2,
+      "B": 0.4
+    }
+  },
+  {
+    "id": "gran7__brave-k",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "Brave K",
+    "hasNutrients": true,
+    "nutrients": {
+      "K2O": 220,
+      "Mg": 40,
+      "N": 50,
+      "S": 50,
+      "B": 40
+    },
+    "line": "Nutrição Gran7",
+    "composition": "N 5%, K2O 22%, Mg 4%, B 4%, S 5%",
+    "doseRaw": "0,5 a 1 Kg/ha",
+    "unit": "kg/ha",
+    "defaultDose": 0.5,
+    "observations": "Fonte concentrada a base de nitrato de potássio, magnésio, boro e enxofre.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "3,78",
+    "nutrientsPercent": {
+      "K2O": 22,
+      "Mg": 4,
+      "N": 5,
+      "S": 5,
+      "B": 4
+    }
+  },
+  {
+    "id": "gran7__manganes-kmol",
+    "brand": "GRAN7",
+    "category": "Nutrição Gran7",
+    "name": "Manganês Kmol",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 300,
+      "Mo": 3,
+      "K2O": 10,
+      "S": 165.6
+    },
+    "line": "Nutrição Gran7",
+    "composition": "Mn 30%, Mo 0,3%, S 16,56%, K 1%",
+    "doseRaw": "0,5 a 2 Kg/ha",
+    "unit": "kg/ha",
+    "defaultDose": 0.5,
+    "observations": "Fonte solúvel concentrada em manganês, a base de sulfato. O material declara \"K\"; interpretado como K2O (convenção de rótulo no Brasil) - confirme na ficha técnica.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "2,5 a 4,5",
+    "nutrientsPercent": {
+      "Mn": 30,
+      "Mo": 0.3,
+      "K2O": 1,
+      "S": 16.56
+    }
+  },
+  {
+    "id": "gran7__sallvare-complex",
+    "brand": "GRAN7",
+    "category": "Tecnologia Complex",
+    "name": "Sallvare Complex",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tecnologia Complex",
+    "composition": "Cu 8% Complexado com Aminoácidos",
+    "doseRaw": "0,05 a 0,15 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.05,
+    "observations": "Molécula complexada para absorção instantânea. Fornece cobre sem queimar e facilita operacional. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "9,3",
+    "technology": "Complexado com aminoácidos (linha Complex)",
+    "nutrientsPercent": {
+      "Cu": 8
+    }
+  },
+  {
+    "id": "gran7__zincatus-complex",
+    "brand": "GRAN7",
+    "category": "Tecnologia Complex",
+    "name": "Zincatus Complex",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tecnologia Complex",
+    "composition": "Zn 5,8%, S 2,8% Complexado com Aminoácidos",
+    "doseRaw": "0,2 a 0,5 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.2,
+    "observations": "Molécula complexada para absorção instantânea. Fornece zinco sem risco de fitotoxidez e facilita operacional. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "2,2 a 3,2",
+    "technology": "Complexado com aminoácidos (linha Complex)",
+    "nutrientsPercent": {
+      "Zn": 5.8,
+      "S": 2.8
+    }
+  },
+  {
+    "id": "gran7__boratus-complex",
+    "brand": "GRAN7",
+    "category": "Tecnologia Complex",
+    "name": "Boratus Complex",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tecnologia Complex",
+    "composition": "B 10% + COT + Manitol + Sorbitol",
+    "doseRaw": "0,5 a 1 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "observations": "Aumento da disponibilidade de boro na planta, viabilização de orgãos reprodutivos, pegamento de estruturas em frutíferas. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "8,05",
+    "technology": "Complexado com aminoácidos (linha Complex)",
+    "nutrientsPercent": {
+      "B": 10
+    }
+  },
+  {
+    "id": "gran7__magmill-complex",
+    "brand": "GRAN7",
+    "category": "Tecnologia Complex",
+    "name": "Magmill Complex",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tecnologia Complex",
+    "composition": "N 6%, Mg 5%, Mn 0,08%, Cu 0,02%, B 0,05%, Mo 0,015% - Complexado com Aminoácidos",
+    "doseRaw": "0,3 a 2 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.3,
+    "observations": "Molécula complexada para absorção instantânea do magnésio. Mais eficiência na translocação do nutriente. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "3,85",
+    "technology": "Complexado com aminoácidos (linha Complex)",
+    "nutrientsPercent": {
+      "Cu": 0.02,
+      "Mg": 5,
+      "Mn": 0.08,
+      "Mo": 0.015,
+      "N": 6,
+      "B": 0.05
+    }
+  },
+  {
+    "id": "gran7__sentinel-k",
+    "brand": "GRAN7",
+    "category": "Fosfitos",
+    "name": "Sentinel K",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Fosfitos",
+    "composition": "P2O5 30%, K2O 20%",
+    "doseRaw": "0,2 a 0,5 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.2,
+    "observations": "Fosfito de Potássio, para estímulo da defesa da planta. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "3,5 a 4,0",
+    "nutrientsPercent": {
+      "P2O5": 30,
+      "K2O": 20
+    }
+  },
+  {
+    "id": "gran7__sentinel-cobre",
+    "brand": "GRAN7",
+    "category": "Fosfitos",
+    "name": "Sentinel Cobre",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Fosfitos",
+    "composition": "P2O5 20%, Cu 3%",
+    "doseRaw": "0,2 a 0,5 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.2,
+    "observations": "Fosfito de Cobre, para estímulo à defesa da planta. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "2,5 a 3,5",
+    "nutrientsPercent": {
+      "P2O5": 20,
+      "Cu": 3
+    }
+  },
+  {
+    "id": "gran7__sentinel-mn",
+    "brand": "GRAN7",
+    "category": "Fosfitos",
+    "name": "Sentinel Mn",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Fosfitos",
+    "composition": "P2O5 30%, Mn 7%",
+    "doseRaw": "0,2 a 0,5 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.2,
+    "observations": "Fosfito de Manganês para estímulo da defesa da planta. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "1,5 a 3,0",
+    "nutrientsPercent": {
+      "P2O5": 30,
+      "Mn": 7
+    }
+  },
+  {
+    "id": "gran7__sentinel-niquel",
+    "brand": "GRAN7",
+    "category": "Fosfitos",
+    "name": "Sentinel Níquel",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Fosfitos",
+    "composition": "P2O5 30%, Ni 1%",
+    "doseRaw": "0,2 a 0,5 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.2,
+    "observations": "Fosfito de Níquel, para estímulo da defesa da planta. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "2,5 a 3,5",
+    "nutrientsPercent": {
+      "P2O5": 30,
+      "Ni": 1
+    }
+  },
+  {
+    "id": "gran7__savium",
+    "brand": "GRAN7",
+    "category": "Fisiológicos",
+    "name": "Savium",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Fisiológicos",
+    "composition": "Ác. Salicílico + Fosfito + Biguanida + Quaternário",
+    "doseRaw": "0,3 a 0,5 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.3,
+    "observations": "Indução de resistência sistêmica, proteção contra estresses bióticos e abióticos, estímulo à cicatrização.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "1,5"
+  },
+  {
+    "id": "gran7__glyfort",
+    "brand": "GRAN7",
+    "category": "Tecnologias Anti-Estresse",
+    "name": "Glyfort",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tecnologias Anti-Estresse",
+    "composition": "32% Glicina Betaína + 4% Ác. Fúlvicos",
+    "doseRaw": "0,2 a 0,4 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.2,
+    "observations": "Manutenção do transporte de água na planta. Resistência a estresses abióticos como altas e baixas temperaturas, excesso ou falta de água.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "5,6"
+  },
+  {
+    "id": "gran7__ferggum",
+    "brand": "GRAN7",
+    "category": "Tecnologias Anti-Estresse",
+    "name": "Ferggum",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tecnologias Anti-Estresse",
+    "composition": "4% de Glicina Betaína + 22% de Ác. Fúlvicos",
+    "doseRaw": "0,5 a 1,5 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "observations": "Composição com Ác. Fúlvicos + Glicina Betaína para aplicação com herbicida mantendo o fluxo de água na planta, evitando travamento fisiológico.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "5,7"
+  },
+  {
+    "id": "gran7__spander",
+    "brand": "GRAN7",
+    "category": "Tecnologias Anti-Estresse",
+    "name": "Spander",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tecnologias Anti-Estresse",
+    "composition": "N 5,5%, P2O5 2% - Precursor de hormônios",
+    "doseRaw": "0,1 a 0,4 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "observations": "Desenvolvimento radicular, desenvolvimento vegetativo e estímulo ao enraizamento. Precursor de auxina, giberelina e citocinina. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "2,5 a 3,5",
+    "nutrientsPercent": {
+      "P2O5": 2,
+      "N": 5.5
+    }
+  },
+  {
+    "id": "gran7__orggam",
+    "brand": "GRAN7",
+    "category": "Tecnologias Anti-Estresse",
+    "name": "Orggam",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Tecnologias Anti-Estresse",
+    "composition": "N 15%, P2O5 8%, K2O 8%, Ca 1%, Mg 0,5%, B 0,5%, Cu 0,2%, Mn 0,5%, Mo 0,1%, Zn 1% + 14,66% COT",
+    "doseRaw": "0,5 a 2 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.5,
+    "observations": "Composição de NPK mais micronutrientes e 19 aminoácidos equilibrados para maior pegamento de estruturas reprodutivas, tolerância a estresses, redistribuição dos nutrientes, manutenção do fluxo hídrico e da fotossíntese. Maior condicionamento para a planta expressar seu maior potencial genético. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "2,5 a 2,8",
+    "nutrientsPercent": {
+      "P2O5": 8,
+      "K2O": 8,
+      "Ca": 1,
+      "Cu": 0.2,
+      "Mg": 0.5,
+      "Mn": 0.5,
+      "Mo": 0.1,
+      "Zn": 1,
+      "N": 15,
+      "B": 0.5
+    }
+  },
+  {
+    "id": "gran7__nittro-oil-n21",
+    "brand": "GRAN7",
+    "category": "Óleos e Condicionadores",
+    "name": "Nittro Oil N21%",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Óleos e Condicionadores",
+    "composition": "N 21% (Óleo nitrogenado)",
+    "doseRaw": "0,4 a 1 L/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.4,
+    "observations": "Melhor distribuição e aderência da calda de aplicação nas plantas. Garantias declaradas só em %m/m e sem densidade no material: sem a densidade não dá para converter para g/L nem calcular custo por kg de nutriente.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "5,0 a 6,5",
+    "nutrientsPercent": {
+      "N": 21
+    }
+  },
+  {
+    "id": "gran7__elleve",
+    "brand": "GRAN7",
+    "category": "Óleos e Condicionadores",
+    "name": "Elleve",
+    "hasNutrients": false,
+    "nutrients": {},
+    "line": "Óleos e Condicionadores",
+    "composition": "Elevar o pH da calda",
+    "doseRaw": "10 a 80 mL/ha",
+    "unit": "L/ha",
+    "defaultDose": 0.01,
+    "observations": "Elevar o pH da calda.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": ">13"
+  },
+  {
+    "id": "gran7__diffuse",
+    "brand": "GRAN7",
+    "category": "Óleos e Condicionadores",
+    "name": "Diffuse",
+    "hasNutrients": true,
+    "nutrients": {
+      "Mn": 30,
+      "Zn": 30,
+      "S": 25
+    },
+    "line": "Óleos e Condicionadores",
+    "composition": "S 2,5%, Mn 3%, Zn 3% (Compatibilizador de Calda)",
+    "doseRaw": "50 a 200 g/ha",
+    "unit": "kg/ha",
+    "defaultDose": 0.05,
+    "observations": "Compatibilizador de calda.",
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "ph": "1,5 a 2,0",
+    "nutrientsPercent": {
+      "Mn": 3,
+      "Zn": 3,
+      "S": 2.5
+    }
   }
 ];

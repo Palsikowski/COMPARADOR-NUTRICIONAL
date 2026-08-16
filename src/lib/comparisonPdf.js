@@ -11,6 +11,7 @@
 import { fmtNum } from "./economics.js";
 import { provenanceOf } from "./provenance.js";
 import { nutrientLabel } from "./nutrientLabels.js";
+import { chartValues } from "./brandTiles.js";
 
 // A fonte padrão do jsPDF (WinAnsi) não tem travessão nem aspas curvas.
 function pdfSafe(s) {
@@ -27,7 +28,7 @@ function pdfSafe(s) {
 
 const HEX = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
 
-export async function exportComparison({ brand, products, panels, withoutData = [], note = "", colors }) {
+export async function exportComparison({ brand, products, panels, withoutData = [], note = "", colorOf }) {
   const { jsPDF } = await import("jspdf");
   const doc = new jsPDF();
   const W = 210;
@@ -97,7 +98,7 @@ export async function exportComparison({ brand, products, panels, withoutData = 
     // Legenda: identidade nunca fica só na cor, nem no papel.
     panel.products.forEach((p, i) => {
       ensure(7);
-      const [r, g, b] = HEX(colors[i % colors.length]);
+      const [r, g, b] = HEX(colorOf.get(p.id));
       doc.setFillColor(r, g, b);
       doc.rect(M, y - 3, 3.5, 3.5, "F");
       doc.setFontSize(9);
@@ -115,8 +116,8 @@ export async function exportComparison({ brand, products, panels, withoutData = 
     function legendStrip() {
       doc.setFontSize(7.5);
       let x = M;
-      panel.products.forEach((p, i) => {
-        const [r, g, b] = HEX(colors[i % colors.length]);
+      panel.products.forEach((p) => {
+        const [r, g, b] = HEX(colorOf.get(p.id));
         doc.setFillColor(r, g, b);
         doc.rect(x, y - 2.6, 3, 3, "F");
         doc.setTextColor(110);
@@ -147,11 +148,11 @@ export async function exportComparison({ brand, products, panels, withoutData = 
       doc.setTextColor(0);
 
       panel.products.forEach((p, i) => {
-        const v = Number(p.nutrients?.[nut]) || 0;
+        const v = Number(chartValues(p)?.values?.[nut]) || 0;
         const w = panel.max > 0 ? (v / panel.max) * plotW : 0;
         const by = top + i * rowH;
         if (v > 0) {
-          const [r, g, b] = HEX(colors[i % colors.length]);
+          const [r, g, b] = HEX(colorOf.get(p.id));
           doc.setFillColor(r, g, b);
           doc.roundedRect(M + labelW, by, Math.max(w, 0.8), barH, 0.8, 0.8, "F");
         }
@@ -214,7 +215,7 @@ export async function exportComparison({ brand, products, panels, withoutData = 
       doc.text(pdfSafe(nutrientLabel(nut)), M, y + 2, { maxWidth: 38 });
       doc.setTextColor(0);
       panel.products.forEach((p, i) => {
-        const v = Number(p.nutrients?.[nut]) || 0;
+        const v = Number(chartValues(p)?.values?.[nut]) || 0;
         doc.setTextColor(v > 0 ? 0 : 160);
         doc.text(v > 0 ? fmtNum(v) : "-", M + 40 + colW * i + colW - 1, y + 2, { align: "right" });
         doc.setTextColor(0);

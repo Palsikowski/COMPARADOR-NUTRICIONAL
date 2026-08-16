@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { ArrowLeft, Search, X, FileDown, BarChart3, AlertTriangle, Info, FileText } from "lucide-react";
 import { productsOfBrand, AGROCETE } from "../lib/catalog.js";
-import { tileFor, comparisonData } from "../lib/brandTiles.js";
-import { concentrationUnit, fmtNum } from "../lib/economics.js";
+import { tileFor, comparisonData, chartValues } from "../lib/brandTiles.js";
+import { fmtNum } from "../lib/economics.js";
 import ComparisonChart, { seriesColors, MAX_SERIES } from "../components/ComparisonChart.jsx";
 import ProductSheet from "../components/ProductSheet.jsx";
 import DataBadge from "../components/DataBadge.jsx";
@@ -29,7 +29,7 @@ export default function BrandPage({ brand, onBack, dark }) {
     const term = q.trim().toLowerCase();
     const base = term ? all.filter((p) => p.name.toLowerCase().includes(term)) : all;
     // Produto com composição primeiro: é com ele que dá pra montar o gráfico.
-    return [...base].sort((a, b) => Number(b.hasNutrients) - Number(a.hasNutrients) || a.name.localeCompare(b.name));
+    return [...base].sort((a, b) => Number(!!chartValues(b)) - Number(!!chartValues(a)) || a.name.localeCompare(b.name));
   }, [all, q]);
 
   const selectedProducts = useMemo(
@@ -37,7 +37,14 @@ export default function BrandPage({ brand, onBack, dark }) {
     [selected, all]
   );
   const { panels, withoutData } = useMemo(() => comparisonData(selectedProducts), [selectedProducts]);
-  const colors = seriesColors(dark);
+
+  // A cor identifica o PRODUTO, não a posição dele dentro de um painel. Com a
+  // seleção dividida em mais de um gráfico (g/kg e %m/m, por exemplo), colorir
+  // por posição daria a mesma cor a dois produtos diferentes na mesma tela.
+  const colorOf = useMemo(() => {
+    const pal = seriesColors(dark);
+    return new Map(selected.map((id, i) => [id, pal[i % pal.length]]));
+  }, [selected, dark]);
   const full = selected.length >= MAX_SERIES;
 
   function toggle(p) {
@@ -47,7 +54,15 @@ export default function BrandPage({ brand, onBack, dark }) {
   async function handleExport() {
     setExporting(true);
     try {
-      await exportComparison({ brand, products: selectedProducts, panels, withoutData, note, colors: seriesColors(false) });
+      const pal = seriesColors(false);
+      await exportComparison({
+        brand,
+        products: selectedProducts,
+        panels,
+        withoutData,
+        note,
+        colorOf: new Map(selected.map((id, i) => [id, pal[i % pal.length]])),
+      });
     } finally {
       setExporting(false);
     }
@@ -140,10 +155,22 @@ export default function BrandPage({ brand, onBack, dark }) {
                 <ComparisonChart
                   key={panel.unit}
                   panel={panel}
-                  colors={colors}
+                  colorOf={colorOf}
                   title={panels.length > 1 ? `Produtos em ${panel.unit}` : "Composição declarada"}
                 />
               ))}
+            </div>
+          )}
+
+          {panels.some((p) => p.unit === "% m/m") && (
+            <div style={{ display: "flex", gap: 9, fontSize: 12.5, marginTop: 14, padding: "11px 13px", background: "var(--warn-soft)", borderRadius: "var(--radius-sm)", lineHeight: 1.55 }}>
+              <AlertTriangle size={15} style={{ color: "var(--warn)", flexShrink: 0, marginTop: 1 }} />
+              <span>
+                O gráfico em <strong>%m/m</strong> compara a proporção declarada, não a entrega por hectare: esses
+                produtos vieram sem densidade no material de origem, então não dá para converter para g/L nem
+                calcular custo por kg de nutriente. Informando a densidade pela ficha técnica (botão Editar), eles
+                passam a entrar nas contas.
+              </span>
             </div>
           )}
 
@@ -151,9 +178,9 @@ export default function BrandPage({ brand, onBack, dark }) {
             <div style={{ display: "flex", gap: 9, fontSize: 12.5, marginTop: 14, padding: "11px 13px", background: "var(--info-soft)", borderRadius: "var(--radius-sm)", lineHeight: 1.55 }}>
               <Info size={15} style={{ color: "var(--info)", flexShrink: 0, marginTop: 1 }} />
               <span>
-                A seleção mistura líquidos (g/L) e sólidos (g/kg). São dois gráficos porque as duas unidades não
-                dividem a mesma escala — g/L é por litro, g/kg é por quilo. Comparar as alturas entre os dois
-                gráficos não significa nada.
+                A seleção mistura <strong>{panels.map((p) => p.unit).join(" e ")}</strong>. É um gráfico por unidade
+                porque elas não dividem a mesma escala — g/L é por litro, g/kg é por quilo e %m/m é proporção.
+                Comparar as alturas entre um gráfico e outro não significa nada.
               </span>
             </div>
           )}
@@ -185,7 +212,6 @@ export default function BrandPage({ brand, onBack, dark }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {list.map((p) => {
           const on = selected.includes(p.id);
-          const idx = selected.indexOf(p.id);
           return (
             <div key={p.id} className="card" style={{ padding: 12, display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
               <label style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 220, cursor: on || !full ? "pointer" : "default" }}>
@@ -195,15 +221,22 @@ export default function BrandPage({ brand, onBack, dark }) {
                   disabled={!on && full}
                   onChange={() => toggle(p)}
                   aria-label={`Comparar ${p.name}`}
-                  style={{ width: 18, height: 18, accentColor: on ? colors[idx] : undefined, flexShrink: 0 }}
+                  style={{ width: 18, height: 18, accentColor: on ? colorOf.get(p.id) : undefined, flexShrink: 0 }}
                 />
                 <span style={{ minWidth: 0 }}>
                   <span style={{ display: "block", fontSize: 14.5, fontWeight: 600, lineHeight: 1.3 }}>{p.name}</span>
                   <span className="muted" style={{ display: "block", fontSize: 12, marginTop: 2 }}>
                     {p.category || "sem categoria"}
-                    {p.hasNutrients
-                      ? ` · ${Object.entries(p.nutrients).filter(([, v]) => Number(v) > 0).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${nutrientLabel(k)} ${fmtNum(v)} ${concentrationUnit(p)}`).join(" · ")}`
-                      : " · sem composição cadastrada"}
+                    {(() => {
+                      const cv = chartValues(p);
+                      if (!cv) return " · sem composição cadastrada";
+                      return ` · ${Object.entries(cv.values)
+                        .filter(([, v]) => Number(v) > 0)
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 3)
+                        .map(([k, v]) => `${nutrientLabel(k)} ${fmtNum(v)}${cv.unit === "% m/m" ? "%" : ` ${cv.unit}`}`)
+                        .join(" · ")}`;
+                    })()}
                   </span>
                 </span>
               </label>
