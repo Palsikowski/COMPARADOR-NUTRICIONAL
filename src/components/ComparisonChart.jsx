@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Table2, BarChart3 } from "lucide-react";
 import { fmtNum } from "../lib/economics.js";
 import { NUTRIENT_LABEL } from "../lib/nutrientLabels.js";
+import { chartValues } from "../lib/brandTiles.js";
 
 // Gráfico comparativo de composição entre produtos selecionados.
 //
@@ -32,7 +33,7 @@ const GAP = 2; // respiro na cor do fundo entre barras vizinhas
 const LABEL_W = 104;
 const VALUE_W = 78;
 
-export default function ComparisonChart({ panel, colors, title }) {
+export default function ComparisonChart({ panel, colorOf, title }) {
   const [view, setView] = useState("grafico");
   const { unit, products, nutrients, max } = panel;
 
@@ -59,9 +60,9 @@ export default function ComparisonChart({ panel, colors, title }) {
       {/* Legenda sempre presente com 2+ séries: identidade nunca fica só na cor. */}
       {products.length > 1 && (
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 10 }}>
-          {products.map((p, i) => (
+          {products.map((p) => (
             <span key={p.id} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12.5 }}>
-              <span style={{ width: 11, height: 11, borderRadius: 3, background: colors[i], flexShrink: 0 }} />
+              <span style={{ width: 11, height: 11, borderRadius: 3, background: colorOf.get(p.id), flexShrink: 0 }} />
               <span style={{ color: "var(--text-2)" }}>{p.name}</span>
             </span>
           ))}
@@ -69,7 +70,7 @@ export default function ComparisonChart({ panel, colors, title }) {
       )}
 
       {view === "tabela" ? (
-        <TableView panel={panel} colors={colors} />
+        <TableView panel={panel} colorOf={colorOf} />
       ) : (
         <div style={{ overflowX: "auto" }}>
           <svg
@@ -87,7 +88,7 @@ export default function ComparisonChart({ panel, colors, title }) {
                     {NUTRIENT_LABEL[nut] || nut}
                   </text>
                   {products.map((p, pi) => {
-                    const v = Number(p.nutrients?.[nut]) || 0;
+                    const v = Number(chartValues(p)?.values?.[nut]) || 0;
                     const w = max > 0 ? (v / max) * plotW : 0;
                     const y = top + pi * ROW_H + (ROW_H - BAR_H) / 2;
                     return (
@@ -98,7 +99,7 @@ export default function ComparisonChart({ panel, colors, title }) {
                           width={Math.max(w, v > 0 ? 3 : 0)}
                           height={BAR_H - GAP}
                           rx={4}
-                          fill={colors[pi]}
+                          fill={colorOf.get(p.id)}
                         >
                           <title>{`${p.name} · ${NUTRIENT_LABEL[nut] || nut}: ${v > 0 ? `${fmtNum(v)} ${unit}` : "não declarado"}`}</title>
                         </rect>
@@ -154,7 +155,7 @@ function ViewBtn({ active, onClick, icon: Icon, label }) {
   );
 }
 
-function TableView({ panel, colors }) {
+function TableView({ panel, colorOf }) {
   const { unit, products, nutrients } = panel;
   return (
     <div style={{ overflowX: "auto" }}>
@@ -165,10 +166,10 @@ function TableView({ panel, colors }) {
         <thead>
           <tr>
             <th style={{ textAlign: "left", padding: "7px 8px", borderBottom: "1px solid var(--border)", fontWeight: 600 }}>Nutriente</th>
-            {products.map((p, i) => (
+            {products.map((p) => (
               <th key={p.id} style={{ textAlign: "right", padding: "7px 8px", borderBottom: "1px solid var(--border)", fontWeight: 600 }}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 9, height: 9, borderRadius: 2, background: colors[i] }} />
+                  <span style={{ width: 9, height: 9, borderRadius: 2, background: colorOf.get(p.id) }} />
                   {p.name}
                 </span>
               </th>
@@ -182,7 +183,7 @@ function TableView({ panel, colors }) {
                 {NUTRIENT_LABEL[nut] || nut}
               </td>
               {products.map((p) => {
-                const v = Number(p.nutrients?.[nut]) || 0;
+                const v = Number(chartValues(p)?.values?.[nut]) || 0;
                 return (
                   <td key={p.id} className="tnum" style={{ textAlign: "right", padding: "7px 8px", borderBottom: "1px solid var(--border)", color: v > 0 ? "var(--text)" : "var(--text-3)" }}>
                     {v > 0 ? fmtNum(v) : "—"}

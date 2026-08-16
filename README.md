@@ -36,7 +36,7 @@ PDF. Empresas deixou de ser uma terceira entrada nele e ganhou tela própria.
 
 ## Catálogo em grade (Produtos)
 
-A navegação do catálogo é uma **grade virtualizada** sobre os 1.595 produtos,
+A navegação do catálogo é uma **grade virtualizada** sobre os 1.625 produtos,
 com barra de filtros fixa no topo.
 
 - **Colunas:** 4 (≥1240px), 3 (≥940px), 2 (≥640px), 1 no celular.
@@ -85,7 +85,7 @@ o desfazer.
 
 ### Virtualização
 
-Renderizar 1.595 cards de uma vez trava celular, então só as linhas visíveis
+Renderizar 1.625 cards de uma vez trava celular, então só as linhas visíveis
 (mais uma margem) vão ao DOM — medido: **52 cards no DOM**, constante ao
 rolar. Não foi usada biblioteca: a janela é calculada a partir do scroll
 (`useWindowed` em `src/pages/Catalog.jsx`).
@@ -150,7 +150,7 @@ de fora da conta por não terem preço.
 ## Empresas: bandeiras, gráfico e PDF
 
 A entrada **Empresas** era o mesmo catálogo agrupado por marca: para chegar a
-uma empresa específica era preciso rolar os 1.595 produtos. Agora é uma vitrine
+uma empresa específica era preciso rolar os 1.625 produtos. Agora é uma vitrine
 de bandeiras — 61 blocos, um por empresa, com o tamanho do portfólio e quanto
 dele tem composição cadastrada. Buscar por nome filtra a vitrine.
 
@@ -188,9 +188,16 @@ Três decisões que mudam o que o gráfico diz:
   leria como "não entrega"; o certo é "não sabemos".
 - **Produto sem composição não entra no gráfico** — sai listado abaixo dele,
   com o nome, para a ausência ficar à vista em vez de sumir.
-- **g/L e g/kg não dividem eixo.** Um é por litro, o outro por quilo. Quando a
-  seleção mistura líquido e sólido saem **dois gráficos**, cada um com sua
-  escala, e um aviso de que comparar as alturas entre eles não significa nada.
+- **g/L, g/kg e %m/m não dividem eixo.** Um é por litro, o outro por quilo e o
+  terceiro é proporção. Quando a seleção mistura, sai **um gráfico por
+  unidade**, cada um com sua escala, e um aviso de que comparar as alturas
+  entre eles não significa nada. O painel de **%m/m** existe para os produtos
+  que vieram sem densidade no material de origem: comparar a proporção
+  declarada entre eles é legítimo, e a tela avisa que isso não é entrega por
+  hectare.
+- **A cor identifica o produto, não a posição no gráfico.** Com a seleção
+  dividida em mais de um painel, colorir por posição daria a mesma cor a dois
+  produtos diferentes na mesma tela.
 
 Todo valor é rotulado direto na barra e existe **visão de tabela** no mesmo
 lugar: dois dos quatro tons ficam abaixo de 3:1 de contraste sobre o fundo
@@ -213,7 +220,7 @@ Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
 - **É leitura de texto (OCR), não reconhecimento visual da embalagem.** Não
   existe nenhuma foto de produto cadastrada na base, então não há como treinar
   reconhecimento por aparência. O que dá para ler com segurança é o nome
-  impresso, e casá-lo com os 1.595 nomes do catálogo.
+  impresso, e casá-lo com os 1.625 nomes do catálogo.
 - **Roda no aparelho.** O leitor (worker, núcleo WebAssembly e modelo de
   idioma, ~14 MB em `public/ocr/`) é servido pelo próprio app, não por CDN —
   sem isso a função só funcionaria com internet, o oposto do que o campo
@@ -296,12 +303,13 @@ Situação atual do catálogo (medida, não estimada):
 
 | Dado | Cobertura |
 | --- | --- |
-| Nome, marca, categoria | 1595 / 1595 |
-| Origem do dado (`fonte`) | 1595 / 1595 |
-| Composição nutricional | 1123 / 1595 |
-| Dose de referência | **248 / 1595** |
-| Densidade | 761 / 1595 |
-| Posicionamento por cultura/estádio | **16 / 1595** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
+| Nome, marca, categoria | 1625 / 1625 |
+| Origem do dado (`fonte`) | 1625 / 1625 |
+| Composição convertida (g/L ou g/kg) | 1128 / 1625 |
+| Composição só em %m/m (sem densidade) | 42 / 1625 |
+| Dose de referência | **293 / 1625** |
+| Densidade | 761 / 1625 |
+| Posicionamento por cultura/estádio | **16 / 1625** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
 | Preço | **0** — preço não está no catálogo, é sempre informado pelo usuário |
 
 Consequências práticas, que a interface deixa explícitas:
@@ -324,10 +332,11 @@ Todo produto carrega um selo derivado do campo `fonte`, clicável para ver
 a origem registrada (`src/lib/provenance.js`):
 
 - **✓ Planilha oficial** (308 produtos) — planilha interna Agrocete.
-- **✓ Dado informado** (1070) — planilhas enviadas pela equipe, sem
+- **✓ Dado informado** (1118) — planilhas enviadas pela equipe, sem
   conferência contra ficha técnica do fabricante.
-- **⚠ Não verificado** (217) — produtos que entraram só como nome na
-  matriz de equivalência, sem composição conferida.
+- **⚠ Não verificado** (199) — produtos que entraram só como nome na
+  matriz de equivalência, sem composição conferida. Eram 217: o portfólio
+  Gran7 preencheu 18 deles.
 
 Nenhum texto de fonte novo é promovido a "oficial" automaticamente: o que
 não casa com uma origem conhecida cai em "informado".
@@ -431,7 +440,7 @@ já entraram: uma planilha com as colunas correspondentes.
   em vetor.
 - `src/lib/nutrientLabels.js` — nome por extenso de cada nutriente, num lugar
   só (estava repetido em quatro telas, com divergências entre elas).
-- `src/data/products.js` — catálogo de 1595 produtos (Agrocete + 60
+- `src/data/products.js` — catálogo de 1625 produtos (Agrocete + 60
   marcas concorrentes), gerado a partir das planilhas internas e das
   planilhas/PDFs enviados pelo usuário ao longo do projeto.
 - `src/data/equivalences.js` — matriz de 35 linhas de produto,
@@ -567,6 +576,32 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
   - **"P" e "K" nos materiais ICL** foram interpretados como **P2O5/K2O**
     (convenção de rótulo no Brasil). Isso está anotado nas observações dos
     produtos afetados para conferência contra a ficha técnica do fabricante.
+
+- **Portfólio Gran7** — planilha com as 48 linhas do portfólio da marca. Foi
+  a primeira que chegou depois de a GRAN7 já existir no catálogo **só com
+  nomes**: os 21 produtos dela vinham da matriz de equivalência, sem nenhuma
+  composição. Resultado: **30 produtos novos e 19 registros enriquecidos**,
+  e a marca saiu de 0 para 38 produtos com composição declarada.
+
+  - **Sem densidade em nenhuma linha.** Os 5 produtos sólidos (dose em kg/ha
+    ou g/ha) convertem normalmente por `%m/m × 10 → g/kg`. Os líquidos não
+    têm como virar g/L, então entram **só com o percentual** e a ficha diz
+    isso. Para destravá-los basta informar a densidade pelo botão **Editar**
+    da ficha — aí eles passam a entrar em custo por kg de nutriente e no NCI.
+  - **Não-nutrientes ficaram fora de `nutrients`**, como sempre: COT,
+    Ascophyllum nodosum, aminoácidos, glicina betaína, ácidos fúlvicos,
+    D-limoneno, óleo mineral e as contagens de UFC dos inoculantes. O texto
+    integral da garantia fica em `composition`, então nada se perde.
+  - **"K 1%" no Manganês Kmol** foi lido como K2O, com a mesma anotação de
+    conferência usada nos materiais ICL.
+  - **Pares da matriz de equivalência.** A matriz cadastrou "Orggam /
+    Ferggum" como um registro só, e a planilha mostra que são dois produtos
+    com composições diferentes. Atribuir ao par a garantia de um dos dois
+    seria atribuí-la também ao outro, então o par continua **sem composição**
+    (com nota explicando) e Orggam e Ferggum entraram separados, cada um com
+    a sua. O par não pode ser apagado: a matriz de equivalência aponta para
+    ele. "Vigga / Nematak" foi enriquecido direto, porque Vigga não declara
+    composição e não havia conflito a criar.
 
 ### Campos novos da ficha técnica
 
