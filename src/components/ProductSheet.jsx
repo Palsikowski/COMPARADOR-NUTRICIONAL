@@ -9,6 +9,8 @@ import { Seals } from "./ProductCard.jsx";
 import CompositionEditor from "./CompositionEditor.jsx";
 import { isEdited } from "../lib/overrides.js";
 import { NUTRIENT_LABEL } from "../lib/nutrientLabels.js";
+import { interactionsWithin } from "../data/nutrientInteractions.js";
+import InteractionList, { InteractionSourceNote } from "./InteractionList.jsx";
 
 // Ficha técnica: tudo que o cadastro tem sobre o produto, com a origem do
 // dado à vista. Campo sem informação aparece como "não informado" em vez de
@@ -264,6 +266,17 @@ export default function ProductSheet({ product, selected, onToggle, onClose, onE
               {product.mixOrder && <Fact label="Ordem de mistura" value={product.mixOrder} />}
               {product.compatibility && <Fact label="Compatibilidade" value={product.compatibility} />}
             </div>
+          </Section>
+        )}
+
+        {interactionsWithin(product).length > 0 && (
+          <Section title="Interações entre os nutrientes deste produto">
+            <p className="muted" style={{ fontSize: 12.5, margin: "0 0 9px", lineHeight: 1.5 }}>
+              Pares que aparecem na composição declarada deste produto. É fisiologia geral, não medição neste
+              produto — serve para saber o que observar, não para prever resultado.
+            </p>
+            <InteractionList items={interactionsWithin(product)} compact />
+            <InteractionSourceNote />
           </Section>
         )}
 

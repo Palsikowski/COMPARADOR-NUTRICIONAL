@@ -213,6 +213,40 @@ imprimir, e sai sempre na paleta clara — papel é sempre claro, independente d
 tema que estava aberto. O cabeçalho da tabela se repete quando ela vira a
 página.
 
+## Interações entre nutrientes
+
+O que se soma e o que compete entre nutrientes. **21 interações** transcritas do
+material de **Daniele Lorenzon (@daniglorenzon)**, 28/07/2026, em
+`src/data/nutrientInteractions.js`.
+
+A informação aparece em três lugares, do mais específico ao mais geral:
+
+1. **Na ficha do produto** — só os pares que estão na composição **daquele
+   produto**. Um produto com Zn e Cu mostra o antagonismo entre os dois;
+   produto sem par nenhum não mostra seção. Nada de listar antagonismo com
+   nutriente que o produto não tem, que seria alarme falso.
+2. **No comparativo da empresa** — os pares em que um nutriente vem de um
+   produto e o outro vem de **outro** produto da seleção. É o caso que
+   interessa quando os dois entrariam juntos. Pares que já aparecem dentro de
+   um mesmo produto ficam de fora daqui, para não repetir. Sai também no PDF.
+3. **Em Sobre → Interações entre nutrientes** — a tabela completa, com filtro
+   por tipo (sinérgica / antagônica / complexa) e por nutriente.
+
+Três cuidados, porque isto é material de terceiro sobre fisiologia geral:
+
+- **A autoria aparece junto de toda lista**, na tela e no PDF, com a ressalva
+  de que é referência de fisiologia — não avaliação de produto, não medição da
+  Agrocete e não recomendação de mistura em calda.
+- **Não entra em nenhum cálculo.** NCI, custo, dose e comparativo continuam
+  exatamente como estavam. É informação de leitura.
+- **O tipo tem cor e ícone**, nunca só cor: "sinérgica" e "antagônica" mudam a
+  decisão e não podem depender de o consultor distinguir verde de laranja.
+
+A tabela de origem usa "P" e "K" (elemento) e o catálogo usa P2O5 e K2O
+(óxido); o cruzamento é feito pelas chaves do catálogo. Alumínio está na tabela
+por ser fator de solo, mas nenhum produto do catálogo declara Al — então esse
+par só aparece na consulta geral.
+
 ## Identificar por foto
 
 Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
@@ -430,6 +464,10 @@ já entraram: uma planilha com as colunas correspondentes.
   bottom sheet, estilo do slider.
 - `src/PasswordGate.jsx` — tela de senha antes de carregar o dashboard.
 - `src/main.jsx` — ponto de entrada React.
+- `src/data/nutrientInteractions.js` — as 21 interações entre nutrientes e o
+  cruzamento com a composição declarada de cada produto.
+- `src/components/InteractionList.jsx` — a lista de interações, no mesmo
+  formato em todas as telas.
 - `src/pages/Brands.jsx` — vitrine de bandeiras das 61 empresas.
 - `src/pages/BrandPage.jsx` — portfólio de uma empresa, seleção de até 4
   produtos, comparativo e exportação.

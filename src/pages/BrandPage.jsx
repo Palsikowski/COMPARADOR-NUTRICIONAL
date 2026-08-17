@@ -8,6 +8,8 @@ import ProductSheet from "../components/ProductSheet.jsx";
 import DataBadge from "../components/DataBadge.jsx";
 import { exportComparison } from "../lib/comparisonPdf.js";
 import { nutrientLabel } from "../lib/nutrientLabels.js";
+import { interactionsBetween } from "../data/nutrientInteractions.js";
+import InteractionList, { InteractionSourceNote } from "../components/InteractionList.jsx";
 
 // Página de uma empresa: portfólio dela, seleção de produtos e o comparativo.
 //
@@ -37,6 +39,7 @@ export default function BrandPage({ brand, onBack, dark }) {
     [selected, all]
   );
   const { panels, withoutData } = useMemo(() => comparisonData(selectedProducts), [selectedProducts]);
+  const entreProdutos = useMemo(() => interactionsBetween(selectedProducts), [selectedProducts]);
 
   // A cor identifica o PRODUTO, não a posição dele dentro de um painel. Com a
   // seleção dividida em mais de um gráfico (g/kg e %m/m, por exemplo), colorir
@@ -191,6 +194,20 @@ export default function BrandPage({ brand, onBack, dark }) {
               <strong>{withoutData.map((p) => p.name).join(", ")}</strong>. Não vira barra zerada porque
               &ldquo;não sabemos&rdquo; é diferente de &ldquo;não entrega&rdquo;.
             </p>
+          )}
+
+          {entreProdutos.length > 0 && (
+            <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
+              <h3 style={{ fontSize: 14.5, fontWeight: 700, margin: "0 0 4px" }}>
+                Interações entre os produtos selecionados
+              </h3>
+              <p className="muted" style={{ fontSize: 12.5, margin: "0 0 10px", lineHeight: 1.5 }}>
+                Pares em que um nutriente vem de um produto e o outro vem de outro — o que interessa quando os dois
+                entrariam juntos. É fisiologia geral, não teste de compatibilidade em calda.
+              </p>
+              <InteractionList items={entreProdutos} showProducts compact />
+              <InteractionSourceNote />
+            </div>
           )}
 
           <label style={{ display: "block", marginTop: 16 }}>
