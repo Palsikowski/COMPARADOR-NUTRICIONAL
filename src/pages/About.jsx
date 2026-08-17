@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { platformStats, STAGES, CULTURES } from "../lib/catalog.js";
 import { LEVELS } from "../lib/provenance.js";
 import { CRITERIA, MISSING_CRITERIA } from "../lib/nci.js";
 import { fmtNum } from "../lib/economics.js";
+import { NUTRIENT_INTERACTIONS, INTERACTION_KINDS } from "../data/nutrientInteractions.js";
+import InteractionList, { InteractionSourceNote } from "../components/InteractionList.jsx";
+import { NUTRIENT_LABEL } from "../lib/nutrientLabels.js";
 
 // Página "Sobre" = transparência metodológica. O que a plataforma calcula, com
 // que dado, e onde o dado não existe. É o que sustenta a credibilidade dos
@@ -109,8 +112,13 @@ export default function About() {
         ))}
       </Section>
 
+      <Section title="Interações entre nutrientes">
+        <InteractionTable />
+      </Section>
+
       <Section title="Limites conhecidos">
         <ul className="muted" style={{ fontSize: 13.5, lineHeight: 1.7, paddingLeft: 20, margin: 0 }}>
+          <li>A tabela de interações entre nutrientes é referência de fisiologia de terceiro, não medição da Agrocete e não avaliação de nenhum produto. Ela não entra em nenhum cálculo (NCI, custo, dose ou comparativo).</li>
           <li>Doses de referência vêm do primeiro número do texto de dose da planilha — ponto de partida, não recomendação. Confira a bula.</li>
           <li>Posicionamento por cultura/estádio existe apenas para os produtos dos manejos oficiais de Soja, Milho e Algodão.</li>
           <li>Os 3 níveis dos manejos prontos (Básico/Médio/Completo) são um agrupamento nosso dos estágios do material oficial, não uma classificação da Agrocete.</li>
@@ -194,5 +202,99 @@ function Callout({ children }) {
     >
       {children}
     </div>
+  );
+}
+
+// Tabela completa de interações, com filtro por tipo e por nutriente. É a
+// referência de consulta; nas outras telas ela aparece já cruzada com a
+// composição do produto que está aberto.
+function InteractionTable() {
+  const [kind, setKind] = useState("");
+  const [nut, setNut] = useState("");
+
+  const nutrientes = useMemo(() => {
+    const set = new Set();
+    NUTRIENT_INTERACTIONS.forEach((i) => i.keys.forEach((k) => set.add(k)));
+    return Array.from(set).sort((a, b) => (NUTRIENT_LABEL[a] || a).localeCompare(NUTRIENT_LABEL[b] || b));
+  }, []);
+
+  const items = useMemo(
+    () =>
+      NUTRIENT_INTERACTIONS.filter(
+        (i) => (!kind || i.kind === kind) && (!nut || i.keys.includes(nut))
+      ),
+    [kind, nut]
+  );
+
+  return (
+    <>
+      <p className="muted" style={{ fontSize: 13.5, lineHeight: 1.6, margin: "0 0 12px" }}>
+        {NUTRIENT_INTERACTIONS.length} interações entre nutrientes — o que se soma e o que compete. Serve para ler a
+        composição de um produto (ou de uma calda) sabendo o que observar. <strong>Não entra em nenhum cálculo</strong>{" "}
+        da plataforma.
+      </p>
+
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+        <FilterChip active={!kind} onClick={() => setKind("")}>
+          Todas ({NUTRIENT_INTERACTIONS.length})
+        </FilterChip>
+        {Object.entries(INTERACTION_KINDS).map(([id, k]) => {
+          const n = NUTRIENT_INTERACTIONS.filter((i) => i.kind === id).length;
+          return (
+            <FilterChip key={id} active={kind === id} onClick={() => setKind(kind === id ? "" : id)} tone={k.tone}>
+              {k.label} ({n})
+            </FilterChip>
+          );
+        })}
+      </div>
+
+      <label style={{ display: "block", marginBottom: 12 }}>
+        <span className="muted-soft" style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          Filtrar por nutriente
+        </span>
+        <select
+          value={nut}
+          onChange={(e) => setNut(e.target.value)}
+          aria-label="Filtrar interações por nutriente"
+          className="input"
+          style={{ display: "block", marginTop: 5, maxWidth: 280 }}
+        >
+          <option value="">Todos os nutrientes</option>
+          {nutrientes.map((k) => (
+            <option key={k} value={k}>
+              {k === "Al" ? "Alumínio (fator de solo)" : NUTRIENT_LABEL[k] || k}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {items.length === 0 ? (
+        <p className="muted" style={{ fontSize: 13 }}>Nenhuma interação com esses filtros.</p>
+      ) : (
+        <InteractionList items={items} />
+      )}
+      <InteractionSourceNote />
+    </>
+  );
+}
+
+function FilterChip({ children, active, onClick, tone }) {
+  const fg = tone === "ok" ? "var(--ok)" : tone === "warn" ? "var(--warn)" : tone === "info" ? "var(--info)" : "var(--brand)";
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      className="chip"
+      style={{
+        cursor: "pointer",
+        fontSize: 12,
+        fontFamily: "inherit",
+        background: active ? `color-mix(in srgb, ${fg} 12%, transparent)` : "transparent",
+        color: active ? fg : "var(--text-3)",
+        borderColor: active ? "transparent" : "var(--border)",
+      }}
+    >
+      {children}
+    </button>
   );
 }

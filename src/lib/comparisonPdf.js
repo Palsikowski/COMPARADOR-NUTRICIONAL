@@ -12,6 +12,7 @@ import { fmtNum } from "./economics.js";
 import { provenanceOf } from "./provenance.js";
 import { nutrientLabel } from "./nutrientLabels.js";
 import { chartValues } from "./brandTiles.js";
+import { interactionsBetween, kindOf, INTERACTION_SOURCE } from "../data/nutrientInteractions.js";
 
 // A fonte padrão do jsPDF (WinAnsi) não tem travessão nem aspas curvas.
 function pdfSafe(s) {
@@ -174,7 +175,16 @@ export async function exportComparison({ brand, products, panels, withoutData = 
     ensure(18);
     y += 4;
     para(
-      "Atenção: a seleção mistura líquidos (g/L) e sólidos (g/kg). São dois gráficos porque as unidades não dividem a mesma escala - comparar as alturas entre um gráfico e o outro não significa nada.",
+      `Atenção: a seleção mistura ${panels.map((p) => p.unit).join(" e ")}. É um gráfico por unidade porque elas não dividem a mesma escala - comparar as alturas entre um gráfico e o outro não significa nada.`,
+      8.5,
+      150
+    );
+  }
+
+  if (panels.some((p) => p.unit === "% m/m")) {
+    ensure(18);
+    para(
+      "O gráfico em %m/m compara a proporção declarada, não a entrega por hectare: esses produtos vieram sem densidade no material de origem, então não dá para converter para g/L nem calcular custo por kg de nutriente.",
       8.5,
       150
     );
@@ -224,6 +234,52 @@ export async function exportComparison({ brand, products, panels, withoutData = 
       doc.line(M, y - 2, W - M, y - 2);
     });
   });
+
+  // ---- INTERAÇÕES ENTRE OS PRODUTOS ----
+  // Vai no PDF porque é justamente o material de discussão da equipe: qual par
+  // de nutrientes soma e qual compete quando os produtos entram juntos.
+  const interacoes = interactionsBetween(products);
+  if (interacoes.length > 0) {
+    ensure(30);
+    y += 8;
+    doc.setFont(undefined, "bold");
+    doc.setFontSize(11);
+    doc.text("Interações entre os produtos selecionados", M, y);
+    doc.setFont(undefined, "normal");
+    y += 6;
+    para(
+      "Pares em que um nutriente vem de um produto e o outro vem de outro. É fisiologia geral, não teste de compatibilidade em calda.",
+      8.5,
+      130
+    );
+
+    interacoes.forEach((inter) => {
+      ensure(16);
+      const kind = kindOf(inter);
+      const [r, g, b] =
+        kind.tone === "ok" ? [5, 150, 105] : kind.tone === "warn" ? [180, 110, 20] : [37, 99, 175];
+      doc.setFillColor(r, g, b);
+      doc.circle(M + 1.4, y - 1.2, 1.4, "F");
+      doc.setFont(undefined, "bold");
+      doc.setFontSize(9);
+      const par = pdfSafe(`${nutrientLabel(inter.keys[0])} x ${inter.b === "Al" ? "Alumínio" : nutrientLabel(inter.keys[1])}`);
+      // A largura precisa ser medida com a fonte em que o texto foi DESENHADO
+      // (9pt negrito). Medindo depois de trocar para 8pt normal, o resultado é
+      // menor e o tipo da interação encosta no nome do par.
+      const parW = doc.getTextWidth(par);
+      doc.text(par, M + 5, y);
+      doc.setFont(undefined, "normal");
+      doc.setTextColor(r, g, b);
+      doc.setFontSize(8);
+      doc.text(pdfSafe(inter.tipo), M + 5 + parW + 3, y);
+      doc.setTextColor(0);
+      y += 4.5;
+      para(inter.efeito, 8.5, 90);
+      if (inter.from && inter.to) para(`${inter.from.name} x ${inter.to.name} · Onde ocorre: ${inter.onde}`, 7.5, 150);
+    });
+
+    para(`Referência de ${INTERACTION_SOURCE.author}, ${INTERACTION_SOURCE.date}. ${INTERACTION_SOURCE.note}`, 7.5, 150);
+  }
 
   // ---- O QUE FICOU DE FORA ----
   if (withoutData.length > 0) {
