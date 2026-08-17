@@ -79,7 +79,11 @@ export default function Catalog({ initialSearch = "", initialGroupBy = "categori
           norm(p.name).includes(q) ||
           norm(p.brand).includes(q) ||
           norm(p.composition).includes(q) ||
-          norm(p.category).includes(q);
+          norm(p.category).includes(q) ||
+          // cultura posicionada no material oficial: buscar "feijão" tem que
+          // trazer os produtos posicionados para feijão, não zero resultado
+          (p.culturas || []).some((c) => norm(c.cultura).includes(q)) ||
+          norm(p.technology).includes(q);
         if (!hit) continue;
       }
       out.push(p);
