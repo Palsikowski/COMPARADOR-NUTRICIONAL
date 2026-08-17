@@ -36,7 +36,7 @@ PDF. Empresas deixou de ser uma terceira entrada nele e ganhou tela própria.
 
 ## Catálogo em grade (Produtos)
 
-A navegação do catálogo é uma **grade virtualizada** sobre os 1.625 produtos,
+A navegação do catálogo é uma **grade virtualizada** sobre os 1.626 produtos,
 com barra de filtros fixa no topo.
 
 - **Colunas:** 4 (≥1240px), 3 (≥940px), 2 (≥640px), 1 no celular.
@@ -85,7 +85,7 @@ o desfazer.
 
 ### Virtualização
 
-Renderizar 1.625 cards de uma vez trava celular, então só as linhas visíveis
+Renderizar 1.626 cards de uma vez trava celular, então só as linhas visíveis
 (mais uma margem) vão ao DOM — medido: **52 cards no DOM**, constante ao
 rolar. Não foi usada biblioteca: a janela é calculada a partir do scroll
 (`useWindowed` em `src/pages/Catalog.jsx`).
@@ -150,7 +150,7 @@ de fora da conta por não terem preço.
 ## Empresas: bandeiras, gráfico e PDF
 
 A entrada **Empresas** era o mesmo catálogo agrupado por marca: para chegar a
-uma empresa específica era preciso rolar os 1.625 produtos. Agora é uma vitrine
+uma empresa específica era preciso rolar os 1.626 produtos. Agora é uma vitrine
 de bandeiras — 61 blocos, um por empresa, com o tamanho do portfólio e quanto
 dele tem composição cadastrada. Buscar por nome filtra a vitrine.
 
@@ -213,6 +213,26 @@ imprimir, e sai sempre na paleta clara — papel é sempre claro, independente d
 tema que estava aberto. O cabeçalho da tabela se repete quando ela vira a
 página.
 
+## Dose por cultura (Soja, Milho, Feijão)
+
+O material de posicionamento oficial da Agrocete traz a dose de cada produto
+por cultura. Isso virou o campo `culturas` e uma seção própria na ficha —
+**31 produtos**, contra os 16 que tinham posicionamento por estádio.
+
+- **Cultura sem dose no material não aparece.** O GRAP GRAD, por exemplo, tem
+  dose para Soja e Feijão e um traço no Milho: a ficha mostra duas culturas,
+  não três com uma vazia.
+- **Feijão é cultura nova no app** e não tem manejo montado. Sem juntar as
+  duas origens de cultura (manejos prontos + dose por cultura dos produtos),
+  buscar "feijão" na home não ofereceria nada, mesmo com 31 produtos
+  posicionados para ela — então `CULTURES` agora é a união das duas.
+- **A busca do catálogo acha por cultura e por tecnologia**, além de nome,
+  marca, composição e categoria.
+
+É diferente do **Posicionamento oficial**, que continua vindo dos manejos e
+carrega o estádio fenológico. Dose por cultura é o teto e o piso da faixa;
+posicionamento diz *quando* aplicar.
+
 ## Interações entre nutrientes
 
 O que se soma e o que compete entre nutrientes. **21 interações** transcritas do
@@ -254,7 +274,7 @@ Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
 - **É leitura de texto (OCR), não reconhecimento visual da embalagem.** Não
   existe nenhuma foto de produto cadastrada na base, então não há como treinar
   reconhecimento por aparência. O que dá para ler com segurança é o nome
-  impresso, e casá-lo com os 1.625 nomes do catálogo.
+  impresso, e casá-lo com os 1.626 nomes do catálogo.
 - **Roda no aparelho.** O leitor (worker, núcleo WebAssembly e modelo de
   idioma, ~14 MB em `public/ocr/`) é servido pelo próprio app, não por CDN —
   sem isso a função só funcionaria com internet, o oposto do que o campo
@@ -337,13 +357,14 @@ Situação atual do catálogo (medida, não estimada):
 
 | Dado | Cobertura |
 | --- | --- |
-| Nome, marca, categoria | 1625 / 1625 |
-| Origem do dado (`fonte`) | 1625 / 1625 |
-| Composição convertida (g/L ou g/kg) | 1128 / 1625 |
-| Composição só em %m/m (sem densidade) | 42 / 1625 |
-| Dose de referência | **293 / 1625** |
-| Densidade | 761 / 1625 |
-| Posicionamento por cultura/estádio | **16 / 1625** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
+| Nome, marca, categoria | 1626 / 1626 |
+| Origem do dado (`fonte`) | 1626 / 1626 |
+| Composição convertida (g/L ou g/kg) | 1129 / 1626 |
+| Composição só em %m/m (sem densidade) | 43 / 1626 |
+| Dose de referência | **293 / 1626** |
+| Densidade | 762 / 1626 |
+| Dose por cultura (Soja/Milho/Feijão) | **31 / 1626** (produtos Agrocete do material de posicionamento) |
+| Posicionamento por cultura/estádio | **16 / 1626** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
 | Preço | **0** — preço não está no catálogo, é sempre informado pelo usuário |
 
 Consequências práticas, que a interface deixa explícitas:
@@ -366,7 +387,7 @@ Todo produto carrega um selo derivado do campo `fonte`, clicável para ver
 a origem registrada (`src/lib/provenance.js`):
 
 - **✓ Planilha oficial** (308 produtos) — planilha interna Agrocete.
-- **✓ Dado informado** (1118) — planilhas enviadas pela equipe, sem
+- **✓ Dado informado** (1119) — planilhas enviadas pela equipe, sem
   conferência contra ficha técnica do fabricante.
 - **⚠ Não verificado** (199) — produtos que entraram só como nome na
   matriz de equivalência, sem composição conferida. Eram 217: o portfólio
@@ -478,7 +499,7 @@ já entraram: uma planilha com as colunas correspondentes.
   em vetor.
 - `src/lib/nutrientLabels.js` — nome por extenso de cada nutriente, num lugar
   só (estava repetido em quatro telas, com divergências entre elas).
-- `src/data/products.js` — catálogo de 1625 produtos (Agrocete + 60
+- `src/data/products.js` — catálogo de 1626 produtos (Agrocete + 60
   marcas concorrentes), gerado a partir das planilhas internas e das
   planilhas/PDFs enviados pelo usuário ao longo do projeto.
 - `src/data/equivalences.js` — matriz de 35 linhas de produto,
@@ -640,6 +661,40 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
     a sua. O par não pode ser apagado: a matriz de equivalência aponta para
     ele. "Vigga / Nematak" foi enriquecido direto, porque Vigga não declara
     composição e não havia conflito a criar.
+
+- **Portfólio e posicionamento AGROCETE** — material oficial da própria
+  Agrocete, com a tabela `PRODUTOS × GARANTIAS × SOJA × MILHO × FEIJÃO ×
+  COMPOSIÇÃO/TECNOLOGIA`. É a primeira fonte que traz **dose por cultura** e a
+  **tecnologia** de cada produto da casa. Resultado: **31 produtos
+  enriquecidos** e 1 recadastrado.
+
+  - **A extração foi por coordenada**, usando as réguas verticais da própria
+    tabela (`page.edges`), não por texto corrido: o `extract_text()` intercala
+    as três colunas de dose na mesma linha, e a dose da Soja acabaria na
+    Milho.
+  - **Conferência antes de importar.** As garantias trazem o par `% (g/L)`, o
+    que permite derivar a densidade e checar contra a cadastrada. **26 das 33
+    linhas bateram exatamente.** As divergências foram anotadas nas
+    observações do produto, mantendo o valor da base — nunca sobrescrito:
+    - *GRAP Manganês RR Plus* — o material diz `Mn 7% (171,6 g)` e
+      `S 4% (100,1 g)`, o que implicaria densidade ~2,48 (implausível para um
+      foliar). Esses gramas são exatamente os do GRAP 140 Fluid. A base
+      (87,5 / 50 a 1,25) é coerente consigo mesma.
+    - *GRAP Amyno 15* e *GRAP Mont 15* — o Mn implica densidade 1,35 e o S
+      implica 1,53 dentro da **mesma linha**. A observação já cadastrada
+      desses produtos confirma `S 5% (67,50 g/L)`, que é o valor da base.
+    - *GRAP Organo TOP* — o material traz P2O5 0,20%, que a base não tinha; a
+      base traz K2O e B, que o material não lista.
+  - **Preencher lacuna ≠ sobrescrever.** Nutriente ausente na base só entrou
+    quando a densidade implícita bate com a cadastrada: *GRAP PHIL Cobre*
+    ganhou o P2O5 256 g/L (a própria observação antiga já dizia "20% de P2O5
+    proveniente de ác. fosforoso", mas o valor não estava em `nutrients`) e
+    *GRAP D-LIM* ganhou N 21,2 e B 5,3 g/L, com a densidade 1,06 que os dois
+    valores implicam de forma concordante.
+  - **GRAP PHIL K voltou ao catálogo.** Tinha saído por não constar na
+    planilha interna mais recente; reapareceu num material oficial. Entra só
+    com o percentual — o material não traz g/L nem densidade — e as três
+    culturas aparecem sem dose.
 
 ### Campos novos da ficha técnica
 

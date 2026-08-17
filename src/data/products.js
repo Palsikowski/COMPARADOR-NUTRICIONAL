@@ -33,7 +33,14 @@ export const PRODUCTS = [
     "observations": "Quantidade de numero mínimo de bactérias/sementes maior que o recomendado pela Embrapa (1.200.000)",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Fixação Biológica de Nitrogênio",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "TS50kg : 2a4doses Sulco: 6a8 doses / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-al",
@@ -53,7 +60,22 @@ export const PRODUCTS = [
     "observations": "Inoculante liquido pra co-inoculação em soja e outras culturas.",
     "warning": "Não ultrapassar a quantidade de 2 doses/há",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Fixação Biológica de Nitrogenio Crescimento radicular",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "TS 50 kg: 1a2 doses Sulco: 1 doses / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "TS50 kg: 2a4 doses Sulco: 2 doses / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "TS50kg : 1a2 doses Sulco: 1 doses / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-extranod",
@@ -93,7 +115,22 @@ export const PRODUCTS = [
     "observations": "Inoculante liquido pra co-inoculação em soja e outras culturas.",
     "warning": "Não ultrapassar a quantidade de 2 doses/ha (por conta do Azospirillum)",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Solubilizador de Fósforo no solo Fixação Biológica de Nitrogenio Crescimento radicular",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "TS50kg : 1a2doses Sulco: 2 doses / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "TS50kg : 1a2 doses Sulco: 2 doses / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "TS50kg : 1a2 doses Sulco: 2 doses / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-fl",
@@ -139,7 +176,22 @@ export const PRODUCTS = [
     "observations": null,
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Sulfato de Zinco quelatizado",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1,0 a 2,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "2,0 a 4,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1,0 a 2,0 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-140-fluid",
@@ -162,10 +214,26 @@ export const PRODUCTS = [
     "composition": "Sulfato de Mn,  Ácido Citrico",
     "source": "Quelato/Complexo",
     "description": null,
-    "observations": "Dobrou-se a quantidade de complexante (em relação a formulação anterior 14%). Absorção acelerada. Maior performance, portanto recomenda-se as mesmas dosagens. Maior possibilidade em misturas, menos íons livres. Maior estabilidade em prateleira                     Mn=12% (171,6g/L)\nS=7% (100,1g/L)",
+    "observations": "Dobrou-se a quantidade de complexante (em relação a formulação anterior 14%). Absorção acelerada. Maior performance, portanto recomenda-se as mesmas dosagens. Maior possibilidade em misturas, menos íons livres. Maior estabilidade em prateleira Mn=12% (171,6g/L) S=7% (100,1g/L)",
     "warning": "Incompatibilidade com Herbicida",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Sulfato de Manganês complexado compativel com fungicidas não é compatível com o Glifosato",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,5 a 1,0 L / ha"
+      }
+    ],
+    "compatibility": "Não é compatível com o Glifosato (compatível com fungicidas)."
   },
   {
     "id": "agrocete__grap-110-je",
@@ -217,7 +285,22 @@ export const PRODUCTS = [
     "observations": "Índice Salino: 23,58%",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Molibdato de sódio e Sulfato de cobalto quelatizado",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1,0 ml/kg Semente 0,1 a 0,2 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "2,0ml/kgSemente 0,1 a 0,2 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1,0ml/kgSemente 0,1 a 0,2 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-180-je",
@@ -290,10 +373,25 @@ export const PRODUCTS = [
     "composition": "Carbonato de K",
     "source": null,
     "description": null,
-    "observations": "Indice Salino: 65,27%                                                    eleva o pH a 10",
+    "observations": "Indice Salino: 65,27% eleva o pH a 10",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Carbonato de Potássio",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1,5 a 3,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "1,5 a 3,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1,5 a 3,0 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-boric",
@@ -317,7 +415,22 @@ export const PRODUCTS = [
     "observations": null,
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Boro MEA",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "1,0 a 2,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,5 a 1,0 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-cobre",
@@ -343,7 +456,22 @@ export const PRODUCTS = [
     "observations": "Fórmulação do quelato exclusiva Agrocete, não divulgada",
     "warning": "pH 6,0",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Sulfato de Cobre quelatizado",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,1 a 0,2 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,1 a 0,2 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,1 a 0,2 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-grad",
@@ -364,10 +492,21 @@ export const PRODUCTS = [
     "composition": "Cloreto de Mg e ácidos carboxílicos",
     "source": "Quelato",
     "description": null,
-    "observations": "pH 5,5  (± 1)  \ncom ác. Carboxílicos                                             Mg 7% (89,6 g/L)",
+    "observations": "pH 5,5 (± 1) com ác. Carboxílicos Mg 7% (89,6 g/L)",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Cloreto de magnésio + ácidos carboxilicos para a estruturação de plantas",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,25 L / ha V4 a V6"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,25 L / ha V4"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-evic-s",
@@ -390,10 +529,25 @@ export const PRODUCTS = [
     "composition": "Sulfonitrato de amônio, Tiossulfato de Amônio",
     "source": null,
     "description": null,
-    "observations": "índice salino: 80%                                                       N 11% (146,3 g/L)                                                         S 25% (332,5 g/L)",
+    "observations": "índice salino: 80% N 11% (146,3 g/L) S 25% (332,5 g/L)",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Sulfonitrato de amônio e Tiossulfato de amônio",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1,0 a 1,5 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "1,5 a 2,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1,0 a 1,5 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-ferro",
@@ -443,7 +597,22 @@ export const PRODUCTS = [
     "observations": null,
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Cloreto de Magnésio",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,5 a 1,5 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,5 a 1,5 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,5 a 1,5 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-manganes-rr-plus",
@@ -466,10 +635,26 @@ export const PRODUCTS = [
     "composition": "Sulfato de Mn",
     "source": "Quelato",
     "description": null,
-    "observations": "Fórmulação do quelato exclusiva Agrocete, não divulgada",
+    "observations": "Fórmulação do quelato exclusiva Agrocete, não divulgada. Divergência com o material de posicionamento oficial (mantidos os valores da base interna, que são coerentes entre si): densidade implícita inconsistente no PDF: [2.45, 2.5]; densidade do PDF ~2.48 x catálogo 1.25; Mn: catálogo 87.5 x PDF 171.6; S: catálogo 50 x PDF 100.1.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Sulfato de Manganês quelatizado compatível com o Glifosato",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,5 a 1,0 L / ha"
+      }
+    ],
+    "compatibility": "Compatível com o Glifosato."
   },
   {
     "id": "agrocete__grap-mont-15",
@@ -500,10 +685,26 @@ export const PRODUCTS = [
     "composition": "Acido citrico, Acido Borico, Sulfato de Cu, Mn, Co, Zn, Molibdato de Na.",
     "source": "Quelato",
     "description": null,
-    "observations": "Indice Salino: 20%",
+    "observations": "Indice Salino: 20%. Divergência com o material de posicionamento oficial (mantidos os valores da base interna, que são coerentes entre si): densidade implícita inconsistente no PDF: [1.35, 1.53]; S: catálogo 67.5 x PDF 76.5.",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Macro e micronutrientes quelatados compatível com o Glifosato.",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1,0 a 2,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "1,0 a 2,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1,0 a 2,0 L / ha"
+      }
+    ],
+    "compatibility": "Compatível com o Glifosato."
   },
   {
     "id": "agrocete__grap-nitro",
@@ -527,7 +728,22 @@ export const PRODUCTS = [
     "observations": "N: nítrico e amoniacal",
     "warning": "Cuidado com misturas de Oxicloreto de Cu",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Nitrato de amônio",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1,0 a 3,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "1,0 a 3,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1,0 a 3,0 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-p-306",
@@ -562,7 +778,8 @@ export const PRODUCTS = [
     "name": "GRAP PHIL Cobre",
     "hasNutrients": true,
     "nutrients": {
-      "Cu": 38.4
+      "Cu": 38.4,
+      "P2O5": 256
     },
     "nutrientsPercent": {
       "Cu": 3
@@ -574,10 +791,25 @@ export const PRODUCTS = [
     "composition": "Fosfito de Cu",
     "source": "Complexo",
     "description": null,
-    "observations": "20% de P205  proveniente\nde ác. fosforoso",
+    "observations": "20% de P205 proveniente de ác. fosforoso. Garantia completada pelo material de posicionamento oficial: P2O5 256 g/L (densidade implícita coerente com a cadastrada).",
     "warning": "Cuidado com ativo tebuconazole (diminuir eficiência de ambos)",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Fosfito de Cobre",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,5 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,5 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-phil-fosfito",
@@ -600,7 +832,7 @@ export const PRODUCTS = [
     "composition": "Fosfito de K",
     "source": "Complexo",
     "description": null,
-    "observations": "30% de P205  proveniente\nde ác. Fosforoso",
+    "observations": "30% de P205 proveniente de ác. Fosforoso",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -626,10 +858,25 @@ export const PRODUCTS = [
     "composition": "Fosfito de Mn",
     "source": "Complexo",
     "description": null,
-    "observations": "30% de P205  proveniente\nde ác. Fosforoso",
+    "observations": "30% de P205 proveniente de ác. Fosforoso",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Fosfito de Mn",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,5 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-top-fluid-plus",
@@ -687,7 +934,22 @@ export const PRODUCTS = [
     "observations": null,
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Aplicação com herbicidas",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "50 ml / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "50 ml / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "50 ml / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-super-gun-sr",
@@ -707,7 +969,22 @@ export const PRODUCTS = [
     "observations": null,
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Aplicações padrão",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "50 ml / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "50 ml / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "50 ml / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-sensor",
@@ -734,20 +1011,38 @@ export const PRODUCTS = [
     "brand": "AGROCETE",
     "category": "Tec. de Aplicação",
     "name": "GRAP D-LIM",
-    "hasNutrients": false,
-    "nutrients": {},
+    "hasNutrients": true,
+    "nutrients": {
+      "N": 21.2,
+      "B": 5.3
+    },
     "nutrientsPercent": {},
-    "density": null,
-    "unit": null,
+    "density": 1.06,
+    "unit": "L/ha",
     "defaultDose": 0.1,
     "doseRaw": "50 a 150/ 100l agua",
     "composition": "D- Limoneno",
     "source": null,
     "description": null,
-    "observations": null,
+    "observations": "Garantia completada pelo material de posicionamento oficial: N 21.2 g/L, B 5.3 g/L (densidade implícita coerente com a cadastrada).",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Óleo D-Limoneno",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "50 ml / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "50 ml / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "50 ml / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-alphatank",
@@ -767,7 +1062,22 @@ export const PRODUCTS = [
     "observations": null,
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Limpeza + pelicula de proteção",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1a2L/ 1000 L água"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "1a2L/ 1000 L água"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1a2L/ 1000 L água"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-oil",
@@ -787,7 +1097,22 @@ export const PRODUCTS = [
     "observations": "Liquido de coloração amarela, viscoso e translucido. Densidade (g/mL) 0,93",
     "warning": "Incompatível c/ produtos à base de S",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Oléo vegetal a base de soja ( envolve as particulas na calda, adere, espalha, diminui evaporação, deriva e fotodecomposição)",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,3 a 1,0 % vol. calda"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,3 a 1,0 % vol. calda"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,3 a 1,0 % vol. calda"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-tech",
@@ -878,10 +1203,26 @@ export const PRODUCTS = [
     "composition": "Sulfato de Cu, Mn, Zn, Ácido Bórico, citrico, acido glutâmico, molibdato de Na",
     "source": "Quelato/Complexo aminoácido",
     "description": null,
-    "observations": "pH 1 a 2,0                                                                    Mn 6% (81,00 g/L) / S 5% (67,50 g/L) / Zn 3% (40,50 g/L) / B 0,5% (6,75 g/L) / Cu 0,5% (6,75 g/L) / Mo 0,1% (1,35 g/L)",
+    "observations": "pH 1 a 2,0 Mn 6% (81,00 g/L) / S 5% (67,50 g/L) / Zn 3% (40,50 g/L) / B 0,5% (6,75 g/L) / Cu 0,5% (6,75 g/L) / Mo 0,1% (1,35 g/L). Divergência com o material de posicionamento oficial (mantidos os valores da base interna, que são coerentes entre si): densidade implícita inconsistente no PDF: [1.35, 1.53]; S: catálogo 67.5 x PDF 76.5.",
     "warning": "Cuidado com Zapp e Crucial",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Macro e micronutrientes quelatados compatível com o Glifosato.",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1,0 a 2,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "1,0 a 2,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1,0 a 2,0 L / ha"
+      }
+    ],
+    "compatibility": "Compatível com o Glifosato."
   },
   {
     "id": "agrocete__grap-organo-top",
@@ -899,7 +1240,8 @@ export const PRODUCTS = [
       "Mn": 0.6,
       "Mo": 2.4,
       "Zn": 1.2,
-      "C_Org": 168
+      "C_Org": 168,
+      "P2O5": 2.4
     },
     "nutrientsPercent": {
       "N": 5,
@@ -920,10 +1262,25 @@ export const PRODUCTS = [
     "composition": "Sulfatos: Zn, Mn, Fe, Co, Cu, Uréia, ácido borico, Fosfito de K, Molibdato de Na",
     "source": "Quelato / Complexo por MO (Mel Residual)",
     "description": null,
-    "observations": "pH 5,0                                                                              N 5% (65 g/L) / K²O 4% (52 g/L) / B 0,2% (2,6 g/L) / Co 0,02% (0,26 g/L) / Cu 0,05% (0,65 g/L) / Fe 0,1% (1,3 g/L) / Mn 0,05% (0,65 g/L) / Mo 0,2% (2,6 g/L) / Zn 0,1% (1,3 g/L)",
+    "observations": "pH 5,0 N 5% (65 g/L) / K²O 4% (52 g/L) / B 0,2% (2,6 g/L) / Co 0,02% (0,26 g/L) / Cu 0,05% (0,65 g/L) / Fe 0,1% (1,3 g/L) / Mn 0,05% (0,65 g/L) / Mo 0,2% (2,6 g/L) / Zn 0,1% (1,3 g/L). Garantia completada pelo material de posicionamento oficial: P2O5 2.4 g/L (densidade implícita coerente com a cadastrada).",
     "warning": "Carbono Orgânico: 14% (87,5% AF e 12,5% AH)                    Aminoácidos totais = 0,58%\nÁcido aspártico: 0,2%\nTriptofano: 0,17%",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Macro e micronutrientes + Ácidos Fulvicos e Húmicos",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1,0 a 2,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "1,0 a 2,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1,0 a 2,0 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-st-pro",
@@ -946,10 +1303,25 @@ export const PRODUCTS = [
     "composition": "Sulfato de Co, Molibdato de Na, Acido citrico, Extrato de algas",
     "source": "Quelato / Complexo",
     "description": null,
-    "observations": "pH 5,5                                                                       Baixo indice salino",
+    "observations": "pH 5,5 Baixo indice salino",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "MolibdatodesódioeSulfato de cobalto quelatizado e extrato de algas",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "2 ml / kg semente 0,2 L / ha sulco"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "4ml/kgsemente 0,2 L / ha sulco"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "2ml/kgsemente 0,2 L / ha sulco"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-breed-pro",
@@ -972,10 +1344,25 @@ export const PRODUCTS = [
     "composition": "Ácido bórico (MEA), Molibdato de Na, Acido citrico, Extrato de algas",
     "source": "Quelato / Complexo",
     "description": null,
-    "observations": "pH 7,0 (± 1)                                                                      B 5% (60,5 g/L)                                                           Mo 2% (24,2 g/L)",
+    "observations": "pH 7,0 (± 1) B 5% (60,5 g/L) Mo 2% (24,2 g/L)",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Boro MEA + molibdato de sódio complexado com extrato de algas",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,5 a 1,0 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-field-pro",
@@ -998,10 +1385,25 @@ export const PRODUCTS = [
     "composition": "Sulfato de Co, Molibdato de Na, Acido citrico, Extrato de algas",
     "source": "Quelato / Complexo",
     "description": null,
-    "observations": "pH 3,5 (± 1)                                                                  Co 1,7% (22,95 g/L)                                                  Mo 8% (108,00 g/L)",
+    "observations": "pH 3,5 (± 1) Co 1,7% (22,95 g/L) Mo 8% (108,00 g/L)",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Molibdato de sódio e Sulfato de cobalto quelatizado e extrato de algas",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,2 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,3L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,2 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-biostat",
@@ -1021,7 +1423,22 @@ export const PRODUCTS = [
     "observations": "Alta concentração 100g/Kg de ativo",
     "warning": "Realizar pré diluição (50g/25mL)    Dilui bem com inoculantes",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "NematicidaparaMeloidogyneIncógnitaeMeloidogyneJavanicaePratylenchusbrachyurus",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "1,0 a 1,5 g / kg semente 200 g / ha sulco"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "1,0a1,5g/kgsemente200g/hasulco"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "1,0a1,5g/kgsemente200g/hasulco"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-beestric",
@@ -1041,7 +1458,22 @@ export const PRODUCTS = [
     "observations": "Alta concentração 300g/Kg de ativo",
     "warning": "Realizar pré diluição (50g/25mL)    Dilui bem com inoculantes    Manter em agitação constante (pode ocorrer decantação)",
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Biofungicida para Mofo Branco, Rhizoctonia solani, Macrophomina phaseolina e Pratylenchus zeae.",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,5 g / kg semente 50-200 g / ha sulco 250 g / ha barra"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,5g/kgsemente50 - 200g/hasulco 250 g / ha barra"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,5g/kgsemente50 - 200g/hasulco 250 g / ha barra"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-beessect",
@@ -1061,7 +1493,22 @@ export const PRODUCTS = [
     "observations": "Alta concentração 850g/L de ativo",
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
+    "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
+    "technology": "Produção de 18 proteínas para o controle de diversas especies de lagartas, traças e bicho furão.",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,4a1,2L/ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,4 - 1,2L/ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,4 - 1,2L/ha"
+      }
+    ]
   },
   {
     "id": "nodusoja-noduagri__nodusoja-l-elkani",
@@ -1438,7 +1885,7 @@ export const PRODUCTS = [
     "composition": null,
     "source": null,
     "description": null,
-    "observations": "Ts, sulco, V4                                                  Enraizante",
+    "observations": "Ts, sulco, V4 Enraizante",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -1528,7 +1975,7 @@ export const PRODUCTS = [
     "composition": null,
     "source": "COT + E.A. + A.A",
     "description": null,
-    "observations": "V6, R1, R4                                                              Indutor de resistência",
+    "observations": "V6, R1, R4 Indutor de resistência",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -1612,7 +2059,7 @@ export const PRODUCTS = [
     "composition": "Aminoácidos",
     "source": null,
     "description": null,
-    "observations": "V8                                                                         Aplicar com fungicidas",
+    "observations": "V8 Aplicar com fungicidas",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -1644,7 +2091,7 @@ export const PRODUCTS = [
     "composition": null,
     "source": null,
     "description": null,
-    "observations": "V4, V6, R1, Pós estresse                            Potencializador fotossintético                                   Regulador osmótico",
+    "observations": "V4, V6, R1, Pós estresse Potencializador fotossintético Regulador osmótico",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -1700,7 +2147,7 @@ export const PRODUCTS = [
     "composition": "Aminoácidos",
     "source": null,
     "description": null,
-    "observations": "Aplicar com fungicidas                                       A.A. 26%",
+    "observations": "Aplicar com fungicidas A.A. 26%",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -1720,7 +2167,7 @@ export const PRODUCTS = [
     "composition": null,
     "source": null,
     "description": null,
-    "observations": "V4, VN                                                        Estruturador/ Regulador",
+    "observations": "V4, VN Estruturador/ Regulador",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -1884,7 +2331,7 @@ export const PRODUCTS = [
     "composition": "Glicina Betaina + Prolina",
     "source": null,
     "description": null,
-    "observations": "V6, R3, R5, Pós estresse                                     Glicina Betaina 54%                                         Prolina 6,8%",
+    "observations": "V6, R3, R5, Pós estresse Glicina Betaina 54% Prolina 6,8%",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -1934,7 +2381,7 @@ export const PRODUCTS = [
     "composition": null,
     "source": null,
     "description": null,
-    "observations": "V4, V6, R3, R5.1                                               Precursor hormonal",
+    "observations": "V4, V6, R3, R5.1 Precursor hormonal",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -2080,7 +2527,7 @@ export const PRODUCTS = [
     "composition": null,
     "source": null,
     "description": null,
-    "observations": "V3, R1                                                                    Indutor de resistência",
+    "observations": "V3, R1 Indutor de resistência",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -2172,7 +2619,7 @@ export const PRODUCTS = [
     "composition": null,
     "source": null,
     "description": null,
-    "observations": "V3, V6, R1, R5                                                         Indutor de resistência",
+    "observations": "V3, V6, R1, R5 Indutor de resistência",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -3154,7 +3601,7 @@ export const PRODUCTS = [
     "composition": "Trichoderma harzianum - URM 8119\nT. asperellum - URM 8120\nBacillus amyloliquefaciens - CCT 7901",
     "source": "5x10⁸ UFC/g                                             WG - Grânulos dispersíveis em água",
     "description": null,
-    "observations": "Concentração de 50g/Kg de ativo T. harzianum                                           Concentração de 50g/Kg de ativo T. asperellum                                           Concentração de 2g/Kg de ativo B. amyloliquefaciens",
+    "observations": "Concentração de 50g/Kg de ativo T. harzianum Concentração de 50g/Kg de ativo T. asperellum Concentração de 2g/Kg de ativo B. amyloliquefaciens",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -3174,7 +3621,7 @@ export const PRODUCTS = [
     "composition": "Bacillus amyloliquefaciens - SVG 00027-B\nB. amyloliquefaciens - SVG 00028-B\nB. thuringiensis - SVG 00029-B\nB. subtilis - SVG 00030-B",
     "source": "1x10⁸ UFC/mL                                       SC - Suspensão Concentrada",
     "description": null,
-    "observations": "Concentração de 10g/Kg de ativo B. amyloliquefaciens                                      Concentração de 10g/Kg de ativo B. amyloliquefaciens                                      Concentração de 10g/Kg de B. subtilis                                           Concentração de 1g/Kg de ativo B. thuringiensis",
+    "observations": "Concentração de 10g/Kg de ativo B. amyloliquefaciens Concentração de 10g/Kg de ativo B. amyloliquefaciens Concentração de 10g/Kg de B. subtilis Concentração de 1g/Kg de ativo B. thuringiensis",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -6418,7 +6865,7 @@ export const PRODUCTS = [
     "composition": null,
     "source": null,
     "description": null,
-    "observations": "0,35% de Ni                                                                 Extrato de algas (?)",
+    "observations": "0,35% de Ni Extrato de algas (?)",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -6448,7 +6895,7 @@ export const PRODUCTS = [
     "composition": null,
     "source": null,
     "description": null,
-    "observations": "0,5% de Ni                                                              Extrato de algas (?)",
+    "observations": "0,5% de Ni Extrato de algas (?)",
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -7334,7 +7781,7 @@ export const PRODUCTS = [
     "composition": "Pseudomonas fluorescens - CCTB03\nPseudomonas chlororaphis - CCTB19",
     "source": "1,1×10⁴ UFC/mL                                      5,2×10⁷ UFC/mL                                         SC - Suspensão Concentrada",
     "description": null,
-    "observations": "Concentração 6g/Kg de ativo          Concentração 12g/Kg de ativo",
+    "observations": "Concentração 6g/Kg de ativo Concentração 12g/Kg de ativo",
     "warning": "Biodam é o mesmo produto",
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes"
@@ -24336,7 +24783,22 @@ export const PRODUCTS = [
     "observations": null,
     "warning": null,
     "shelfLife": null,
-    "fonte": "Planilha de produtos nutricionais enviada pelo usuário (PLANILHA_DE_PRODUTOS_NUTRICIONAIS_1.xlsx)"
+    "fonte": "Portfólio e posicionamento AGROCETE (material oficial enviado pelo usuário).",
+    "technology": "Pegamento floral",
+    "culturas": [
+      {
+        "cultura": "Soja",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Milho",
+        "dose": "0,5 a 1,0 L / ha"
+      },
+      {
+        "cultura": "Feijão",
+        "dose": "0,5 a 1,0 L / ha"
+      }
+    ]
   },
   {
     "id": "agrocete__grap-147-fluid",
@@ -42452,5 +42914,23 @@ export const PRODUCTS = [
       "Zn": 3,
       "S": 2.5
     }
+  },
+  {
+    "id": "agrocete__grap-phil-k",
+    "brand": "AGROCETE",
+    "category": "NUTRIÇÃO E FISIOLOGIA",
+    "name": "GRAP PHIL K",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {
+      "P2O5": 30,
+      "K2O": 20
+    },
+    "composition": "P 0 : 30% e K O: 20% 252",
+    "technology": "Fosfito de Potássio",
+    "culturas": null,
+    "unit": "L/ha",
+    "observations": "Voltou ao catálogo pelo material de posicionamento oficial (tinha saído por não constar na planilha interna mais recente). O material traz só o percentual e não informa densidade, então não dá para converter para g/L. As três culturas aparecem sem dose no material.",
+    "fonte": "Portfólio e posicionamento AGROCETE (material oficial enviado pelo usuário)."
   }
 ];

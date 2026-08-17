@@ -47,7 +47,15 @@ export function positioningFor(productId) {
   return POSITIONING_BY_PRODUCT.get(productId) || [];
 }
 
-export const CULTURES = Object.keys(MANAGEMENT_PRESETS);
+// Culturas conhecidas: as dos manejos prontos MAIS as que aparecem na dose por
+// cultura dos produtos. O material de posicionamento oficial trouxe Feijão, que
+// não tem manejo montado — sem juntar as duas origens, buscar "feijão" na home
+// não ofereceria nada, mesmo com 31 produtos posicionados para ela.
+export const CULTURES = (() => {
+  const set = new Set(Object.keys(MANAGEMENT_PRESETS));
+  PRODUCTS.forEach((p) => (p.culturas || []).forEach((c) => set.add(c.cultura)));
+  return Array.from(set);
+})();
 
 // Estádios fenológicos cadastrados, por cultura. Buscar "V4" precisa achar o
 // estádio "V3–V5" da Soja, então o casamento é por faixa: quebra o rótulo em

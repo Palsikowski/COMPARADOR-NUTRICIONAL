@@ -194,6 +194,38 @@ export default function ProductSheet({ product, selected, onToggle, onClose, onE
           )}
         </Section>
 
+        {product.culturas?.length > 0 && (
+          <Section title="Dose por cultura">
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {product.culturas.map((c) => (
+                <div
+                  key={c.cultura}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "baseline",
+                    gap: 12,
+                    padding: "8px 11px",
+                    background: "var(--surface-2)",
+                    borderRadius: "var(--radius-sm)",
+                  }}
+                >
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 13, fontWeight: 600 }}>
+                    <Leaf size={13} style={{ color: "var(--brand)" }} /> {c.cultura}
+                  </span>
+                  <span className="muted" style={{ fontSize: 12.5, textAlign: "right", whiteSpace: "pre-line" }}>
+                    {c.dose}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="muted-soft" style={{ fontSize: 11, margin: "7px 0 0", lineHeight: 1.5 }}>
+              Do material de posicionamento oficial da Agrocete. Cultura sem dose no material não aparece aqui —
+              confirme na bula antes de aplicar.
+            </p>
+          </Section>
+        )}
+
         {pos.length > 0 && (
           <Section title="Posicionamento oficial">
             <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
