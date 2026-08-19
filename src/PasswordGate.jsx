@@ -17,7 +17,14 @@ async function sha256Hex(text) {
 }
 
 export default function PasswordGate({ children }) {
-  const [unlocked, setUnlocked] = useState(() => localStorage.getItem(STORAGE_KEY) === PASSWORD_HASH);
+  const [unlocked, setUnlocked] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) === PASSWORD_HASH;
+    } catch {
+      // sem localStorage: só não lembra o desbloqueio anterior
+      return false;
+    }
+  });
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
@@ -25,7 +32,11 @@ export default function PasswordGate({ children }) {
     e.preventDefault();
     const hash = await sha256Hex(password);
     if (hash === PASSWORD_HASH) {
-      localStorage.setItem(STORAGE_KEY, hash);
+      try {
+        localStorage.setItem(STORAGE_KEY, hash);
+      } catch {
+        // sem localStorage: o desbloqueio vale só nesta sessão
+      }
       setUnlocked(true);
       setError(false);
     } else {
