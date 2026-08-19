@@ -26,7 +26,8 @@ A navegação do topo tem cinco entradas, além da home:
   com diferença calculada, economia (custo/ha por área, custo por kg de
   nutriente), índice NCI e posicionamento.
 - **Sobre** — metodologia aberta: cobertura medida dos dados, níveis de
-  confiabilidade, as fórmulas usadas, os pesos do NCI e os limites
+  confiabilidade, as fórmulas usadas, os pesos do NCI, as tabelas de
+  referência (interações entre nutrientes e sais/matérias-primas) e os limites
   conhecidos.
 
 Produtos e Manejos são duas entradas para o mesmo dashboard que já existia —
@@ -36,7 +37,7 @@ PDF. Empresas deixou de ser uma terceira entrada nele e ganhou tela própria.
 
 ## Catálogo em grade (Produtos)
 
-A navegação do catálogo é uma **grade virtualizada** sobre os 1.626 produtos,
+A navegação do catálogo é uma **grade virtualizada** sobre os 1.647 produtos,
 com barra de filtros fixa no topo.
 
 - **Colunas:** 4 (≥1240px), 3 (≥940px), 2 (≥640px), 1 no celular.
@@ -85,7 +86,7 @@ o desfazer.
 
 ### Virtualização
 
-Renderizar 1.626 cards de uma vez trava celular, então só as linhas visíveis
+Renderizar 1.647 cards de uma vez trava celular, então só as linhas visíveis
 (mais uma margem) vão ao DOM — medido: **52 cards no DOM**, constante ao
 rolar. Não foi usada biblioteca: a janela é calculada a partir do scroll
 (`useWindowed` em `src/pages/Catalog.jsx`).
@@ -150,7 +151,7 @@ de fora da conta por não terem preço.
 ## Empresas: bandeiras, gráfico e PDF
 
 A entrada **Empresas** era o mesmo catálogo agrupado por marca: para chegar a
-uma empresa específica era preciso rolar os 1.626 produtos. Agora é uma vitrine
+uma empresa específica era preciso rolar os 1.647 produtos. Agora é uma vitrine
 de bandeiras — 61 blocos, um por empresa, com o tamanho do portfólio e quanto
 dele tem composição cadastrada. Buscar por nome filtra a vitrine.
 
@@ -274,7 +275,7 @@ Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
 - **É leitura de texto (OCR), não reconhecimento visual da embalagem.** Não
   existe nenhuma foto de produto cadastrada na base, então não há como treinar
   reconhecimento por aparência. O que dá para ler com segurança é o nome
-  impresso, e casá-lo com os 1.626 nomes do catálogo.
+  impresso, e casá-lo com os 1.647 nomes do catálogo.
 - **Roda no aparelho.** O leitor (worker, núcleo WebAssembly e modelo de
   idioma, ~14 MB em `public/ocr/`) é servido pelo próprio app, não por CDN —
   sem isso a função só funcionaria com internet, o oposto do que o campo
@@ -357,14 +358,14 @@ Situação atual do catálogo (medida, não estimada):
 
 | Dado | Cobertura |
 | --- | --- |
-| Nome, marca, categoria | 1626 / 1626 |
-| Origem do dado (`fonte`) | 1626 / 1626 |
-| Composição convertida (g/L ou g/kg) | 1129 / 1626 |
-| Composição só em %m/m (sem densidade) | 43 / 1626 |
-| Dose de referência | **293 / 1626** |
-| Densidade | 762 / 1626 |
-| Dose por cultura (Soja/Milho/Feijão) | **31 / 1626** (produtos Agrocete do material de posicionamento) |
-| Posicionamento por cultura/estádio | **16 / 1626** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
+| Nome, marca, categoria | 1647 / 1647 |
+| Origem do dado (`fonte`) | 1647 / 1647 |
+| Composição convertida (g/L ou g/kg) | 1129 / 1647 |
+| Composição só em %m/m (sem densidade) | 73 / 1647 |
+| Dose de referência | **293 / 1647** |
+| Densidade | 762 / 1647 |
+| Dose por cultura (Soja/Milho/Feijão) | **31 / 1647** (produtos Agrocete do material de posicionamento) |
+| Posicionamento por cultura/estádio | **16 / 1647** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
 | Preço | **0** — preço não está no catálogo, é sempre informado pelo usuário |
 
 Consequências práticas, que a interface deixa explícitas:
@@ -487,6 +488,9 @@ já entraram: uma planilha com as colunas correspondentes.
 - `src/main.jsx` — ponto de entrada React.
 - `src/data/nutrientInteractions.js` — as 21 interações entre nutrientes e o
   cruzamento com a composição declarada de cada produto.
+- `src/data/rawMaterials.js` — sais e matérias-primas (solubilidade e garantia
+  declarada), tabela de referência exibida na página Sobre. Não são produtos do
+  catálogo e não entram em nenhum cálculo.
 - `src/components/InteractionList.jsx` — a lista de interações, no mesmo
   formato em todas as telas.
 - `src/pages/Brands.jsx` — vitrine de bandeiras das 61 empresas.
@@ -499,7 +503,7 @@ já entraram: uma planilha com as colunas correspondentes.
   em vetor.
 - `src/lib/nutrientLabels.js` — nome por extenso de cada nutriente, num lugar
   só (estava repetido em quatro telas, com divergências entre elas).
-- `src/data/products.js` — catálogo de 1626 produtos (Agrocete + 60
+- `src/data/products.js` — catálogo de 1647 produtos (Agrocete + 60
   marcas concorrentes), gerado a partir das planilhas internas e das
   planilhas/PDFs enviados pelo usuário ao longo do projeto.
 - `src/data/equivalences.js` — matriz de 35 linhas de produto,
@@ -695,6 +699,46 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
     planilha interna mais recente; reapareceu num material oficial. Entra só
     com o percentual — o material não traz g/L nem densidade — e as três
     culturas aparecem sem dose.
+
+- **Guia Técnico Nitro (Fev 2024, V6)** — planilha
+  `NITRO_Garantias_Comparador.xlsx` com duas abas: as **garantias das 30
+  linhas** do portfólio Nitro e uma tabela de **sais e matérias-primas**. A
+  NITRO estava no catálogo desde a matriz de equivalência, mas **só com
+  nomes** — nenhum dos 17 registros tinha composição. Resultado: **21 produtos
+  novos e 9 enriquecidos**, e a marca saiu de 0 para **30 produtos com
+  garantia declarada** (38 no total).
+
+  - **Só percentual, em todas as linhas.** O guia publica `%m/m` e não traz
+    densidade, dose nem indicação de sólido/líquido. Então nenhum produto foi
+    convertido para g/L ou g/kg: todos entram em `nutrientsPercent`, com
+    `nutrients` vazio, e a ficha diz por que o produto ainda não entra em
+    custo por kg de nutriente. Assumir densidade 1,0 (ou "é pó, então g/kg")
+    seria inventar a base da conta.
+  - **Casamento produto a produto, escrito à mão.** O guia escreve os nomes em
+    caixa alta e com barra (`FORCE /Mn-N`, `COMPAT /COMPLEX`, `GROWN`), o que
+    faria uma heurística de nome errar. As 9 correspondências com registros já
+    existentes foram decididas uma a uma e ficam **anotadas na observação do
+    produto** ("Casado com a linha X do guia da Nitro"), junto da garantia
+    declarada — dá para conferir sem abrir a planilha.
+  - **Enriquecimento, não sobrescrita**, como nas importações anteriores:
+    nenhum dos 9 registros tinha garantia numérica, então não houve conflito a
+    resolver. A categoria antiga foi mantida; a linha do guia entrou no campo
+    `line`.
+  - **Categoria dos produtos novos** vem da coluna "Linha" da planilha: as
+    linhas *Linha Solo* e *Tratamento de Sementes* foram para as categorias de
+    mesmo sentido que já existiam no catálogo, e o resto ficou em "Nutrição e
+    Fisiologia" — que é a categoria dos produtos NITRO já cadastrados e o
+    próprio assunto do guia.
+  - **Sais e matérias-primas** (segunda aba) **não entraram no catálogo.** Não
+    são produtos comerciais: não têm marca, dose nem preço, e apareceriam na
+    busca e no comparativo como se fossem. Viraram uma tabela de referência em
+    `src/data/rawMaterials.js`, exibida na página **Sobre** — 8 matérias-primas
+    com solubilidade (g/L) e garantia declarada. Não entra em nenhum cálculo, e
+    a tela avisa que a solubilidade vem **sem temperatura de referência**, ou
+    seja, não é limite de calda.
+  - **"P" lido como P2O5** no MAP purificado, com a mesma convenção de rótulo
+    já usada nos materiais ICL e Gran7 — e a divergência de símbolo está
+    escrita embaixo da tabela.
 
 ### Campos novos da ficha técnica
 
