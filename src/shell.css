@@ -1,0 +1,394 @@
+/* Casca do app: fundo animado em tela cheia + barra flutuante em pílula.
+ *
+ * A barra é sobreposta (fixed), não empurra o conteúdo. Quem reserva o espaço
+ * dela é `--shell-top`, usado tanto no respiro do <main> quanto nas barras
+ * grudentas de dentro das telas (os filtros do catálogo) — assim existe um
+ * número só, e mudar a altura da pílula não desalinha o resto. */
+
+:root {
+  --shell-top: 84px;
+  /* Véu sobre o shader. O tema claro precisa de mais: o shader é escuro, e o
+     texto do app é grafite sobre fundo claro. */
+  --veil: rgba(249, 250, 251, 0.86);
+  --pill-bg: rgba(255, 255, 255, 0.72);
+  --pill-border: rgba(31, 41, 55, 0.1);
+  --pill-shadow: 0 14px 40px rgba(15, 23, 42, 0.16);
+}
+
+[data-theme="dark"] {
+  --veil: rgba(15, 23, 32, 0.78);
+  --pill-bg: rgba(23, 33, 43, 0.68);
+  --pill-border: rgba(242, 245, 247, 0.12);
+  --pill-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* ---- fundo ---------------------------------------------------------------- */
+
+.app-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Se o WebGL não subir, o canvas fica transparente e sobra esta cor — a
+     mesma do app sem fundo animado. */
+  background: var(--bg);
+}
+
+.app-bg-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.app-bg-veil {
+  position: absolute;
+  inset: 0;
+  background: var(--veil);
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+/* ---- barra em pílula ------------------------------------------------------ */
+
+/* Esmaecido atrás da barra: desfoca e clareia o topo da página, mantendo o
+   fundo animado visível. Só efeito visual — não recebe clique. */
+.shell-topfade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--shell-top) + 10px);
+  z-index: 35;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--bg) 92%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 86%, transparent) 70%,
+    transparent 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
+}
+
+.pillbar {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  width: min(1180px, calc(100vw - 24px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 58px;
+  padding: 0 8px 0 10px;
+  border-radius: var(--radius-pill);
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  box-shadow: var(--pill-shadow);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+}
+
+.pill-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 8px 4px 4px;
+  border: none;
+  background: none;
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Ícone em gradiente: as cores são as do shader de fundo, então a marca e o
+   fundo animado ficam visivelmente da mesma família. */
+.pill-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, var(--brand) 0%, #33AEB9 48%, #7F00FF 100%);
+  box-shadow: 0 4px 12px rgba(127, 0, 255, 0.25);
+}
+
+.pill-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+  white-space: nowrap;
+}
+.pill-brand-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.pill-brand-tag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.pill-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0 auto;
+}
+
+.pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 40px;
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-2);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--speed) ease, color var(--speed) ease;
+}
+.pill-link:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+.pill-link[data-active="true"] {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.pill-more {
+  position: relative;
+}
+
+.pill-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 232px;
+  padding: 6px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pill-dropdown-item {
+  display: block;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--speed) ease, color var(--speed) ease;
+}
+.pill-dropdown-item:hover {
+  background: var(--surface-2);
+}
+.pill-dropdown-item[data-active="true"] {
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.pill-dropdown-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px 4px;
+  color: var(--text-3);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.pill-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.pill-offline {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.pill-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--pill-border);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  color: var(--text-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--speed) ease, color var(--speed) ease;
+}
+.pill-icon:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.pill-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 42px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+  color: var(--brand-contrast);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--speed) ease, transform var(--speed) ease;
+}
+.pill-cta:hover {
+  background: var(--brand-strong);
+}
+.pill-cta:active {
+  transform: scale(0.985);
+}
+
+.pill-burger {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--pill-border);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  color: var(--text);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Sanduíche: o mesmo vidro da pílula, com todas as seções empilhadas. Aqui o
+   vidro é mais fechado que o da barra — são sete itens de texto, e o que
+   passava por baixo estava disputando com eles. */
+.pill-sheet {
+  padding: 8px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid var(--pill-border);
+  box-shadow: var(--pill-shadow);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pill-sheet-item {
+  min-height: 48px;
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+.pill-sheet-item[data-active="true"] {
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-weight: 700;
+}
+
+/* A pílula tem largura própria: os links do meio saem antes de tudo ficar
+   apertado, e aí entra o sanduíche. */
+@media (max-width: 1080px) {
+  .pill-links {
+    display: none;
+  }
+  .pill-burger {
+    display: inline-flex;
+  }
+  .pill-brand {
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --shell-top: 78px;
+  }
+  .pill-brand-text {
+    display: none;
+  }
+  .pill-cta-label {
+    display: none;
+  }
+  .pill-cta {
+    width: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+
+/* Vidro tem custo de composição e pode ficar leitoso em telas fracas; sem
+   suporte, a pílula vira sólida em vez de translúcida sem desfoque. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pill,
+  .pill-sheet {
+    background: var(--surface);
+  }
+}

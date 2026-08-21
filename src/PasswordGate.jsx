@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import SignInPage from "./components/SignInPage.jsx";
 import { platformStats } from "./lib/catalog.js";
 import { fmtNum } from "./lib/economics.js";
+import { AuthContext, readUnlocked, storeUnlocked, clearUnlock } from "./lib/auth.js";
 
 // Portão de senha simples para desencorajar acesso casual ao app publicado.
 // NÃO é segurança de verdade: o hash abaixo fica visível no código-fonte da
 // página, e quem quiser pode tentar quebrá-lo offline. Serve só para não
 // deixar o app aberto pra qualquer um que ache o link.
 //
-// Aqui mora a regra (o que é senha válida, onde o desbloqueio fica guardado);
-// o desenho da tela é do SignInPage.
+// Aqui mora a regra (o que é senha válida, quando o acesso cai); o desenho da
+// tela é do SignInPage e o armazenamento é do lib/auth.
 const PASSWORD_HASH = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
-const STORAGE_KEY = "agro-comparador-auth-v1";
 
 async function sha256Hex(text) {
   const bytes = new TextEncoder().encode(text);
@@ -21,43 +21,22 @@ async function sha256Hex(text) {
     .join("");
 }
 
-// O desbloqueio pode ficar em dois lugares: `localStorage` dura entre sessões
-// (aparelho da pessoa) e `sessionStorage` some ao fechar a aba (aparelho
-// compartilhado, que é o caso do notebook que roda no escritório). Quem decide
-// é a caixa "manter conectado".
-function readUnlocked() {
-  for (const store of [safeStore(() => localStorage), safeStore(() => sessionStorage)]) {
-    try {
-      if (store && store.getItem(STORAGE_KEY) === PASSWORD_HASH) return true;
-    } catch {
-      // storage bloqueado: segue pro próximo
-    }
-  }
-  return false;
-}
-
-function safeStore(get) {
-  try {
-    return get();
-  } catch {
-    return null;
-  }
-}
-
-function storeUnlocked(hash, remember) {
-  try {
-    const store = remember ? localStorage : sessionStorage;
-    store.setItem(STORAGE_KEY, hash);
-  } catch {
-    // sem storage: o desbloqueio vale só enquanto a página estiver aberta
-  }
-}
-
 export default function PasswordGate({ children }) {
-  const [unlocked, setUnlocked] = useState(readUnlocked);
+  const [unlocked, setUnlocked] = useState(() => readUnlocked(PASSWORD_HASH));
   const [error, setError] = useState(null);
   const [hint, setHint] = useState(null);
   const [busy, setBusy] = useState(false);
+
+  // "Sair" volta pra tela de entrada sem recarregar a página: o app desmonta e
+  // o portão assume de novo.
+  const signOut = useCallback(() => {
+    clearUnlock();
+    setUnlocked(false);
+    setError(null);
+    setHint(null);
+  }, []);
+
+  const auth = useMemo(() => ({ signOut }), [signOut]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -76,15 +55,16 @@ export default function PasswordGate({ children }) {
         setHint(null);
       }
     } catch {
-      // crypto.subtle exige contexto seguro (https ou localhost). Abrindo o
-      // arquivo por http://IP da rede local, por exemplo, ele não existe.
+      // crypto.subtle exige contexto seguro (https, localhost ou arquivo
+      // local). Abrindo o painel por http://IP da rede local, por exemplo, ele
+      // não existe.
       setError("Não foi possível verificar a senha neste navegador. Abra o painel por HTTPS ou pelo endereço local.");
     } finally {
       setBusy(false);
     }
   }
 
-  if (unlocked) return children;
+  if (unlocked) return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 
   const stats = platformStats();
   const notes = [

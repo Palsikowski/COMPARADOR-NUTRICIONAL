@@ -35,6 +35,62 @@ ele continua intacto, com manejo atual lado a lado, manejos prontos, sugestão
 automática de manejo Agrocete, manejos salvos, trava de dose e exportação em
 PDF. Empresas deixou de ser uma terceira entrada nele e ganhou tela própria.
 
+## Casca do app: fundo animado e barra flutuante
+
+A navegação deixou de ser um cabeçalho sólido colado no topo e virou uma
+**barra flutuante em pílula** (`src/components/PillNav.jsx`), sobreposta a um
+**fundo animado em WebGL** que ocupa a tela inteira
+(`src/components/AppBackground.jsx`).
+
+### O fundo
+
+É o mesmo shader "Mesh drift" da tela de entrada, agora em tela cheia e fixo:
+não rola com a página, e as três proteções continuam valendo — sem WebGL o
+canvas não desenha e sobra a cor de fundo de sempre, o laço para quando a aba
+perde o foco, e `prefers-reduced-motion` desenha um quadro só.
+
+O que ele **não** faz é aparecer atrás de dado. Sobre o shader existe um véu
+(`--veil`) que o transforma em textura: ele aparece nas margens, entre os
+cards e por trás do vidro da barra, e o texto continua no contraste de
+sempre. Uma grade de 1.647 produtos por cima de manchas roxas em movimento
+seria bonita em captura de tela e um teste de vista no uso real. As duas
+exceções são de propósito: o **hero da home** não tem fundo próprio, então é
+lá que o fundo animado aparece inteiro, e o tema escuro usa menos véu, porque
+o shader é escuro e não briga com o texto claro.
+
+### A barra
+
+Vidro (`backdrop-filter`), cantos totalmente arredondados, sombra suave,
+largura própria e centralizada. À esquerda a marca, com o ícone em gradiente
+nas cores do shader. À direita o botão de tema e o **Sair**. No centro, três
+seções:
+
+| Na barra | Tela |
+| --- | --- |
+| Empresas | vitrine de bandeiras e portfólio por empresa |
+| Manejos Cliente | o dashboard de manejo do cliente (era "Meu manejo") |
+| Manejos Agrocete | manejos oficiais por cultura e estádio |
+
+As outras quatro telas — Produtos, Calculadora Custo/ha, Identificar por foto
+e Sobre — ficam em **"Mais"**, não sumiram. Três entradas no centro é o
+desenho pedido; deixar metade do app sem entrada de navegação seria perder
+função em nome dele. Abaixo de 1080px os links do meio saem e tudo vira
+**sanduíche**, com as sete seções empilhadas no mesmo vidro arredondado.
+
+Dois detalhes que só aparecem no uso: a barra flutua, então o conteúdo passa
+**por baixo** dela ao rolar — por isso existe uma faixa de topo que desfoca e
+clareia essa passagem. E, como a barra é sobreposta e não empurra o conteúdo,
+quem reserva o espaço dela é um token só (`--shell-top`), usado tanto no
+respiro do `<main>` quanto na barra de filtros do catálogo, que gruda logo
+abaixo dela.
+
+### Sair
+
+O botão à direita limpa o desbloqueio (`localStorage` e `sessionStorage`) e
+devolve a tela de entrada, sem recarregar a página. O estado de acesso mora em
+`src/lib/auth.js` e chega às telas por contexto, então qualquer tela pode
+oferecer "Sair" sem importar o portão de senha.
+
 ## Catálogo em grade (Produtos)
 
 A navegação do catálogo é uma **grade virtualizada** sobre os 1.647 produtos,
@@ -496,6 +552,12 @@ já entraram: uma planilha com as colunas correspondentes.
   edição.
 - `src/lib/theme.js` — tema claro/escuro num lugar só, aplicado no boot pra a
   tela de entrada já nascer no tema certo.
+- `src/lib/auth.js` — onde o desbloqueio fica guardado e o contexto que leva o
+  "Sair" pras telas.
+- `src/components/PillNav.jsx` + `src/shell.css` — a barra flutuante em pílula
+  e a casca do app (fundo fixo, véu, faixa de topo, `--shell-top`).
+- `src/components/AppBackground.jsx` — o fundo animado em tela cheia com o véu
+  que o mantém legível por baixo do conteúdo.
 - `src/main.jsx` — ponto de entrada React.
 - `src/data/nutrientInteractions.js` — as 21 interações entre nutrientes e o
   cruzamento com a composição declarada de cada produto.
