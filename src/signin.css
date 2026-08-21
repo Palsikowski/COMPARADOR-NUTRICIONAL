@@ -1,0 +1,408 @@
+/* Tela de entrada (SignInPage).
+ *
+ * Duas colunas: formulário à esquerda, foto com cartões flutuantes à direita.
+ * No celular a foto sai e sobra o formulário — é o que interessa no campo,
+ * onde a conexão é ruim e a imagem seria só peso.
+ *
+ * Tudo aqui usa os tokens de src/theme.css: a tela de entrada é a primeira
+ * coisa que a pessoa vê e precisa ser a mesma plataforma que vem depois. */
+
+.signin {
+  min-height: 100dvh;
+  display: flex;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.signin-form-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+}
+
+.signin-form-inner {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.signin-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.signin-brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: var(--brand);
+  color: var(--brand-contrast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.signin-title {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.signin-description {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.signin-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-3);
+  margin-bottom: 6px;
+}
+
+/* Campo em "vidro": fundo translúcido sobre a superfície, que ganha a cor da
+   marca quando recebe foco. O foco também mantém o outline padrão do app. */
+.signin-field {
+  position: relative;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  backdrop-filter: blur(6px);
+  transition: border-color var(--speed) ease, background var(--speed) ease;
+}
+.signin-field:focus-within {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.signin-field input {
+  width: 100%;
+  min-height: 50px;
+  padding: 13px 15px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+}
+.signin-field input::placeholder {
+  color: var(--text-3);
+}
+.signin-field input:focus {
+  outline: none;
+}
+.signin-field:focus-within {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.signin-field-with-action input {
+  padding-right: 48px;
+}
+
+.signin-field-action {
+  position: absolute;
+  inset-block: 0;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: color var(--speed) ease;
+}
+.signin-field-action:hover {
+  color: var(--text);
+}
+
+.signin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+}
+
+.signin-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+}
+.signin-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand);
+  cursor: pointer;
+}
+
+.signin-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--brand);
+  cursor: pointer;
+}
+.signin-link:hover {
+  text-decoration: underline;
+}
+
+.signin-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 11px 13px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent);
+  color: var(--danger);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.signin-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 11px 13px;
+  border-radius: var(--radius-sm);
+  background: var(--info-soft);
+  border: 1px solid color-mix(in srgb, var(--info) 20%, transparent);
+  color: var(--info);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.signin-divider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.signin-divider::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: 1px;
+  background: var(--border);
+}
+.signin-divider span {
+  position: relative;
+  padding: 0 12px;
+  background: var(--bg);
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.signin-foot {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Coluna da direita: foto + cartões. O gradiente fica por baixo da imagem, e
+   não atrás dela: sem rede (uso offline, arquivo único aberto do disco) a foto
+   não carrega e o painel continua sendo um painel, não um buraco branco. */
+.signin-hero {
+  display: none;
+  flex: 1;
+  position: relative;
+  padding: 16px;
+}
+
+.signin-hero-panel {
+  position: absolute;
+  inset: 16px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background:
+    linear-gradient(150deg, var(--brand-strong) 0%, #0b3b2e 55%, #08251d 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+.signin-hero-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.signin-hero-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6, 24, 19, 0.82) 0%, rgba(6, 24, 19, 0.15) 45%, rgba(6, 24, 19, 0.35) 100%);
+}
+
+.signin-hero-caption {
+  position: absolute;
+  top: 34px;
+  left: 34px;
+  right: 34px;
+  color: #F4FBF8;
+}
+.signin-hero-caption h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.signin-hero-caption p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(244, 251, 248, 0.82);
+  max-width: 46ch;
+}
+
+.signin-notes {
+  position: absolute;
+  bottom: 34px;
+  left: 34px;
+  right: 34px;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.signin-note {
+  flex: 1 1 190px;
+  max-width: 260px;
+  padding: 15px 16px;
+  border-radius: var(--radius);
+  background: rgba(10, 32, 26, 0.55);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(244, 251, 248, 0.16);
+  color: #F4FBF8;
+}
+.signin-note-value {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.signin-note-label {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(244, 251, 248, 0.62);
+}
+.signin-note-text {
+  margin-top: 7px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: rgba(244, 251, 248, 0.86);
+}
+
+@media (min-width: 900px) {
+  .signin-hero {
+    display: block;
+  }
+}
+
+/* Entrada dos elementos: sobem, desembaçam e param. Uma vez só, no load — a
+   tela de entrada não é lugar de movimento contínuo. O bloco global de
+   prefers-reduced-motion em theme.css já zera tudo isso. */
+@keyframes signinFadeUp {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes signinSlideRight {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+}
+
+@keyframes signinNoteIn {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+.signin-anim {
+  opacity: 0;
+  animation: signinFadeUp 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.signin-anim-right {
+  opacity: 0;
+  animation: signinSlideRight 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.signin-anim-note {
+  opacity: 0;
+  animation: signinNoteIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.signin-d1 { animation-delay: 0.1s; }
+.signin-d2 { animation-delay: 0.2s; }
+.signin-d3 { animation-delay: 0.3s; }
+.signin-d4 { animation-delay: 0.4s; }
+.signin-d5 { animation-delay: 0.5s; }
+.signin-d6 { animation-delay: 0.6s; }
+.signin-d7 { animation-delay: 0.7s; }
+.signin-d8 { animation-delay: 0.9s; }
+.signin-d9 { animation-delay: 1.1s; }
+
+/* Sem animação: os elementos precisam ficar visíveis mesmo com a duração
+   zerada pelo bloco de reduced-motion (forwards com 0.01ms ainda aplica o
+   estado final, mas explicitar aqui evita depender disso). */
+@media (prefers-reduced-motion: reduce) {
+  .signin-anim,
+  .signin-anim-right,
+  .signin-anim-note {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}

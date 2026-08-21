@@ -484,7 +484,12 @@ já entraram: uma planilha com as colunas correspondentes.
 - `src/dashboard.css` — micro-interações que inline styles não
   expressam: escala ao tocar, accordion com altura suave, pulso do
   bottom sheet, estilo do slider.
-- `src/PasswordGate.jsx` — tela de senha antes de carregar o dashboard.
+- `src/PasswordGate.jsx` — a regra de acesso: valida a senha e guarda o
+  desbloqueio. O desenho da tela é do `SignInPage`.
+- `src/components/SignInPage.jsx` + `src/signin.css` — a tela de entrada
+  (formulário, foto e os números reais da base).
+- `src/lib/theme.js` — tema claro/escuro num lugar só, aplicado no boot pra a
+  tela de entrada já nascer no tema certo.
 - `src/main.jsx` — ponto de entrada React.
 - `src/data/nutrientInteractions.js` — as 21 interações entre nutrientes e o
   cruzamento com a composição declarada de cada produto.
@@ -1053,11 +1058,70 @@ travadas e o nome do cliente/fazenda são gravados automaticamente no
 É armazenamento local por navegador/dispositivo — não sincroniza entre
 aparelhos nem entre membros da equipe.
 
+## Tela de entrada
+
+A primeira tela do app é o `SignInPage` (`src/components/SignInPage.jsx`,
+estilo em `src/signin.css`): formulário à esquerda, foto de lavoura com os
+números reais da base à direita.
+
+- **A tela não valida nada.** Ela recebe `onSubmit`, `error`, `hint` e `busy`;
+  quem decide se a senha vale é o `PasswordGate`. Trocar a autenticação depois
+  (login por pessoa, SSO) não encosta no layout.
+- **Os cartões da direita são dados medidos**, lidos de `platformStats()` — os
+  mesmos números da página Sobre. Não são depoimentos: inventar elogios
+  assinados por pessoas que não existem, numa tela de entrada de ferramenta
+  interna, seria mentira com cara de prova social.
+- **A foto é decoração e pode faltar.** O painel tem um gradiente por baixo,
+  então sem internet (uso em campo, ou o build de arquivo único aberto direto
+  do disco) a tela continua inteira em vez de virar um retângulo branco. No
+  celular a coluna da foto sai: o que interessa ali é o campo de senha.
+- **"Manter conectado" escolhe onde o desbloqueio fica.** Marcado, vai pro
+  `localStorage` e dura entre sessões; desmarcado, vai pro `sessionStorage` e
+  some ao fechar a aba — que é o certo no computador compartilhado do
+  escritório.
+- **"Esqueci a senha" não finge um fluxo que não existe:** responde que a
+  entrada é uma senha só, compartilhada, e manda pedir a quem administra.
+- **Botão do Google e "criar conta"** existem no componente (props
+  `onGoogleSignIn` e `onCreateAccount`) mas **não são renderizados**, porque a
+  plataforma não tem backend de autenticação nem cadastro. Botão que não faz
+  nada é pior que botão nenhum. Passe os handlers no dia em que existir login
+  por pessoa e os dois aparecem.
+- O tema (claro/escuro) é aplicado no boot, em `main.jsx`, via
+  `src/lib/theme.js` — antes a alternância morava no App, que só monta depois
+  do login, e quem usa tema escuro via um flash branco na entrada.
+
+### Sobre shadcn/ui, Tailwind e TypeScript
+
+O componente de origem vinha em TSX com classes do Tailwind e o caminho
+`@/components/ui`. **Nada disso foi instalado**, e a tela foi reescrita em
+JSX com os tokens de `src/theme.css`. O motivo é o mesmo já registrado na
+seção "Sobre Tailwind": este é um app Vite + React em JavaScript, com ~50 mil
+linhas de JSX e um design system próprio em CSS custom properties. Instalar
+Tailwind 4, TypeScript e a estrutura da shadcn por causa de uma tela
+significaria duas linguagens de estilo convivendo no mesmo app — e a tela de
+entrada, que precisa ser idêntica ao resto, seria justamente a que ficaria
+diferente.
+
+O que foi mantido do original: o layout de duas colunas, a foto com cartões
+flutuantes, o campo "de vidro" que acende no foco, o olho de mostrar/ocultar
+senha (`lucide-react`, que o projeto já usa), a entrada animada com atraso
+escalonado e a mesma superfície de props.
+
+Se um dia a stack for migrada de fato, o caminho é: `npx shadcn@latest init`
+(que cria `components.json`, `src/components/ui` e o `@/*` no `tsconfig` +
+`vite.config`), `npm i -D tailwindcss @tailwindcss/vite typescript` com o
+plugin no `vite.config.js`, e `@import "tailwindcss"` no CSS de entrada. A
+pasta `components/ui` é exigência da CLI da shadcn: é onde ela escreve e
+atualiza os componentes que você instala, e fora dela `npx shadcn add` não
+encontra o que sobrescrever. Só que isso é uma migração de stack do app
+inteiro, não um passo desta tela — e a orientação registrada no projeto,
+desde o começo, é não trocar de stack por estética.
+
 ## Tela de senha
 
-O app fica atrás de uma tela de senha simples (`src/PasswordGate.jsx`)
-antes de carregar o dashboard — pensada para publicações em hosts
-gratuitos, onde não dá pra restringir acesso de outra forma sem custo.
+A regra de acesso continua em `src/PasswordGate.jsx` — pensada para
+publicações em hosts gratuitos, onde não dá pra restringir acesso de outra
+forma sem custo.
 Só o hash SHA-256 da senha fica no código (não a senha em texto puro),
 mas isso **não é segurança de verdade**: qualquer pessoa com acesso ao
 código-fonte da página pode tentar quebrar o hash offline. Serve para
@@ -1077,8 +1141,9 @@ const { webcrypto } = require('crypto');
 "
 ```
 
-Depois de acertar a senha uma vez, o navegador lembra (via
-`localStorage`) e não pede de novo nesse dispositivo.
+Depois de acertar a senha uma vez, o navegador lembra e não pede de novo
+nesse dispositivo — em `localStorage` se "manter conectado" estava marcado, em
+`sessionStorage` (só até fechar a aba) se não estava.
 
 ## Exportar em PDF
 

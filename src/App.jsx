@@ -9,9 +9,9 @@ import Brands from "./pages/Brands.jsx";
 import BrandPage from "./pages/BrandPage.jsx";
 import PhotoId from "./pages/PhotoId.jsx";
 import Dashboard from "./Dashboard.jsx";
+import { readStoredTheme, applyTheme, storeTheme } from "./lib/theme.js";
 import "./theme.css";
 
-const THEME_KEY = "agro-theme";
 
 // Os menus mapeiam para as telas que existem de verdade. "Produtos" e
 // "Manejos" são duas entradas no mesmo catálogo (lista por categoria e manejos
@@ -34,22 +34,12 @@ export default function App() {
   const [catalogNonce, setCatalogNonce] = useState(0);
   const [openBrand, setOpenBrand] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dark, setDark] = useState(() => {
-    try {
-      return localStorage.getItem(THEME_KEY) === "dark";
-    } catch {
-      return false;
-    }
-  });
+  const [dark, setDark] = useState(readStoredTheme);
   const [online, setOnline] = useState(() => (typeof navigator === "undefined" ? true : navigator.onLine));
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-    try {
-      localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
-    } catch {
-      // sem localStorage: o tema só não persiste
-    }
+    applyTheme(dark);
+    storeTheme(dark);
   }, [dark]);
 
   useEffect(() => {
