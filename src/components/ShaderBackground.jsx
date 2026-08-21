@@ -12,13 +12,18 @@ import { VERTEX_SHADER, FRAGMENT_SHADER, MESH_DRIFT } from "./meshDriftShader.js
 //   gradiente do painel), então o resultado é a tela sem animação — nunca um
 //   retângulo preto.
 // - **Não roda escondido.** O laço para quando a aba sai de foco
-//   (`visibilitychange`) e quando o elemento sai da tela: é fundo decorativo,
-//   não pode consumir bateria de celular no campo.
+//   (`visibilitychange`) e quando o elemento sai da tela (`IntersectionObserver`
+//   — inclui o painel escondido por `display: none` no celular): é fundo
+//   decorativo, não pode consumir bateria de celular no campo.
+// - **Custo sob controle.** `maxDpr` e `maxFps` deixam quem usa escolher o
+//   preço: o painel da tela de entrada roda cheio, o fundo do app inteiro roda
+//   em resolução e cadência menores — ele fica atrás de um véu e desfocado,
+//   ninguém vê a diferença, e o app é usado o dia todo no celular em campo.
 // - **Respeita quem pediu menos movimento.** Com `prefers-reduced-motion`,
 //   desenha um quadro só e para. O app inteiro já segue essa regra em
 //   theme.css, e animação de fundo é justamente o tipo de movimento que
 //   incomoda quem ativou isso.
-export default function ShaderBackground({ recipe = MESH_DRIFT, className, style }) {
+export default function ShaderBackground({ recipe = MESH_DRIFT, maxDpr = 2, maxFps = 0, className, style }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -70,40 +75,59 @@ export default function ShaderBackground({ recipe = MESH_DRIFT, className, style
     let width = 0;
     let height = 0;
 
+    // Mede e redimensiona o buffer. Fica fora do `draw` porque ler
+    // `clientWidth` força cálculo de layout — a cada quadro isso seria um custo
+    // por quadro em troca de nada: o tamanho só muda em resize de verdade.
     function resize() {
-      // devicePixelRatio limitado a 2: acima disso o custo cresce ao quadrado
-      // e ninguém vê diferença num fundo desfocado.
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, Math.max(1, maxDpr));
       const w = Math.max(1, Math.round(canvas.clientWidth * dpr));
       const h = Math.max(1, Math.round(canvas.clientHeight * dpr));
-      if (w === width && h === height) return;
+      if (w === width && h === height) return false;
       width = w;
       height = h;
       canvas.width = w;
       canvas.height = h;
       gl.viewport(0, 0, w, h);
+      return true;
     }
 
     function draw(seconds) {
-      resize();
+      lastSeconds = seconds;
       gl.uniform4f(u.scene, width, height, seconds * recipe.timeScale, colorCount);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+
+    // Mudar `canvas.width` limpa o buffer. Parado (movimento reduzido, aba
+    // oculta), ninguém redesenha depois — e o canvas fica preto, que é o pior
+    // resultado possível num fundo. Então quem redimensiona também redesenha.
+    function onResize() {
+      if (resize() && !running) draw(lastSeconds);
     }
 
     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)");
     let frame = 0;
     let start = 0;
     let running = false;
+    let visible = true;
+    let lastSeconds = 0;
+    let lastPaint = 0;
+    const minGap = maxFps > 0 ? 1000 / maxFps - 1 : 0;
 
     function loop(now) {
       if (!running) return;
       if (!start) start = now;
-      draw((now - start) / 1000);
+      // Com `maxFps`, o RAF continua sendo o relógio, mas só uma parte dos
+      // quadros vira desenho — o resto sai de graça.
+      if (!minGap || now - lastPaint >= minGap) {
+        lastPaint = now;
+        resize();
+        draw((now - start) / 1000);
+      }
       frame = requestAnimationFrame(loop);
     }
 
     function play() {
-      if (running || reduceMotion?.matches) return;
+      if (running || !visible || document.hidden || reduceMotion?.matches) return;
       running = true;
       // Recomeça a contagem: sem isso, voltar pra aba depois de horas daria um
       // salto no tempo do shader e as manchas pulariam de posição.
@@ -120,6 +144,16 @@ export default function ShaderBackground({ recipe = MESH_DRIFT, className, style
       if (document.hidden) pause();
       else play();
     }
+
+    // Fora da tela não desenha. Cobre a rolagem e, principalmente, o painel
+    // que o CSS esconde no celular: sem isso ele mantinha contexto WebGL e um
+    // laço vivo desenhando num buffer de 1x1 que ninguém vê.
+    const observer = new IntersectionObserver((entries) => {
+      visible = entries.some((e) => e.isIntersecting);
+      if (visible) play();
+      else pause();
+    });
+    observer.observe(canvas);
 
     function onMotionChange() {
       if (reduceMotion?.matches) {
@@ -138,10 +172,11 @@ export default function ShaderBackground({ recipe = MESH_DRIFT, className, style
     canvas.addEventListener("webglcontextlost", onContextLost);
     document.addEventListener("visibilitychange", onVisibility);
     reduceMotion?.addEventListener?.("change", onMotionChange);
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", onResize);
 
     // Um quadro imediato pra tela não nascer vazia esperando o primeiro RAF,
     // e é também o único quadro quando o movimento está reduzido.
+    resize();
     draw(0);
     play();
 
@@ -150,12 +185,13 @@ export default function ShaderBackground({ recipe = MESH_DRIFT, className, style
       canvas.removeEventListener("webglcontextlost", onContextLost);
       document.removeEventListener("visibilitychange", onVisibility);
       reduceMotion?.removeEventListener?.("change", onMotionChange);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", onResize);
+      observer.disconnect();
       gl.deleteBuffer(buffer);
       gl.deleteProgram(program);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [recipe]);
+  }, [recipe, maxDpr, maxFps]);
 
   return <canvas ref={canvasRef} className={className} style={style} aria-hidden="true" />;
 }

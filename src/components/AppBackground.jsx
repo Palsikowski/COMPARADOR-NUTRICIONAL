@@ -15,7 +15,12 @@ import ShaderBackground from "./ShaderBackground.jsx";
 export default function AppBackground() {
   return (
     <div className="app-bg" aria-hidden="true">
-      <ShaderBackground className="app-bg-canvas" />
+      {/* Metade da cadência e resolução de tela, não 2x: este canvas cobre a
+          janela inteira e fica vivo a sessão toda, atrás de um véu. O painel do
+          login roda cheio porque é pequeno e dura poucos segundos; aqui o preço
+          seria bateria de celular no campo, o dia todo, por uma diferença que o
+          véu apaga. */}
+      <ShaderBackground className="app-bg-canvas" maxDpr={1} maxFps={30} />
       <div className="app-bg-veil" />
     </div>
   );

@@ -22,6 +22,18 @@ export default function PillNav({
   const [moreOpen, setMoreOpen] = useState(false);
   const moreRef = useRef(null);
 
+  // Alargou a ponto de o sanduíche sumir? Fecha a folha: o botão que a fecharia
+  // desaparece junto com o corte.
+  useEffect(() => {
+    const wide = window.matchMedia?.("(min-width: 1081px)");
+    if (!wide) return undefined;
+    const onChange = () => {
+      if (wide.matches) setMenuOpen(false);
+    };
+    wide.addEventListener?.("change", onChange);
+    return () => wide.removeEventListener?.("change", onChange);
+  }, []);
+
   // Fecha o "Mais" ao clicar fora ou apertar Esc — menu que só fecha no
   // próprio botão prende o clique seguinte da pessoa.
   useEffect(() => {
@@ -56,113 +68,113 @@ export default function PillNav({
       <div className="shell-topfade" aria-hidden="true" />
 
       <div className="pillbar">
-      <nav className="pill" aria-label="Navegação principal">
-        <button className="pill-brand" onClick={() => go("home")} aria-label="Comparador Nutricional — início">
-          <span className="pill-mark">
-            <Leaf size={17} />
-          </span>
-          <span className="pill-brand-text">
-            <span className="pill-brand-name">Comparador Nutricional</span>
-            <span className="pill-brand-tag">Inteligência Foliar</span>
-          </span>
-        </button>
-
-        <div className="pill-links">
-          {primary.map((n) => (
-            <button
-              key={n.id}
-              className="pill-link"
-              onClick={() => go(n.id)}
-              aria-current={page === n.id ? "page" : undefined}
-              data-active={page === n.id ? "true" : undefined}
-            >
-              {n.label}
-            </button>
-          ))}
-
-          <div className="pill-more" ref={moreRef}>
-            <button
-              className="pill-link"
-              onClick={() => setMoreOpen((v) => !v)}
-              aria-expanded={moreOpen}
-              aria-haspopup="true"
-              data-active={secondaryActive ? "true" : undefined}
-            >
-              Mais <ChevronDown size={14} style={{ transform: moreOpen ? "rotate(180deg)" : "none", transition: "transform var(--speed) ease" }} />
-            </button>
-            {moreOpen && (
-              <div className="pill-dropdown" role="menu">
-                {secondary.map((n) => (
-                  <button
-                    key={n.id}
-                    role="menuitem"
-                    className="pill-dropdown-item"
-                    onClick={() => go(n.id)}
-                    aria-current={page === n.id ? "page" : undefined}
-                    data-active={page === n.id ? "true" : undefined}
-                  >
-                    {n.label}
-                  </button>
-                ))}
-                <div className="pill-dropdown-note">
-                  {online ? <Wifi size={13} /> : <WifiOff size={13} />}
-                  {online ? "Online — o catálogo fica no aparelho" : "Sem internet — o catálogo continua no aparelho"}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="pill-actions">
-          {!online && (
-            <span className="pill-offline" title="Sem internet. A plataforma continua funcionando: todo o catálogo está salvo no aparelho.">
-              <WifiOff size={13} /> Offline
+        <nav className="pill" aria-label="Navegação principal">
+          <button className="pill-brand" onClick={() => go("home")} aria-label="Comparador Nutricional — início">
+            <span className="pill-mark">
+              <Leaf size={17} />
             </span>
-          )}
-
-          <button
-            className="pill-icon"
-            onClick={onToggleTheme}
-            title={dark ? "Usar tema claro" : "Usar tema escuro (leitura sob sol forte)"}
-            aria-label={dark ? "Usar tema claro" : "Usar tema escuro"}
-          >
-            {dark ? <Sun size={16} /> : <Moon size={16} />}
+            <span className="pill-brand-text">
+              <span className="pill-brand-name">Comparador Nutricional</span>
+              <span className="pill-brand-tag">Inteligência Foliar</span>
+            </span>
           </button>
 
-          <button className="pill-cta" onClick={onSignOut}>
-            <LogOut size={15} /> <span className="pill-cta-label">Sair</span>
-          </button>
+          <div className="pill-links">
+            {primary.map((n) => (
+              <button
+                key={n.id}
+                className="pill-link"
+                onClick={() => go(n.id)}
+                aria-current={page === n.id ? "page" : undefined}
+                data-active={page === n.id ? "true" : undefined}
+              >
+                {n.label}
+              </button>
+            ))}
 
-          <button
-            className="pill-burger"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
-            aria-expanded={menuOpen}
-          >
-            {menuOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
-        </div>
-      </nav>
-
-      {menuOpen && (
-        <div className="pill-sheet">
-          {[...primary, ...secondary].map((n) => (
-            <button
-              key={n.id}
-              className="pill-sheet-item"
-              onClick={() => go(n.id)}
-              aria-current={page === n.id ? "page" : undefined}
-              data-active={page === n.id ? "true" : undefined}
-            >
-              {n.label}
-            </button>
-          ))}
-          <div className="pill-dropdown-note">
-            {online ? <Wifi size={13} /> : <WifiOff size={13} />}
-            {online ? "Online — o catálogo fica no aparelho" : "Sem internet — o catálogo continua no aparelho"}
+            <div className="pill-more" ref={moreRef}>
+              <button
+                className="pill-link"
+                onClick={() => setMoreOpen((v) => !v)}
+                aria-expanded={moreOpen}
+                aria-haspopup="true"
+                data-active={secondaryActive ? "true" : undefined}
+              >
+                Mais <ChevronDown size={14} style={{ transform: moreOpen ? "rotate(180deg)" : "none", transition: "transform var(--speed) ease" }} />
+              </button>
+              {moreOpen && (
+                <div className="pill-dropdown" role="menu">
+                  {secondary.map((n) => (
+                    <button
+                      key={n.id}
+                      role="menuitem"
+                      className="pill-dropdown-item"
+                      onClick={() => go(n.id)}
+                      aria-current={page === n.id ? "page" : undefined}
+                      data-active={page === n.id ? "true" : undefined}
+                    >
+                      {n.label}
+                    </button>
+                  ))}
+                  <div className="pill-dropdown-note">
+                    {online ? <Wifi size={13} /> : <WifiOff size={13} />}
+                    {online ? "Online — o catálogo fica no aparelho" : "Sem internet — o catálogo continua no aparelho"}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+
+          <div className="pill-actions">
+            {!online && (
+              <span className="pill-offline" title="Sem internet. A plataforma continua funcionando: todo o catálogo está salvo no aparelho.">
+                <WifiOff size={13} /> Offline
+              </span>
+            )}
+
+            <button
+              className="pill-icon"
+              onClick={onToggleTheme}
+              title={dark ? "Usar tema claro" : "Usar tema escuro (leitura sob sol forte)"}
+              aria-label={dark ? "Usar tema claro" : "Usar tema escuro"}
+            >
+              {dark ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+
+            <button className="pill-cta" onClick={onSignOut}>
+              <LogOut size={15} /> <span className="pill-cta-label">Sair</span>
+            </button>
+
+            <button
+              className="pill-burger"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+              aria-expanded={menuOpen}
+            >
+              {menuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
+        </nav>
+
+        {menuOpen && (
+          <div className="pill-sheet">
+            {[...primary, ...secondary].map((n) => (
+              <button
+                key={n.id}
+                className="pill-sheet-item"
+                onClick={() => go(n.id)}
+                aria-current={page === n.id ? "page" : undefined}
+                data-active={page === n.id ? "true" : undefined}
+              >
+                {n.label}
+              </button>
+            ))}
+            <div className="pill-dropdown-note">
+              {online ? <Wifi size={13} /> : <WifiOff size={13} />}
+              {online ? "Online — o catálogo fica no aparelho" : "Sem internet — o catálogo continua no aparelho"}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

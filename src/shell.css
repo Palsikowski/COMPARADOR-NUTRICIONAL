@@ -27,7 +27,11 @@
 .app-bg {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  /* z-index negativo, e não `1` no <main>: dar z-index ao <main> criava um
+     contexto de empilhamento e prendia lá dentro TODOS os modais do app (ficha
+     técnica, NCI, edição rápida, z 60-80), que passavam a ser desenhados
+     ABAIXO da barra flutuante. O fundo é a única coisa que precisa descer. */
+  z-index: -1;
   pointer-events: none;
   /* Se o WebGL não subir, o canvas fica transparente e sobra esta cor — a
      mesma do app sem fundo animado. */
@@ -49,8 +53,6 @@
 }
 
 .app-shell {
-  position: relative;
-  z-index: 1;
   min-height: 100vh;
 }
 
@@ -364,6 +366,15 @@
   }
   .pill-brand {
     margin-right: auto;
+  }
+}
+
+/* Trava do sanduíche: acima do corte o botão que o fecha não existe mais, então
+   a folha aberta ficaria por cima do conteúdo sem jeito de sair. O componente
+   também fecha o menu na virada; esta regra é a garantia. */
+@media (min-width: 1081px) {
+  .pill-sheet {
+    display: none;
   }
 }
 

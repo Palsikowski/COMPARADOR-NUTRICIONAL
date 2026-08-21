@@ -37,6 +37,12 @@ export function readUnlocked(expectedHash) {
 }
 
 export function storeUnlocked(hash, remember) {
+  // Limpa os dois antes de gravar. Sem isso, entrar SEM "manter conectado" num
+  // aparelho onde alguém já tinha entrado COM deixava o acesso permanente de
+  // pé: a gravação ia pro sessionStorage e a leitura continuava achando o
+  // localStorage antigo — exatamente o contrário do que a caixa promete, e no
+  // computador compartilhado é onde isso importa.
+  clearUnlock();
   try {
     const store = remember ? localStorage : sessionStorage;
     store.setItem(AUTH_STORAGE_KEY, hash);
