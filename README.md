@@ -52,7 +52,7 @@ perde o foco, e `prefers-reduced-motion` desenha um quadro só.
 O que ele **não** faz é aparecer atrás de dado. Sobre o shader existe um véu
 (`--veil`) que o transforma em textura: ele aparece nas margens, entre os
 cards e por trás do vidro da barra, e o texto continua no contraste de
-sempre. Uma grade de 1.647 produtos por cima de manchas roxas em movimento
+sempre. Uma grade de 1.648 produtos por cima de manchas roxas em movimento
 seria bonita em captura de tela e um teste de vista no uso real. As duas
 exceções são de propósito: o **hero da home** não tem fundo próprio, então é
 lá que o fundo animado aparece inteiro, e o tema escuro usa menos véu, porque
@@ -93,7 +93,7 @@ oferecer "Sair" sem importar o portão de senha.
 
 ## Catálogo em grade (Produtos)
 
-A navegação do catálogo é uma **grade virtualizada** sobre os 1.647 produtos,
+A navegação do catálogo é uma **grade virtualizada** sobre os 1.648 produtos,
 com barra de filtros fixa no topo.
 
 - **Colunas:** 4 (≥1240px), 3 (≥940px), 2 (≥640px), 1 no celular.
@@ -142,7 +142,7 @@ o desfazer.
 
 ### Virtualização
 
-Renderizar 1.647 cards de uma vez trava celular, então só as linhas visíveis
+Renderizar 1.648 cards de uma vez trava celular, então só as linhas visíveis
 (mais uma margem) vão ao DOM — medido: **52 cards no DOM**, constante ao
 rolar. Não foi usada biblioteca: a janela é calculada a partir do scroll
 (`useWindowed` em `src/pages/Catalog.jsx`).
@@ -207,7 +207,7 @@ de fora da conta por não terem preço.
 ## Empresas: bandeiras, gráfico e PDF
 
 A entrada **Empresas** era o mesmo catálogo agrupado por marca: para chegar a
-uma empresa específica era preciso rolar os 1.647 produtos. Agora é uma vitrine
+uma empresa específica era preciso rolar os 1.648 produtos. Agora é uma vitrine
 de bandeiras — 61 blocos, um por empresa, com o tamanho do portfólio e quanto
 dele tem composição cadastrada. Buscar por nome filtra a vitrine.
 
@@ -331,7 +331,7 @@ Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
 - **É leitura de texto (OCR), não reconhecimento visual da embalagem.** Não
   existe nenhuma foto de produto cadastrada na base, então não há como treinar
   reconhecimento por aparência. O que dá para ler com segurança é o nome
-  impresso, e casá-lo com os 1.647 nomes do catálogo.
+  impresso, e casá-lo com os 1.648 nomes do catálogo.
 - **Roda no aparelho.** O leitor (worker, núcleo WebAssembly e modelo de
   idioma, ~14 MB em `public/ocr/`) é servido pelo próprio app, não por CDN —
   sem isso a função só funcionaria com internet, o oposto do que o campo
@@ -414,14 +414,14 @@ Situação atual do catálogo (medida, não estimada):
 
 | Dado | Cobertura |
 | --- | --- |
-| Nome, marca, categoria | 1647 / 1647 |
-| Origem do dado (`fonte`) | 1647 / 1647 |
-| Composição convertida (g/L ou g/kg) | 1129 / 1647 |
-| Composição só em %m/m (sem densidade) | 73 / 1647 |
-| Dose de referência | **293 / 1647** |
-| Densidade | 762 / 1647 |
-| Dose por cultura (Soja/Milho/Feijão) | **31 / 1647** (produtos Agrocete do material de posicionamento) |
-| Posicionamento por cultura/estádio | **16 / 1647** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
+| Nome, marca, categoria | 1648 / 1648 |
+| Origem do dado (`fonte`) | 1648 / 1648 |
+| Composição convertida (g/L ou g/kg) | 1129 / 1648 |
+| Composição só em %m/m (sem densidade) | 73 / 1648 |
+| Dose de referência | **294 / 1648** |
+| Densidade | 762 / 1648 |
+| Dose por cultura (Soja/Milho/Feijão) | **31 / 1648** (produtos Agrocete do material de posicionamento) |
+| Posicionamento por cultura/estádio | **16 / 1648** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
 | Preço | **0** — preço não está no catálogo, é sempre informado pelo usuário |
 
 Consequências práticas, que a interface deixa explícitas:
@@ -576,7 +576,7 @@ já entraram: uma planilha com as colunas correspondentes.
   em vetor.
 - `src/lib/nutrientLabels.js` — nome por extenso de cada nutriente, num lugar
   só (estava repetido em quatro telas, com divergências entre elas).
-- `src/data/products.js` — catálogo de 1647 produtos (Agrocete + 60
+- `src/data/products.js` — catálogo de 1648 produtos (Agrocete + 60
   marcas concorrentes), gerado a partir das planilhas internas e das
   planilhas/PDFs enviados pelo usuário ao longo do projeto.
 - `src/data/equivalences.js` — matriz de 35 linhas de produto,

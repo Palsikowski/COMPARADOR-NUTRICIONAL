@@ -12966,6 +12966,27 @@ export const PRODUCTS = [
     "line": "Nematicida Fitoquímico"
   },
   {
+    "id": "gran7__vigga",
+    "brand": "GRAN7",
+    "category": "BIOCONTROLE",
+    "name": "Vigga",
+    "hasNutrients": false,
+    "nutrients": {},
+    "nutrientsPercent": {},
+    "density": null,
+    "unit": "L/ha",
+    "defaultDose": 0.1,
+    "doseRaw": "0,1 a 0,4 L/ha",
+    "composition": "Nematicida fitoquímico. Primeiro e único registrado no Brasil.",
+    "source": null,
+    "description": null,
+    "observations": "Nematicida fitoquímico concentrado de contato. Mata qualquer nematoide que entrar em contato (ovos, juvenis e adultos). Age somente nos nematoides, sem interferir em fungos, bactérias, insetos e outros organismos vivos. Tecnologia natural com residual de até 75 dias. O catálogo também tem o registro “Vigga / Nematak”, que veio da matriz de equivalência e aponta para este mesmo produto — o par foi mantido porque a matriz referencia aquele nome.",
+    "warning": null,
+    "shelfLife": null,
+    "fonte": "Portfólio Gran7 (planilha enviada pelo usuário).",
+    "line": "Nematicida Fitoquímico"
+  },
+  {
     "id": "nutriplant__aminonutri",
     "brand": "NUTRIPLANT",
     "category": "Nutrição e Fisiologia",
