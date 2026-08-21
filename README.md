@@ -26,7 +26,8 @@ A navegação do topo tem cinco entradas, além da home:
   com diferença calculada, economia (custo/ha por área, custo por kg de
   nutriente), índice NCI e posicionamento.
 - **Sobre** — metodologia aberta: cobertura medida dos dados, níveis de
-  confiabilidade, as fórmulas usadas, os pesos do NCI e os limites
+  confiabilidade, as fórmulas usadas, os pesos do NCI, as tabelas de
+  referência (interações entre nutrientes e sais/matérias-primas) e os limites
   conhecidos.
 
 Produtos e Manejos são duas entradas para o mesmo dashboard que já existia —
@@ -34,9 +35,65 @@ ele continua intacto, com manejo atual lado a lado, manejos prontos, sugestão
 automática de manejo Agrocete, manejos salvos, trava de dose e exportação em
 PDF. Empresas deixou de ser uma terceira entrada nele e ganhou tela própria.
 
+## Casca do app: fundo animado e barra flutuante
+
+A navegação deixou de ser um cabeçalho sólido colado no topo e virou uma
+**barra flutuante em pílula** (`src/components/PillNav.jsx`), sobreposta a um
+**fundo animado em WebGL** que ocupa a tela inteira
+(`src/components/AppBackground.jsx`).
+
+### O fundo
+
+É o mesmo shader "Mesh drift" da tela de entrada, agora em tela cheia e fixo:
+não rola com a página, e as três proteções continuam valendo — sem WebGL o
+canvas não desenha e sobra a cor de fundo de sempre, o laço para quando a aba
+perde o foco, e `prefers-reduced-motion` desenha um quadro só.
+
+O que ele **não** faz é aparecer atrás de dado. Sobre o shader existe um véu
+(`--veil`) que o transforma em textura: ele aparece nas margens, entre os
+cards e por trás do vidro da barra, e o texto continua no contraste de
+sempre. Uma grade de 1.647 produtos por cima de manchas roxas em movimento
+seria bonita em captura de tela e um teste de vista no uso real. As duas
+exceções são de propósito: o **hero da home** não tem fundo próprio, então é
+lá que o fundo animado aparece inteiro, e o tema escuro usa menos véu, porque
+o shader é escuro e não briga com o texto claro.
+
+### A barra
+
+Vidro (`backdrop-filter`), cantos totalmente arredondados, sombra suave,
+largura própria e centralizada. À esquerda a marca, com o ícone em gradiente
+nas cores do shader. À direita o botão de tema e o **Sair**. No centro, três
+seções:
+
+| Na barra | Tela |
+| --- | --- |
+| Empresas | vitrine de bandeiras e portfólio por empresa |
+| Manejos Cliente | o dashboard de manejo do cliente (era "Meu manejo") |
+| Manejos Agrocete | manejos oficiais por cultura e estádio |
+
+As outras quatro telas — Produtos, Calculadora Custo/ha, Identificar por foto
+e Sobre — ficam em **"Mais"**, não sumiram. Três entradas no centro é o
+desenho pedido; deixar metade do app sem entrada de navegação seria perder
+função em nome dele. Abaixo de 1080px os links do meio saem e tudo vira
+**sanduíche**, com as sete seções empilhadas no mesmo vidro arredondado.
+
+Dois detalhes que só aparecem no uso: a barra flutua, então o conteúdo passa
+**por baixo** dela ao rolar — por isso existe uma faixa de topo que desfoca e
+clareia essa passagem. E, como a barra é sobreposta e não empurra o conteúdo,
+quem reserva o espaço dela é um token só (`--shell-top`), usado tanto no
+respiro do `<main>` quanto na barra de filtros do catálogo, que gruda logo
+abaixo dela.
+
+### Sair
+
+O botão à direita limpa o desbloqueio (`localStorage` e `sessionStorage`) e
+devolve a tela de entrada, sem recarregar a página. O estado de acesso mora em
+`src/lib/auth.js` e chega às telas por contexto, então qualquer tela pode
+oferecer "Sair" sem importar o portão de senha.
+
 ## Catálogo em grade (Produtos)
 
-A navegação do catálogo é uma **grade virtualizada** sobre os 1.626 produtos,
+A navegação do catálogo é uma **grade virtualizada** sobre os 1.647 produtos,
 com barra de filtros fixa no topo.
 
 - **Colunas:** 4 (≥1240px), 3 (≥940px), 2 (≥640px), 1 no celular.
@@ -85,7 +142,7 @@ o desfazer.
 
 ### Virtualização
 
-Renderizar 1.626 cards de uma vez trava celular, então só as linhas visíveis
+Renderizar 1.647 cards de uma vez trava celular, então só as linhas visíveis
 (mais uma margem) vão ao DOM — medido: **52 cards no DOM**, constante ao
 rolar. Não foi usada biblioteca: a janela é calculada a partir do scroll
 (`useWindowed` em `src/pages/Catalog.jsx`).
@@ -150,7 +207,7 @@ de fora da conta por não terem preço.
 ## Empresas: bandeiras, gráfico e PDF
 
 A entrada **Empresas** era o mesmo catálogo agrupado por marca: para chegar a
-uma empresa específica era preciso rolar os 1.626 produtos. Agora é uma vitrine
+uma empresa específica era preciso rolar os 1.647 produtos. Agora é uma vitrine
 de bandeiras — 61 blocos, um por empresa, com o tamanho do portfólio e quanto
 dele tem composição cadastrada. Buscar por nome filtra a vitrine.
 
@@ -274,7 +331,7 @@ Fotografe o rótulo: o app lê o texto impresso e procura no catálogo.
 - **É leitura de texto (OCR), não reconhecimento visual da embalagem.** Não
   existe nenhuma foto de produto cadastrada na base, então não há como treinar
   reconhecimento por aparência. O que dá para ler com segurança é o nome
-  impresso, e casá-lo com os 1.626 nomes do catálogo.
+  impresso, e casá-lo com os 1.647 nomes do catálogo.
 - **Roda no aparelho.** O leitor (worker, núcleo WebAssembly e modelo de
   idioma, ~14 MB em `public/ocr/`) é servido pelo próprio app, não por CDN —
   sem isso a função só funcionaria com internet, o oposto do que o campo
@@ -357,14 +414,14 @@ Situação atual do catálogo (medida, não estimada):
 
 | Dado | Cobertura |
 | --- | --- |
-| Nome, marca, categoria | 1626 / 1626 |
-| Origem do dado (`fonte`) | 1626 / 1626 |
-| Composição convertida (g/L ou g/kg) | 1129 / 1626 |
-| Composição só em %m/m (sem densidade) | 43 / 1626 |
-| Dose de referência | **293 / 1626** |
-| Densidade | 762 / 1626 |
-| Dose por cultura (Soja/Milho/Feijão) | **31 / 1626** (produtos Agrocete do material de posicionamento) |
-| Posicionamento por cultura/estádio | **16 / 1626** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
+| Nome, marca, categoria | 1647 / 1647 |
+| Origem do dado (`fonte`) | 1647 / 1647 |
+| Composição convertida (g/L ou g/kg) | 1129 / 1647 |
+| Composição só em %m/m (sem densidade) | 73 / 1647 |
+| Dose de referência | **293 / 1647** |
+| Densidade | 762 / 1647 |
+| Dose por cultura (Soja/Milho/Feijão) | **31 / 1647** (produtos Agrocete do material de posicionamento) |
+| Posicionamento por cultura/estádio | **16 / 1647** (só produtos Agrocete dos manejos oficiais de Soja, Milho, Algodão e Sorgo) |
 | Preço | **0** — preço não está no catálogo, é sempre informado pelo usuário |
 
 Consequências práticas, que a interface deixa explícitas:
@@ -483,10 +540,30 @@ já entraram: uma planilha com as colunas correspondentes.
 - `src/dashboard.css` — micro-interações que inline styles não
   expressam: escala ao tocar, accordion com altura suave, pulso do
   bottom sheet, estilo do slider.
-- `src/PasswordGate.jsx` — tela de senha antes de carregar o dashboard.
+- `src/PasswordGate.jsx` — a regra de acesso: valida a senha e guarda o
+  desbloqueio. O desenho da tela é do `SignInPage`.
+- `src/components/SignInPage.jsx` + `src/signin.css` — a tela de entrada
+  (formulário, painel animado e os números reais da base).
+- `src/components/ShaderBackground.jsx` — o fundo animado em WebGL1 puro:
+  contexto, laço de render, pausa fora de foco e as saídas silenciosas quando
+  o WebGL não existe.
+- `src/components/meshDriftShader.js` — o GLSL do "Mesh drift" e a receita de
+  cores/ajuste, em arquivo separado por ser código de terceiro copiado sem
+  edição.
+- `src/lib/theme.js` — tema claro/escuro num lugar só, aplicado no boot pra a
+  tela de entrada já nascer no tema certo.
+- `src/lib/auth.js` — onde o desbloqueio fica guardado e o contexto que leva o
+  "Sair" pras telas.
+- `src/components/PillNav.jsx` + `src/shell.css` — a barra flutuante em pílula
+  e a casca do app (fundo fixo, véu, faixa de topo, `--shell-top`).
+- `src/components/AppBackground.jsx` — o fundo animado em tela cheia com o véu
+  que o mantém legível por baixo do conteúdo.
 - `src/main.jsx` — ponto de entrada React.
 - `src/data/nutrientInteractions.js` — as 21 interações entre nutrientes e o
   cruzamento com a composição declarada de cada produto.
+- `src/data/rawMaterials.js` — sais e matérias-primas (solubilidade e garantia
+  declarada), tabela de referência exibida na página Sobre. Não são produtos do
+  catálogo e não entram em nenhum cálculo.
 - `src/components/InteractionList.jsx` — a lista de interações, no mesmo
   formato em todas as telas.
 - `src/pages/Brands.jsx` — vitrine de bandeiras das 61 empresas.
@@ -499,7 +576,7 @@ já entraram: uma planilha com as colunas correspondentes.
   em vetor.
 - `src/lib/nutrientLabels.js` — nome por extenso de cada nutriente, num lugar
   só (estava repetido em quatro telas, com divergências entre elas).
-- `src/data/products.js` — catálogo de 1626 produtos (Agrocete + 60
+- `src/data/products.js` — catálogo de 1647 produtos (Agrocete + 60
   marcas concorrentes), gerado a partir das planilhas internas e das
   planilhas/PDFs enviados pelo usuário ao longo do projeto.
 - `src/data/equivalences.js` — matriz de 35 linhas de produto,
@@ -695,6 +772,46 @@ os dados extraídos já estão embutidos nos arquivos `.js`):
     planilha interna mais recente; reapareceu num material oficial. Entra só
     com o percentual — o material não traz g/L nem densidade — e as três
     culturas aparecem sem dose.
+
+- **Guia Técnico Nitro (Fev 2024, V6)** — planilha
+  `NITRO_Garantias_Comparador.xlsx` com duas abas: as **garantias das 30
+  linhas** do portfólio Nitro e uma tabela de **sais e matérias-primas**. A
+  NITRO estava no catálogo desde a matriz de equivalência, mas **só com
+  nomes** — nenhum dos 17 registros tinha composição. Resultado: **21 produtos
+  novos e 9 enriquecidos**, e a marca saiu de 0 para **30 produtos com
+  garantia declarada** (38 no total).
+
+  - **Só percentual, em todas as linhas.** O guia publica `%m/m` e não traz
+    densidade, dose nem indicação de sólido/líquido. Então nenhum produto foi
+    convertido para g/L ou g/kg: todos entram em `nutrientsPercent`, com
+    `nutrients` vazio, e a ficha diz por que o produto ainda não entra em
+    custo por kg de nutriente. Assumir densidade 1,0 (ou "é pó, então g/kg")
+    seria inventar a base da conta.
+  - **Casamento produto a produto, escrito à mão.** O guia escreve os nomes em
+    caixa alta e com barra (`FORCE /Mn-N`, `COMPAT /COMPLEX`, `GROWN`), o que
+    faria uma heurística de nome errar. As 9 correspondências com registros já
+    existentes foram decididas uma a uma e ficam **anotadas na observação do
+    produto** ("Casado com a linha X do guia da Nitro"), junto da garantia
+    declarada — dá para conferir sem abrir a planilha.
+  - **Enriquecimento, não sobrescrita**, como nas importações anteriores:
+    nenhum dos 9 registros tinha garantia numérica, então não houve conflito a
+    resolver. A categoria antiga foi mantida; a linha do guia entrou no campo
+    `line`.
+  - **Categoria dos produtos novos** vem da coluna "Linha" da planilha: as
+    linhas *Linha Solo* e *Tratamento de Sementes* foram para as categorias de
+    mesmo sentido que já existiam no catálogo, e o resto ficou em "Nutrição e
+    Fisiologia" — que é a categoria dos produtos NITRO já cadastrados e o
+    próprio assunto do guia.
+  - **Sais e matérias-primas** (segunda aba) **não entraram no catálogo.** Não
+    são produtos comerciais: não têm marca, dose nem preço, e apareceriam na
+    busca e no comparativo como se fossem. Viraram uma tabela de referência em
+    `src/data/rawMaterials.js`, exibida na página **Sobre** — 8 matérias-primas
+    com solubilidade (g/L) e garantia declarada. Não entra em nenhum cálculo, e
+    a tela avisa que a solubilidade vem **sem temperatura de referência**, ou
+    seja, não é limite de calda.
+  - **"P" lido como P2O5** no MAP purificado, com a mesma convenção de rótulo
+    já usada nos materiais ICL e Gran7 — e a divergência de símbolo está
+    escrita embaixo da tabela.
 
 ### Campos novos da ficha técnica
 
@@ -1009,11 +1126,78 @@ travadas e o nome do cliente/fazenda são gravados automaticamente no
 É armazenamento local por navegador/dispositivo — não sincroniza entre
 aparelhos nem entre membros da equipe.
 
+## Tela de entrada
+
+A primeira tela do app é o `SignInPage` (`src/components/SignInPage.jsx`,
+estilo em `src/signin.css`): formulário à esquerda, foto de lavoura com os
+números reais da base à direita.
+
+- **A tela não valida nada.** Ela recebe `onSubmit`, `error`, `hint` e `busy`;
+  quem decide se a senha vale é o `PasswordGate`. Trocar a autenticação depois
+  (login por pessoa, SSO) não encosta no layout.
+- **Os cartões da direita são dados medidos**, lidos de `platformStats()` — os
+  mesmos números da página Sobre. Não são depoimentos: inventar elogios
+  assinados por pessoas que não existem, numa tela de entrada de ferramenta
+  interna, seria mentira com cara de prova social.
+- **O painel da direita é um shader animado em WebGL**, não uma foto: o
+  "Mesh drift" do 21st.dev Shader Builder, em WebGL1 puro (um triângulo que
+  cobre a tela e um fragment shader), sem biblioteca nenhuma. Trocar a foto do
+  Unsplash por ele resolveu de quebra o problema que a foto tinha: shader não
+  depende de rede, então funciona igual em campo sem sinal e no build de
+  arquivo único aberto direto do disco. No celular a coluna some — ali o que
+  interessa é o campo de senha, e o resto seria só consumo de bateria.
+- **O fundo animado degrada em silêncio.** Sem WebGL, com o contexto perdido
+  ou com o shader recusado pelo driver, o canvas não desenha e aparece o
+  gradiente do painel — a tela fica sem animação, nunca com um buraco preto.
+  O laço para quando a aba sai de foco, o `devicePixelRatio` é limitado a 2, e
+  com `prefers-reduced-motion` ele desenha **um quadro só** e para.
+- **"Manter conectado" escolhe onde o desbloqueio fica.** Marcado, vai pro
+  `localStorage` e dura entre sessões; desmarcado, vai pro `sessionStorage` e
+  some ao fechar a aba — que é o certo no computador compartilhado do
+  escritório.
+- **"Esqueci a senha" não finge um fluxo que não existe:** responde que a
+  entrada é uma senha só, compartilhada, e manda pedir a quem administra.
+- **Botão do Google e "criar conta"** existem no componente (props
+  `onGoogleSignIn` e `onCreateAccount`) mas **não são renderizados**, porque a
+  plataforma não tem backend de autenticação nem cadastro. Botão que não faz
+  nada é pior que botão nenhum. Passe os handlers no dia em que existir login
+  por pessoa e os dois aparecem.
+- O tema (claro/escuro) é aplicado no boot, em `main.jsx`, via
+  `src/lib/theme.js` — antes a alternância morava no App, que só monta depois
+  do login, e quem usa tema escuro via um flash branco na entrada.
+
+### Sobre shadcn/ui, Tailwind e TypeScript
+
+O componente de origem vinha em TSX com classes do Tailwind e o caminho
+`@/components/ui`. **Nada disso foi instalado**, e a tela foi reescrita em
+JSX com os tokens de `src/theme.css`. O motivo é o mesmo já registrado na
+seção "Sobre Tailwind": este é um app Vite + React em JavaScript, com ~50 mil
+linhas de JSX e um design system próprio em CSS custom properties. Instalar
+Tailwind 4, TypeScript e a estrutura da shadcn por causa de uma tela
+significaria duas linguagens de estilo convivendo no mesmo app — e a tela de
+entrada, que precisa ser idêntica ao resto, seria justamente a que ficaria
+diferente.
+
+O que foi mantido do original: o layout de duas colunas, a foto com cartões
+flutuantes, o campo "de vidro" que acende no foco, o olho de mostrar/ocultar
+senha (`lucide-react`, que o projeto já usa), a entrada animada com atraso
+escalonado e a mesma superfície de props.
+
+Se um dia a stack for migrada de fato, o caminho é: `npx shadcn@latest init`
+(que cria `components.json`, `src/components/ui` e o `@/*` no `tsconfig` +
+`vite.config`), `npm i -D tailwindcss @tailwindcss/vite typescript` com o
+plugin no `vite.config.js`, e `@import "tailwindcss"` no CSS de entrada. A
+pasta `components/ui` é exigência da CLI da shadcn: é onde ela escreve e
+atualiza os componentes que você instala, e fora dela `npx shadcn add` não
+encontra o que sobrescrever. Só que isso é uma migração de stack do app
+inteiro, não um passo desta tela — e a orientação registrada no projeto,
+desde o começo, é não trocar de stack por estética.
+
 ## Tela de senha
 
-O app fica atrás de uma tela de senha simples (`src/PasswordGate.jsx`)
-antes de carregar o dashboard — pensada para publicações em hosts
-gratuitos, onde não dá pra restringir acesso de outra forma sem custo.
+A regra de acesso continua em `src/PasswordGate.jsx` — pensada para
+publicações em hosts gratuitos, onde não dá pra restringir acesso de outra
+forma sem custo.
 Só o hash SHA-256 da senha fica no código (não a senha em texto puro),
 mas isso **não é segurança de verdade**: qualquer pessoa com acesso ao
 código-fonte da página pode tentar quebrar o hash offline. Serve para
@@ -1033,8 +1217,9 @@ const { webcrypto } = require('crypto');
 "
 ```
 
-Depois de acertar a senha uma vez, o navegador lembra (via
-`localStorage`) e não pede de novo nesse dispositivo.
+Depois de acertar a senha uma vez, o navegador lembra e não pede de novo
+nesse dispositivo — em `localStorage` se "manter conectado" estava marcado, em
+`sessionStorage` (só até fechar a aba) se não estava.
 
 ## Exportar em PDF
 

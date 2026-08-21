@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Leaf, Sun, Moon, Wifi, WifiOff, Menu, X, ArrowLeftRight, Camera } from "lucide-react";
+import PillNav from "./components/PillNav.jsx";
+import AppBackground from "./components/AppBackground.jsx";
 import Home from "./pages/Home.jsx";
 import Compare from "./pages/Compare.jsx";
 import About from "./pages/About.jsx";
@@ -9,19 +10,27 @@ import Brands from "./pages/Brands.jsx";
 import BrandPage from "./pages/BrandPage.jsx";
 import PhotoId from "./pages/PhotoId.jsx";
 import Dashboard from "./Dashboard.jsx";
+import { readStoredTheme, applyTheme, storeTheme } from "./lib/theme.js";
+import { useAuth } from "./lib/auth.js";
 import "./theme.css";
+import "./shell.css";
 
-const THEME_KEY = "agro-theme";
 
-// Os menus mapeiam para as telas que existem de verdade. "Produtos" e
-// "Manejos" são duas entradas no mesmo catálogo (lista por categoria e manejos
-// oficiais abertos). "Empresas" deixou de ser uma terceira: virou a vitrine de
-// bandeiras, com página própria por empresa e comparativo em gráfico.
-const NAV = [
-  { id: "produtos", label: "Produtos" },
+// A barra flutuante mostra três seções no centro, como pedido. As outras
+// quatro telas continuam existindo e ficam em "Mais" (e no sanduíche do
+// celular): sumir com a entrada de navegação de metade do app em nome do
+// desenho seria perder função, não ganhar estética.
+//
+// "Manejos Cliente" é a tela que o app chamava de "Meu manejo" — o nome mudou
+// na navegação, o id e o comportamento não.
+const PRIMARY_NAV = [
   { id: "empresas", label: "Empresas" },
-  { id: "manejo", label: "Meu manejo" },
+  { id: "manejo", label: "Manejos Cliente" },
   { id: "manejos", label: "Manejos Agrocete" },
+];
+
+const SECONDARY_NAV = [
+  { id: "produtos", label: "Produtos" },
   { id: "custo", label: "Calculadora Custo/ha" },
   { id: "foto", label: "Identificar por foto" },
   { id: "sobre", label: "Sobre" },
@@ -33,23 +42,13 @@ export default function App() {
   const [pendingSelection, setPendingSelection] = useState(null);
   const [catalogNonce, setCatalogNonce] = useState(0);
   const [openBrand, setOpenBrand] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [dark, setDark] = useState(() => {
-    try {
-      return localStorage.getItem(THEME_KEY) === "dark";
-    } catch {
-      return false;
-    }
-  });
+  const [dark, setDark] = useState(readStoredTheme);
   const [online, setOnline] = useState(() => (typeof navigator === "undefined" ? true : navigator.onLine));
+  const { signOut } = useAuth();
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-    try {
-      localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
-    } catch {
-      // sem localStorage: o tema só não persiste
-    }
+    applyTheme(dark);
+    storeTheme(dark);
   }, [dark]);
 
   useEffect(() => {
@@ -65,7 +64,6 @@ export default function App() {
 
   function go(id) {
     setPage(id);
-    setMenuOpen(false);
     // Sair de "Empresas" fecha a empresa aberta: voltar pela navegação e cair
     // na página de uma marca que não se escolheu agora é desorientador.
     if (id !== "empresas") setOpenBrand(null);
@@ -74,7 +72,6 @@ export default function App() {
   function goBrand(brand) {
     setOpenBrand(brand);
     setPage("empresas");
-    setMenuOpen(false);
     window.scrollTo({ top: 0 });
   }
 
@@ -98,193 +95,21 @@ export default function App() {
   const isCatalog = page === "produtos";
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
-      <header
-        style={{
-          background: "var(--surface)",
-          borderBottom: "1px solid var(--border)",
-          position: "sticky",
-          top: 0,
-          zIndex: 30,
-        }}
-      >
-        <div className="shell shell-header" style={{ display: "flex", alignItems: "center", gap: 12, height: 64 }}>
-          <button
-            onClick={() => go("home")}
-            aria-label="Comparador Nutricional — início"
-            style={{ display: "flex", alignItems: "center", gap: 10, background: "none", border: "none", cursor: "pointer", padding: 0, color: "var(--text)", font: "inherit", flexShrink: 0 }}
-          >
-            <span
-              style={{
-                width: 34,
-                height: 34,
-                borderRadius: 10,
-                background: "var(--brand)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <Leaf size={18} color="var(--brand-contrast)" />
-            </span>
-            <span style={{ textAlign: "left", lineHeight: 1.15, whiteSpace: "nowrap" }}>
-              <span style={{ display: "block", fontSize: 15, fontWeight: 700, letterSpacing: "-0.015em" }}>
-                Comparador Nutricional
-              </span>
-              <span
-                className="brand-tagline"
-                style={{
-                  display: "inline-block",
-                  marginTop: 2,
-                  fontSize: 9.5,
-                  fontWeight: 700,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  color: "var(--brand)",
-                  background: "var(--brand-soft)",
-                  padding: "1px 6px",
-                  borderRadius: "var(--radius-pill)",
-                }}
-              >
-                Inteligência Foliar
-              </span>
-            </span>
-          </button>
+    <>
+      <AppBackground />
 
-          <nav className="main-nav" style={{ display: "flex", gap: 2, marginLeft: "auto" }}>
-            {NAV.map((n) => {
-              const active = page === n.id;
-              return (
-                <button
-                  key={n.id}
-                  onClick={() => go(n.id)}
-                  aria-current={active ? "page" : undefined}
-                  style={{
-                    height: 38,
-                    padding: "0 12px",
-                    borderRadius: 9,
-                    border: "none",
-                    background: active ? "var(--brand-soft)" : "transparent",
-                    color: active ? "var(--brand)" : "var(--text-2)",
-                    fontWeight: active ? 700 : 500,
-                    fontSize: 13.5,
-                    cursor: "pointer",
-                    font: "inherit",
-                    fontFamily: "inherit",
-                    whiteSpace: "nowrap",
-                    transition: "background var(--speed) ease, color var(--speed) ease",
-                  }}
-                >
-                  {n.label}
-                </button>
-              );
-            })}
-          </nav>
+      <PillNav
+        page={page}
+        primary={PRIMARY_NAV}
+        secondary={SECONDARY_NAV}
+        online={online}
+        dark={dark}
+        onNavigate={go}
+        onToggleTheme={() => setDark((v) => !v)}
+        onSignOut={signOut}
+      />
 
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: "auto", flexShrink: 0 }}>
-            <span
-              title={
-                online
-                  ? "Com internet. O catálogo inteiro fica no aparelho — a plataforma funciona igual sem sinal."
-                  : "Sem internet. A plataforma continua funcionando: todo o catálogo está salvo no aparelho."
-              }
-              className="chip conn-chip"
-              style={{
-                background: online ? "transparent" : "var(--warn-soft)",
-                color: online ? "var(--text-3)" : "var(--warn)",
-                borderColor: online ? "var(--border)" : "transparent",
-              }}
-            >
-              {online ? <Wifi size={12} /> : <WifiOff size={12} />}
-              {online ? "Online" : "Offline — funciona normal"}
-            </span>
-
-            <button
-              onClick={() => setDark((v) => !v)}
-              title={dark ? "Usar tema claro" : "Usar tema escuro (leitura sob sol forte)"}
-              aria-label={dark ? "Usar tema claro" : "Usar tema escuro"}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 9,
-                border: "1px solid var(--border)",
-                background: "var(--surface)",
-                color: "var(--text-2)",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              {dark ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
-
-            <button className="btn btn-primary cta-btn" style={{ minHeight: 40, fontSize: 13.5 }} onClick={() => go("custo")}>
-              <ArrowLeftRight size={15} /> Iniciar comparação
-            </button>
-
-            <button
-              className="menu-btn"
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
-              aria-expanded={menuOpen}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 9,
-                border: "1px solid var(--border)",
-                background: "var(--surface)",
-                color: "var(--text-2)",
-                cursor: "pointer",
-                display: "none",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              {menuOpen ? <X size={17} /> : <Menu size={17} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Menu do celular: os mesmos itens, empilhados. */}
-        {menuOpen && (
-          <div className="mobile-menu" style={{ borderTop: "1px solid var(--border)", background: "var(--surface)" }}>
-            <div className="shell" style={{ paddingTop: 8, paddingBottom: 12, display: "flex", flexDirection: "column", gap: 2 }}>
-              {NAV.map((n) => (
-                <button
-                  key={n.id}
-                  onClick={() => go(n.id)}
-                  aria-current={page === n.id ? "page" : undefined}
-                  style={{
-                    minHeight: 48,
-                    padding: "0 12px",
-                    borderRadius: 9,
-                    border: "none",
-                    background: page === n.id ? "var(--brand-soft)" : "transparent",
-                    color: page === n.id ? "var(--brand)" : "var(--text)",
-                    fontWeight: page === n.id ? 700 : 500,
-                    fontSize: 15,
-                    textAlign: "left",
-                    cursor: "pointer",
-                    font: "inherit",
-                    fontFamily: "inherit",
-                  }}
-                >
-                  {n.label}
-                </button>
-              ))}
-              <button className="btn btn-primary" style={{ marginTop: 8 }} onClick={() => go("custo")}>
-                <ArrowLeftRight size={15} /> Iniciar comparação
-              </button>
-            </div>
-          </div>
-        )}
-      </header>
-
-      <main>
+      <main className="app-shell" style={{ paddingTop: "var(--shell-top)" }}>
         {page === "home" && (
           <Home onCompare={() => go("custo")} onCatalog={() => go("produtos")} onSearchTerm={goCatalogWith} />
         )}
@@ -311,6 +136,6 @@ export default function App() {
           <Dashboard key={`manejo-${catalogNonce}`} initialSelection={pendingSelection} />
         )}
       </main>
-    </div>
+    </>
   );
 }

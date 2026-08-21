@@ -52,7 +52,10 @@ export default function Home({ onCompare, onCatalog, onSearchTerm }) {
   return (
     <div>
       {/* HERO */}
-      <section style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)" }}>
+      {/* Hero sem fundo próprio: é aqui que o fundo animado aparece de verdade.
+          As faixas seguintes continuam opacas — dado se lê sobre superfície
+          sólida, não sobre mancha em movimento. */}
+      <section style={{ background: "transparent", borderBottom: "1px solid var(--border)" }}>
         <div className="shell" style={{ paddingTop: 56, paddingBottom: 44 }}>
           <h1
             style={{

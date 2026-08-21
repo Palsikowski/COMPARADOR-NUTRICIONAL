@@ -6,6 +6,8 @@ import { fmtNum } from "../lib/economics.js";
 import { NUTRIENT_INTERACTIONS, INTERACTION_KINDS } from "../data/nutrientInteractions.js";
 import InteractionList, { InteractionSourceNote } from "../components/InteractionList.jsx";
 import { NUTRIENT_LABEL } from "../lib/nutrientLabels.js";
+import { RAW_MATERIALS, RAW_MATERIALS_SOURCE } from "../data/rawMaterials.js";
+import NutrientPill from "../dashboard/NutrientPill.jsx";
 
 // Página "Sobre" = transparência metodológica. O que a plataforma calcula, com
 // que dado, e onde o dado não existe. É o que sustenta a credibilidade dos
@@ -116,6 +118,10 @@ export default function About() {
         <InteractionTable />
       </Section>
 
+      <Section title="Sais e matérias-primas">
+        <RawMaterialsTable />
+      </Section>
+
       <Section title="Limites conhecidos">
         <ul className="muted" style={{ fontSize: 13.5, lineHeight: 1.7, paddingLeft: 20, margin: 0 }}>
           <li>A tabela de interações entre nutrientes é referência de fisiologia de terceiro, não medição da Agrocete e não avaliação de nenhum produto. Ela não entra em nenhum cálculo (NCI, custo, dose ou comparativo).</li>
@@ -123,6 +129,7 @@ export default function About() {
           <li>Posicionamento por cultura/estádio existe apenas para os produtos dos manejos oficiais de Soja, Milho e Algodão.</li>
           <li>Os 3 níveis dos manejos prontos (Básico/Médio/Completo) são um agrupamento nosso dos estágios do material oficial, não uma classificação da Agrocete.</li>
           <li>A sugestão automática de manejo Agrocete é uma heurística de aproximação por nutriente, não um solver nem recomendação validada.</li>
+          <li>A tabela de sais e matérias-primas é transcrição de um guia de terceiro. A solubilidade publicada não tem temperatura de referência e não é limite de calda: no tanque ela muda com temperatura, pH e com o que já está misturado.</li>
           <li>Preferências, manejos salvos e doses travadas ficam no navegador do aparelho — não sincronizam entre pessoas ou dispositivos.</li>
         </ul>
       </Section>
@@ -274,6 +281,68 @@ function InteractionTable() {
         <InteractionList items={items} />
       )}
       <InteractionSourceNote />
+    </>
+  );
+}
+
+// Sais e matérias-primas: o que cada sal carrega de nutriente e quanto o guia
+// declara dissolver por litro. Fica na Sobre, e não no catálogo, porque não são
+// produtos comerciais — não têm marca, dose nem preço, e não entram em
+// comparativo, custo/ha ou NCI.
+function RawMaterialsTable() {
+  const divergentes = RAW_MATERIALS.flatMap((m) => m.guarantees)
+    .filter((g) => g.label && g.label !== g.key)
+    .map((g) => `${g.label} → ${g.key}`);
+  const simbolos = Array.from(new Set(divergentes));
+
+  return (
+    <>
+      <p className="muted" style={{ fontSize: 13.5, lineHeight: 1.6, margin: "0 0 12px" }}>
+        {RAW_MATERIALS.length} matérias-primas com solubilidade e garantia declaradas no guia de origem. Serve para ler
+        de onde vem o nutriente de uma formulação. <strong>Não entra em nenhum cálculo</strong> da plataforma, e nenhuma
+        delas está no catálogo de produtos.
+      </p>
+
+      <div style={{ overflowX: "auto" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13.5, minWidth: 460 }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: "left", padding: "0 8px 8px 0", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-3)" }}>
+                Matéria-prima
+              </th>
+              <th style={{ textAlign: "right", padding: "0 12px 8px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-3)", whiteSpace: "nowrap" }}>
+                Solubilidade
+              </th>
+              <th style={{ textAlign: "left", padding: "0 0 8px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-3)" }}>
+                Garantia declarada
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {RAW_MATERIALS.map((m) => (
+              <tr key={m.name} style={{ borderTop: "1px solid var(--border)" }}>
+                <td style={{ padding: "9px 8px 9px 0", lineHeight: 1.45 }}>{m.name}</td>
+                <td className="tnum" style={{ padding: "9px 12px", textAlign: "right", whiteSpace: "nowrap", fontWeight: 600 }}>
+                  {fmtNum(m.solubility, 0)} <span className="muted-soft" style={{ fontWeight: 500 }}>g/L</span>
+                </td>
+                <td style={{ padding: "9px 0" }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                    {m.guarantees.map((g) => (
+                      <NutrientPill key={g.key} nutrientKey={g.key} value={g.percent} unit="% m/m" label={NUTRIENT_LABEL[g.key]} />
+                    ))}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p className="muted-soft" style={{ fontSize: 12.5, lineHeight: 1.6, marginTop: 12 }}>
+        Fonte: {RAW_MATERIALS_SOURCE.title} — {RAW_MATERIALS_SOURCE.publisher}, {RAW_MATERIALS_SOURCE.date}.{" "}
+        {RAW_MATERIALS_SOURCE.note}
+        {simbolos.length > 0 && ` O guia escreve ${simbolos.join(", ")}; a plataforma usa a convenção de rótulo (óxido).`}
+      </p>
     </>
   );
 }

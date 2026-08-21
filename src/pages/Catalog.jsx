@@ -137,7 +137,9 @@ export default function Catalog({ initialSearch = "", initialGroupBy = "categori
       <div
         style={{
           position: "sticky",
-          top: 64,
+          // A barra flutuante é sobreposta e não empurra o conteúdo; o mesmo
+          // token que dá o respiro do <main> mantém os filtros abaixo dela.
+          top: "var(--shell-top)",
           zIndex: 20,
           background: "var(--surface)",
           borderBottom: "1px solid var(--border)",

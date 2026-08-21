@@ -234,42 +234,10 @@ body {
   }
 }
 
-/* Navegação responsiva.
-
-   Os pontos de quebra vêm da largura medida de cada parte do cabeçalho, não de
-   número redondo: logo 241px + menu 936px + bloco da direita 347px + respiros
-   = 1588px. Com o cabeçalho preso em 1180px (a largura do conteúdo) ele
-   estourava em QUALQUER tela de desktop e empurrava a página inteira pro lado.
-   Por isso o cabeçalho tem largura própria, maior que a do conteúdo, e as
-   partes secundárias saem antes do menu virar sanduíche:
-
-   - >= 1601px: tudo (precisa de 1588px)
-   - 1330-1600px: menu + tema; CTA e indicador de conexão saem (precisa 1281px)
-   - <= 1329px: sanduíche */
-.shell-header {
-  max-width: 1600px;
-}
-@media (max-width: 1600px) {
-  .cta-btn,
-  .conn-chip {
-    display: none !important;
-  }
-}
-@media (max-width: 1329px) {
-  .main-nav {
-    display: none !important;
-  }
-  .menu-btn {
-    display: flex !important;
-  }
-}
+/* A navegação virou a barra flutuante em pílula (src/shell.css), que tem os
+   próprios pontos de quebra. Só o respiro lateral do conteúdo no celular
+   sobrou daqui. */
 @media (max-width: 640px) {
-  .nav-label {
-    display: none;
-  }
-  .brand-tagline {
-    display: none !important;
-  }
   .shell {
     padding: 0 14px;
   }
