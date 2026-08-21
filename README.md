@@ -487,7 +487,13 @@ já entraram: uma planilha com as colunas correspondentes.
 - `src/PasswordGate.jsx` — a regra de acesso: valida a senha e guarda o
   desbloqueio. O desenho da tela é do `SignInPage`.
 - `src/components/SignInPage.jsx` + `src/signin.css` — a tela de entrada
-  (formulário, foto e os números reais da base).
+  (formulário, painel animado e os números reais da base).
+- `src/components/ShaderBackground.jsx` — o fundo animado em WebGL1 puro:
+  contexto, laço de render, pausa fora de foco e as saídas silenciosas quando
+  o WebGL não existe.
+- `src/components/meshDriftShader.js` — o GLSL do "Mesh drift" e a receita de
+  cores/ajuste, em arquivo separado por ser código de terceiro copiado sem
+  edição.
 - `src/lib/theme.js` — tema claro/escuro num lugar só, aplicado no boot pra a
   tela de entrada já nascer no tema certo.
 - `src/main.jsx` — ponto de entrada React.
@@ -1071,10 +1077,18 @@ números reais da base à direita.
   mesmos números da página Sobre. Não são depoimentos: inventar elogios
   assinados por pessoas que não existem, numa tela de entrada de ferramenta
   interna, seria mentira com cara de prova social.
-- **A foto é decoração e pode faltar.** O painel tem um gradiente por baixo,
-  então sem internet (uso em campo, ou o build de arquivo único aberto direto
-  do disco) a tela continua inteira em vez de virar um retângulo branco. No
-  celular a coluna da foto sai: o que interessa ali é o campo de senha.
+- **O painel da direita é um shader animado em WebGL**, não uma foto: o
+  "Mesh drift" do 21st.dev Shader Builder, em WebGL1 puro (um triângulo que
+  cobre a tela e um fragment shader), sem biblioteca nenhuma. Trocar a foto do
+  Unsplash por ele resolveu de quebra o problema que a foto tinha: shader não
+  depende de rede, então funciona igual em campo sem sinal e no build de
+  arquivo único aberto direto do disco. No celular a coluna some — ali o que
+  interessa é o campo de senha, e o resto seria só consumo de bateria.
+- **O fundo animado degrada em silêncio.** Sem WebGL, com o contexto perdido
+  ou com o shader recusado pelo driver, o canvas não desenha e aparece o
+  gradiente do painel — a tela fica sem animação, nunca com um buraco preto.
+  O laço para quando a aba sai de foco, o `devicePixelRatio` é limitado a 2, e
+  com `prefers-reduced-motion` ele desenha **um quadro só** e para.
 - **"Manter conectado" escolhe onde o desbloqueio fica.** Marcado, vai pro
   `localStorage` e dura entre sessões; desmarcado, vai pro `sessionStorage` e
   some ao fechar a aba — que é o certo no computador compartilhado do

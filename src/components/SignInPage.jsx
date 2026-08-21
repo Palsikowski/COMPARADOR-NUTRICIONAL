@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Leaf, Eye, EyeOff, AlertTriangle, Info } from "lucide-react";
+import ShaderBackground from "./ShaderBackground.jsx";
 import "../signin.css";
 
 // Tela de entrada da plataforma: formulário à esquerda, foto e destaques à
@@ -11,6 +12,11 @@ import "../signin.css";
 // credencial vale é quem passa `onSubmit` (hoje o PasswordGate), e o erro volta
 // pra cá pelo prop `error`. Assim dá pra trocar a autenticação depois sem
 // mexer no layout.
+//
+// O painel da direita aceita uma foto (`heroImageSrc`) ou o fundo animado em
+// WebGL (`heroShader`). Nos dois casos o gradiente do painel fica por baixo,
+// então uma foto que não carrega ou um navegador sem WebGL deixam a tela
+// completa em vez de um buraco.
 //
 // Os botões sociais (`onGoogleSignIn`) e o "criar conta" (`onCreateAccount`) só
 // aparecem se receberem handler. Hoje a plataforma não tem backend de
@@ -52,6 +58,7 @@ export default function SignInPage({
   hint = null,
   busy = false,
   heroImageSrc,
+  heroShader = false,
   heroTitle,
   heroText,
   notes = [],
@@ -201,7 +208,11 @@ export default function SignInPage({
 
       <section className="signin-hero" aria-hidden="true">
         <div className="signin-hero-panel signin-anim-right signin-d3">
-          {heroImageSrc && <div className="signin-hero-img" style={{ backgroundImage: `url(${heroImageSrc})` }} />}
+          {heroShader ? (
+            <ShaderBackground className="signin-hero-shader" />
+          ) : (
+            heroImageSrc && <div className="signin-hero-img" style={{ backgroundImage: `url(${heroImageSrc})` }} />
+          )}
           <div className="signin-hero-veil" />
 
           {(heroTitle || heroText) && (

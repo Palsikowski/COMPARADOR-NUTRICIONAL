@@ -13,11 +13,6 @@ import { fmtNum } from "./lib/economics.js";
 const PASSWORD_HASH = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
 const STORAGE_KEY = "agro-comparador-auth-v1";
 
-// Foto de lavoura do Unsplash. É decoração: se a rede não responder — uso em
-// campo, ou o arquivo único aberto direto do disco — o painel fica só com o
-// gradiente e a tela continua inteira.
-const HERO_IMAGE = "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80";
-
 async function sha256Hex(text) {
   const bytes = new TextEncoder().encode(text);
   const digest = await crypto.subtle.digest("SHA-256", bytes);
@@ -118,7 +113,7 @@ export default function PasswordGate({ children }) {
       error={error}
       hint={hint}
       busy={busy}
-      heroImageSrc={HERO_IMAGE}
+      heroShader
       heroTitle="Compare. Entenda. Decida melhor."
       heroText="Composição, posicionamento e custo por hectare a partir dos dados reais das planilhas internas e dos materiais oficiais — nunca de dados inventados."
       notes={notes}
