@@ -394,3 +394,79 @@ body {
   background: var(--flag-bg-dark);
   color: var(--flag-fg-dark);
 }
+
+/* Linha do tempo fenológica (StageTimeline).
+ *
+ * Cores próprias: a paleta do app é de interface, e aqui o assunto é planta e
+ * solo. Ficam em tokens para o tema escuro poder escurecer o solo sem que o
+ * verde da folha perca contraste contra ele. */
+:root {
+  --tl-soil: #4A2E1C;
+  --tl-divider: rgba(255, 255, 255, 0.14);
+  --tl-label: #FFFFFF;
+  --tl-label-soft: rgba(255, 255, 255, 0.62);
+  --tl-leaf: #2F8F4E;
+  --tl-stem: #6B8F3A;
+  --tl-root: #A9733F;
+  --tl-flower: #E9A8C9;
+  --tl-pod: #C9A33F;
+  --tl-dry: #C2A24A;
+}
+
+[data-theme="dark"] {
+  --tl-soil: #2E1D12;
+  --tl-divider: rgba(255, 255, 255, 0.1);
+  --tl-label: #F2F5F7;
+  --tl-label-soft: rgba(242, 245, 247, 0.55);
+  --tl-leaf: #3FB56A;
+  --tl-stem: #8FAE52;
+  --tl-root: #B98551;
+  --tl-flower: #F0B8D6;
+  --tl-pod: #DCB75C;
+  --tl-dry: #D4B45C;
+}
+
+.tl-scroll {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.tl-products {
+  display: grid;
+  gap: 0;
+  margin-top: 8px;
+}
+
+.tl-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  padding: 0 6px;
+  text-align: center;
+}
+
+.tl-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  padding: 5px 7px;
+  border-radius: var(--radius-sm);
+  background: var(--brand-soft);
+  border: 1px solid color-mix(in srgb, var(--brand) 22%, transparent);
+  line-height: 1.25;
+}
+
+.tl-chip-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand);
+  overflow-wrap: anywhere;
+}
+
+.tl-chip-dose {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-3);
+}

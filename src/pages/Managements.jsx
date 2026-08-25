@@ -15,6 +15,7 @@ import { PRODUCTS } from "../data/products.js";
 import { doseUnit, fmtNum } from "../lib/economics.js";
 import { exportCaderno } from "../lib/caderno.js";
 import { provenanceOf } from "../lib/provenance.js";
+import StageTimeline from "../components/StageTimeline.jsx";
 
 // MANEJOS AGROCETE: posicionamento rápido por cultura.
 // Os manejos oficiais vêm dos materiais da Agrocete e não podem ser alterados;
@@ -170,6 +171,8 @@ function ManagementCard({ mng, open, onToggle, onEdit, onDuplicate, onRemove, on
               {mng.source}
             </p>
           )}
+
+          <StageTimeline stages={mng.stages} />
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {mng.stages.map((stage, i) => (

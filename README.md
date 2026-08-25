@@ -184,6 +184,32 @@ As doses e os estádios foram lidos das páginas renderizadas dos PDFs (são
 infográficos: a extração de texto embaralha as colunas, então a leitura foi
 visual, página a página).
 
+### Linha do tempo do manejo
+
+Ao abrir um manejo aparece um **esquema fenológico**: a planta crescendo
+estágio a estágio sobre a faixa de solo, com os produtos daquele estágio
+listados embaixo de cada coluna (`src/components/StageTimeline.jsx`).
+
+É **SVG gerado a partir dos estágios reais do manejo aberto**, não uma imagem.
+A diferença importa:
+
+- **Cada cultura tem os seus estágios.** Soja vai de Plantio a R4–R5, Algodão
+  usa TS/B1/B6/F2/F6/C1, e um manejo copiado e editado pela equipe pode ter
+  quantos estágios quiser. Uma figura fixa mostraria soja para todo mundo e
+  passaria a mentir no primeiro manejo diferente.
+- **A planta é ilustração, e a tela diz isso.** Ela cresce conforme a *posição
+  do estágio na sequência*, não conforme altura, massa ou estádio medido —
+  está escrito na legenda, porque desenho ao lado de número pesa como número.
+  Pelo mesmo motivo a última planta **não** aparece seca: o fim da sequência é
+  o último estágio cadastrado (na soja, R4–R5, que é enchimento de grão), não a
+  maturação.
+- **Funciona offline e nos dois temas**, com cores próprias em tokens
+  (`--tl-*`) — a paleta do app é de interface, aqui o assunto é planta e solo.
+- **As colunas são elásticas:** com espaço sobrando elas esticam e o solo ocupa
+  a largura do card; sem espaço, cada uma fica no mínimo legível, a figura rola
+  na horizontal junto com a faixa de produtos (as duas precisam continuar
+  alinhadas) e aparece o aviso de arrastar.
+
 ### Editar manejos
 
 Os manejos oficiais são **somente leitura** — são a referência publicada pela
