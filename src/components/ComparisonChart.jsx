@@ -27,19 +27,199 @@ export function seriesColors(dark) {
   return dark ? SERIES_DARK : SERIES_LIGHT;
 }
 
-const ROW_H = 26; // altura da faixa de cada barra
-const BAR_H = 18; // marca fina: nunca preenche a faixa inteira
-const GAP = 2; // respiro na cor do fundo entre barras vizinhas
-const LABEL_W = 104;
-const VALUE_W = 78;
+// Duas densidades do MESMO desenho, não dois gráficos.
+//
+// `compact` é a tela de estudo: cabe num card, ao lado de outras coisas.
+// `stage` é o modo apresentação: projetado, a 3 metros de distância. O que
+// muda entre eles não é só "tudo maior" — muda para onde vai o número:
+//
+//   compact → valor na ponta da barra (denso, o olho está perto)
+//   stage   → valor numa coluna fixa à direita
+//
+// Na ponta, o rótulo se move junto com a barra e 16 números viram serrilha
+// projetada. Numa coluna fixa eles alinham, ficam legíveis de longe e ainda
+// assim pertencem sem ambiguidade à sua linha — cada linha é uma barra só.
+//
+// `chip` é a segunda diferença do palco: um quadradinho da cor do produto em
+// CADA linha, colado à linha de base. Sem ele, a linha de um nutriente que o
+// produto não declara fica órfã — um traço solto na coluna da direita, sem
+// nada que diga de quem é. Projetado, ninguém conta a ordem das barras contra
+// a legenda; o chip devolve a identidade linha a linha.
+//
+// `titleH` decide onde fica o nome do nutriente. Centrado à esquerda do bloco
+// (compact) ele economiza altura, mas com três produtos ele cai exatamente na
+// altura da barra do meio e passa a parecer o rótulo DAQUELA barra. No palco,
+// onde o bloco é grande e a leitura é de longe, o nome vira cabeçalho do bloco:
+// some a ambiguidade e sobra largura para o gráfico.
+const SIZES = {
+  compact: { W: 640, ROW: 26, BAR: 18, GAP: 2, LABEL: 104, VALUE: 78, LABEL_FS: 12.5, VALUE_FS: 11.5, PAD: 14, R: 4, valueAt: "tip", chip: 0, titleH: 0, floor: 520 },
+  stage: { W: 1000, ROW: 34, BAR: 20, GAP: 4, LABEL: 26, VALUE: 110, LABEL_FS: 21, VALUE_FS: 17, PAD: 22, R: 4, valueAt: "gutter", chip: 12, titleH: 32, floor: 680 },
+  // Palco estreito (celular). Não é o palco "reduzido": num viewBox, encolher a
+  // largura encolhe o texto junto, então a versão de celular tem a MESMA
+  // estrutura numa caixa mais curta e com o texto proporcionalmente maior — é
+  // o que faz o valor continuar legível sem rolagem horizontal.
+  stageNarrow: { W: 560, ROW: 40, BAR: 24, GAP: 4, LABEL: 32, VALUE: 108, LABEL_FS: 23, VALUE_FS: 20, PAD: 24, R: 5, valueAt: "gutter", chip: 14, titleH: 36, floor: 0 },
+};
+
+// Barra com a ponta arredondada e a base reta: o canto redondo marca onde o
+// valor termina, e arredondar também o pé faria a barra parecer descolada da
+// linha de base — que é de onde toda barra cresce.
+function barPath(x, y, w, h, r) {
+  if (w <= 0) return "";
+  const rr = Math.min(r, w, h / 2);
+  if (rr <= 0) return `M${x},${y}h${w}v${h}h${-w}z`;
+  return `M${x},${y}h${w - rr}a${rr},${rr} 0 0 1 ${rr},${rr}v${h - 2 * rr}a${rr},${rr} 0 0 1 ${-rr},${rr}h${-(w - rr)}z`;
+}
+
+/**
+ * Só as barras — sem título, sem alternador de visão, sem rodapé.
+ *
+ * Separado do `ComparisonChart` porque o modo apresentação monta a própria
+ * moldura (legenda no cabeçalho do slide, unidade no eyebrow) e precisa do
+ * mesmo desenho por baixo. Duas cópias do gráfico é como as duas telas
+ * começam a discordar sobre o mesmo dado.
+ */
+export function CompositionBars({ panel, colorOf, size = "compact", scaleTo, nutrientTitles = true }) {
+  const S = SIZES[size] || SIZES.compact;
+  const { unit, products, nutrients } = panel;
+  // `scaleTo` existe para o slide de um nutriente só, onde a escala do painel
+  // inteiro reduziria um micronutriente a um traço. Fora daí a escala é sempre
+  // a do painel, senão a mesma barra teria dois tamanhos na mesma sessão.
+  const max = Number(scaleTo) > 0 ? Number(scaleTo) : panel.max;
+  // O slide de destaque já anuncia o nutriente no eyebrow e no texto; repetir
+  // o nome como cabeçalho do bloco só gastaria altura.
+  const titleH = nutrientTitles ? S.titleH : 0;
+
+  const blockH = titleH + products.length * S.ROW + S.PAD;
+  const height = nutrients.length * blockH + 8;
+  const plotW = S.W - S.LABEL - S.VALUE;
+
+  // Rede de segurança do palco: mesmo com o fatiamento por linhas, uma seleção
+  // incomum não pode empurrar o gráfico para fora do slide. Como o desenho é
+  // um viewBox, limitar a altura encolhe tudo junto em vez de cortar o pé.
+  return (
+    <svg
+      width="100%"
+      viewBox={`0 0 ${S.W} ${height}`}
+      style={{ display: "block", minWidth: S.floor || undefined, maxHeight: S.valueAt === "gutter" ? "54vh" : undefined }}
+      role="img"
+      aria-label={`Composição comparada em ${unit} de ${products.map((p) => p.name).join(", ")}`}
+    >
+      {/* Linha de base: única régua do gráfico. Com todo valor rotulado, uma
+          grade completa seria tinta que não carrega dado. */}
+      <line x1={S.LABEL} x2={S.LABEL} y1={4} y2={height - 8} stroke="var(--border)" strokeWidth="1" />
+
+      {nutrients.map((nut, ni) => {
+        const top = ni * blockH + 4;
+        return (
+          <g key={nut}>
+            {!nutrientTitles ? null : titleH > 0 ? (
+              <text x={0} y={top + S.LABEL_FS} fontSize={S.LABEL_FS} fontWeight={600} fill="var(--text)">
+                {NUTRIENT_LABEL[nut] || nut}
+              </text>
+            ) : (
+              <text
+                x={S.LABEL - 12}
+                y={top + (products.length * S.ROW) / 2 + S.LABEL_FS / 3}
+                textAnchor="end"
+                fontSize={S.LABEL_FS}
+                fill="var(--text-2)"
+              >
+                {NUTRIENT_LABEL[nut] || nut}
+              </text>
+            )}
+            {products.map((p, pi) => {
+              const v = Number(chartValues(p)?.values?.[nut]) || 0;
+              const w = max > 0 ? (v / max) * plotW : 0;
+              const drawn = Math.max(w, v > 0 ? 3 : 0);
+              const y = top + titleH + pi * S.ROW + (S.ROW - S.BAR) / 2;
+              const label = v > 0 ? fmtNum(v) : "—";
+              return (
+                <g key={p.id}>
+                  {S.chip > 0 && (
+                    <rect
+                      x={S.LABEL - S.chip - 10}
+                      y={y + (S.BAR - S.chip) / 2}
+                      width={S.chip}
+                      height={S.chip}
+                      rx={3}
+                      fill={colorOf.get(p.id)}
+                    />
+                  )}
+                  <path d={barPath(S.LABEL, y + S.GAP / 2, drawn, S.BAR - S.GAP, S.R)} fill={colorOf.get(p.id)}>
+                    <title>{`${p.name} · ${NUTRIENT_LABEL[nut] || nut}: ${v > 0 ? `${fmtNum(v)} ${unit}` : "não declarado"}`}</title>
+                  </path>
+                  {/* Rótulo direto em toda barra: é o "relevo" exigido pela
+                      paleta clara, e o que faz a leitura não depender da cor. */}
+                  {S.valueAt === "gutter" ? (
+                    <text
+                      x={S.W - 10}
+                      y={y + S.BAR / 2 + S.VALUE_FS / 3}
+                      textAnchor="end"
+                      fontSize={S.VALUE_FS}
+                      fontWeight={600}
+                      style={{ fontVariantNumeric: "tabular-nums" }}
+                      fill={v > 0 ? "var(--text)" : "var(--text-3)"}
+                    >
+                      {label}
+                    </text>
+                  ) : (
+                    <text
+                      x={S.LABEL + drawn + 7}
+                      y={y + S.BAR / 2 + S.VALUE_FS / 3}
+                      fontSize={S.VALUE_FS}
+                      fill={v > 0 ? "var(--text-2)" : "var(--text-3)"}
+                    >
+                      {label}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+            {ni < nutrients.length - 1 && (
+              <line
+                x1={S.chip > 0 ? 0 : S.LABEL}
+                x2={S.W - 8}
+                y1={top + titleH + products.length * S.ROW + S.PAD / 2 - 1}
+                y2={top + titleH + products.length * S.ROW + S.PAD / 2 - 1}
+                stroke="var(--border)"
+                strokeWidth="1"
+              />
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+// Legenda das séries. Sai do gráfico para poder viver também no cabeçalho de
+// um slide, onde precisa ficar fixa enquanto os nutrientes passam.
+export function SeriesLegend({ products, colorOf, size = 12.5, gap = 14 }) {
+  if (products.length < 2) return null;
+  return (
+    <div style={{ display: "flex", gap, flexWrap: "wrap", alignItems: "center" }}>
+      {products.map((p) => (
+        <span key={p.id} style={{ display: "inline-flex", alignItems: "center", gap: gap / 2.3, fontSize: size }}>
+          <span
+            style={{
+              width: size * 0.85,
+              height: size * 0.85,
+              borderRadius: Math.max(2, size * 0.22),
+              background: colorOf.get(p.id),
+              flexShrink: 0,
+            }}
+          />
+          <span style={{ color: "var(--text-2)", whiteSpace: "nowrap" }}>{p.name}</span>
+        </span>
+      ))}
+    </div>
+  );
+}
 
 export default function ComparisonChart({ panel, colorOf, title }) {
   const [view, setView] = useState("grafico");
-  const { unit, products, nutrients, max } = panel;
-
-  const blockH = products.length * ROW_H + 14;
-  const height = nutrients.length * blockH + 8;
-  const plotW = 640 - LABEL_W - VALUE_W;
+  const { unit, products } = panel;
 
   return (
     <figure style={{ margin: 0 }}>
@@ -59,13 +239,8 @@ export default function ComparisonChart({ panel, colorOf, title }) {
 
       {/* Legenda sempre presente com 2+ séries: identidade nunca fica só na cor. */}
       {products.length > 1 && (
-        <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 10 }}>
-          {products.map((p) => (
-            <span key={p.id} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12.5 }}>
-              <span style={{ width: 11, height: 11, borderRadius: 3, background: colorOf.get(p.id), flexShrink: 0 }} />
-              <span style={{ color: "var(--text-2)" }}>{p.name}</span>
-            </span>
-          ))}
+        <div style={{ marginBottom: 10 }}>
+          <SeriesLegend products={products} colorOf={colorOf} />
         </div>
       )}
 
@@ -73,58 +248,7 @@ export default function ComparisonChart({ panel, colorOf, title }) {
         <TableView panel={panel} colorOf={colorOf} />
       ) : (
         <div style={{ overflowX: "auto" }}>
-          <svg
-            width="100%"
-            viewBox={`0 0 640 ${height}`}
-            style={{ minWidth: 520, display: "block" }}
-            role="img"
-            aria-label={`Composição comparada em ${unit} de ${products.map((p) => p.name).join(", ")}`}
-          >
-            {nutrients.map((nut, ni) => {
-              const top = ni * blockH + 4;
-              return (
-                <g key={nut}>
-                  <text x={LABEL_W - 10} y={top + (products.length * ROW_H) / 2 + 4} textAnchor="end" fontSize="12.5" fill="var(--text-2)">
-                    {NUTRIENT_LABEL[nut] || nut}
-                  </text>
-                  {products.map((p, pi) => {
-                    const v = Number(chartValues(p)?.values?.[nut]) || 0;
-                    const w = max > 0 ? (v / max) * plotW : 0;
-                    const y = top + pi * ROW_H + (ROW_H - BAR_H) / 2;
-                    return (
-                      <g key={p.id}>
-                        <rect
-                          x={LABEL_W}
-                          y={y + GAP / 2}
-                          width={Math.max(w, v > 0 ? 3 : 0)}
-                          height={BAR_H - GAP}
-                          rx={4}
-                          fill={colorOf.get(p.id)}
-                        >
-                          <title>{`${p.name} · ${NUTRIENT_LABEL[nut] || nut}: ${v > 0 ? `${fmtNum(v)} ${unit}` : "não declarado"}`}</title>
-                        </rect>
-                        {/* Rótulo direto em toda barra: é o "relevo" exigido pela
-                            paleta clara, e o que faz a leitura não depender da cor. */}
-                        <text x={LABEL_W + Math.max(w, 3) + 7} y={y + BAR_H / 2 + 4} fontSize="11.5" fill={v > 0 ? "var(--text-2)" : "var(--text-3)"}>
-                          {v > 0 ? fmtNum(v) : "—"}
-                        </text>
-                      </g>
-                    );
-                  })}
-                  {ni < nutrients.length - 1 && (
-                    <line
-                      x1={LABEL_W}
-                      x2={640 - 8}
-                      y1={top + products.length * ROW_H + 6}
-                      y2={top + products.length * ROW_H + 6}
-                      stroke="var(--border)"
-                      strokeWidth="1"
-                    />
-                  )}
-                </g>
-              );
-            })}
-          </svg>
+          <CompositionBars panel={panel} colorOf={colorOf} size="compact" />
         </div>
       )}
 

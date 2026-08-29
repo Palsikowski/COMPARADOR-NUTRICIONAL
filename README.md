@@ -203,6 +203,55 @@ Todo valor é rotulado direto na barra e existe **visão de tabela** no mesmo
 lugar: dois dos quatro tons ficam abaixo de 3:1 de contraste sobre o fundo
 claro, o que obriga a leitura a não depender só da cor.
 
+### Modo apresentação
+
+O botão **Apresentar** abre o mesmo comparativo como sequência de slides, em
+tela cheia, para a reunião. Não é uma exportação: é a mesma seleção, os mesmos
+painéis e o mesmo componente de gráfico numa densidade maior — se o número
+mudar na tela de estudo, ele muda no slide.
+
+A ordem é a da conversa: **capa** (quem está sendo comparado) → **o quadro
+completo** → **um nutriente por vez** → **o que o dado não sustenta** →
+**fecho**. As ressalvas têm slide próprio, e vêm antes do fecho de propósito:
+numa reunião elas precisam ser ditas por quem apresenta, não descobertas depois
+pelo cliente.
+
+Os slides de destaque não são "o vencedor". A ordem sai de `score = share ×
+gap`: o quanto o líder do nutriente pesa contra o maior valor do painel
+(`share`) vezes a distância relativa dele para o segundo (`gap`, sendo 1 quando
+só um produto declara). Sem o `share`, um micronutriente com 10× de diferença e
+0,4 g/L roubaria o slide de um macro com 80 g/L de diferença real. Todo slide de
+destaque carrega, escrito, que **mais concentrado não é melhor** — depende da
+dose e do papel do produto no manejo.
+
+O que muda no desenho do gráfico entre a tela e o palco:
+
+- **O valor sai da ponta da barra e vai para uma coluna fixa à direita.** Na
+  ponta o rótulo se move junto com a barra, e projetado isso vira serrilha.
+- **Cada linha ganha um quadradinho da cor do produto** colado à linha de base.
+  Sem ele, a linha de um nutriente que o produto não declara fica órfã — um
+  traço solto, sem nada dizendo de quem é. Ninguém conta a ordem das barras
+  contra a legenda a três metros de distância.
+- **O nome do nutriente vira cabeçalho do bloco** em vez de rótulo centrado à
+  esquerda: com três produtos, o rótulo centrado cai exatamente na altura da
+  barra do meio e passa a parecer o nome daquela barra.
+- **A legenda mora no cabeçalho do slide**, fixa: os nutrientes passam, a
+  identidade dos produtos não pode passar junto.
+- **O slide é fatiado por número de barras, não de nutrientes** (teto de 10).
+  Sete nutrientes são 7 linhas com um produto e 28 com quatro — contando
+  nutrientes, o slide cabia com dois produtos e estourava a tela com quatro.
+  A escala é a mesma em todas as partes, senão a mesma barra teria dois
+  tamanhos na mesma apresentação.
+- **No celular o palco troca de caixa, não de tamanho.** Num `viewBox`,
+  encolher a largura encolhe o texto junto: a versão estreita tem a mesma
+  estrutura numa caixa mais curta e com o texto proporcionalmente maior, o que
+  mantém o valor legível sem rolagem horizontal.
+
+Navegação: setas, `PageUp`/`PageDown` e barra de espaço (é o que o apresentador
+remoto manda), `Home`/`End`, `Esc` para sair, marcadores clicáveis no rodapé —
+numa reunião sempre pedem para voltar num slide específico — e um botão de tela
+cheia.
+
 ### O PDF
 
 O botão **Baixar PDF** gera capa com o nome da empresa, a observação que a
@@ -452,6 +501,16 @@ já entraram: uma planilha com as colunas correspondentes.
 - `src/lib/provenance.js` — níveis de confiabilidade a partir do `fonte`.
 - `src/lib/catalog.js` — índices derivados, estatísticas da plataforma,
   posicionamento por cultura/estádio e busca unificada.
+- `src/components/ComparisonChart.jsx` — o gráfico de composição. Exporta o
+  desenho puro (`CompositionBars`) e a legenda (`SeriesLegend`) para que a
+  tela e o modo apresentação usem o mesmo componente em densidades
+  diferentes: `compact`, `stage` e `stageNarrow`.
+- `src/lib/presentation.js` — modelo dos slides: fatiamento por número de
+  barras, ranking dos nutrientes de destaque (`score = share × gap`) e as
+  ressalvas. Fica separado da view para a regra do que vira destaque ser
+  legível sem abrir JSX.
+- `src/presentation/PresentationDeck.jsx` — o modo apresentação: navegação por
+  teclado, legenda fixa no cabeçalho e um slide por assunto.
 - `src/components/` — `ProductSelector`, `DataBadge`, `CostPerHectare`,
   `CompareBars`.
 

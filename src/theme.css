@@ -426,3 +426,23 @@ body {
   background: var(--flag-bg-dark);
   color: var(--flag-fg-dark);
 }
+
+/* ---- Modo apresentação ----
+   O gráfico do palco tem piso de largura (680px): abaixo disso o viewBox
+   encolhe o texto junto com o desenho e os valores somem. Rolar na horizontal
+   preserva o corpo do texto — encolher não. */
+.deck-chart {
+  overflow-x: auto;
+}
+
+/* Em tela estreita a legenda desce para a própria linha do cabeçalho.
+   Espremida ao lado do nome da empresa, ela quebra "Grap 100 Fluid" em três
+   linhas e o cabeçalho come metade do slide. */
+@media (max-width: 760px) {
+  .deck-legend {
+    /* !important porque o elemento carrega `flex: 1` inline, e o atalho já
+       fixa flex-basis: 0% — sem isto a legenda continua espremida na linha. */
+    flex-basis: 100% !important;
+    order: 3;
+  }
+}

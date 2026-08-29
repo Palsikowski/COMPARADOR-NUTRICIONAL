@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { ArrowLeft, Search, X, FileDown, BarChart3, AlertTriangle, Info, FileText } from "lucide-react";
+import { ArrowLeft, Search, X, FileDown, BarChart3, AlertTriangle, Info, FileText, Presentation } from "lucide-react";
 import { productsOfBrand, AGROCETE } from "../lib/catalog.js";
 import { tileFor, comparisonData, chartValues } from "../lib/brandTiles.js";
 import { fmtNum } from "../lib/economics.js";
@@ -10,6 +10,7 @@ import { exportComparison } from "../lib/comparisonPdf.js";
 import { nutrientLabel } from "../lib/nutrientLabels.js";
 import { interactionsBetween } from "../data/nutrientInteractions.js";
 import InteractionList, { InteractionSourceNote } from "../components/InteractionList.jsx";
+import PresentationDeck from "../presentation/PresentationDeck.jsx";
 
 // Página de uma empresa: portfólio dela, seleção de produtos e o comparativo.
 //
@@ -23,6 +24,7 @@ export default function BrandPage({ brand, onBack, dark }) {
   const [sheet, setSheet] = useState(null);
   const [exporting, setExporting] = useState(false);
   const [note, setNote] = useState("");
+  const [presenting, setPresenting] = useState(false);
 
   const tile = tileFor(brand);
   const all = useMemo(() => productsOfBrand(brand), [brand]);
@@ -137,6 +139,11 @@ export default function BrandPage({ brand, onBack, dark }) {
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               <button className="btn btn-ghost" onClick={() => setSelected([])}>
                 Limpar seleção
+              </button>
+              {/* Apresentar antes de Baixar PDF: numa reunião a sequência de
+                  slides é o que se usa ao vivo; o PDF é o que fica depois. */}
+              <button className="btn btn-ghost" onClick={() => setPresenting(true)} disabled={panels.length === 0}>
+                <Presentation size={15} /> Apresentar
               </button>
               <button className="btn btn-primary" onClick={handleExport} disabled={exporting || panels.length === 0}>
                 <FileDown size={15} /> {exporting ? "Gerando..." : "Baixar PDF"}
@@ -269,6 +276,18 @@ export default function BrandPage({ brand, onBack, dark }) {
       </div>
 
       {sheet && <ProductSheet product={sheet} onClose={() => setSheet(null)} />}
+
+      {presenting && (
+        <PresentationDeck
+          brand={brand}
+          products={selectedProducts}
+          panels={panels}
+          withoutData={withoutData}
+          note={note}
+          colorOf={colorOf}
+          onClose={() => setPresenting(false)}
+        />
+      )}
     </div>
   );
 }
