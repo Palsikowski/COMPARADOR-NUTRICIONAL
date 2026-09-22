@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { ArrowLeft, Search, X, FileDown, BarChart3, AlertTriangle, Info, FileText } from "lucide-react";
+import { ArrowLeft, Search, X, FileDown, BarChart3, AlertTriangle, Info, FileText, Table2, ArrowRight } from "lucide-react";
 import { productsOfBrand, AGROCETE } from "../lib/catalog.js";
 import { tileFor, comparisonData, chartValues } from "../lib/brandTiles.js";
 import { fmtNum } from "../lib/economics.js";
@@ -17,7 +17,7 @@ import InteractionList, { InteractionSourceNote } from "../components/Interactio
 // estudando o portfólio de um concorrente para discutir com a equipe, não
 // montando um manejo pra cotar. Misturar as duas coisas faria a seleção de
 // estudo virar recomendação sem ninguém pedir.
-export default function BrandPage({ brand, onBack, dark }) {
+export default function BrandPage({ brand, onBack, dark, onPortfolio }) {
   const [q, setQ] = useState("");
   const [selected, setSelected] = useState([]);
   const [sheet, setSheet] = useState(null);
@@ -104,6 +104,36 @@ export default function BrandPage({ brand, onBack, dark }) {
           </p>
         </div>
       </header>
+
+      {brand === AGROCETE && onPortfolio && (
+        <button
+          className="card"
+          onClick={onPortfolio}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 11,
+            width: "100%",
+            padding: 13,
+            marginBottom: 14,
+            cursor: "pointer",
+            font: "inherit",
+            color: "var(--text)",
+            textAlign: "left",
+            background: "var(--brand-soft)",
+            borderColor: "transparent",
+          }}
+        >
+          <Table2 size={18} style={{ color: "var(--brand)", flexShrink: 0 }} />
+          <span style={{ flex: 1, minWidth: 0 }}>
+            <span style={{ display: "block", fontSize: 14.5, fontWeight: 700 }}>Portfólio completo</span>
+            <span className="muted" style={{ display: "block", fontSize: 12.5, marginTop: 2 }}>
+              Garantia e dose por cultura de todo o portfólio, numa tela — e em PDF.
+            </span>
+          </span>
+          <ArrowRight size={16} style={{ color: "var(--brand)", flexShrink: 0 }} />
+        </button>
+      )}
 
       <div className="card" style={{ padding: 14, marginBottom: 16 }}>
         <div style={{ position: "relative" }}>

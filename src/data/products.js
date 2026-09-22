@@ -27,7 +27,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.006,
     "doseRaw": "1 dose = 70 mL                            4 a 8 doses/ 50Kg de sementes (varia de acordo com região)",
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079        Bradyrhizobium diazoefficiens - SEMIA 5080",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 + Bradyrhizobium diazoefficiens - SEMIA 5080",
     "source": "7x10ꝰ UFC/mL",
     "description": null,
     "observations": "Quantidade de numero mínimo de bactérias/sementes maior que o recomendado pela Embrapa (1.200.000)",
@@ -38,9 +38,11 @@ export const PRODUCTS = [
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "TS50kg : 2a4doses Sulco: 6a8 doses / ha"
+        "dose": "TS 50 kg: 2 a 4 doses\nSulco: 6 a 8 doses / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Biológicos",
+    "portfolioOrder": 31
   },
   {
     "id": "agrocete__grap-al",
@@ -61,21 +63,23 @@ export const PRODUCTS = [
     "warning": "Não ultrapassar a quantidade de 2 doses/há",
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Fixação Biológica de Nitrogenio Crescimento radicular",
+    "technology": "Fixação Biológica de Nitrogênio · Crescimento radicular",
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "TS 50 kg: 1a2 doses Sulco: 1 doses / ha"
+        "dose": "TS 50 kg: 1 a 2 doses\nSulco: 1 dose / ha"
       },
       {
         "cultura": "Milho",
-        "dose": "TS50 kg: 2a4 doses Sulco: 2 doses / ha"
+        "dose": "TS 50 kg: 2 a 4 doses\nSulco: 2 doses / ha"
       },
       {
         "cultura": "Feijão",
-        "dose": "TS50kg : 1a2 doses Sulco: 1 doses / ha"
+        "dose": "TS 50 kg: 1 a 2 doses\nSulco: 1 dose / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Biológicos",
+    "portfolioOrder": 30
   },
   {
     "id": "agrocete__grap-extranod",
@@ -109,28 +113,30 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.15,
     "doseRaw": "TS 2mL / Kg de semente                                Sulco 100 a 200mL/há",
-    "composition": "Azospirillum brasilense - AbV5 e AbV6  Pseudomonas fluorescens - ATCC 13525",
+    "composition": "Azospirillum brasilense - AbV5 e AbV6 + Pseudomonas fluorescens - ATCC 13525",
     "source": "2x10⁸ UFC/mL",
     "description": null,
     "observations": "Inoculante liquido pra co-inoculação em soja e outras culturas.",
     "warning": "Não ultrapassar a quantidade de 2 doses/ha (por conta do Azospirillum)",
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Solubilizador de Fósforo no solo Fixação Biológica de Nitrogenio Crescimento radicular",
+    "technology": "Solubilizador de Fósforo no solo · Fixação Biológica de Nitrogênio · Crescimento radicular",
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "TS50kg : 1a2doses Sulco: 2 doses / ha"
+        "dose": "TS 50 kg: 1 a 2 doses\nSulco: 2 doses / ha"
       },
       {
         "cultura": "Milho",
-        "dose": "TS50kg : 1a2 doses Sulco: 2 doses / ha"
+        "dose": "TS 50 kg: 1 a 2 doses\nSulco: 2 doses / ha"
       },
       {
         "cultura": "Feijão",
-        "dose": "TS50kg : 1a2 doses Sulco: 2 doses / ha"
+        "dose": "TS 50 kg: 1 a 2 doses\nSulco: 2 doses / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Biológicos",
+    "portfolioOrder": 29
   },
   {
     "id": "agrocete__grap-fl",
@@ -191,7 +197,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "1,0 a 2,0 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 8
   },
   {
     "id": "agrocete__grap-140-fluid",
@@ -211,14 +219,14 @@ export const PRODUCTS = [
     "unit": "L/ha",
     "defaultDose": 0.75,
     "doseRaw": "500 a 1000",
-    "composition": "Sulfato de Mn,  Ácido Citrico",
+    "composition": "Sulfato de Mn, Ácido Citrico",
     "source": "Quelato/Complexo",
     "description": null,
     "observations": "Dobrou-se a quantidade de complexante (em relação a formulação anterior 14%). Absorção acelerada. Maior performance, portanto recomenda-se as mesmas dosagens. Maior possibilidade em misturas, menos íons livres. Maior estabilidade em prateleira Mn=12% (171,6g/L) S=7% (100,1g/L)",
     "warning": "Incompatibilidade com Herbicida",
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Sulfato de Manganês complexado compativel com fungicidas não é compatível com o Glifosato",
+    "technology": "Sulfato de Manganês complexado, compatível com fungicidas; não é compatível com o Glifosato",
     "culturas": [
       {
         "cultura": "Soja",
@@ -233,7 +241,9 @@ export const PRODUCTS = [
         "dose": "0,5 a 1,0 L / ha"
       }
     ],
-    "compatibility": "Não é compatível com o Glifosato (compatível com fungicidas)."
+    "compatibility": "Não é compatível com o Glifosato (compatível com fungicidas).",
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 7
   },
   {
     "id": "agrocete__grap-110-je",
@@ -290,17 +300,19 @@ export const PRODUCTS = [
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "1,0 ml/kg Semente 0,1 a 0,2 L / ha"
+        "dose": "1,0 ml / kg semente\n0,1 a 0,2 L / ha"
       },
       {
         "cultura": "Milho",
-        "dose": "2,0ml/kgSemente 0,1 a 0,2 L / ha"
+        "dose": "2,0 ml / kg semente\n0,1 a 0,2 L / ha"
       },
       {
         "cultura": "Feijão",
-        "dose": "1,0ml/kgSemente 0,1 a 0,2 L / ha"
+        "dose": "1,0 ml / kg semente\n0,1 a 0,2 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 3
   },
   {
     "id": "agrocete__grap-180-je",
@@ -391,7 +403,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "1,5 a 3,0 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 12
   },
   {
     "id": "agrocete__grap-boric",
@@ -430,7 +444,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "0,5 a 1,0 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 11
   },
   {
     "id": "agrocete__grap-cobre",
@@ -471,7 +487,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "0,1 a 0,2 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 18
   },
   {
     "id": "agrocete__grap-grad",
@@ -496,17 +514,19 @@ export const PRODUCTS = [
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Cloreto de magnésio + ácidos carboxilicos para a estruturação de plantas",
+    "technology": "Cloreto de magnésio + ácidos carboxílicos para a estruturação de plantas",
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "0,25 L / ha V4 a V6"
+        "dose": "0,25 L / ha  V4 a V6"
       },
       {
         "cultura": "Feijão",
-        "dose": "0,25 L / ha V4"
+        "dose": "0,25 L / ha  V4"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 20
   },
   {
     "id": "agrocete__grap-evic-s",
@@ -547,7 +567,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "1,0 a 1,5 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 17
   },
   {
     "id": "agrocete__grap-ferro",
@@ -612,7 +634,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "0,5 a 1,5 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 10
   },
   {
     "id": "agrocete__grap-manganes-rr-plus",
@@ -639,7 +663,7 @@ export const PRODUCTS = [
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Sulfato de Manganês quelatizado compatível com o Glifosato",
+    "technology": "Sulfato de Manganês quelatizado, compatível com o Glifosato",
     "culturas": [
       {
         "cultura": "Soja",
@@ -654,7 +678,9 @@ export const PRODUCTS = [
         "dose": "0,5 a 1,0 L / ha"
       }
     ],
-    "compatibility": "Compatível com o Glifosato."
+    "compatibility": "Compatível com o Glifosato.",
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 19
   },
   {
     "id": "agrocete__grap-mont-15",
@@ -689,7 +715,7 @@ export const PRODUCTS = [
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Macro e micronutrientes quelatados compatível com o Glifosato.",
+    "technology": "Macro e micronutrientes quelatados, compatível com o Glifosato",
     "culturas": [
       {
         "cultura": "Soja",
@@ -704,7 +730,9 @@ export const PRODUCTS = [
         "dose": "1,0 a 2,0 L / ha"
       }
     ],
-    "compatibility": "Compatível com o Glifosato."
+    "compatibility": "Compatível com o Glifosato.",
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 6
   },
   {
     "id": "agrocete__grap-nitro",
@@ -743,7 +771,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "1,0 a 3,0 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 16
   },
   {
     "id": "agrocete__grap-p-306",
@@ -809,7 +839,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "0,5 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 14
   },
   {
     "id": "agrocete__grap-phil-fosfito",
@@ -876,7 +908,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "0,5 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 13
   },
   {
     "id": "agrocete__grap-top-fluid-plus",
@@ -928,7 +962,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.037,
     "doseRaw": "25 a 50/ 100l agua",
-    "composition": null,
+    "composition": "Redução de pH, homogeneizante, quebra de tensão da gota, antiespuma e redução de deriva",
     "source": null,
     "description": null,
     "observations": null,
@@ -949,7 +983,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "50 ml / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Tecnologia de Aplicação",
+    "portfolioOrder": 21
   },
   {
     "id": "agrocete__grap-super-gun-sr",
@@ -963,7 +999,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.037,
     "doseRaw": "25 a 50/ 100l agua",
-    "composition": null,
+    "composition": "Homogeneizante, quebra de tensão da gota, antiespuma e redução de deriva",
     "source": null,
     "description": null,
     "observations": null,
@@ -984,7 +1020,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "50 ml / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Tecnologia de Aplicação",
+    "portfolioOrder": 22
   },
   {
     "id": "agrocete__grap-sensor",
@@ -1042,7 +1080,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "50 ml / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Tecnologia de Aplicação",
+    "portfolioOrder": 23
   },
   {
     "id": "agrocete__grap-alphatank",
@@ -1056,28 +1096,30 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 1.5,
     "doseRaw": "1000 a 2000/1000l agua",
-    "composition": null,
+    "composition": "Limpeza e proteção de tanque agrícola",
     "source": null,
     "description": null,
     "observations": null,
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Limpeza + pelicula de proteção",
+    "technology": "Limpeza + película de proteção",
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "1a2L/ 1000 L água"
+        "dose": "1 a 2 L / 1000 L água"
       },
       {
         "cultura": "Milho",
-        "dose": "1a2L/ 1000 L água"
+        "dose": "1 a 2 L / 1000 L água"
       },
       {
         "cultura": "Feijão",
-        "dose": "1a2L/ 1000 L água"
+        "dose": "1 a 2 L / 1000 L água"
       }
-    ]
+    ],
+    "portfolioGroup": "Tecnologia de Aplicação",
+    "portfolioOrder": 24
   },
   {
     "id": "agrocete__grap-oil",
@@ -1098,7 +1140,7 @@ export const PRODUCTS = [
     "warning": "Incompatível c/ produtos à base de S",
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Oléo vegetal a base de soja ( envolve as particulas na calda, adere, espalha, diminui evaporação, deriva e fotodecomposição)",
+    "technology": "Óleo vegetal à base de soja (envolve as partículas na calda, adere, espalha, diminui evaporação, deriva e fotodecomposição)",
     "culturas": [
       {
         "cultura": "Soja",
@@ -1112,7 +1154,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "0,3 a 1,0 % vol. calda"
       }
-    ]
+    ],
+    "portfolioGroup": "Tecnologia de Aplicação",
+    "portfolioOrder": 25
   },
   {
     "id": "agrocete__grap-tech",
@@ -1207,7 +1251,7 @@ export const PRODUCTS = [
     "warning": "Cuidado com Zapp e Crucial",
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Macro e micronutrientes quelatados compatível com o Glifosato.",
+    "technology": "Macro e micronutrientes quelatados, compatível com o Glifosato",
     "culturas": [
       {
         "cultura": "Soja",
@@ -1222,7 +1266,9 @@ export const PRODUCTS = [
         "dose": "1,0 a 2,0 L / ha"
       }
     ],
-    "compatibility": "Compatível com o Glifosato."
+    "compatibility": "Compatível com o Glifosato.",
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 5
   },
   {
     "id": "agrocete__grap-organo-top",
@@ -1266,7 +1312,7 @@ export const PRODUCTS = [
     "warning": "Carbono Orgânico: 14% (87,5% AF e 12,5% AH)                    Aminoácidos totais = 0,58%\nÁcido aspártico: 0,2%\nTriptofano: 0,17%",
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Macro e micronutrientes + Ácidos Fulvicos e Húmicos",
+    "technology": "Macro e micronutrientes + Ácidos Fúlvicos e Húmicos",
     "culturas": [
       {
         "cultura": "Soja",
@@ -1280,7 +1326,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "1,0 a 2,0 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 4
   },
   {
     "id": "agrocete__grap-st-pro",
@@ -1307,21 +1355,23 @@ export const PRODUCTS = [
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "MolibdatodesódioeSulfato de cobalto quelatizado e extrato de algas",
+    "technology": "Molibdato de sódio e Sulfato de cobalto quelatizado e extrato de algas",
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "2 ml / kg semente 0,2 L / ha sulco"
+        "dose": "2 ml / kg semente\n0,2 L / ha sulco"
       },
       {
         "cultura": "Milho",
-        "dose": "4ml/kgsemente 0,2 L / ha sulco"
+        "dose": "4 ml / kg semente\n0,2 L / ha sulco"
       },
       {
         "cultura": "Feijão",
-        "dose": "2ml/kgsemente 0,2 L / ha sulco"
+        "dose": "2 ml / kg semente\n0,2 L / ha sulco"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 0
   },
   {
     "id": "agrocete__grap-breed-pro",
@@ -1362,7 +1412,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "0,5 a 1,0 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 2
   },
   {
     "id": "agrocete__grap-field-pro",
@@ -1397,13 +1449,15 @@ export const PRODUCTS = [
       },
       {
         "cultura": "Milho",
-        "dose": "0,3L / ha"
+        "dose": "0,3 L / ha"
       },
       {
         "cultura": "Feijão",
         "dose": "0,2 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 1
   },
   {
     "id": "agrocete__grap-biostat",
@@ -1424,21 +1478,23 @@ export const PRODUCTS = [
     "warning": "Realizar pré diluição (50g/25mL)    Dilui bem com inoculantes",
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "NematicidaparaMeloidogyneIncógnitaeMeloidogyneJavanicaePratylenchusbrachyurus",
+    "technology": "Nematicida para Meloidogyne incognita, Meloidogyne javanica e Pratylenchus brachyurus",
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "1,0 a 1,5 g / kg semente 200 g / ha sulco"
+        "dose": "1,0 a 1,5 g / kg semente\n200 g / ha sulco"
       },
       {
         "cultura": "Milho",
-        "dose": "1,0a1,5g/kgsemente200g/hasulco"
+        "dose": "1,0 a 1,5 g / kg semente\n200 g / ha sulco"
       },
       {
         "cultura": "Feijão",
-        "dose": "1,0a1,5g/kgsemente200g/hasulco"
+        "dose": "1,0 a 1,5 g / kg semente\n200 g / ha sulco"
       }
-    ]
+    ],
+    "portfolioGroup": "Biológicos",
+    "portfolioOrder": 27
   },
   {
     "id": "agrocete__grap-beestric",
@@ -1459,21 +1515,23 @@ export const PRODUCTS = [
     "warning": "Realizar pré diluição (50g/25mL)    Dilui bem com inoculantes    Manter em agitação constante (pode ocorrer decantação)",
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Biofungicida para Mofo Branco, Rhizoctonia solani, Macrophomina phaseolina e Pratylenchus zeae.",
+    "technology": "Biofungicida para Mofo Branco, Rhizoctonia solani, Macrophomina phaseolina e Pratylenchus zeae",
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "0,5 g / kg semente 50-200 g / ha sulco 250 g / ha barra"
+        "dose": "0,5 g / kg semente\n50-200 g / ha sulco\n250 g / ha barra"
       },
       {
         "cultura": "Milho",
-        "dose": "0,5g/kgsemente50 - 200g/hasulco 250 g / ha barra"
+        "dose": "0,5 g / kg semente\n50-200 g / ha sulco\n250 g / ha barra"
       },
       {
         "cultura": "Feijão",
-        "dose": "0,5g/kgsemente50 - 200g/hasulco 250 g / ha barra"
+        "dose": "0,5 g / kg semente\n50-200 g / ha sulco\n250 g / ha barra"
       }
-    ]
+    ],
+    "portfolioGroup": "Biológicos",
+    "portfolioOrder": 26
   },
   {
     "id": "agrocete__grap-beessect",
@@ -1494,21 +1552,23 @@ export const PRODUCTS = [
     "warning": null,
     "shelfLife": null,
     "fonte": "Planilha interna Agrocete — Dados Nutricionais Agrocete x Concorrentes",
-    "technology": "Produção de 18 proteínas para o controle de diversas especies de lagartas, traças e bicho furão.",
+    "technology": "Produção de 18 proteínas para o controle de diversas espécies de lagartas, traças e bicho-furão",
     "culturas": [
       {
         "cultura": "Soja",
-        "dose": "0,4a1,2L/ha"
+        "dose": "0,4 a 1,2 L / ha"
       },
       {
         "cultura": "Milho",
-        "dose": "0,4 - 1,2L/ha"
+        "dose": "0,4 a 1,2 L / ha"
       },
       {
         "cultura": "Feijão",
-        "dose": "0,4 - 1,2L/ha"
+        "dose": "0,4 a 1,2 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Biológicos",
+    "portfolioOrder": 28
   },
   {
     "id": "nodusoja-noduagri__nodusoja-l-elkani",
@@ -3418,7 +3478,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.05,
     "doseRaw": "TS 50 mL/há                          Sulco 300mL/ha",
-    "composition": "Bradyrhizobium japonicum - SEMIA 5080        Bradyrhizobium elkanii - SEMIA 587",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5080 Bradyrhizobium elkanii - SEMIA 587",
     "source": "7x10ꝰ UFC/mL",
     "description": null,
     "observations": null,
@@ -3678,7 +3738,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.001,
     "doseRaw": "1 dose = 50 mL                            1 doses/ 50Kg de sementes Sulco 300 mL/há                      Via Barra 400 mL/ha",
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079        Bradyrhizobium diazoefficiens - SEMIA 5080",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 Bradyrhizobium diazoefficiens - SEMIA 5080",
     "source": "1x10¹⁰ UFC/mL.",
     "description": null,
     "observations": null,
@@ -3758,7 +3818,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.001,
     "doseRaw": "1 dose = 60 mL                            1 doses/ 50Kg de sementes Sulco 360 mL/há                      Via Barra 480 mL/ha",
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079 e  5080                                                           ou                                                           Bradyrhizobium elkanii - SEMIA 587 e 5019",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 e 5080 ou Bradyrhizobium elkanii - SEMIA 587 e 5019",
     "source": "7x10ꝰ UFC/mL",
     "description": null,
     "observations": "Areas novas utilizar 2 doses no TS",
@@ -3818,7 +3878,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.001,
     "doseRaw": "1 dose = 60 g                                1 doses/ 50Kg de sementes",
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079 e  5080                                                           ou                                                                             Bradyrhizobium elkanii - SEMIA 587 e 5019",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 e 5080 ou Bradyrhizobium elkanii - SEMIA 587 e 5019",
     "source": "3x10ꝰ UFC/g",
     "description": null,
     "observations": "Areas novas utilizar 2 doses no TS",
@@ -4990,7 +5050,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.001,
     "doseRaw": "1 dose = 50 mL                            1 doses/ 50Kg de sementes Sulco 300 mL/há                      Via Barra 400 mL/ha",
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079        Bradyrhizobium diazoefficiens - SEMIA 5080",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 Bradyrhizobium diazoefficiens - SEMIA 5080",
     "source": "7,2x10ꝰ células viáveis/mL.",
     "description": null,
     "observations": null,
@@ -5110,7 +5170,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": null,
     "doseRaw": null,
-    "composition": "Bacillus subtilis - CNPMS B2084  Bacillus megaterium CNPMS B119",
+    "composition": "Bacillus subtilis - CNPMS B2084 Bacillus megaterium CNPMS B119",
     "source": null,
     "description": null,
     "observations": null,
@@ -5308,7 +5368,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.25,
     "doseRaw": "100 a 400 mL/100 Kg de sementes",
-    "composition": "Bacillus amyloliquefaciens -  B.B.A 43",
+    "composition": "Bacillus amyloliquefaciens - B.B.A 43",
     "source": "1,1x10¹⁰ UFC/mL                                    SC - Suspensão Concentrada",
     "description": null,
     "observations": "Concentração 485g/Kg de ativo",
@@ -5448,7 +5508,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": null,
     "doseRaw": null,
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079        Bradyrhizobium diazoefficiens - SEMIA 5080",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 Bradyrhizobium diazoefficiens - SEMIA 5080",
     "source": null,
     "description": null,
     "observations": null,
@@ -5468,7 +5528,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": null,
     "doseRaw": null,
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079        Bradyrhizobium diazoefficiens - SEMIA 5080",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 Bradyrhizobium diazoefficiens - SEMIA 5080",
     "source": null,
     "description": null,
     "observations": null,
@@ -5568,7 +5628,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": null,
     "doseRaw": null,
-    "composition": "Bacillus subtilis - CNPMS B2084     Bacillus megaterium - CNPMS B119",
+    "composition": "Bacillus subtilis - CNPMS B2084 Bacillus megaterium - CNPMS B119",
     "source": null,
     "description": null,
     "observations": null,
@@ -5588,7 +5648,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": null,
     "doseRaw": null,
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079        Bradyrhizobium diazoefficiens - SEMIA 5080",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 Bradyrhizobium diazoefficiens - SEMIA 5080",
     "source": null,
     "description": null,
     "observations": null,
@@ -5788,7 +5848,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.25,
     "doseRaw": "200 a 300 mL/100Kg de sementes                                  100 a 250 mL/há via sulco                       100 a 1000mL/há",
-    "composition": "Bacillus amyloliquefaciens -  SIMBI BS10 (CCT 7600)",
+    "composition": "Bacillus amyloliquefaciens - SIMBI BS10 (CCT 7600)",
     "source": "5x10ꝰ UFC/mL                                           SC - Suspensão Concentrada",
     "description": null,
     "observations": "Concentração 30g/L de ativo",
@@ -6108,7 +6168,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.06,
     "doseRaw": "60mL/50 Kg de sementes",
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079        Bradyrhizobium diazoefficiens - SEMIA 5080",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 Bradyrhizobium diazoefficiens - SEMIA 5080",
     "source": "7,5x10ꝰ UFC/mL",
     "description": null,
     "observations": "Pra áreas de primeiro plantio, duplicar a dose",
@@ -6128,7 +6188,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.06,
     "doseRaw": "60g/50 Kg de sementes",
-    "composition": "Bradyrhizobium japonicum - SEMIA 5079        Bradyrhizobium diazoefficiens - SEMIA 5080",
+    "composition": "Bradyrhizobium japonicum - SEMIA 5079 Bradyrhizobium diazoefficiens - SEMIA 5080",
     "source": "5x10ꝰ UFC/g",
     "description": null,
     "observations": "Pra áreas de primeiro plantio, duplicar a dose",
@@ -7358,7 +7418,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.8,
     "doseRaw": "Deois flavopicta - 800g / ha\nMahanarva fimbriolata - 50g / há Zulia entreriana - 50g / há",
-    "composition": "Metarhizium anisopliae -  IBCB 425",
+    "composition": "Metarhizium anisopliae - IBCB 425",
     "source": "WP - Pó molhavel",
     "description": null,
     "observations": "Alta concentração 400g/Kg de ativo",
@@ -7378,7 +7438,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 1.6,
     "doseRaw": "Deois flavopicta - 1600g / ha\nMahanarva fimbriolata - 100g/há Zulia entreriana - 100g / há",
-    "composition": "Metarhizium anisopliae -  IBCB 425",
+    "composition": "Metarhizium anisopliae - IBCB 425",
     "source": "WP - Pó molhavel",
     "description": null,
     "observations": "Alta concentração 300g/Kg de ativo",
@@ -7478,7 +7538,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 0.8,
     "doseRaw": "Deois flavopicta - 800g / ha\nMahanarva fimbriolata - 50g / há Zulia entreriana - 50g / há",
-    "composition": "Metarhizium anisopliae -  IBCB 425",
+    "composition": "Metarhizium anisopliae - IBCB 425",
     "source": "WP - Pó molhavel",
     "description": null,
     "observations": "Alta concentração 400g/Kg de ativo",
@@ -7498,7 +7558,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": 1.6,
     "doseRaw": "Deois flavopicta - 1600g / ha\nMahanarva fimbriolata - 100g/há Zulia entreriana - 100g / há",
-    "composition": "Metarhizium anisopliae -  IBCB 425",
+    "composition": "Metarhizium anisopliae - IBCB 425",
     "source": "WP - Pó molhavel",
     "description": null,
     "observations": "Alta concentração 300g/Kg de ativo",
@@ -10191,7 +10251,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": null,
     "doseRaw": null,
-    "composition": "B  + Bioestimulante",
+    "composition": "B + Bioestimulante",
     "source": null,
     "description": null,
     "observations": null,
@@ -10211,7 +10271,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": null,
     "doseRaw": null,
-    "composition": "B  + Bioestimulante",
+    "composition": "B + Bioestimulante",
     "source": null,
     "description": null,
     "observations": null,
@@ -10231,7 +10291,7 @@ export const PRODUCTS = [
     "unit": null,
     "defaultDose": null,
     "doseRaw": null,
-    "composition": "B  + Bioestimulante",
+    "composition": "B + Bioestimulante",
     "source": null,
     "description": null,
     "observations": null,
@@ -24856,7 +24916,9 @@ export const PRODUCTS = [
         "cultura": "Feijão",
         "dose": "0,5 a 1,0 L / ha"
       }
-    ]
+    ],
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 9
   },
   {
     "id": "agrocete__grap-147-fluid",
@@ -42986,10 +43048,11 @@ export const PRODUCTS = [
     },
     "composition": "P 0 : 30% e K O: 20% 252",
     "technology": "Fosfito de Potássio",
-    "culturas": null,
     "unit": "L/ha",
     "observations": "Voltou ao catálogo pelo material de posicionamento oficial (tinha saído por não constar na planilha interna mais recente). O material traz só o percentual e não informa densidade, então não dá para converter para g/L. As três culturas aparecem sem dose no material.",
-    "fonte": "Portfólio e posicionamento AGROCETE (material oficial enviado pelo usuário)."
+    "fonte": "Portfólio e posicionamento AGROCETE (material oficial enviado pelo usuário).",
+    "portfolioGroup": "Nutrição e Fisiologia",
+    "portfolioOrder": 15
   },
   {
     "id": "nitro__midas",

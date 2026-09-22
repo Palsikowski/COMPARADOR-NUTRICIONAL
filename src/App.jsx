@@ -8,6 +8,7 @@ import Managements from "./pages/Managements.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import Brands from "./pages/Brands.jsx";
 import BrandPage from "./pages/BrandPage.jsx";
+import Portfolio from "./pages/Portfolio.jsx";
 import PhotoId from "./pages/PhotoId.jsx";
 import Dashboard from "./Dashboard.jsx";
 import { readStoredTheme, applyTheme, storeTheme } from "./lib/theme.js";
@@ -31,6 +32,7 @@ const PRIMARY_NAV = [
 
 const SECONDARY_NAV = [
   { id: "produtos", label: "Produtos" },
+  { id: "portfolio", label: "Portfólio Agrocete" },
   { id: "custo", label: "Calculadora Custo/ha" },
   { id: "foto", label: "Identificar por foto" },
   { id: "sobre", label: "Sobre" },
@@ -111,14 +113,21 @@ export default function App() {
 
       <main className="app-shell" style={{ paddingTop: "var(--shell-top)" }}>
         {page === "home" && (
-          <Home onCompare={() => go("custo")} onCatalog={() => go("produtos")} onSearchTerm={goCatalogWith} />
+          <Home
+            onCompare={() => go("custo")}
+            onCatalog={() => go("produtos")}
+            onSearchTerm={goCatalogWith}
+            onBrands={() => go("empresas")}
+            onPortfolio={() => go("portfolio")}
+          />
         )}
+        {page === "portfolio" && <Portfolio onOpenProduct={(p) => goCatalogWith(p.name)} />}
         {page === "custo" && <Compare onOpenCatalog={() => go("produtos")} />}
         {page === "manejos" && <Managements onLoadIntoCatalog={loadSelectionIntoCatalog} />}
         {page === "foto" && <PhotoId onOpenProduct={(p) => goCatalogWith(p.name)} onOpenBrand={goBrand} />}
         {page === "empresas" &&
           (openBrand ? (
-            <BrandPage key={openBrand} brand={openBrand} dark={dark} onBack={() => setOpenBrand(null)} />
+            <BrandPage key={openBrand} brand={openBrand} dark={dark} onBack={() => setOpenBrand(null)} onPortfolio={() => go("portfolio")} />
           ) : (
             <Brands onOpenBrand={goBrand} />
           ))}

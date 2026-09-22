@@ -270,6 +270,43 @@ imprimir, e sai sempre na paleta clara — papel é sempre claro, independente d
 tema que estava aberto. O cabeçalho da tabela se repete quando ela vira a
 página.
 
+## Portfólio Agrocete
+
+A tabela do material oficial dentro do app: os **32 produtos** com a garantia de
+cada um e a dose por cultura, agrupados como a Agrocete agrupa (Nutrição e
+Fisiologia, Tecnologia de Aplicação, Biológicos). Chega por três caminhos — o
+menu **Mais**, o atalho da home e um botão no painel da Agrocete — e sai em
+**PDF em paisagem** para imprimir.
+
+- **A garantia exibida é a mesma que alimenta os cálculos do app**, em g/L ou
+  g/kg com o %m/m ao lado — não uma segunda transcrição do material. Duas
+  versões da mesma garantia divergiriam com o tempo, e é este papel que vai
+  para a mão do cliente.
+- **Biológico e adjuvante não têm garantia nutricional**: a "garantia" deles no
+  material é a cepa ou a função (`Trichoderma harzianum – IBLF 006`, `Redução
+  de pH, homogeneizante...`). A coluna cai para a composição declarada em vez
+  de ficar vazia justamente nos produtos cuja garantia É a função.
+- **No celular a tabela vira card por produto** — seis colunas em 390px não se
+  lê.
+- O PDF sai em paisagem porque em retrato a coluna de garantias fica com duas
+  palavras por linha e a tabela perde a função de consulta rápida.
+
+### Correção do texto justificado letra a letra
+
+O material justifica algumas células letra a letra (`4 m l / k g s e m e n t e`).
+A importação anterior colapsava o trecho juntando todos os caracteres, o que
+apagava as fronteiras de palavra: `4ml/kgsemente`,
+`MolibdatodesódioeSulfato`. Os 32 produtos foram retranscritos da tabela
+renderizada, e agora **a quebra de linha da célula é preservada** — cada linha é
+um **modo de aplicação** diferente (tratamento de semente, sulco, barra), não
+uma dose só:
+
+```
+Soja: 0,5 g / kg semente
+      50-200 g / ha sulco
+      250 g / ha barra
+```
+
 ## Dose por cultura (Soja, Milho, Feijão)
 
 O material de posicionamento oficial da Agrocete traz a dose de cada produto
@@ -566,6 +603,11 @@ já entraram: uma planilha com as colunas correspondentes.
   catálogo e não entram em nenhum cálculo.
 - `src/components/InteractionList.jsx` — a lista de interações, no mesmo
   formato em todas as telas.
+- `src/pages/Portfolio.jsx` — o portfólio Agrocete em tabela (cards no
+  celular), com busca e exportação.
+- `src/lib/portfolio.js` — as linhas do portfólio montadas a partir do
+  catálogo, agrupadas como no material.
+- `src/lib/portfolioPdf.js` — o PDF do portfólio, em paisagem.
 - `src/pages/Brands.jsx` — vitrine de bandeiras das 61 empresas.
 - `src/pages/BrandPage.jsx` — portfólio de uma empresa, seleção de até 4
   produtos, comparativo e exportação.
