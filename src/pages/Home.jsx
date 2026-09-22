@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Search, ArrowLeftRight, Building2, Calculator, Sprout, ArrowRight, Scale, Gauge, Layers } from "lucide-react";
+import { Search, ArrowLeftRight, Building2, Calculator, Sprout, ArrowRight, Scale, Gauge, Layers, Leaf } from "lucide-react";
 import { searchAll, platformStats, AGROCETE, STAGES } from "../lib/catalog.js";
 import { isComparable } from "../lib/provenance.js";
 import { fmtNum } from "../lib/economics.js";
@@ -24,7 +24,7 @@ const NUTRIENT_LABEL = {
 
 const EXAMPLES = ["Manganês", "Soja", "V4", "Boro"];
 
-export default function Home({ onCompare, onCatalog, onSearchTerm }) {
+export default function Home({ onCompare, onCatalog, onSearchTerm, onBrands, onPortfolio }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const boxRef = useRef(null);
@@ -193,8 +193,14 @@ export default function Home({ onCompare, onCatalog, onSearchTerm }) {
           <ActionCard
             icon={<Building2 size={18} />}
             title="Comparar empresas"
-            desc="Navegue pelo portfólio de cada uma das 58 marcas do catálogo."
-            onClick={onCatalog}
+            desc={`Uma bandeira por empresa: navegue o portfólio de cada uma das ${stats.brands} marcas.`}
+            onClick={onBrands}
+          />
+          <ActionCard
+            icon={<Leaf size={18} />}
+            title="Portfólio Agrocete"
+            desc="Todo o portfólio numa tela, com garantia e dose por cultura."
+            onClick={onPortfolio}
           />
           <ActionCard
             icon={<Calculator size={18} />}
