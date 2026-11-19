@@ -14,8 +14,23 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+# Build e deploy em jobs separados, como na receita oficial do GitHub.
+#
+# Estavam no mesmo job, e isso quebrou o deploy três vezes seguidas hoje
+# sempre no mesmo ponto: o upload termina ("Artifact github-pages has been
+# successfully uploaded! Artifact ID 14568587314"), o deploy-pages pergunta
+# pelo artefato 750 ms depois e recebe "Found 0 artifact(s)". É atraso de
+# leitura na API de artefatos do GitHub, não erro de build — o build passava
+# verde em todas as tentativas.
+#
+# A fronteira entre dois jobs dá à API o tempo que ela precisa, e é por isso
+# que o workflow modelo do GitHub é assim. Também evita a armadilha em que
+# cair: "re-run failed jobs" num job único refaz o upload e deixa DOIS
+# artefatos com o mesmo nome na mesma execução, e aí o erro muda de "Found 0"
+# para "Multiple artifacts named github-pages". Em caso de falha, use
+# "Re-run all jobs" ou dispare o workflow de novo.
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,5 +43,13 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist-standalone
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
