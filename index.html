@@ -2,8 +2,28 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Comparador de Manejo Foliar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- O nome na aba é o mesmo que a barra do app mostra. Antes a aba dizia
+         "Comparador de Manejo Foliar" e a barra dizia "Comparador Nutricional":
+         quem salva o link no celular guardava um app com outro nome. -->
+    <title>Comparador Nutricional</title>
+    <meta
+      name="description"
+      content="Compara produtos de nutrição foliar por composição, posicionamento e custo por hectare, a partir do catálogo interno da equipe."
+    />
+
+    <!-- Ícone embutido como data-URI: o build de produção é um index.html
+         único, então um arquivo .ico à parte viraria mais uma requisição (e um
+         404 no console quando o app roda em subpasta, como no GitHub Pages). -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23059669'/%3E%3Cg fill='%23fff'%3E%3Crect x='7' y='17' width='4.5' height='9' rx='1.4'/%3E%3Crect x='13.8' y='11' width='4.5' height='15' rx='1.4'/%3E%3Crect x='20.6' y='6' width='4.5' height='20' rx='1.4'/%3E%3C/g%3E%3C/svg%3E"
+    />
+
+    <!-- A cor da barra do navegador no celular acompanha o tema do app. -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F9FAFB" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1720" />
   </head>
   <body style="margin:0;">
     <div id="root"></div>
