@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Leaf, Sun, Moon, Wifi, WifiOff, Menu, X, LogOut, ChevronDown } from "lucide-react";
+import { Leaf, Sun, Moon, Wifi, WifiOff, Menu, X, LogOut, ChevronDown, Search } from "lucide-react";
 
 // Barra de navegação flutuante em pílula, sobreposta ao fundo animado.
 //
@@ -17,6 +17,7 @@ export default function PillNav({
   onNavigate,
   onToggleTheme,
   onSignOut,
+  onOpenSearch,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -58,7 +59,11 @@ export default function PillNav({
     setMoreOpen(false);
   }
 
-  const secondaryActive = secondary.some((n) => n.id === page);
+  // Quando a tela aberta está dentro de "Mais", o item que carrega o
+  // aria-current nem existe no DOM (o menu está fechado). Resultado: em cinco
+  // das oito telas nada dizia onde a pessoa estava. O botão passa a mostrar o
+  // nome da seção ativa e a carregar o aria-current no lugar dela.
+  const activeSecondary = secondary.find((n) => n.id === page) || null;
 
   return (
     <>
@@ -98,9 +103,11 @@ export default function PillNav({
                 onClick={() => setMoreOpen((v) => !v)}
                 aria-expanded={moreOpen}
                 aria-haspopup="true"
-                data-active={secondaryActive ? "true" : undefined}
+                aria-current={activeSecondary ? "page" : undefined}
+                data-active={activeSecondary ? "true" : undefined}
               >
-                Mais <ChevronDown size={14} style={{ transform: moreOpen ? "rotate(180deg)" : "none", transition: "transform var(--speed) ease" }} />
+                {activeSecondary ? activeSecondary.label : "Mais"}
+                <ChevronDown size={14} style={{ transform: moreOpen ? "rotate(180deg)" : "none", transition: "transform var(--speed) ease" }} />
               </button>
               {moreOpen && (
                 <div className="pill-dropdown" role="menu">
@@ -131,6 +138,18 @@ export default function PillNav({
                 <WifiOff size={13} /> Offline
               </span>
             )}
+
+            {/* A busca unificada só existia na home. Aqui ela alcança todas as
+                telas — é a porta de entrada de quem não sabe em qual das oito
+                a resposta mora. */}
+            <button
+              className="pill-icon"
+              onClick={onOpenSearch}
+              title="Buscar em todo o app (Ctrl+K)"
+              aria-label="Buscar em todo o app"
+            >
+              <Search size={16} />
+            </button>
 
             <button
               className="pill-icon"

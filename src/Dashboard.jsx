@@ -592,6 +592,16 @@ export default function Dashboard({ initialSearch = "", initialMode = null, focu
           fica no App — aqui sobra só o contador de doses travadas, que é
           específico desta tela. */}
       <main style={{ maxWidth: 1360, margin: "0 auto", padding: "18px 16px 140px" }}>
+      {/* TÍTULO — esta tela não dizia o que era. O nome no menu ("Manejo do
+          cliente") só faz sentido ao lado de "Manejos Agrocete", e a diferença
+          entre os dois precisa estar escrita em algum lugar: é aqui. */}
+      <header style={{ marginBottom: 16 }}>
+        <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0, letterSpacing: "-0.02em" }}>Manejo do cliente</h1>
+        <p className="muted" style={{ fontSize: 14.5, margin: "6px 0 0", lineHeight: 1.55, maxWidth: 720 }}>
+          Monte aqui o manejo que o produtor usa hoje e veja, lado a lado, o que a linha Agrocete entrega no lugar —
+          por nutriente e por custo. Os manejos oficiais da Agrocete ficam em <strong>Manejos Agrocete</strong>.
+        </p>
+      </header>
       {lockedCount > 0 && (
         <div style={{ marginBottom: 12 }}>
           <StatusPill

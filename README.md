@@ -9,20 +9,45 @@ dados inventados.
 
 ## Como a plataforma está organizada
 
-A navegação do topo tem cinco entradas, além da home:
+A barra do topo mostra as **quatro telas por onde o trabalho começa** —
+Produtos, Empresas, Manejo do cliente e Manejos Agrocete — e guarda o resto em
+**Mais**. Três regras valem em toda a navegação:
+
+1. **O rótulo do menu é o título da tela.** Menu e página dizendo nomes
+   diferentes ("Calculadora Custo/ha" abrindo "Compare duas soluções") fazem a
+   pessoa achar que clicou errado.
+2. **Toda tela diz onde você está.** Quando a tela aberta está dentro de
+   "Mais", é o próprio botão que mostra o nome dela — o item que carregaria a
+   marcação não existe no DOM enquanto o menu está fechado, então antes disso
+   cinco das oito telas não davam sinal nenhum.
+3. **Um atalho, um destino.** Dois cartões para a mesma tela, ou um cartão que
+   promete manejos e abre o catálogo, ensinam a desconfiar do menu inteiro.
 
 - **Início** — hero com a busca principal (produto, empresa, nutriente,
-  cultura ou estádio fenológico), quatro atalhos de ação, os indicadores
-  da base e o módulo **Preço ≠ valor**. Todos os números são derivados dos
-  dados reais; nenhum é escrito à mão.
+  cultura ou estádio fenológico), seis atalhos sob a pergunta "O que você quer
+  fazer?" — **um destino distinto cada** —, os indicadores da base e o módulo
+  **Preço ≠ valor**. Todos os números são derivados dos dados reais; nenhum é
+  escrito à mão.
+- **Busca global** — a lupa da barra, ou **Ctrl/⌘+K**, abre a mesma busca
+  unificada da home **de qualquer tela**. Antes ela só existia no início: quem
+  estava no catálogo e queria outra coisa precisava voltar primeiro, e quem
+  nunca usou o app não tem como saber em qual das oito telas a resposta mora.
+  Navega por teclado (↑ ↓, Enter, Esc) e é a mesma `searchAll` da home, não uma
+  segunda implementação com regras próprias.
 - **Produtos** — catálogo completo por categoria. É também para onde a
-  busca da home leva, já filtrada.
+  busca leva, já filtrada. Subiu para o menu central: é a tela mais usada e
+  estava a dois cliques, o mesmo custo de "Sobre".
 - **Empresas** — vitrine com uma **bandeira por empresa** (61). Abrir uma
   bandeira leva ao portfólio dela, onde dá para marcar produtos, ver o
   **gráfico comparativo** e baixar o **PDF** para discutir com a equipe.
-- **Manejos** — catálogo com os manejos oficiais por cultura e estádio já
-  abertos.
-- **Calculadora Custo/ha** — comparação A vs B: visão geral, composição
+- **Manejo do cliente** — a bancada onde se monta o manejo que o produtor usa
+  hoje, para ver lado a lado o que a linha Agrocete entrega no lugar. Forma um
+  par de propósito com a tela seguinte: *o que ele usa* × *o que recomendamos*.
+  O nome estava no plural ("Manejos Cliente"), quase idêntico ao do par, e isso
+  escondia a diferença; no singular fica claro que é **um** manejo, o que você
+  monta.
+- **Manejos Agrocete** — os manejos oficiais por cultura e estádio já abertos.
+- **Compare dois produtos** — comparação A vs B: visão geral, composição
   com diferença calculada, economia (custo/ha por área, custo por kg de
   nutriente), índice NCI e posicionamento.
 - **Sobre** — metodologia aberta: cobertura medida dos dados, níveis de
@@ -591,6 +616,8 @@ já entraram: uma planilha com as colunas correspondentes.
   tela de entrada já nascer no tema certo.
 - `src/lib/auth.js` — onde o desbloqueio fica guardado e o contexto que leva o
   "Sair" pras telas.
+- `src/components/GlobalSearch.jsx` — a busca global (lupa da barra e
+  Ctrl/⌘+K), sobre a mesma `searchAll` da home.
 - `src/components/PillNav.jsx` + `src/shell.css` — a barra flutuante em pílula
   e a casca do app (fundo fixo, véu, faixa de topo, `--shell-top`).
 - `src/components/AppBackground.jsx` — o fundo animado em tela cheia com o véu

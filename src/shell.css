@@ -403,3 +403,156 @@
     background: var(--surface);
   }
 }
+
+/* ---- Busca global (lupa da barra / Ctrl+K) ------------------------------
+   Sobreposta porque precisa abrir de qualquer tela sem tirar a pessoa de
+   onde ela está: fechar a busca devolve a tela anterior intacta. */
+.gsearch-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: color-mix(in srgb, #0b1220 42%, transparent);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10vh 16px 16px;
+}
+@media (max-width: 720px) {
+  .gsearch-backdrop {
+    padding: 0;
+    align-items: stretch;
+  }
+}
+
+.gsearch {
+  width: 100%;
+  max-width: 620px;
+  max-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 22px 60px rgba(8, 15, 30, 0.28);
+  overflow: hidden;
+}
+@media (max-width: 720px) {
+  .gsearch {
+    max-width: none;
+    max-height: none;
+    height: 100%;
+    border-radius: 0;
+    border: none;
+  }
+}
+
+.gsearch-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px 12px 15px;
+  border-bottom: 1px solid var(--border);
+}
+.gsearch-field input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  font: inherit;
+  font-size: 16px; /* 16px evita o zoom automático do iOS ao focar */
+  color: var(--text);
+}
+.gsearch-field input::placeholder {
+  color: var(--text-3);
+}
+
+.gsearch-body {
+  overflow-y: auto;
+  padding: 6px;
+}
+.gsearch-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.gsearch-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 10px 11px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: var(--text);
+  text-align: left;
+}
+.gsearch-item[data-sel="true"] {
+  background: var(--brand-soft);
+}
+.gsearch-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text-3);
+}
+.gsearch-item[data-sel="true"] .gsearch-ico {
+  background: var(--surface);
+  color: var(--brand);
+}
+.gsearch-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gsearch-sub {
+  display: block;
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gsearch-foot {
+  display: flex;
+  gap: 16px;
+  padding: 9px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+@media (max-width: 720px) {
+  /* Atalho de teclado não serve a quem está no celular. */
+  .gsearch-foot {
+    display: none;
+  }
+}
+.gsearch-foot kbd {
+  display: inline-block;
+  min-width: 17px;
+  padding: 1px 4px;
+  margin-right: 3px;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--surface);
+  font: inherit;
+  font-size: 10.5px;
+  text-align: center;
+}
