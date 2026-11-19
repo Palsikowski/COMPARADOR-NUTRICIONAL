@@ -133,6 +133,16 @@ export default function Catalog({ initialSearch = "", initialGroupBy = "categori
 
   return (
     <div>
+      {/* TÍTULO — a tela não tinha nenhum. Quem chegava pelo menu "Mais", ou
+          voltava ao app depois de sair, não lia em lugar nenhum onde estava. */}
+      <div className="shell" style={{ paddingTop: 22, paddingBottom: 4 }}>
+        <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0, letterSpacing: "-0.02em" }}>Produtos</h1>
+        <p className="muted" style={{ fontSize: 14.5, margin: "6px 0 0", lineHeight: 1.55, maxWidth: 680 }}>
+          O catálogo inteiro: {PRODUCTS.length.toLocaleString("pt-BR")} produtos de {COMPETITOR_BRANDS.length + 1}{" "}
+          empresas. Filtre, abra a ficha técnica e marque o que quiser comparar.
+        </p>
+      </div>
+
       {/* FILTROS FIXOS */}
       <div
         style={{

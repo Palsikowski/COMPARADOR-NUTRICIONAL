@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Search, ArrowLeftRight, Building2, Calculator, Sprout, ArrowRight, Scale, Gauge, Layers, Leaf } from "lucide-react";
+import { Search, ArrowLeftRight, Building2, Calculator, Sprout, ArrowRight, Scale, Gauge, Layers, Leaf, Camera } from "lucide-react";
 import { searchAll, platformStats, AGROCETE, STAGES } from "../lib/catalog.js";
 import { isComparable } from "../lib/provenance.js";
 import { fmtNum } from "../lib/economics.js";
@@ -24,7 +24,7 @@ const NUTRIENT_LABEL = {
 
 const EXAMPLES = ["Manganês", "Soja", "V4", "Boro"];
 
-export default function Home({ onCompare, onCatalog, onSearchTerm, onBrands, onPortfolio }) {
+export default function Home({ onCompare, onCatalog, onSearchTerm, onBrands, onPortfolio, onManagements, onPhoto }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const boxRef = useRef(null);
@@ -181,19 +181,30 @@ export default function Home({ onCompare, onCatalog, onSearchTerm, onBrands, onP
         </div>
       </section>
 
-      {/* ATALHOS */}
+      {/* ATALHOS — um destino por cartão.
+          Antes "Comparar produtos" e "Analisar custo/ha" abriam a MESMA tela
+          (dois cartões para um destino), e "Encontrar um manejo" levava ao
+          catálogo de produtos, não aos manejos. Cartão que não cumpre o que
+          promete ensina a pessoa a desconfiar do menu inteiro. */}
       <div className="shell" style={{ paddingTop: 28 }}>
+        <h2 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 12px" }}>O que você quer fazer?</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 12 }}>
           <ActionCard
             icon={<ArrowLeftRight size={18} />}
-            title="Comparar produtos"
-            desc="Compare dois produtos por composição, custo/ha e posicionamento."
+            title="Compare dois produtos"
+            desc="Composição, custo por hectare e custo por nutriente, lado a lado."
             onClick={onCompare}
           />
           <ActionCard
+            icon={<Layers size={18} />}
+            title="Abra o catálogo"
+            desc={`${fmtNum(stats.products, 0)} produtos para filtrar por nutriente, categoria ou empresa.`}
+            onClick={onCatalog}
+          />
+          <ActionCard
             icon={<Building2 size={18} />}
-            title="Comparar empresas"
-            desc={`Uma bandeira por empresa: navegue o portfólio de cada uma das ${stats.brands} marcas.`}
+            title="Veja por empresa"
+            desc={`Uma bandeira por empresa: o portfólio de cada uma das ${stats.brands} marcas.`}
             onClick={onBrands}
           />
           <ActionCard
@@ -203,16 +214,16 @@ export default function Home({ onCompare, onCatalog, onSearchTerm, onBrands, onP
             onClick={onPortfolio}
           />
           <ActionCard
-            icon={<Calculator size={18} />}
-            title="Analisar custo/ha"
-            desc="Entenda o impacto econômico da dose e do preço na área toda."
-            onClick={onCompare}
+            icon={<Sprout size={18} />}
+            title="Encontre um manejo"
+            desc="Manejos oficiais da Agrocete por cultura e estádio fenológico."
+            onClick={onManagements}
           />
           <ActionCard
-            icon={<Sprout size={18} />}
-            title="Encontrar um manejo"
-            desc="Manejos oficiais por cultura e estádio fenológico."
-            onClick={onCatalog}
+            icon={<Camera size={18} />}
+            title="Identifique por foto"
+            desc="Fotografe o rótulo e o app procura o produto no catálogo."
+            onClick={onPhoto}
           />
         </div>
       </div>

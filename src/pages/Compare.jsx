@@ -77,7 +77,7 @@ export default function Compare({ onOpenCatalog }) {
   return (
     <div className="shell" style={{ paddingTop: 26, paddingBottom: 90 }}>
       <header style={{ marginBottom: 20 }}>
-        <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0, letterSpacing: "-0.02em" }}>Compare duas soluções</h1>
+        <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0, letterSpacing: "-0.02em" }}>Compare dois produtos</h1>
         <p className="muted" style={{ fontSize: 14.5, margin: "6px 0 0", maxWidth: 720, lineHeight: 1.5 }}>
           Escolha dois produtos, informe dose e preço, e veja composição, custo por hectare e custo por nutriente lado a
           lado. Dose e preço são seus — o catálogo traz a composição.

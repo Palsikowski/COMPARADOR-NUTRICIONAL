@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PillNav from "./components/PillNav.jsx";
+import GlobalSearch from "./components/GlobalSearch.jsx";
 import AppBackground from "./components/AppBackground.jsx";
 import Home from "./pages/Home.jsx";
 import Compare from "./pages/Compare.jsx";
@@ -17,23 +18,29 @@ import "./theme.css";
 import "./shell.css";
 
 
-// A barra flutuante mostra três seções no centro, como pedido. As outras
-// quatro telas continuam existindo e ficam em "Mais" (e no sanduíche do
-// celular): sumir com a entrada de navegação de metade do app em nome do
-// desenho seria perder função, não ganhar estética.
+// O menu central lista as quatro telas por onde o trabalho começa; o resto
+// fica em "Mais" (e no sanduíche do celular).
 //
-// "Manejos Cliente" é a tela que o app chamava de "Meu manejo" — o nome mudou
-// na navegação, o id e o comportamento não.
+// "Produtos" subiu para o centro: é o catálogo de 1.647 itens, a tela mais
+// usada do app, e estava a dois cliques — o mesmo custo de "Sobre".
+//
+// "Manejo do cliente" e "Manejos Agrocete" formam um par de propósito: o que o
+// produtor usa hoje × o que a Agrocete recomenda. O nome no plural ("Manejos
+// Cliente") escondia esse sentido; no singular fica claro que é UM manejo, o
+// que você monta. O id e o comportamento não mudaram.
+//
+// O rótulo aqui é o mesmo título que a tela mostra. Menu e página dizendo
+// nomes diferentes é o que faz a pessoa achar que clicou errado.
 const PRIMARY_NAV = [
+  { id: "produtos", label: "Produtos" },
   { id: "empresas", label: "Empresas" },
-  { id: "manejo", label: "Manejos Cliente" },
+  { id: "manejo", label: "Manejo do cliente" },
   { id: "manejos", label: "Manejos Agrocete" },
 ];
 
 const SECONDARY_NAV = [
-  { id: "produtos", label: "Produtos" },
   { id: "portfolio", label: "Portfólio Agrocete" },
-  { id: "custo", label: "Calculadora Custo/ha" },
+  { id: "custo", label: "Compare dois produtos" },
   { id: "foto", label: "Identificar por foto" },
   { id: "sobre", label: "Sobre" },
 ];
@@ -44,6 +51,7 @@ export default function App() {
   const [pendingSelection, setPendingSelection] = useState(null);
   const [catalogNonce, setCatalogNonce] = useState(0);
   const [openBrand, setOpenBrand] = useState(null);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [dark, setDark] = useState(readStoredTheme);
   const [online, setOnline] = useState(() => (typeof navigator === "undefined" ? true : navigator.onLine));
   const { signOut } = useAuth();
@@ -62,6 +70,19 @@ export default function App() {
       window.removeEventListener("online", on);
       window.removeEventListener("offline", off);
     };
+  }, []);
+
+  // Ctrl/⌘+K abre a busca de qualquer tela. O atalho é o caminho de quem usa
+  // o app todo dia; a lupa na barra é o de quem não sabe que ele existe.
+  useEffect(() => {
+    function onKey(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   function go(id) {
@@ -109,6 +130,15 @@ export default function App() {
         onNavigate={go}
         onToggleTheme={() => setDark((v) => !v)}
         onSignOut={signOut}
+        onOpenSearch={() => setSearchOpen(true)}
+      />
+
+      <GlobalSearch
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onProduct={(p) => goCatalogWith(p.name)}
+        onBrand={(b) => goBrand(b)}
+        onTerm={goCatalogWith}
       />
 
       <main className="app-shell" style={{ paddingTop: "var(--shell-top)" }}>
@@ -119,6 +149,8 @@ export default function App() {
             onSearchTerm={goCatalogWith}
             onBrands={() => go("empresas")}
             onPortfolio={() => go("portfolio")}
+            onManagements={() => go("manejos")}
+            onPhoto={() => go("foto")}
           />
         )}
         {page === "portfolio" && <Portfolio onOpenProduct={(p) => goCatalogWith(p.name)} />}
