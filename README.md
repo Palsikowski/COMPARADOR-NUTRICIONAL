@@ -7,6 +7,28 @@ dados inventados.
 
 **Compare. Entenda. Decida melhor.**
 
+## Onde entrar
+
+**https://palsikowski.github.io/COMPARADOR-NUTRICIONAL/**
+
+Publicado pelo workflow `.github/workflows/deploy-pages.yml` a cada push na
+`main`. Duas coisas que esse endereço ensinou, e que valem para qualquer host:
+
+- **O app não mora na raiz do domínio**, mora em `/COMPARADOR-NUTRICIONAL/`.
+  Por isso o build `singlefile` usa `base: "./"`. Com o `base` padrão (`"/"`),
+  tudo o que está inline no `index.html` continua funcionando — e só o que é
+  carregado por caminho quebra, que no app é o leitor de rótulo
+  (`public/ocr/*`). Resultado: "Identificar por foto" com 404 em produção e
+  perfeito no `npm run preview` local, onde o app está na raiz. Para testar
+  igual ao publicado, sirva o `dist-standalone` **dentro de uma subpasta**.
+- **Build e deploy são jobs separados** no workflow. Junto num só job, o
+  `deploy-pages` pergunta pelo artefato menos de um segundo depois do upload e
+  recebe `Found 0 artifact(s)` — atraso de leitura na API do GitHub, não erro
+  de build. Se o deploy falhar assim, use **"Re-run all jobs"**, nunca
+  "Re-run failed jobs": num job único isso refaz o upload e deixa dois
+  artefatos com o mesmo nome, e o erro vira `Multiple artifacts named
+  "github-pages"`.
+
 ## Como a plataforma está organizada
 
 A barra do topo mostra as **quatro telas por onde o trabalho começa** —
